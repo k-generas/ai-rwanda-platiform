@@ -1,0 +1,1025 @@
+# Platform development phase — AI Education Rwanda
+
+We are pausing lesson production and shifting to the platform itself.
+
+The objective is not simply to build a website where people can watch lessons. We are building an **AI learning and education management platform** where:
+
+- Superadmins control the entire education business.
+- Administrators prepare and publish courses without needing a developer.
+- Learners can discover, purchase, access and complete courses easily.
+- Instructors can manage learning activities within assigned permissions.
+- The platform handles enrollment, progress, assessments, certificates and communication.
+- Founders can monitor the business, control access, investigate problems and make decisions.
+
+The experience should feel like a properly designed education product, not an ordinary admin dashboard with a collection of forms.
+
+## 1. The product vision
+
+# AI Education Rwanda
+
+## Learn AI. Apply AI. Build with AI.
+
+**One platform. Three connected experiences.**
+
+**Learners**
+
+Discover, learn, practice and achieve.
+
+**Educators**
+
+Create, organize and deliver learning.
+
+**Founders**
+
+Control, monitor and grow the platform.
+
+My central design principle:
+
+**A learner should never struggle to find what to learn next. An administrator should never struggle to manage what learners see. A founder should never lose control of the business.**
+
+## 2. First, organize the platform into clear areas
+
+Do not put every feature into one enormous sidebar. That creates confusion.
+
+I recommend five connected areas.
+
+## Platform architecture
+
+**01. Public website**
+
+Visitors discover the organization, courses, programmes, upcoming events and learning opportunities.
+
+**02. Learner portal**
+
+Registered learners access courses, lessons, projects, assessments, progress and certificates.
+
+**03. Education management**
+
+Authorized administrators and instructors create courses, prepare lessons, organize cohorts and manage learning activities.
+
+**04. Founder control center**
+
+Superadmin controls users, permissions, payments, publishing, access, operations, security and business monitoring.
+
+**05. Platform settings**
+
+Branding, languages, notifications, integrations, policies and system configuration.
+
+These are logical areas, not five disconnected applications. They should share one consistent design system and one controlled data structure.
+
+## 3. Superadmin: the founder control center
+
+This is the most important management area.
+
+The superadmin should not need a developer every time a course, price, instructor or learner permission changes.
+
+### Recommended superadmin navigation
+
+**Founder Control Center**  (Superadmin)
+
+---
+
+**OVERVIEW**
+
+- Dashboard
+- Activity and alerts
+
+**EDUCATION**
+
+- Courses
+- Course builder
+- Learning paths
+- Upcoming programmes
+- Live sessions and events
+- Instructors
+- Categories
+
+**LEARNERS**
+
+- All learners
+- Enrollments
+- Access management
+- Cohorts and groups
+- Submissions
+- Certificates
+
+**ASSESSMENT**
+
+- Quizzes and question bank
+- Assignments
+- Project reviews
+- Results and grading
+
+**BUSINESS**
+
+- Payments and transactions
+- Pricing and offers
+- Discounts
+- Refunds
+- Revenue reports
+
+**COMMUNICATION**
+
+- Announcements
+- Notifications
+- Email templates
+- Support requests
+
+**CONTROL**
+
+- Staff and roles
+- Permissions
+- Audit logs
+- Platform settings
+- Integrations
+- Security
+
+The navigation should be collapsible, searchable and grouped. Important actions should be easy to find. Low-frequency settings should not compete visually with everyday work.
+
+### A. Founder dashboard
+
+The first screen should answer:
+
+- How many learners are registered?
+- How many are actively learning?
+- How many courses are published?
+- How many enrollments have been made?
+- How much verified revenue has been received?
+- Which payments need attention?
+- Which courses are performing well?
+- Which learners are falling behind?
+- What is scheduled next?
+- Are there unresolved platform problems?
+
+Suggested dashboard indicators:
+
+| Metric              | What it tells the founder                                         |
+| ------------------- | ----------------------------------------------------------------- |
+| Total learners      | Registered accounts                                               |
+| Active learners     | Learners active during a defined period                           |
+| Published courses   | Courses currently available                                       |
+| Total enrollments   | Enrollment records                                                |
+| Verified revenue    | Successfully confirmed payments, less applicable refunds          |
+| Completion rate     | Learners completing courses against a clearly defined denominator |
+| Pending reviews     | Assignments awaiting evaluation                                   |
+| Upcoming programmes | Scheduled programmes and events                                   |
+
+Do not fill the dashboard with decorative statistics. Every number must come from real records, have a clear definition and lead to a useful action.
+
+## 4. The course builder — the heart of the platform
+
+This is where the education business will actually operate.
+
+The administrator should be able to prepare the entire 28-Day Practical AI Challenge without editing source code.
+
+I recommend a guided course-building experience with a clear progression.
+
+### A. Course management
+
+Each course should support:
+
+- Course title and subtitle.
+- Description and learning outcomes.
+- Cover image and promotional video.
+- Category and difficulty level.
+- Estimated duration.
+- Language availability.
+- Instructor assignment.
+- Course price and currency.
+- Free or paid access.
+- Enrollment capacity, if applicable.
+- Start and end dates, if applicable.
+- Prerequisites.
+- Certificate eligibility.
+- Publication status.
+- SEO title and description.
+- Course visibility.
+
+Course statuses:
+
+(Draft) (In review) (Published) (Scheduled) (Archived)
+
+A course should not become publicly available just because an administrator has started creating it.
+
+### B. Curriculum builder
+
+Use a hierarchy that mirrors how we prepare lessons.
+
+**Example: 28-Day Practical AI Challenge** (Course structure)
+
+**Module 1 — AI Foundations**
+
+Days 1–7 · 7 lessons
+
+1. Day 1 — What Is Artificial Intelligence?
+2. Day 2 — AI vs ML vs Deep Learning
+3. Day 3 — Generative AI and LLMs
+4. Day 4 — How AI Generates Responses
+5. Day 5 — Hallucinations, Bias and Fact-Checking
+6. Day 6 — Responsible AI, Privacy and Ethics
+7. Day 7 — Weekly Assessment
+
+**Module 2 — Prompt Engineering**
+
+Days 8–14 · 7 lessons
+
+Lessons, activities and weekly assessment.
+
+**Module 3 — Workflow Thinking and Automation**
+
+Days 15–21 · 7 lessons
+
+Lessons, demonstrations and practical assessment.
+
+**Module 4 — AI-Powered Automation**
+
+Days 22–28 · 7 lessons
+
+Lessons, final project and assessment.
+
+Administrators should be able to:
+
+- Add, edit, duplicate, reorder and delete modules.
+- Add lessons inside modules.
+- Drag lessons into a different order.
+- Mark lessons as required or optional.
+- Set prerequisites and completion requirements.
+- Preview the complete course as a learner.
+- Save drafts without publishing.
+- Schedule module or lesson releases.
+- See the completion status of the course content itself.
+
+### C. A powerful lesson editor
+
+This is particularly important because our lessons contain more than paragraphs.
+
+The editor should support structured content blocks:
+
+| Content block        | Purpose                                 |
+| -------------------- | --------------------------------------- |
+| Rich text            | Explanations, headings and lists        |
+| Image                | Diagrams, illustrations and screenshots |
+| Video                | Recorded lessons and demonstrations     |
+| Audio                | Audio learning materials                |
+| Code block           | Programming examples                    |
+| Callout              | Important warnings and key points       |
+| Table                | Comparisons and structured information  |
+| Download             | PDFs, templates and worksheets          |
+| External resource    | Learning links                          |
+| Quiz                 | Knowledge checks                        |
+| Assignment           | Practical activities                    |
+| Reflection           | Learner questions                       |
+| Checklist            | Completion tasks                        |
+| Interactive activity | Supported learning interactions         |
+
+**Critical design decision:** Build a structured lesson editor, not just a giant text box.
+
+Our Day 1, Day 2 and Day 3 materials should be convertible into organized platform lessons with headings, images, exercises, assessment questions and resources.
+
+The editor should include:
+
+1. English and Kinyarwanda versions.
+2. Autosave and visible save status.
+3. Preview mode.
+4. Draft and publishing controls.
+5. Lesson ordering.
+6. Required/optional lesson settings.
+7. Estimated completion time.
+8. Learning objectives.
+9. Attachments and downloadable materials.
+10. Version history and restoration.
+
+### D. English and Kinyarwanda content management
+
+Every course and lesson needs a shared identity with language-specific content.
+
+For example:
+
+**Lesson: What Is Artificial Intelligence?**
+
+English (Published)
+
+English title, body, exercises and resources.
+
+---
+
+Kinyarwanda (Translation needed)
+
+Separate Kinyarwanda title, body, exercises and resources.
+
+Administrators should be able to:
+
+- Switch between language versions.
+- See missing translations.
+- Copy an English draft into a Kinyarwanda draft as a starting point.
+- Edit each language independently.
+- Publish one language without accidentally publishing an unfinished translation.
+- Track translation completion.
+
+Never automatically publish an AI-generated translation without human review.
+
+### E. Course publishing checklist
+
+Before publishing, the system should check:
+
+- Course title and description exist.
+- Learning objectives exist.
+- At least one module exists.
+- Required lessons have content.
+- Required translations are ready for the selected language.
+- Pricing and enrollment settings are valid.
+- Instructor assignment is valid, if required.
+- Certificate rules are configured, if a certificate is offered.
+- Course preview is available.
+
+The system should explain what is missing instead of simply displaying an error.
+
+---
+
+## 5. Learner experience — make learning effortless
+
+This is where the platform earns its reputation.
+
+The learner should not feel like they are navigating a complicated school administration system.
+
+They should feel guided.
+
+### A. Learner home dashboard
+
+The first screen after login should prioritize:
+
+1. Welcome message.
+2. Continue learning.
+3. Current course progress.
+4. Next lesson.
+5. Upcoming live sessions or events.
+6. Pending assignments.
+7. Recent announcements.
+8. Achievements and certificates.
+
+Example:
+
+# Welcome back 👋
+
+Your learning dashboard
+
+(Continue learning)
+
+**28-Day Practical AI Challenge**
+
+Day 3 of 28 · Generative AI and LLMs
+
+Progress: 11% 3/28 lessons
+
+**Continue where you stopped →**
+
+**Assignments**
+
+# 2
+
+Pending
+
+**Upcoming**
+
+# 1
+
+Scheduled event
+
+Illustrative dashboard preview, not live platform data.
+
+### B. Course discovery
+
+The public course catalogue should allow learners to:
+
+- Search by course name.
+- Filter by category.
+- Filter by difficulty.
+- Filter by language.
+- Filter by free or paid.
+- See course duration.
+- See course outcomes.
+- View instructor information.
+- See available enrollment dates.
+- Compare course details.
+- View course prerequisites.
+
+Every course card should answer three questions quickly:
+
+1. What will I learn?
+2. Who is this course for?
+3. What do I need to do to enroll?
+
+### C. The learning experience
+
+The actual lesson page should provide:
+
+- Main learning content.
+- Course and module navigation.
+- Previous and next lesson.
+- Lesson completion control.
+- Reading progress.
+- Video playback, where applicable.
+- Downloadable resources.
+- Practical exercises.
+- Notes and bookmarks.
+- Assessment links.
+- Language switching.
+- Help or report-a-problem option.
+
+On mobile, the curriculum should become a convenient collapsible drawer. Do not force learners to navigate a desktop-style sidebar on a small screen.
+
+### D. Never make learners guess what comes next
+
+After completing a lesson, show:
+
+- Completion confirmation.
+- Assessment or assignment, if required.
+- Next lesson.
+- Module progress.
+- Any outstanding requirement.
+
+If a learner cannot proceed because a prerequisite is incomplete, explain exactly what they need to do.
+
+### E. Learning paths
+
+Eventually, the platform should allow administrators to group multiple courses into guided learning paths.
+
+For example:
+
+**AI Foundations to AI Automation**
+
+1. **AI Foundations**
+
+   Understand AI, ML, generative AI and responsible use.
+2. **Prompt Engineering**
+
+   Learn how to communicate effectively with AI models.
+3. **Workflow Automation**
+
+   Design and connect repeatable processes.
+4. **AI-Powered Automation**
+
+   Apply AI to practical workflows and projects.
+
+The learner should see their position in the path and what they need to complete next.
+
+---
+
+## 6. Upcoming programmes, events and opportunities
+
+This needs its own management area. Not everything offered by the organization is a self-paced course.
+
+Administrators should be able to create:
+
+- Upcoming courses.
+- Enrollment announcements.
+- Live workshops.
+- Webinars.
+- Practical bootcamps.
+- Training cohorts.
+- Public events.
+- Free introductory sessions.
+- Special programmes.
+- Application-based opportunities.
+
+Each programme should have:
+
+- Title and description.
+- Cover image.
+- Programme type.
+- Date and time.
+- Time zone.
+- Location or online meeting information.
+- Registration opening and closing dates.
+- Capacity.
+- Eligibility criteria.
+- Price, if applicable.
+- Application questions, if applicable.
+- Visibility and publishing settings.
+- Registration status.
+
+Possible statuses:
+
+- Draft.
+- Upcoming.
+- Registration open.
+- Fully booked.
+- In progress.
+- Completed.
+- Cancelled.
+
+**Important:** An upcoming programme is not automatically an active course enrollment. Keep registration and course enrollment as separate records. A learner who registers for a free webinar should not automatically receive access to a paid course.
+
+## 7. Learner management and access control
+
+Founders need control over who can access what.
+
+### Learner profile
+
+Each learner profile should show:
+
+- Full name and email.
+- Account creation date.
+- Preferred language.
+- Enrolled courses.
+- Payment history.
+- Learning progress.
+- Quiz results.
+- Assignment submissions.
+- Certificates.
+- Account status.
+- Recent activity.
+- Support history.
+
+### Access management
+
+Superadmin should be able to:
+
+- Grant access to a course.
+- Revoke access.
+- Extend access duration.
+- Grant complimentary access.
+- Enroll a learner manually.
+- Move a learner into a cohort.
+- Suspend or reactivate an account.
+- Review access history.
+- Set access expiration.
+- See the reason access was granted or changed.
+
+Every manual access change should record:
+
+- Who made the change.
+- Which learner was affected.
+- Which course was affected.
+- Previous and new access status.
+- Date and time.
+- Reason for the action.
+
+### Staff roles and permissions
+
+Do not give every administrator superadmin privileges.
+
+| Role           | Responsibilities                                  |
+| -------------- | ------------------------------------------------- |
+| Superadmin     | Full platform and business control                |
+| Admin          | Manage assigned education operations              |
+| Course manager | Create and manage assigned courses                |
+| Instructor     | Manage assigned lessons, teaching and assessments |
+| Reviewer       | Review and grade assigned submissions             |
+| Support staff  | Handle learner support and account issues         |
+| Learner        | Access enrolled learning content                  |
+
+Permissions should be granular. For example, an instructor may be allowed to edit their assigned lessons but not change prices, issue refunds or grant themselves superadmin access.
+
+---
+
+## 8. Assessments, assignments and certificates
+
+These features must work together.
+
+### A. Quiz management
+
+Administrators should be able to:
+
+- Create a question bank.
+- Organize questions by course and lesson.
+- Create multiple-choice questions.
+- Create true/false questions.
+- Create short-answer questions.
+- Create questions with explanations.
+- Set marks and pass thresholds.
+- Randomize questions and answer order.
+- Set attempts and time limits.
+- Publish quizzes.
+- Review results.
+
+### B. Assignment management
+
+Support:
+
+- Text submissions.
+- File uploads.
+- Project links.
+- Code or document submissions.
+- Submission deadlines.
+- Resubmission rules.
+- Instructor feedback.
+- Scores and grading rubrics.
+
+### C. Project evaluation
+
+For the 28-Day Practical AI Challenge, instructors should be able to assess practical projects against a rubric.
+
+Example:
+
+| Assessment criterion           | Weight   |
+| ------------------------------ | -------- |
+| Problem understanding          | 20%      |
+| Appropriate AI approach        | 20%      |
+| Practical implementation       | 25%      |
+| Testing and evaluation         | 20%      |
+| Documentation and presentation | 15%      |
+| **Total**                      | **100%** |
+
+The rubric must be editable by authorized staff.
+
+### D. Certificate management
+
+Superadmin should control:
+
+- Certificate templates.
+- Organization name and branding.
+- Course name.
+- Learner name.
+- Issue date.
+- Unique certificate ID.
+- Verification code or QR code.
+- Certificate eligibility rules.
+- Revocation and reissuance.
+
+The public verification page should confirm whether a certificate is valid, revoked or not found, without exposing unnecessary learner information.
+
+Do not automatically issue a certificate simply because someone opened the final lesson.
+
+---
+
+## 9. Payments and commercial management
+
+The platform must support Rwanda's payment environment while remaining extensible.
+
+Initial payment options to investigate and integrate:
+
+- MTN Mobile Money.
+- Airtel Money.
+- Other supported payment providers.
+- Manual payment verification as a controlled fallback.
+
+Superadmin should see:
+
+- Transaction reference.
+- Learner.
+- Course or programme.
+- Amount and currency.
+- Payment provider.
+- Transaction status.
+- Date.
+- Verification details.
+- Refund status.
+
+Payment statuses:
+
+(Verified) (Pending) (Failed) (Refunded)
+
+Important rules:
+
+- Never trust a screenshot as proof of payment.
+- Verify transactions server-side with the payment provider.
+- Protect payment credentials.
+- Prevent duplicate payment callbacks from creating duplicate enrollments.
+- Record refunds and adjustments.
+- Grant paid course access only after verified payment or authorized manual approval.
+- Never collect or store mobile money PINs.
+
+The founder dashboard should distinguish money requested, money pending, money successfully received and money refunded.
+
+---
+
+## 10. Communication and learner support
+
+The platform should not depend on learners discovering important information by chance.
+
+Build a communication center with:
+
+- Course announcements.
+- Platform-wide announcements.
+- Enrollment confirmations.
+- Payment confirmations.
+- Lesson release notifications.
+- Assignment reminders.
+- Upcoming event reminders.
+- Assessment results.
+- Certificate notifications.
+- Account and security alerts.
+
+Support should include:
+
+- Learner support requests.
+- Categories and priority.
+- Assigned staff member.
+- Status tracking.
+- Conversation history.
+- Resolution notes.
+
+Use email first where available. In-platform notifications should also be available. SMS or WhatsApp integrations can be added later after provider costs, consent and delivery reliability are assessed.
+
+## 11. Founder intelligence and monitoring
+
+This is different from a normal dashboard.
+
+A founder needs to understand what is happening and identify problems before they become serious.
+
+Recommended reporting areas:
+
+| Report                | What to measure                              |
+| --------------------- | -------------------------------------------- |
+| Learner growth        | Registrations and active learners over time  |
+| Course performance    | Enrollments, starts and completions          |
+| Learning performance  | Quiz scores and project results              |
+| Revenue               | Verified sales, refunds and payment failures |
+| Engagement            | Lesson activity and returning learners       |
+| Programme performance | Registrations, attendance and completion     |
+| Staff activity        | Administrative and teaching activity         |
+| Support performance   | Open and resolved support requests           |
+
+Add an activity and audit log that records sensitive actions.
+
+Examples:
+
+- Course published.
+- Course price changed.
+- Learner access granted.
+- Learner access revoked.
+- Payment manually verified.
+- Refund processed.
+- Staff role changed.
+- Certificate revoked.
+- Important system settings changed.
+
+Superadmin should be able to filter these records by person, action, date and affected resource.
+
+### Platform alerts
+
+The system should highlight important operational conditions:
+
+- Payment verification failures.
+- Failed notification delivery.
+- Courses with incomplete content.
+- Upcoming enrollment deadlines.
+- Assignments awaiting review.
+- Unexpected spikes in errors.
+- Expiring programme registrations.
+- Suspicious administrative activity.
+
+Avoid meaningless alerts. Every alert should have a reason and, where possible, a recommended action.
+
+---
+
+## 12. Design system and navigation rules
+
+The platform needs a consistent visual identity.
+
+### Design direction
+
+**Clean workspace**
+
+White and light neutral surfaces, clear content hierarchy.
+
+**Learning first**
+
+Course imagery, progress and next actions are prominent.
+
+**Organized administration**
+
+Structured navigation, usable tables and contextual actions.
+
+**Mobile friendly**
+
+Readable lessons, simple navigation and responsive controls.
+
+### Design rules
+
+1. Use a consistent typography system.
+2. Use spacing consistently.
+3. Keep primary actions visible.
+4. Use clear labels rather than obscure icons.
+5. Use icons consistently and always provide tooltips where needed.
+6. Use tables for administration, not oversized cards for everything.
+7. Use searchable filters for large collections.
+8. Use confirmation dialogs for destructive actions.
+9. Provide empty states that explain what to do next.
+10. Show loading, success and error states.
+11. Avoid unnecessary animations.
+12. Make mobile layouts genuinely usable.
+13. Support keyboard navigation and accessible contrast.
+14. Do not make every screen look like the same dashboard template.
+
+### Navigation experience
+
+The user should always understand:
+
+- Where am I?
+- What can I do here?
+- What is the next action?
+- How do I return?
+- Did my action succeed?
+
+Use breadcrumbs on deeper administrative pages, a persistent navigation system, contextual actions and consistent page titles.
+
+A global search can eventually search across courses, learners, programmes and transactions, with results filtered by permissions.
+
+---
+
+## 13. Important platform capabilities we should not forget
+
+These are useful additions that often get overlooked when people focus only on course creation.
+
+| Capability                      | Why it matters                                   |
+| ------------------------------- | ------------------------------------------------ |
+| Course duplication              | Create a new course from an existing structure   |
+| Reusable lesson templates       | Avoid rebuilding common lesson layouts           |
+| Content version history         | Recover earlier lesson content                   |
+| Draft previews                  | Check work before publishing                     |
+| Scheduled publishing            | Prepare content ahead of time                    |
+| Course prerequisites            | Control learning progression                     |
+| Cohort management               | Run separate groups of learners                  |
+| Learning paths                  | Connect courses into programmes                  |
+| Content search                  | Help learners find lessons quickly               |
+| Bookmarks and notes             | Help learners organize study                     |
+| Progress recovery               | Let learners resume where they stopped           |
+| Exportable reports              | Support operational analysis                     |
+| Data export                     | Preserve access to business records              |
+| Backups and recovery            | Protect important educational data               |
+| Consent and privacy controls    | Handle learner information responsibly           |
+| Feature settings                | Enable or disable optional platform capabilities |
+| Localization                    | Manage English and Kinyarwanda content           |
+| Audit logs                      | Maintain accountability                          |
+| Public certificate verification | Confirm certificate authenticity                 |
+
+### Features I would deliberately postpone
+
+These might sound impressive but could distract us from building a dependable education business:
+
+- A social-media-style learner feed.
+- Complex gamification and virtual currencies.
+- Native Android and iOS applications.
+- An AI tutor with unrestricted access to all learner data.
+- Advanced proctoring and invasive monitoring.
+- A complicated affiliate marketplace.
+- Multiple overlapping dashboard systems.
+- An elaborate automation engine before the core workflows work.
+
+Build the foundations first. Add these only when there is a demonstrated need.
+
+---
+
+## 14. The technology and architecture rules
+
+We have previously discussed a TypeScript and Firebase direction. The implementation agent must inspect the existing project before changing anything.
+
+The proposed direction is:
+
+| Layer                  | Preferred approach                                        |
+| ---------------------- | --------------------------------------------------------- |
+| Frontend               | Existing frontend framework, TypeScript                   |
+| Styling                | Existing design system or Tailwind if already established |
+| Authentication         | Firebase Authentication                                   |
+| Database               | Cloud Firestore                                           |
+| File storage           | Firebase Storage                                          |
+| Server operations      | Firebase Cloud Functions with TypeScript                  |
+| Trusted backend access | Firebase Admin SDK                                        |
+| Hosting                | Existing hosting arrangement, with Vercel as an option    |
+| Source control         | GitHub                                                    |
+
+One important clarification: TypeScript is a programming language; React is a frontend library. They are not alternatives. If the existing project uses React with TypeScript, preserve that unless there is a compelling, documented reason to change it.
+
+### Core data organization
+
+A possible Firestore structure:
+
+- `users`
+- `roles`
+- `courses`
+- `modules`
+- `lessons`
+- `lessonTranslations`
+- `learningPaths`
+- `enrollments`
+- `cohorts`
+- `programmes`
+- `registrations`
+- `quizzes`
+- `questions`
+- `quizAttempts`
+- `assignments`
+- `submissions`
+- `certificates`
+- `payments`
+- `refunds`
+- `notifications`
+- `announcements`
+- `supportTickets`
+- `auditLogs`
+- `platformSettings`
+
+This is a proposed logical model, not an instruction to create every collection blindly. The implementation agent must define relationships, access patterns, security rules and data lifecycle before adding collections.
+
+### Non-negotiable security
+
+- Roles must be controlled by trusted backend logic.
+- A learner must never be able to grant themselves admin privileges.
+- Payment secrets must never be exposed in frontend code.
+- Administrative actions must be authorized server-side where appropriate.
+- Firestore rules must enforce access boundaries.
+- Learners must not access another learner's private submissions or records.
+- File uploads must have appropriate validation and access rules.
+- Important changes must be auditable.
+- Backups and recovery must be considered before launch.
+
+# 15. Master implementation instruction for your AI development agent
+
+This is the instruction I would give the coding agent. It makes the agent responsible for product thinking, architecture, UI/UX, implementation, testing and quality control—not merely generating components.
+
+**Implementation brief** (Master prompt)
+
+Copy the complete instruction below into your coding agent. Use it as the project-level specification.
+
+[Copy master implementation prompt]
+
+## 16. Implementation roadmap
+
+Do not instruct the coding agent to build everything in one uncontrolled operation. Use these stages.
+
+1. **Phase 1 — Audit and foundations**
+
+   (Start here)
+   - Inspect existing project.
+   - Establish navigation and design system.
+   - Define database relationships.
+   - Define roles and permissions.
+   - Protect existing functionality and data.
+2. **Phase 2 — Founder control center**
+   - Superadmin dashboard.
+   - User and staff management.
+   - Roles and access.
+   - Audit logs.
+   - Platform settings.
+3. **Phase 3 — Education management**
+   - Course builder.
+   - Modules and lessons.
+   - Content editor.
+   - Translation management.
+   - Preview and publishing.
+4. **Phase 4 — Learner experience**
+   - Public catalogue.
+   - Learner dashboard.
+   - Course player.
+   - Progress tracking.
+   - Learning paths.
+5. **Phase 5 — Learning operations**
+   - Assessments.
+   - Assignments.
+   - Project reviews.
+   - Cohorts.
+   - Certificates.
+6. **Phase 6 — Business operations**
+   - Payments.
+   - Access management.
+   - Discounts and pricing.
+   - Refund records.
+   - Reports and analytics.
+7. **Phase 7 — Programmes and communication**
+   - Upcoming programmes.
+   - Events and registration.
+   - Announcements.
+   - Notifications.
+   - Support center.
+8. **Phase 8 — Quality and launch**
+   - Security tests.
+   - Mobile testing.
+   - Performance.
+   - Data recovery.
+   - End-to-end workflow testing.
+
+## 17. My final product decisions
+
+There are a few things I would insist on before accepting the finished platform.
+
+**1. One platform, not separate disconnected dashboards.** A learner's enrollment, progress, payment and certificate should connect to the same underlying records.
+
+**2. Administration must be independent of development.** Once the platform is ready, preparing Day 4 should require using the course builder—not asking a developer to modify a page.
+
+**3. No fake completeness.** A beautiful button that does nothing is not a feature. A dashboard with invented revenue is worse than no dashboard.
+
+**4. Every important action must be traceable.** Especially payments, refunds, role changes and course-access decisions.
+
+**5. Content must be portable.** Preserve course and lesson data in structured formats so that content is not trapped in one particular page design.
+
+**6. Mobile is a first-class experience.** Learners should not need an expensive computer to read lessons, take quizzes or follow their progress. Some practical automation exercises may still require a laptop.
+
+**7. The platform should grow without becoming confusing.** New features should fit into the existing architecture rather than creating another sidebar, another dashboard or another competing workflow.
+
+### What I want you to understand before implementation
+
+There is a difference between a platform having many features and a platform being genuinely easy to use.
+
+We are not trying to win by having the longest feature list. We are trying to make every important task feel obvious.
+
+A learner opens the platform and immediately knows what to do.
+
+An instructor opens it and knows how to prepare a lesson.
+
+A superadmin opens it and understands the state of the business.
+
+That is the product standard.
+
+**My recommendation:** Start with Phase 1 and Phase 2. Do not begin preparing the Day 1–28 lessons inside the platform until the course builder is working properly. Once it is ready, we can transfer all three existing lessons into the system and continue preparing the remaining course content there.

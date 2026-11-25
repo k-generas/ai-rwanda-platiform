@@ -1,0 +1,723 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Learner or staff account profile with account status.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "email": { "type": "string", "format": "email", "maxLength": 200 },
+        "preferredLanguage": { "type": "string", "enum": ["en", "rw"] },
+        "role": { "type": "string", "enum": ["superadmin", "admin", "course_manager", "instructor", "reviewer", "support_staff", "learner"] },
+        "accountStatus": { "type": "string", "enum": ["active", "suspended"] },
+        "suspensionReason": { "type": "string", "maxLength": 400 },
+        "privacyConsentAcceptedAt": { "type": "string", "maxLength": 64 },
+        "marketingOptIn": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "displayName", "email", "preferredLanguage", "role", "accountStatus", "createdAt", "updatedAt"]
+    },
+    "StaffRoleRecord": {
+      "title": "StaffRoleRecord",
+      "description": "Authoritative RBAC role and granular permissions assignment managed strictly by Superadmin.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "email": { "type": "string", "format": "email", "maxLength": 200 },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "role": { "type": "string", "enum": ["superadmin", "admin", "course_manager", "instructor", "reviewer", "support_staff"] },
+        "permissions": { "type": "array" },
+        "assignedCourseIds": { "type": "array" },
+        "status": { "type": "string", "enum": ["active", "suspended"] },
+        "updatedBy": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "displayName", "role", "permissions", "assignedCourseIds", "status", "updatedBy", "createdAt", "updatedAt"]
+    },
+    "Course": {
+      "title": "Course",
+      "description": "Bilingual course catalog entry with English and Kinyarwanda metadata and builder settings.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "slug": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "code": { "type": "string", "minLength": 1, "maxLength": 32 },
+        "status": { "type": "string", "enum": ["draft", "in_review", "active", "upcoming", "scheduled", "archived"] },
+        "category": { "type": "string", "enum": ["foundations", "prompting", "automation", "agents", "industry"] },
+        "visibility": { "type": "string", "enum": ["public", "unlisted", "private"] },
+        "isFree": { "type": "boolean" },
+        "priceRwf": { "type": "number" },
+        "durationDays": { "type": "number" },
+        "capacity": { "type": "number" },
+        "enrolledCount": { "type": "number" },
+        "certificateEligible": { "type": "boolean" },
+        "levelRange": { "type": "string", "maxLength": 40 },
+        "ownerUid": { "type": "string", "maxLength": 128 },
+        "startDate": { "type": "string", "maxLength": 64 },
+        "endDate": { "type": "string", "maxLength": 64 },
+        "coverImageUrl": { "type": "string", "maxLength": 500 },
+        "promoVideoUrl": { "type": "string", "maxLength": 500 },
+        "prerequisitesText": { "type": "string", "maxLength": 500 },
+        "seoTitle": { "type": "string", "maxLength": 160 },
+        "seoDescription": { "type": "string", "maxLength": 320 },
+        "titleEn": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "titleRw": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "subtitleEn": { "type": "string", "maxLength": 260 },
+        "subtitleRw": { "type": "string", "maxLength": 260 },
+        "descriptionEn": { "type": "string", "maxLength": 2000 },
+        "descriptionRw": { "type": "string", "maxLength": 2000 },
+        "outcomesEn": { "type": "array" },
+        "outcomesRw": { "type": "array" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "slug", "code", "status", "priceRwf", "durationDays", "titleEn", "titleRw", "updatedAt"]
+    },
+    "CourseModule": {
+      "title": "CourseModule",
+      "description": "Structured course module container grouping ordered lessons.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "courseId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "orderIndex": { "type": "number" },
+        "titleEn": { "type": "string", "minLength": 1, "maxLength": 180 },
+        "titleRw": { "type": "string", "minLength": 1, "maxLength": 180 },
+        "summaryEn": { "type": "string", "maxLength": 1000 },
+        "summaryRw": { "type": "string", "maxLength": 1000 },
+        "releaseAt": { "type": "string", "maxLength": 64 },
+        "releaseAtMs": { "type": "number" },
+        "isPublished": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "courseId", "orderIndex", "titleEn", "titleRw", "isPublished", "updatedAt"]
+    },
+    "Lesson": {
+      "title": "Lesson",
+      "description": "Shared lesson identity holding English and Kinyarwanda structured instructional blocks.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "courseId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "moduleId": { "type": "string", "maxLength": 128 },
+        "orderIndex": { "type": "number" },
+        "dayNumber": { "type": "number" },
+        "weekNumber": { "type": "number" },
+        "isSample": { "type": "boolean" },
+        "isRequired": { "type": "boolean" },
+        "estimatedMinutes": { "type": "number" },
+        "enStatus": { "type": "string", "enum": ["draft", "published"] },
+        "rwStatus": { "type": "string", "enum": ["draft", "translation_needed", "published"] },
+        "releaseAt": { "type": "string", "maxLength": 64 },
+        "releaseAtMs": { "type": "number" },
+        "titleEn": { "type": "string", "minLength": 1, "maxLength": 180 },
+        "titleRw": { "type": "string", "minLength": 1, "maxLength": 180 },
+        "summaryEn": { "type": "string", "maxLength": 4000 },
+        "summaryRw": { "type": "string", "maxLength": 4000 },
+        "objectivesEn": { "type": "array" },
+        "objectivesRw": { "type": "array" },
+        "blocksEnJson": { "type": "string", "maxLength": 200000 },
+        "blocksRwJson": { "type": "string", "maxLength": 200000 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "courseId", "dayNumber", "weekNumber", "isSample", "titleEn", "titleRw", "updatedAt"]
+    },
+    "LessonVersion": {
+      "title": "LessonVersion",
+      "description": "Point-in-time snapshot of a structured bilingual lesson for version restoration.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "lessonId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "courseId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "savedBy": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "note": { "type": "string", "maxLength": 240 },
+        "snapshotJson": { "type": "string", "minLength": 2, "maxLength": 250000 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "lessonId", "courseId", "savedBy", "snapshotJson", "createdAt"]
+    },
+    "LearningPath": {
+      "title": "LearningPath",
+      "description": "Ordered sequence of courses forming a guided educational progression.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "titleEn": { "type": "string", "minLength": 2, "maxLength": 160 },
+        "titleRw": { "type": "string", "minLength": 2, "maxLength": 160 },
+        "descriptionEn": { "type": "string", "maxLength": 1200 },
+        "descriptionRw": { "type": "string", "maxLength": 1200 },
+        "courseIds": { "type": "array" },
+        "isPublished": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "titleEn", "titleRw", "courseIds", "isPublished", "updatedAt"]
+    },
+    "PaymentRecord": {
+      "title": "PaymentRecord",
+      "description": "Mobile Money transaction record awaiting or passing backend/authorized verification.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "courseId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "provider": { "type": "string", "enum": ["mtn_momo", "airtel_money", "manual"] },
+        "phoneMasked": { "type": "string", "minLength": 4, "maxLength": 32 },
+        "amountRwf": { "type": "number" },
+        "couponCode": { "type": "string", "maxLength": 40 },
+        "discountRwf": { "type": "number" },
+        "transactionRef": { "type": "string", "minLength": 4, "maxLength": 100 },
+        "status": { "type": "string", "enum": ["pending", "verified", "failed", "refunded"] },
+        "verifiedBy": { "type": "string", "maxLength": 128 },
+        "verificationNote": { "type": "string", "maxLength": 400 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "courseId", "provider", "phoneMasked", "amountRwf", "transactionRef", "status", "createdAt"]
+    },
+    "RefundRecord": {
+      "title": "RefundRecord",
+      "description": "Commercial refund ledger record tied to a payment.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "paymentId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "courseId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "amountRwf": { "type": "number" },
+        "reason": { "type": "string", "minLength": 3, "maxLength": 500 },
+        "status": { "type": "string", "enum": ["processed", "pending"] },
+        "processedBy": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "paymentId", "userId", "courseId", "amountRwf", "reason", "status", "processedBy", "createdAt"]
+    },
+    "Enrollment": {
+      "title": "Enrollment",
+      "description": "Learner course access record with access type and progress.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 256, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "courseId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userEmail": { "type": "string", "format": "email", "maxLength": 200 },
+        "userName": { "type": "string", "maxLength": 120 },
+        "status": { "type": "string", "enum": ["pending", "active", "revoked", "expired"] },
+        "accessType": { "type": "string", "enum": ["paid", "free", "manual_grant", "complimentary", "sponsored"] },
+        "paymentRef": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "amountRwf": { "type": "number" },
+        "couponCode": { "type": "string", "maxLength": 40 },
+        "discountRwf": { "type": "number" },
+        "cohortId": { "type": "string", "maxLength": 128 },
+        "cohortName": { "type": "string", "maxLength": 120 },
+        "completedDays": { "type": "array" },
+        "currentDay": { "type": "number" },
+        "grantedBy": { "type": "string", "maxLength": 128 },
+        "grantReason": { "type": "string", "maxLength": 400 },
+        "expiresAt": { "type": "string", "maxLength": 64 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "courseId", "userEmail", "userName", "status", "paymentRef", "amountRwf", "completedDays", "currentDay", "createdAt", "updatedAt"]
+    },
+    "QuizAttempt": {
+      "title": "QuizAttempt",
+      "description": "Learner weekly assessment or dynamic quiz attempt and score.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "courseId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "quizId": { "type": "string", "maxLength": 128 },
+        "quizTitle": { "type": "string", "maxLength": 180 },
+        "weekNumber": { "type": "number" },
+        "score": { "type": "number" },
+        "passed": { "type": "boolean" },
+        "totalQuestions": { "type": "number" },
+        "correctCount": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "courseId", "weekNumber", "score", "totalQuestions", "correctCount", "createdAt"]
+    },
+    "ProjectSubmission": {
+      "title": "ProjectSubmission",
+      "description": "Practical project submission and instructor rubric review.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "userEmail": { "type": "string", "format": "email", "maxLength": 200 },
+        "courseId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "projectKey": { "type": "string", "enum": ["study_assistant", "auto_registration", "customer_inquiry", "content_planning", "research_assistant", "custom"] },
+        "title": { "type": "string", "minLength": 3, "maxLength": 180 },
+        "problemStatement": { "type": "string", "minLength": 10, "maxLength": 2000 },
+        "toolsUsed": { "type": "array" },
+        "artifactUrl": { "type": "string", "maxLength": 500 },
+        "documentationSummary": { "type": "string", "minLength": 10, "maxLength": 3000 },
+        "status": { "type": "string", "enum": ["submitted", "under_review", "approved", "needs_revision"] },
+        "score": { "type": "number" },
+        "reviewerFeedback": { "type": "string", "maxLength": 1500 },
+        "assignedReviewerUid": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "userName", "userEmail", "courseId", "projectKey", "title", "problemStatement", "toolsUsed", "documentationSummary", "status", "createdAt", "updatedAt"]
+    },
+    "Certificate": {
+      "title": "Certificate",
+      "description": "Publicly verifiable Certificate of Completion record.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 4, "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "learnerName": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "courseId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "courseTitle": { "type": "string", "minLength": 3, "maxLength": 180 },
+        "finalScore": { "type": "number" },
+        "status": { "type": "string", "enum": ["valid", "revoked"] },
+        "issuedAt": { "type": "string", "format": "date-time" },
+        "issuedBy": { "type": "string", "maxLength": 128 }
+      },
+      "required": ["id", "userId", "learnerName", "courseId", "courseTitle", "finalScore", "status", "issuedAt", "issuedBy"]
+    },
+    "EventRegistration": {
+      "title": "EventRegistration",
+      "description": "Workshop and live cohort event registration.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 256, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "eventId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "eventTitle": { "type": "string", "minLength": 2, "maxLength": 180 },
+        "attendeeName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "attendeeEmail": { "type": "string", "format": "email", "maxLength": 200 },
+        "attendanceMode": { "type": "string", "enum": ["online", "kigali_in_person"] },
+        "status": { "type": "string", "enum": ["registered", "cancelled"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "eventId", "eventTitle", "attendeeName", "attendeeEmail", "attendanceMode", "status", "createdAt", "updatedAt"]
+    },
+    "Inquiry": {
+      "title": "Inquiry",
+      "description": "Public contact message or upcoming course waitlist registration.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "type": { "type": "string", "enum": ["contact", "waitlist"] },
+        "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "email": { "type": "string", "format": "email", "maxLength": 200 },
+        "topic": { "type": "string", "maxLength": 160 },
+        "message": { "type": "string", "maxLength": 2000 },
+        "courseSlug": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "type", "name", "email", "createdAt"]
+    },
+    "Announcement": {
+      "title": "Announcement",
+      "description": "Platform-wide or course-specific bilingual announcement.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "titleEn": { "type": "string", "minLength": 2, "maxLength": 180 },
+        "titleRw": { "type": "string", "minLength": 2, "maxLength": 180 },
+        "bodyEn": { "type": "string", "minLength": 2, "maxLength": 2000 },
+        "bodyRw": { "type": "string", "minLength": 2, "maxLength": 2000 },
+        "audience": { "type": "string", "enum": ["all", "learners", "staff"] },
+        "isPublished": { "type": "boolean" },
+        "createdBy": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "titleEn", "titleRw", "bodyEn", "bodyRw", "audience", "isPublished", "createdBy", "createdAt"]
+    },
+    "NotificationRecord": {
+      "title": "NotificationRecord",
+      "description": "In-platform user notification.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "title": { "type": "string", "minLength": 2, "maxLength": 160 },
+        "message": { "type": "string", "minLength": 2, "maxLength": 600 },
+        "category": { "type": "string", "enum": ["enrollment", "payment", "assessment", "certificate", "system"] },
+        "isRead": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "title", "message", "category", "isRead", "createdAt"]
+    },
+    "SupportTicket": {
+      "title": "SupportTicket",
+      "description": "Learner or staff support request tracked through resolution.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userEmail": { "type": "string", "format": "email", "maxLength": 200 },
+        "userName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "category": { "type": "string", "enum": ["access", "payment", "technical", "curriculum", "certificate", "other"] },
+        "priority": { "type": "string", "enum": ["low", "normal", "high", "urgent"] },
+        "status": { "type": "string", "enum": ["open", "in_progress", "resolved", "closed"] },
+        "subject": { "type": "string", "minLength": 3, "maxLength": 180 },
+        "description": { "type": "string", "minLength": 5, "maxLength": 2000 },
+        "assignedToUid": { "type": "string", "maxLength": 128 },
+        "resolutionNote": { "type": "string", "maxLength": 1500 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "userEmail", "userName", "category", "priority", "status", "subject", "description", "createdAt", "updatedAt"]
+    },
+    "PlatformSettings": {
+      "title": "PlatformSettings",
+      "description": "Global platform configuration and integration readiness flags.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "platformName": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "defaultLanguage": { "type": "string", "enum": ["en", "rw"] },
+        "allowSelfRegistration": { "type": "boolean" },
+        "maintenanceMode": { "type": "boolean" },
+        "momoIntegrationActive": { "type": "boolean" },
+        "airtelIntegrationActive": { "type": "boolean" },
+        "emailProviderActive": { "type": "boolean" },
+        "smsProviderActive": { "type": "boolean" },
+        "enablePublicVerify": { "type": "boolean" },
+        "enableWaitlists": { "type": "boolean" },
+        "enableSupportTickets": { "type": "boolean" },
+        "enableCoupons": { "type": "boolean" },
+        "certificateOrgName": { "type": "string", "maxLength": 140 },
+        "certificateSignatoryName": { "type": "string", "maxLength": 120 },
+        "certificateSignatoryTitle": { "type": "string", "maxLength": 140 },
+        "certificateMinQuizAvg": { "type": "number" },
+        "certificateMinProjectScore": { "type": "number" },
+        "updatedBy": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "platformName", "defaultLanguage", "allowSelfRegistration", "maintenanceMode", "momoIntegrationActive", "airtelIntegrationActive", "emailProviderActive", "smsProviderActive", "updatedBy", "updatedAt"]
+    },
+    "Cohort": {
+      "title": "Cohort",
+      "description": "Scheduled learner cohort or group attached to a course.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "courseId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "code": { "type": "string", "minLength": 2, "maxLength": 40 },
+        "instructorUid": { "type": "string", "maxLength": 128 },
+        "instructorName": { "type": "string", "maxLength": 120 },
+        "startDate": { "type": "string", "minLength": 4, "maxLength": 64 },
+        "endDate": { "type": "string", "minLength": 4, "maxLength": 64 },
+        "capacity": { "type": "number" },
+        "enrolledCount": { "type": "number" },
+        "status": { "type": "string", "enum": ["planned", "enrolling", "active", "completed", "archived"] },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "courseId", "name", "code", "startDate", "endDate", "capacity", "status", "updatedAt"]
+    },
+    "CouponRecord": {
+      "title": "CouponRecord",
+      "description": "Promotional discount code or scholarship coupon.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 2, "maxLength": 40, "pattern": "^[A-Z0-9_\\-]+$" },
+        "code": { "type": "string", "minLength": 2, "maxLength": 40 },
+        "discountType": { "type": "string", "enum": ["percent", "fixed_rwf"] },
+        "discountValue": { "type": "number" },
+        "courseId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "maxUses": { "type": "number" },
+        "usedCount": { "type": "number" },
+        "expiresAt": { "type": "string", "maxLength": 64 },
+        "isActive": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "code", "discountType", "discountValue", "courseId", "maxUses", "usedCount", "isActive", "updatedAt"]
+    },
+    "ProgrammeRecord": {
+      "title": "ProgrammeRecord",
+      "description": "Workshop, webinar, bootcamp, or upcoming cohort event.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "slug": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "type": { "type": "string", "enum": ["workshop", "webinar", "bootcamp", "cohort", "upcoming_course", "special_programme"] },
+        "titleEn": { "type": "string", "minLength": 2, "maxLength": 180 },
+        "titleRw": { "type": "string", "minLength": 2, "maxLength": 180 },
+        "descriptionEn": { "type": "string", "minLength": 2, "maxLength": 2000 },
+        "descriptionRw": { "type": "string", "minLength": 2, "maxLength": 2000 },
+        "dateLabel": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "timeLabel": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "timezone": { "type": "string", "maxLength": 64 },
+        "format": { "type": "string", "enum": ["online", "kigali_in_person", "hybrid"] },
+        "locationEn": { "type": "string", "minLength": 2, "maxLength": 180 },
+        "locationRw": { "type": "string", "minLength": 2, "maxLength": 180 },
+        "languageLabel": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "meetingUrl": { "type": "string", "maxLength": 400 },
+        "capacity": { "type": "number" },
+        "registeredCount": { "type": "number" },
+        "eligibilityEn": { "type": "string", "maxLength": 300 },
+        "eligibilityRw": { "type": "string", "maxLength": 300 },
+        "priceRwf": { "type": "number" },
+        "status": { "type": "string", "enum": ["draft", "upcoming", "registration_open", "fully_booked", "in_progress", "completed", "cancelled"] },
+        "featured": { "type": "boolean" },
+        "speaker": { "type": "string", "minLength": 2, "maxLength": 140 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "slug", "type", "titleEn", "titleRw", "descriptionEn", "descriptionRw", "dateLabel", "timeLabel", "timezone", "format", "locationEn", "locationRw", "languageLabel", "capacity", "priceRwf", "status", "featured", "speaker", "updatedAt"]
+    },
+    "DynamicQuiz": {
+      "title": "DynamicQuiz",
+      "description": "Published or draft quiz with question bank payload.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "courseId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "moduleId": { "type": "string", "maxLength": 128 },
+        "weekNumber": { "type": "number" },
+        "titleEn": { "type": "string", "minLength": 2, "maxLength": 180 },
+        "titleRw": { "type": "string", "minLength": 2, "maxLength": 180 },
+        "descriptionEn": { "type": "string", "maxLength": 800 },
+        "descriptionRw": { "type": "string", "maxLength": 800 },
+        "passThreshold": { "type": "number" },
+        "timeLimitMinutes": { "type": "number" },
+        "maxAttempts": { "type": "number" },
+        "randomizeQuestions": { "type": "boolean" },
+        "isPublished": { "type": "boolean" },
+        "questionsJson": { "type": "string", "minLength": 2, "maxLength": 150000 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "courseId", "weekNumber", "titleEn", "titleRw", "passThreshold", "timeLimitMinutes", "maxAttempts", "randomizeQuestions", "isPublished", "questionsJson", "updatedAt"]
+    },
+    "RubricConfig": {
+      "title": "RubricConfig",
+      "description": "Persisted project grading rubric weights per course.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "courseId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "problemWeight": { "type": "number" },
+        "approachWeight": { "type": "number" },
+        "implementationWeight": { "type": "number" },
+        "testingWeight": { "type": "number" },
+        "docsWeight": { "type": "number" },
+        "passThreshold": { "type": "number" },
+        "updatedBy": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "courseId", "problemWeight", "approachWeight", "implementationWeight", "testingWeight", "docsWeight", "passThreshold", "updatedBy", "updatedAt"]
+    },
+    "LearnerNote": {
+      "title": "LearnerNote",
+      "description": "Private learner bookmark and study notes per lesson.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 256, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "courseId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "dayNumber": { "type": "number" },
+        "bookmarked": { "type": "boolean" },
+        "noteText": { "type": "string", "maxLength": 5000 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "courseId", "dayNumber", "bookmarked", "noteText", "updatedAt"]
+    },
+    "TicketMessage": {
+      "title": "TicketMessage",
+      "description": "Two-way conversation message attached to a support ticket.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ticketId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ticketOwnerUid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "senderUid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "senderName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "senderRole": { "type": "string", "enum": ["learner", "staff"] },
+        "message": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "ticketId", "ticketOwnerUid", "senderUid", "senderName", "senderRole", "message", "createdAt"]
+    },
+    "EmailTemplateRecord": {
+      "title": "EmailTemplateRecord",
+      "description": "Editable EN/RW email message templates managed by Superadmin/Admin.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "templateKey": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "name": { "type": "string", "minLength": 2, "maxLength": 140 },
+        "subjectEn": { "type": "string", "minLength": 2, "maxLength": 200 },
+        "subjectRw": { "type": "string", "minLength": 2, "maxLength": 200 },
+        "bodyEn": { "type": "string", "minLength": 2, "maxLength": 3000 },
+        "bodyRw": { "type": "string", "minLength": 2, "maxLength": 3000 },
+        "updatedBy": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "templateKey", "name", "subjectEn", "subjectRw", "bodyEn", "bodyRw", "updatedBy", "updatedAt"]
+    },
+    "ResourceItem": {
+      "title": "ResourceItem",
+      "description": "Bilingual downloadable prompt sheet, checklist, or guide.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "courseId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "category": { "type": "string", "enum": ["prompting", "automation", "ai_automation", "project"] },
+        "titleEn": { "type": "string", "minLength": 2, "maxLength": 180 },
+        "titleRw": { "type": "string", "minLength": 2, "maxLength": 180 },
+        "descriptionEn": { "type": "string", "minLength": 2, "maxLength": 600 },
+        "descriptionRw": { "type": "string", "minLength": 2, "maxLength": 600 },
+        "filename": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "externalUrl": { "type": "string", "maxLength": 400 },
+        "contentEn": { "type": "string", "minLength": 2, "maxLength": 20000 },
+        "contentRw": { "type": "string", "minLength": 2, "maxLength": 20000 },
+        "isPublished": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "courseId", "category", "titleEn", "titleRw", "descriptionEn", "descriptionRw", "filename", "contentEn", "contentRw", "isPublished", "updatedAt"]
+    },
+    "AuditLog": {
+      "title": "AuditLog",
+      "description": "Immutable administrative and founder audit log.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "actorUid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "actorEmail": { "type": "string", "format": "email", "maxLength": 200 },
+        "actorRole": { "type": "string", "maxLength": 40 },
+        "action": { "type": "string", "minLength": 2, "maxLength": 100 },
+        "targetCollection": { "type": "string", "minLength": 2, "maxLength": 64 },
+        "targetId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "previousState": { "type": "string", "maxLength": 300 },
+        "newState": { "type": "string", "maxLength": 300 },
+        "reason": { "type": "string", "maxLength": 500 },
+        "summary": { "type": "string", "minLength": 2, "maxLength": 500 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "actorUid", "actorEmail", "action", "targetCollection", "targetId", "summary", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Learner and staff user profiles isolated by owner and staff."
+    },
+    "/staffRoles/{userId}": {
+      "schema": { "$ref": "#/entities/StaffRoleRecord" },
+      "description": "Authoritative 7-role RBAC assignments managed by Superadmin."
+    },
+    "/admins/{userId}": {
+      "schema": "UserProfile",
+      "description": "Legacy/compatibility admin registry."
+    },
+    "/courses/{courseId}": {
+      "schema": { "$ref": "#/entities/Course" },
+      "description": "Publicly browsable bilingual course catalog."
+    },
+    "/modules/{moduleId}": {
+      "schema": { "$ref": "#/entities/CourseModule" },
+      "description": "Ordered course modules managed by education staff."
+    },
+    "/lessons/{lessonId}": {
+      "schema": { "$ref": "#/entities/Lesson" },
+      "description": "Bilingual course lessons with structured blocks gated by sample status or active enrollment."
+    },
+    "/lessonVersions/{versionId}": {
+      "schema": { "$ref": "#/entities/LessonVersion" },
+      "description": "Version snapshots for restoring previous lesson content."
+    },
+    "/learningPaths/{pathId}": {
+      "schema": { "$ref": "#/entities/LearningPath" },
+      "description": "Guided learning paths grouping multiple courses."
+    },
+    "/payments/{paymentId}": {
+      "schema": { "$ref": "#/entities/PaymentRecord" },
+      "description": "Payment records awaiting or passing server/authorized verification."
+    },
+    "/refunds/{refundId}": {
+      "schema": { "$ref": "#/entities/RefundRecord" },
+      "description": "Refund ledger entries."
+    },
+    "/enrollments/{enrollmentId}": {
+      "schema": { "$ref": "#/entities/Enrollment" },
+      "description": "Learner enrollments keyed deterministically as {userId}_{courseId}."
+    },
+    "/quizAttempts/{attemptId}": {
+      "schema": { "$ref": "#/entities/QuizAttempt" },
+      "description": "Weekly knowledge assessment attempts owned by the learner."
+    },
+    "/projectSubmissions/{submissionId}": {
+      "schema": { "$ref": "#/entities/ProjectSubmission" },
+      "description": "Practical project submissions and instructor rubric grades."
+    },
+    "/certificates/{certificateId}": {
+      "schema": { "$ref": "#/entities/Certificate" },
+      "description": "Admin-issued certificates publicly verifiable by exact certificate ID."
+    },
+    "/eventRegistrations/{regId}": {
+      "schema": { "$ref": "#/entities/EventRegistration" },
+      "description": "Learner workshop and event RSVPs keyed as {userId}_{eventId}."
+    },
+    "/inquiries/{inquiryId}": {
+      "schema": { "$ref": "#/entities/Inquiry" },
+      "description": "Contact form messages and upcoming cohort waitlist signups."
+    },
+    "/announcements/{announcementId}": {
+      "schema": { "$ref": "#/entities/Announcement" },
+      "description": "Published platform and course announcements."
+    },
+    "/notifications/{notificationId}": {
+      "schema": { "$ref": "#/entities/NotificationRecord" },
+      "description": "In-platform user notifications."
+    },
+    "/supportTickets/{ticketId}": {
+      "schema": { "$ref": "#/entities/SupportTicket" },
+      "description": "Learner support requests and resolution tracking."
+    },
+    "/platformSettings/{docId}": {
+      "schema": { "$ref": "#/entities/PlatformSettings" },
+      "description": "Global platform configuration and integration readiness flags."
+    },
+    "/cohorts/{cohortId}": {
+      "schema": { "$ref": "#/entities/Cohort" },
+      "description": "Course cohorts and student groups."
+    },
+    "/coupons/{couponId}": {
+      "schema": { "$ref": "#/entities/CouponRecord" },
+      "description": "Discount coupons validated on checkout and managed by Admin."
+    },
+    "/programmes/{programmeId}": {
+      "schema": { "$ref": "#/entities/ProgrammeRecord" },
+      "description": "Dynamic live workshops, bootcamps, and special programmes."
+    },
+    "/quizzes/{quizId}": {
+      "schema": { "$ref": "#/entities/DynamicQuiz" },
+      "description": "Dynamic bilingual quizzes and question banks."
+    },
+    "/rubrics/{rubricId}": {
+      "schema": { "$ref": "#/entities/RubricConfig" },
+      "description": "Persisted project grading rubric weights per course."
+    },
+    "/learnerNotes/{noteId}": {
+      "schema": { "$ref": "#/entities/LearnerNote" },
+      "description": "Private learner study notes and lesson bookmarks keyed as {userId}_{courseId}_{dayNumber}."
+    },
+    "/ticketMessages/{msgId}": {
+      "schema": { "$ref": "#/entities/TicketMessage" },
+      "description": "Two-way conversation replies on learner support tickets."
+    },
+    "/emailTemplates/{templateId}": {
+      "schema": { "$ref": "#/entities/EmailTemplateRecord" },
+      "description": "Bilingual email templates customized by platform administration."
+    },
+    "/resources/{resourceId}": {
+      "schema": { "$ref": "#/entities/ResourceItem" },
+      "description": "Curated bilingual worksheets and prompt libraries."
+    },
+    "/auditLogs/{logId}": {
+      "schema": { "$ref": "#/entities/AuditLog" },
+      "description": "Append-only administrative and founder audit logs."
+    }
+  }
+}

@@ -1,0 +1,918 @@
+AI Education Rwanda — Complete Business, Course, Technology and Launch Blueprint
+UPDATED MASTER DOCUMENT · VERSION 2.0
+
+This is the revised blueprint for the AI education business, incorporating your technology changes:
+- Firebase instead of MySQL
+- TypeScript instead of React
+- Vite + TypeScript for the frontend
+- Node.js + Express + TypeScript for the backend, where needed
+- Firebase services for authentication, database, storage and server-side functions
+One technical clarification: TypeScript and React are not direct alternatives. React is a UI library; TypeScript is a programming language. Since you asked to use TypeScript instead of React, this blueprint uses vanilla TypeScript with Vite, without React.
+PART 1: BUSINESS OVERVIEW
+1. Business concept
+The business is an independent AI education company focused on helping people understand, use and build with artificial intelligence.
+
+Its purpose is not simply to teach people how to use ChatGPT or Gemini.
+
+It aims to teach people how to:
+1. Understand artificial intelligence.
+2. Communicate effectively with AI systems.
+3. Solve real problems using AI.
+4. Design automated workflows.
+5. Connect different applications and services.
+6. Build AI-powered automation systems.
+7. Understand and design AI agents.
+8. Apply these skills to education, business, agriculture and other industries.
+Core message:
+Learn AI. Apply AI. Build with AI.
+
+The business will start in Rwanda, with the possibility of expanding to other African countries and eventually international markets.
+2. Mission
+Make practical AI education accessible to people who want to understand artificial intelligence and use it to solve real-world problems.
+3. Vision
+Become a trusted practical AI education provider that helps individuals and organizations develop useful AI, automation and problem-solving skills.
+4. Target market
+Primary audience
+- Secondary school graduates.
+- University students.
+- TVET students.
+- Recent graduates.
+- Young people interested in technology.
+- People who want to improve their productivity using AI.
+Secondary audience
+- Small business owners.
+- Entrepreneurs.
+- Teachers and educators.
+- Content creators.
+- Freelancers.
+- Professionals.
+- NGOs and organizations.
+Geographic strategy
+Stage	Market
+Stage 1	Rwanda
+Stage 2	East Africa
+Stage 3	Other African markets
+Stage 4	Global market
+
+
+5. The problem being addressed
+Many people have access to AI tools but do not know how to use them effectively.
+
+Some can ask ChatGPT questions, generate images or write content, but struggle when they need to:
+- Create reliable outputs.
+- Verify AI-generated information.
+- Design reusable prompt systems.
+- Automate repetitive tasks.
+- Connect applications.
+- Build AI-powered workflows.
+- Understand AI agents.
+- Apply AI to real business or educational problems.
+The opportunity is to move learners beyond basic AI usage.
+The educational gap
+Level 1 — AI awareness
+
+Learners know AI tools exist.
+
+Level 2 — AI usage
+
+Learners can use AI tools for everyday tasks.
+
+Level 3 — Prompt engineering
+
+Learners can communicate with AI more effectively.
+
+Level 4 — Workflow thinking
+
+Learners can identify and design repeatable processes.
+
+Level 5 — Automation
+
+Learners can connect applications and automate tasks.
+
+Level 6 — AI-powered automation
+
+Learners can integrate AI into automated processes.
+
+Level 7 — AI agents and systems
+
+Learners understand how to build and manage systems that use AI tools to perform multi-step tasks.
+
+The business will help learners progress through these levels.
+PART 2: EDUCATIONAL FRAMEWORK
+6. The seven learning levels
+These are the foundation of the educational business. They should guide all courses, lessons, projects and learning resources.
+Level 1: AI Foundations
+Learners understand what artificial intelligence is and how it works.
+
+Topics:
+- What is artificial intelligence?
+- History and development of AI.
+- Artificial intelligence vs machine learning.
+- Machine learning vs deep learning.
+- Generative AI.
+- Large Language Models (LLMs).
+- How AI generates responses.
+- AI hallucinations.
+- Bias and limitations.
+- AI privacy and security.
+- Responsible AI usage.
+- Human judgment and AI.
+Expected outcome:
+
+Learners can explain AI concepts, identify AI limitations and use AI responsibly.
+Level 2: Prompt Engineering
+Learners understand how to communicate effectively with AI systems.
+
+Topics:
+- What is prompt engineering?
+- Anatomy of a good prompt.
+- Context and instructions.
+- Defining roles and objectives.
+- Constraints and output formats.
+- Providing examples.
+- Structured prompting.
+- Advanced prompting techniques.
+- Prompt chaining.
+- Reusable prompt templates.
+- Testing and evaluating prompts.
+- Improving poor AI responses.
+Expected outcome:
+
+Learners can design, test, improve and reuse effective prompts.
+Level 3: Workflow Thinking
+Before automating something, learners must understand how the process works.
+
+Topics:
+- What is a workflow?
+- Identifying repetitive tasks.
+- Understanding inputs and outputs.
+- Triggers and actions.
+- Mapping business processes.
+- Identifying bottlenecks.
+- Decision points.
+- Conditions and exceptions.
+- Human involvement.
+- Designing efficient processes.
+Expected outcome:
+
+Learners can identify a problem and describe how a workflow should operate before choosing an automation tool.
+Level 4: No-Code Automation
+Learners understand how to connect applications and automate repetitive processes.
+
+Topics:
+- Introduction to automation.
+- Automation platforms.
+- Triggers and actions.
+- Connecting applications.
+- Mapping data.
+- Filters and conditions.
+- Scheduling.
+- Error handling.
+- Testing automation.
+- Monitoring workflows.
+Expected outcome:
+
+Learners can build basic automated workflows without needing advanced programming knowledge.
+Level 5: AI-Powered Automation
+Learners understand how AI can become part of an automated workflow.
+
+Topics:
+- Introduction to AI automation.
+- Traditional automation vs AI automation.
+- AI classification.
+- Information extraction.
+- Document summarization.
+- Text generation.
+- Translation.
+- AI-powered customer inquiry processing.
+- AI output evaluation.
+- Human approval.
+- Reliability and limitations.
+Expected outcome:
+
+Learners can design workflows where AI performs specific tasks within a larger automated process.
+Level 6: AI Agents
+Learners understand what AI agents are and how they operate.
+
+Topics:
+- What is an AI agent?
+- AI agents vs chatbots.
+- AI agents vs ordinary automation.
+- Tools and integrations.
+- Knowledge sources.
+- Memory concepts.
+- Multi-step task execution.
+- Permissions and boundaries.
+- Human approval.
+- Agent evaluation.
+- Monitoring and security.
+Expected outcome:
+
+Learners can explain AI agents and design a simple agent workflow with appropriate human oversight.
+Level 7: AI Systems and Problem Solving
+This level connects everything together.
+
+Topics:
+- Identifying real-world problems.
+- Selecting appropriate AI solutions.
+- System architecture.
+- Combining AI, automation and software.
+- Designing AI-powered products.
+- Evaluating solutions.
+- Cost and performance considerations.
+- Security and privacy.
+- Building prototypes.
+- Testing and improving systems.
+Expected outcome:
+
+Learners can plan and demonstrate a practical AI-powered solution to a real problem.
+
+Important: The first 28-day course introduces these levels. It does not promise mastery of all seven levels in four weeks.
+PART 3: FIRST COURSE
+7. Product 01 — 28-Day Practical AI Challenge
+(First product to launch)
+
+Course title: 28-Day Practical AI Challenge
+
+Proposed introductory price: 1,000 RWF, one-time enrollment.
+
+This price is a hypothesis to test, not an established market price.
+
+Duration: 28 days.
+
+Languages: English and Kinyarwanda.
+
+Delivery: Online learning platform.
+
+Target learners: Students, graduates and beginners interested in practical AI.
+Course objective
+By the end of the course, learners should understand AI fundamentals, use AI tools effectively, design workflows, build basic automation and demonstrate an introductory AI-powered project.
+8. Complete 28-day curriculum
+Week 1 — Understanding Artificial Intelligence
+Day	Topic
+1	Introduction to Artificial Intelligence
+2	AI vs Machine Learning vs Deep Learning
+3	Generative AI and Large Language Models
+4	How AI Generates Responses
+5	Hallucinations, Bias and Fact-Checking
+6	Responsible AI, Privacy and Ethics
+7	Weekly Assessment
+
+
+Week 2 — Prompt Engineering
+Day	Topic
+8	Introduction to Prompt Engineering
+9	Structuring Effective Prompts
+10	Advanced Prompting Techniques
+11	AI for Research and Document Analysis
+12	AI for Writing and Productivity
+13	Prompt Chaining and Reusable Prompt Systems
+14	Weekly Assessment
+
+
+Week 3 — Workflow Thinking and Automation
+Day	Topic
+15	Introduction to Automation
+16	Understanding and Mapping Workflows
+17	Introduction to Automation Platforms
+18	Connecting Applications and Mapping Data
+19	Building a Form → Spreadsheet → Email Workflow
+20	Conditions, Filters, Scheduling and Error Handling
+21	Practical Automation Assessment
+
+
+Week 4 — AI-Powered Automation and Agents
+Day	Topic
+22	Introduction to AI-Powered Automation
+23	AI Classification, Extraction and Summarization
+24	Building an AI-Powered Information Processing Workflow
+25	Introduction to AI Agents
+26	Human Approval, Security and Reliability
+27	Final Project Development
+28	Final Assessment and Project Demonstration
+
+
+PART 4: PRACTICAL PROJECTS
+9. Projects learners will build
+The course must prioritize practical work rather than theoretical explanations alone.
+Project 1: Personal AI Study Assistant
+Learners use structured prompts to:
+- Explain difficult subjects.
+- Summarize learning materials.
+- Generate revision questions.
+- Create study plans.
+- Evaluate their understanding.
+Project 2: Automated Registration System
+Learners create a workflow:
+
+Google Form
+
+A learner submits registration information.
+
+Google Sheets
+
+Information is organized automatically.
+
+Email Notification
+
+The learner receives confirmation.
+Project 3: AI Customer Inquiry Assistant
+- Receives customer questions.
+- Classifies inquiries.
+- Extracts important information.
+- Drafts responses.
+- Sends the draft for human approval.
+Project 4: Content Planning Workflow
+- Generates content ideas.
+- Organizes topics.
+- Creates draft content.
+- Adds content to a planning calendar.
+- Allows a human to review before publishing.
+Project 5: Research Document Assistant
+- Analyzes approved documents.
+- Extracts relevant information.
+- Summarizes key points.
+- Identifies claims requiring verification.
+- Produces structured research notes.
+Learners should also be allowed to propose a project addressing a problem they personally understand.
+PART 5: TECHNOLOGY AND LEARNING TOOLS
+10. Tools learners will explore
+The course should not overwhelm beginners with dozens of tools.
+Tool	Educational purpose
+ChatGPT	AI interaction, prompting and analysis
+Google Gemini	AI assistance and multimodal experimentation
+NotebookLM	Research and document analysis
+Google Forms	Collecting information
+Google Sheets	Organizing information
+Make	Visual workflow automation
+Zapier	Application integration and automation
+n8n	Advanced automation and AI workflows
+Google Apps Script	Introduction to code-based automation
+
+
+Useful official websites:
+- ChatGPT
+- Gemini
+- NotebookLM
+- Make
+- Zapier
+- n8n
+- Google Apps Script
+Tool plans, quotas and availability can change. Before teaching a particular exercise, verify that the required features are accessible to learners.
+
+Important educational rule: Do not make paid subscriptions a requirement for the introductory course. Provide alternatives where possible. Some automation exercises will require a laptop, so explain device requirements before enrollment.
+PART 6: LESSON DESIGN
+11. Standard lesson structure
+Every lesson should follow a consistent educational format.
+1. Lesson title.
+2. Learning objectives.
+3. Introduction.
+4. Simple explanation.
+5. Technical explanation.
+6. Real-world example.
+7. Rwanda-relevant example.
+8. Practical demonstration.
+9. Tools to explore.
+10. Step-by-step exercise.
+11. Reusable template.
+12. Common mistakes.
+13. Limitations and risks.
+14. Knowledge check.
+15. Reflection question.
+16. Further learning resources.
+Lesson delivery standards
+- Mobile-friendly.
+- Low-bandwidth.
+- Easy-to-understand English.
+- Properly written Kinyarwanda.
+- Short explanations.
+- Practical demonstrations.
+- Downloadable resources where useful.
+- Clear instructions for every exercise.
+- No unnecessary technical complexity.
+A reasonable starting target is 5–12 minutes of reading or instructional material per lesson, with additional time for practical exercises.
+Language strategy
+English and Kinyarwanda must be treated as two real course languages.
+
+Do not simply translate English lessons using automated translation and publish them without review.
+
+Each translation should be checked for:
+- Technical accuracy.
+- Natural language.
+- Consistency of terminology.
+- Clarity for beginners.
+PART 7: LEARNING RESOURCES
+12. Prompt engineering resources
+Prepare:
+- Basic prompt template.
+- Research prompt template.
+- Document analysis template.
+- Structured output template.
+- Prompt refinement worksheet.
+- Prompt evaluation checklist.
+- Personal prompt library.
+13. Workflow and automation resources
+Prepare:
+- Automation opportunity worksheet.
+- Workflow mapping template.
+- Trigger and action planning sheet.
+- Data mapping worksheet.
+- Automation testing checklist.
+- Error log.
+- Workflow documentation template.
+14. AI automation resources
+Prepare:
+- AI classification template.
+- AI information extraction template.
+- AI summarization template.
+- AI response drafting template.
+- AI output evaluation checklist.
+- Human approval checklist.
+- AI agent design canvas.
+15. Project resources
+Prepare:
+- Project proposal template.
+- Problem identification worksheet.
+- Project requirements template.
+- Testing report.
+- Demonstration checklist.
+- Final project evaluation rubric.
+PART 8: ASSESSMENTS AND CERTIFICATION
+16. Assessment structure
+The course should evaluate practical understanding, not only memorization.
+Assessment	Weight
+Weekly knowledge assessments	20%
+Prompt engineering assignment	15%
+Workflow design assignment	15%
+Basic automation project	20%
+Final AI-powered project	30%
+Total	100%
+
+
+Suggested completion requirements
+- Complete required weekly assessments.
+- Achieve at least 70% overall.
+- Demonstrate the final practical project.
+- Submit project documentation.
+- Meet the final project evaluation requirements.
+Certificate
+Certificate name:
+
+Certificate of Completion — 28-Day Practical AI Challenge
+
+Certificate details:
+- Learner's name.
+- Course title.
+- Certificate ID.
+- Issue date.
+- Final result, if appropriate.
+- QR code.
+- Online verification link.
+- Certificate status.
+The certificate should verify actual course completion.
+
+Do not claim government, university or professional accreditation unless it has genuinely been obtained.
+PART 9: FUTURE COURSE PRODUCTS
+17. Product ladder
+The 28-day course is the entry product. Other products should be developed only after the first course demonstrates demand and learning outcomes.
+Product	Focus	Status
+Product 01	28-Day Practical AI Challenge	First launch
+Product 02	Advanced Prompt Engineering	Future
+Product 03	Practical AI Automation	Future
+Product 04	Building AI Agents	Future
+Product 05	AI Automation for Industries	Future
+
+
+Product 05: Industry-specific education
+Potential courses:
+- AI for Education.
+- AI for Agriculture.
+- AI for Retail.
+- AI for Hospitality.
+- AI for Customer Service.
+- AI for NGOs.
+- AI for Administration.
+- AI for Content Creation.
+These courses should use real industry problems and practical demonstrations.
+PART 10: THE LEARNING PLATFORM
+18. Public website
+The platform needs a public-facing website with:
+- Homepage.
+- About page.
+- Course catalogue.
+- Course detail pages.
+- Sample lessons.
+- Registration.
+- Login.
+- FAQ.
+- Contact.
+- Language selector.
+- Terms and conditions.
+- Privacy policy.
+The homepage must explain three things quickly:
+1. What does the business teach?
+2. Who is it for?
+3. What can learners achieve?
+19. Learner dashboard
+Learners should be able to:
+- View purchased courses.
+- Access lessons.
+- Track learning progress.
+- Complete quizzes.
+- View assessment results.
+- Download learning materials.
+- Submit projects.
+- View certificates.
+- Manage account settings.
+- Select their preferred language.
+20. Admin dashboard
+The administrator should be able to:
+- Create and manage courses.
+- Create modules and lessons.
+- Manage English and Kinyarwanda content.
+- Upload learning materials.
+- Create quizzes and assessments.
+- Review project submissions.
+- Evaluate learner performance.
+- Monitor payments.
+- Manage enrollments.
+- Issue and verify certificates.
+- View learner analytics.
+- Manage notifications.
+- Review important system activity.
+Important platform principle
+The platform must separate course content, translations, learning progress, payments and assessments.
+
+For example, English and Kinyarwanda versions of the same lesson should share one lesson identity rather than becoming two unrelated lessons.
+PART 11: UPDATED TECHNOLOGY ARCHITECTURE
+(Firebase architecture)
+21. Recommended technology stack
+Frontend
+
+TypeScript + Vite + Tailwind CSS
+
+Vanilla TypeScript. No React.
+Backend
+
+Node.js + Express + TypeScript
+
+Business logic, payment verification, secure APIs and administration operations.
+Database
+
+Firebase Cloud Firestore
+
+No MySQL. Document-based database.
+Authentication
+
+Firebase Authentication
+
+User registration, login and identity management.
+File storage
+
+Firebase Storage
+
+Course materials, project files and certificate assets.
+Server-side functions
+
+Firebase Cloud Functions
+
+Secure operations, scheduled tasks, notifications and integrations.
+Hosting
+
+Vercel / Firebase Hosting
+
+Frontend deployment. Select one primary hosting approach.
+
+Official documentation:
+- TypeScript
+- Vite
+- Tailwind CSS
+- Firebase
+- Cloud Firestore
+- Firebase Authentication
+- Firebase Storage
+- Firebase Cloud Functions
+- Express
+22. How the platform components connect
+Frontend — TypeScript + Vite
+
+Website, learner dashboard and admin dashboard
+
+Firebase Authentication
+
+Identity and login management
+
+Firestore
+
+Courses, users, progress, payments
+
+Firebase Storage
+
+Files and resources
+
+Cloud Functions
+
+Secure backend operations
+
+External APIs
+
+Payments and notifications
+
+The frontend should never contain private API keys, payment secrets or privileged Firebase credentials.
+23. Database structure using Firestore
+Instead of MySQL tables, organize information into Firestore collections and documents.
+
+Suggested collections:
+Collection	Purpose
+users	Learner and administrator profiles
+courses	Course information
+courseTranslations	English and Kinyarwanda content
+modules	Course modules
+lessons	Lesson structure and content
+lessonResources	Learning resources
+enrollments	Learner course access
+payments	Payment records
+quizzes	Quiz information
+questions	Assessment questions
+quizAttempts	Learner attempts
+quizAnswers	Submitted answers
+projectSubmissions	Learner projects
+certificates	Certificate records
+notifications	Learner notifications
+auditLogs	Important administrative activity
+
+
+This is a starting data model, not a complete production schema.
+
+Important Firestore design considerations:
+- Use document IDs and references consistently.
+- Avoid storing large lesson documents inside user profiles.
+- Plan indexes for queries before launch.
+- Avoid unbounded arrays in documents.
+- Use pagination for large datasets.
+- Use transactions or server-side logic for sensitive operations.
+- Protect privileged fields through security rules and backend validation.
+- Use server-side timestamps where appropriate.
+24. Payment integration
+Potential payment methods:
+- MTN Mobile Money.
+- Airtel Money.
+- Other payment providers when commercially justified.
+Required payment workflow:
+1. Learner selects a course.
+2. Platform creates a payment record.
+3. Learner starts payment.
+4. Payment provider processes the transaction.
+5. Backend receives a callback or webhook.
+6. Backend verifies the payment with the provider.
+7. Backend checks whether the transaction has already been processed.
+8. Backend marks the payment as verified.
+9. Enrollment is created or activated.
+10. Learner receives confirmation.
+Critical requirements:
+- Never trust a payment screenshot as proof.
+- Never store mobile money PINs.
+- Verify transactions server-side.
+- Use idempotency to prevent duplicate enrollment.
+- Maintain payment and refund records.
+- Reconcile transactions with provider records.
+- Do not give course access based only on a frontend success message.
+25. Privacy and security
+The platform will collect personal information and learner records.
+
+It must consider Rwanda's Law No. 058/2021 relating to the protection of personal data and privacy.
+
+Before collecting real learner information, investigate:
+- Applicable data protection registration requirements.
+- Privacy notices and consent.
+- Data retention policies.
+- User access and deletion rights.
+- Security controls.
+- Cross-border data transfers.
+- Hosting and storage arrangements.
+- Access permissions for administrators.
+Use a qualified local adviser for compliance decisions.
+Security requirements
+- Firebase Authentication.
+- Firestore Security Rules.
+- Storage Security Rules.
+- Role-based access control.
+- Backend authorization checks.
+- Input validation.
+- Rate limiting.
+- Audit logs.
+- Secure secrets management.
+- Backup and recovery planning.
+- Protection against unauthorized certificate creation.
+- Protection against unauthorized course access.
+PART 12: BUSINESS MODEL
+26. Revenue model
+The main revenue model is paid educational products.
+
+The business should not depend on subscriptions at the beginning.
+Initial product
+Product	Proposed price
+28-Day Practical AI Challenge	1,000 RWF
+
+
+The price must be tested with real customers.
+Future revenue opportunities
+1. Advanced courses.
+2. Industry-specific training.
+3. Institutional training.
+4. Corporate workshops.
+5. Practical AI implementation training.
+6. Educational partnerships.
+7. Organization-specific learning programmes.
+Do not launch all revenue streams simultaneously.
+27. The value proposition
+The business should not compete by claiming that it has more AI information than YouTube.
+
+Free content already exists.
+
+Its value must come from:
+- Structured learning.
+- Practical exercises.
+- Clear explanations.
+- Rwanda-relevant examples.
+- Genuine bilingual content.
+- Real projects.
+- Assessments.
+- Feedback.
+- Verified completion.
+The strongest differentiator is not the number of tools taught. It is whether learners can actually solve problems after completing the course.
+PART 13: MARKETING AND CUSTOMER ACQUISITION
+28. Initial marketing strategy
+Start with students and recent graduates.
+
+Potential channels:
+- University communities.
+- TVET institutions.
+- Student groups.
+- WhatsApp communities.
+- TikTok.
+- Facebook.
+- Instagram.
+- LinkedIn.
+- Student ambassadors.
+- Educational partnerships.
+Content marketing topics
+- AI vs automation.
+- Why AI sometimes gives incorrect answers.
+- How to write better prompts.
+- How to automate registration.
+- How students can use AI responsibly.
+- What AI agents actually do.
+- AI-powered customer service.
+- How to fact-check AI-generated information.
+- Building practical projects with AI.
+Demonstration strategy
+Do not rely only on promotional claims.
+
+Show real demonstrations:
+- A prompt before and after improvement.
+- A complete automation workflow.
+- An AI-powered information processing system.
+- A simple agent with controlled permissions.
+These demonstrations should prove that the course teaches practical skills.
+PART 14: MARKET VALIDATION
+29. Validation experiment
+The proposed 1,000 RWF price and student-first strategy are assumptions. They need evidence.
+Initial validation targets
+1. Interview 30 potential learners.
+2. Identify their current AI knowledge.
+3. Understand which problems they struggle with.
+4. Create three sample lessons.
+5. Test one practical assignment.
+6. Offer the course to real prospective learners.
+7. Aim for 30 genuine paid pilot enrollments.
+8. Measure course completion.
+9. Measure practical project success.
+10. Collect feedback and referrals.
+What counts as evidence?
+Weak evidence	Stronger evidence
+"I like your idea."	Someone pays to enroll.
+"AI is interesting."	Someone completes an assignment.
+"I would join."	Someone actually registers.
+"Your course looks good."	Someone completes a project.
+"You should build an app."	Someone repeatedly uses the platform.
+
+
+Reality: 30 people saying they like the course is not validation. Thirty people paying and successfully learning is much stronger evidence.
+PART 15: 90-DAY EXECUTION ROADMAP
+30. First 90 days
+1. Days 1–14: Validate the business
+   - Interview potential learners.
+   - Create three sample lessons.
+   - Test the proposed pricing.
+   - Test the practical learning format.
+   - Find the first paying pilot learners.
+2. Days 15–30: Deliver the pilot
+   - Teach the first learners.
+   - Monitor participation.
+   - Evaluate assignments.
+   - Measure completion.
+   - Improve weak lessons.
+   - Collect feedback.
+3. Days 31–50: Build the platform MVP
+   - Build public website.
+   - Implement authentication.
+   - Set up Firestore.
+   - Create course and lesson management.
+   - Build learner dashboard.
+   - Create basic admin dashboard.
+4. Days 51–70: Controlled launch
+   - Integrate payment verification.
+   - Implement assessments.
+   - Implement progress tracking.
+   - Implement certificate verification.
+   - Test mobile usability.
+   - Review security and privacy.
+5. Days 71–90: Improve and expand distribution
+   - Run marketing experiments.
+   - Improve onboarding.
+   - Analyze learner completion.
+   - Improve the curriculum.
+   - Test student ambassadors.
+   - Explore institutional partnerships.
+These are proposed planning windows, not guaranteed results.
+PART 16: OPERATING PRINCIPLES
+31. Rules the business must follow
+1. Education before technology.
+2. Practical skills before certificates.
+3. Understanding before memorizing prompts.
+4. Workflow thinking before automation tools.
+5. Basic automation before AI agents.
+6. Human oversight for important decisions.
+7. Verify AI-generated information.
+8. Provide free-tool alternatives where possible.
+9. Regularly update course materials.
+10. Make lessons mobile-friendly.
+11. Keep bandwidth requirements low.
+12. Create genuine English and Kinyarwanda content.
+13. Teach through real projects.
+14. Respect learner privacy.
+15. Avoid exaggerated AI promises.
+16. Avoid unnecessary platform complexity.
+17. Do not claim false accreditation.
+18. Measure actual learning outcomes.
+PART 17: WHAT IS STILL MISSING?
+The blueprint is now much more complete, but it is not a finished business or production-ready platform.
+
+There is a significant difference between having a business blueprint and having a functioning education company.
+
+Here is the remaining work.
+
+(Major work remaining)
+32. Business decisions still missing
+Missing item	Why it matters	Priority
+Final business name	Needed for identity and branding	High
+Brand identity	Logo, colors, typography and messaging	Medium
+Final pricing	1,000 RWF is not validated	High
+Customer research	Need evidence of real demand	Critical
+Competitor research	Need to understand existing alternatives	High
+Customer acquisition cost	Need to know how expensive learners are to acquire	Medium
+Refund policy	Needed for customer trust	High
+Business registration and legal structure	Needed before operating formally	High
+Financial projections	Need realistic revenue and expense assumptions	High
+
+
+33. Educational content still missing
+This is one of the biggest gaps.
+
+You have a curriculum outline, but not a complete course.
+Missing item	Current status
+Day 1 complete lesson	Not written
+Day 2 complete lesson	Not written
+Remaining 26 lessons	Not written
+Kinyarwanda lessons	Not written
+Practical demonstration scripts	Not created
+Exercise instructions	Not fully developed
+Answer keys	Not created
+Weekly assessments	Not created
+Final project rubric	Only outlined
+Downloadable templates	Only specified
+Learning videos	Not created
+Course instructor materials	Not created
+
+
+My assessment: Do not build the full platform before producing and testing the actual educational content. A beautiful dashboard cannot compensate for weak lessons.
+34. Platform requirements still missing
+The technology stack is selected, but the engineering design is incomplete.
+Missing item	Why it matters
+Final system architecture	Defines how components communicate
+Detailed Firestore schema	Prevents inconsistent data design
+Firestore Security Rules	Protects learner and business data
+Authentication flows	Defines registration, login and recovery
+Role permissions	Separates learners and administrators
+Payment provider selection	Determines payment implementation
+Payment webhook design	Prevents fraudulent enrollment
+Email provider	Sends confirmations and notifications
+Certificate verification logic	Prevents fake certificates
+Assessment engine	Handles quizzes, grading and attempts
+Course access rules	Controls purchased course access
+Backup strategy	Protects important data
+Error monitoring	Detects failures
+Analytics design	Measures learning and business performance
+Deployment architecture	Defines hosting and production releases
+Automated tests

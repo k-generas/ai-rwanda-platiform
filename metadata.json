@@ -1,0 +1,8 @@
+{
+  "name": "AI Education Rwanda",
+  "description": "Practical bilingual AI, prompt engineering, workflow automation, and AI agents learning platform built for Rwanda and beyond.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,62 @@
+rules_version = '2';
+
+// Reference Firebase Storage Security Rules for AI Education Rwanda.
+// Note: Firebase Storage bucket initialization in Firebase Console uses these
+// exact path and RBAC rules once enabled on the project without modifying Spark/Blaze billing.
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isSignedIn() {
+      return request.auth != null && request.auth.token.email_verified == true;
+    }
+
+    function isSuperadmin() {
+      return isSignedIn()
+        && request.auth.token.email in [
+          'generaskagiraneza@gmail.com',
+          'generaskagiraneza9@gmail.com'
+        ];
+    }
+
+    function isStaff() {
+      return isSuperadmin() || (
+        isSignedIn()
+        && firestore.exists(/databases/(default)/documents/staffRoles/$(request.auth.uid))
+        && firestore.get(/databases/(default)/documents/staffRoles/$(request.auth.uid)).data.status == 'active'
+      );
+    }
+
+    // Course media & downloadable resources: staff upload, public read
+    match /courses/{courseId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if isStaff()
+        && request.resource.size <= 25 * 1024 * 1024
+        && (
+          request.resource.contentType.matches('image/(png|jpeg|webp|gif)') ||
+          request.resource.contentType.matches('video/(mp4|webm)') ||
+          request.resource.contentType.matches('audio/(mpeg|wav|ogg|mp4)') ||
+          request.resource.contentType == 'application/pdf' ||
+          request.resource.contentType.matches('text/(plain|markdown|csv)')
+        );
+    }
+
+    // Learner project submissions: owner or staff read/write only, max 10 MB
+    match /submissions/{userId}/{allPaths=**} {
+      allow read: if isSignedIn() && (request.auth.uid == userId || isStaff());
+      allow write: if isSignedIn()
+        && request.auth.uid == userId
+        && request.resource.size <= 10 * 1024 * 1024
+        && (
+          request.resource.contentType == 'application/pdf' ||
+          request.resource.contentType.matches('image/(png|jpeg|webp)') ||
+          request.resource.contentType.matches('text/(plain|markdown)') ||
+          request.resource.contentType == 'application/zip' ||
+          request.resource.contentType == 'application/json' ||
+          request.resource.contentType == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        );
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
