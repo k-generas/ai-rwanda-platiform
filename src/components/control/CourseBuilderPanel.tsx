@@ -2374,8 +2374,8 @@ export function CourseBuilderPanel({
 
       {/* NEW COURSE MODAL */}
       {newCourseOpen && (
-        <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4" role="dialog" aria-modal="true">
-          <div className="bg-white border border-black/10 rounded-2xl max-w-md w-full p-6 space-y-4">
+        <div className="fixed inset-0 z-50 bg-black/45 flex items-end sm:items-center justify-center p-0 sm:p-4" role="dialog" aria-modal="true">
+          <div className="bg-white border border-black/10 rounded-t-2xl sm:rounded-2xl max-w-lg w-full max-h-[92dvh] overflow-y-auto p-5 sm:p-7 space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-display font-semibold text-[#0D0D0F]">
                 Create New Course (Draft)

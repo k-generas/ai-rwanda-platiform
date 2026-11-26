@@ -270,14 +270,14 @@ export function EventsView({
   };
 
   return (
-    <div className="max-w-[1220px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
+    <div className="max-w-[1260px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
       {/* 1. OpenAI Academy Indigo-Purple Gradient Events Banner */}
-      <section className="rounded-2xl bg-gradient-to-r from-[#2563EB] via-[#4F46E5] to-[#7C3AED] text-white p-8 sm:p-12 shadow-xs">
-        <Radio className="w-7 h-7 text-white mb-4" aria-hidden="true" />
-        <h1 className="text-3xl sm:text-4xl lg:text-[48px] font-display font-bold tracking-[-0.03em] leading-tight mb-2">
+      <section className="rounded-2xl bg-gradient-to-r from-[#2563EB] via-[#4F46E5] to-[#7C3AED] text-white p-8 sm:p-12 lg:p-14 shadow-xs">
+        <Radio className="w-8 h-8 text-white mb-4" aria-hidden="true" />
+        <h1 className="text-[36px] sm:text-[48px] lg:text-[54px] font-display font-bold tracking-[-0.03em] leading-[1.08] mb-3">
           {lang === 'en' ? 'Events' : 'Ibiganiro n’Amahugurwa'}
         </h1>
-        <p className="text-sm sm:text-lg text-white/90 max-w-2xl leading-relaxed">
+        <p className="text-[16px] sm:text-[19px] text-white/95 max-w-2xl leading-relaxed">
           {lang === 'en'
             ? 'Hands-on learning brought to you by AI Education Rwanda and our community partners.'
             : 'Kwitabira amahugurwa imbonankubone i Kigali cyangwa kuri interineti mu Kinyarwanda n’Icyongereza.'}
@@ -297,7 +297,7 @@ export function EventsView({
               key={tab.key}
               type="button"
               onClick={() => setFilter(tab.key as typeof filter)}
-              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap shrink-0 ${
+              className={`px-4 py-2.5 text-[15px] font-semibold rounded-lg transition-colors whitespace-nowrap shrink-0 ${
                 filter === tab.key
                   ? 'bg-[#0284C7] text-white'
                   : 'bg-[#F4F5F7] text-[#4B4B55] hover:bg-[#EAECEF]'
@@ -313,19 +313,19 @@ export function EventsView({
             value={formatFilter}
             onChange={(e) => setFormatFilter(e.target.value as typeof formatFilter)}
             aria-label={lang === 'en' ? 'Filter by event format' : 'Hitamo uburyo'}
-            className="px-3.5 py-2 text-sm bg-white border border-black/15 rounded-lg text-[#0D0D0F]"
+            className="px-4 py-2.5 text-[15px] bg-white border border-black/15 rounded-lg text-[#0D0D0F]"
           >
             <option value="all">{lang === 'en' ? 'All formats' : 'Uburyo bwose'}</option>
             <option value="kigali">{lang === 'en' ? 'In-Person (Kigali)' : 'I Kigali'}</option>
             <option value="online">{lang === 'en' ? 'Livestream' : 'Kuri Interineti'}</option>
           </select>
 
-          <div className="inline-flex items-center border border-black/15 rounded-lg p-0.5 bg-white">
+          <div className="inline-flex items-center border border-black/15 rounded-lg p-1 bg-white">
             <button
               type="button"
               onClick={() => setViewMode('list')}
               aria-label="List view"
-              className={`p-1.5 rounded-md ${
+              className={`p-2 rounded-md ${
                 viewMode === 'list' ? 'bg-[#F0F9FF] text-[#0284C7]' : 'text-[#5D5D66]'
               }`}
             >
@@ -335,7 +335,7 @@ export function EventsView({
               type="button"
               onClick={() => setViewMode('grid')}
               aria-label="Grid view"
-              className={`p-1.5 rounded-md ${
+              className={`p-2 rounded-md ${
                 viewMode === 'grid' ? 'bg-[#F0F9FF] text-[#0284C7]' : 'text-[#5D5D66]'
               }`}
             >
@@ -347,7 +347,7 @@ export function EventsView({
 
       {/* 3. Events Cards Grid / List */}
       {filteredEvents.length === 0 ? (
-        <div className="bg-white border border-black/[0.08] rounded-2xl p-12 text-center text-sm text-[#5D5D66]">
+        <div className="bg-white border border-black/[0.08] rounded-2xl p-12 text-center text-[16px] text-[#5D5D66]">
           {lang === 'en'
             ? 'No sessions match the selected filter right now.'
             : 'Nta kiganiro kibonetse muri iki cyiciro.'}
@@ -357,7 +357,7 @@ export function EventsView({
           className={
             viewMode === 'grid'
               ? 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6'
-              : 'space-y-4'
+              : 'space-y-5'
           }
         >
           {filteredEvents.map((evt, index) => {
@@ -386,51 +386,51 @@ export function EventsView({
               >
                 {/* Colorful Gradient Visual Banner */}
                 <div
-                  className={`relative ${grad} p-5 flex flex-col justify-between text-white ${
-                    viewMode === 'list' ? 'md:w-72 shrink-0 min-h-[160px]' : 'aspect-[16/9]'
+                  className={`relative ${grad} p-5 sm:p-6 flex flex-col justify-between text-white ${
+                    viewMode === 'list' ? 'md:w-80 shrink-0 min-h-[180px]' : 'aspect-[16/9]'
                   }`}
                 >
-                  <div className="flex items-center justify-between gap-2 text-[11px] font-medium text-white/90">
+                  <div className="flex items-center justify-between gap-2 text-xs font-medium text-white/90">
                     <span>AI Education Rwanda</span>
                     <span className="tabular-nums">{evt.dateLabel}</span>
                   </div>
                   <div>
-                    <p className="text-lg sm:text-xl font-display font-bold leading-snug text-balance">
+                    <p className="text-[20px] sm:text-[22px] font-display font-bold leading-snug text-balance">
                       {lang === 'en' ? evt.titleEn : evt.titleRw}
                     </p>
-                    <p className="text-xs text-white/85 mt-1">{evt.speaker}</p>
+                    <p className="text-sm text-white/90 mt-1">{evt.speaker}</p>
                   </div>
                 </div>
 
                 {/* Card Body */}
-                <div className="p-5 flex-1 flex flex-col justify-between gap-4">
+                <div className="p-6 flex-1 flex flex-col justify-between gap-5">
                   <div>
-                    <p className="text-xs font-semibold text-[#0284C7] mb-1">
+                    <p className="text-[15px] font-semibold text-[#0284C7] mb-1.5">
                       {formatLabel} · {evt.typeLabel} · {evt.languageLabel}
                     </p>
-                    <h2 className="text-lg font-display font-bold text-[#0D0D0F] leading-snug mb-1.5">
+                    <h2 className="text-[22px] sm:text-[24px] font-display font-bold text-[#0D0D0F] leading-[1.25] tracking-[-0.015em] mb-2.5">
                       {lang === 'en' ? evt.titleEn : evt.titleRw}
                     </h2>
-                    <p className="text-xs text-[#5D5D66] leading-relaxed line-clamp-2">
+                    <p className="text-[15px] text-[#5D5D66] leading-relaxed line-clamp-2">
                       {lang === 'en' ? evt.descriptionEn : evt.descriptionRw}
                     </p>
                   </div>
 
-                  <div className="pt-3 border-t border-black/[0.06] flex items-end justify-between gap-3">
-                    <div className="space-y-1 text-xs text-[#5D5D66] min-w-0">
-                      <p className="inline-flex items-center gap-1.5 tabular-nums truncate w-full">
-                        <Clock className="w-3.5 h-3.5 shrink-0" />
+                  <div className="pt-4 border-t border-black/[0.06] flex flex-wrap items-end justify-between gap-4">
+                    <div className="space-y-1.5 text-[15px] text-[#5D5D66] min-w-0 flex-1">
+                      <p className="inline-flex items-center gap-2 tabular-nums truncate w-full">
+                        <Clock className="w-4 h-4 shrink-0" />
                         <span className="truncate">{evt.timeLabel} ({evt.timezone})</span>
                       </p>
-                      <p className="inline-flex items-center gap-1.5 tabular-nums truncate w-full">
-                        <Calendar className="w-3.5 h-3.5 shrink-0" />
+                      <p className="inline-flex items-center gap-2 tabular-nums truncate w-full">
+                        <Calendar className="w-4 h-4 shrink-0" />
                         <span className="truncate">{evt.dateLabel}</span>
                       </p>
-                      <p className="inline-flex items-center gap-1.5 truncate w-full">
+                      <p className="inline-flex items-center gap-2 truncate w-full">
                         {evt.format === 'online' ? (
-                          <Video className="w-3.5 h-3.5 shrink-0" />
+                          <Video className="w-4 h-4 shrink-0" />
                         ) : (
-                          <MapPin className="w-3.5 h-3.5 shrink-0" />
+                          <MapPin className="w-4 h-4 shrink-0" />
                         )}
                         <span className="truncate">
                           {lang === 'en' ? evt.locationEn : evt.locationRw}
@@ -443,33 +443,33 @@ export function EventsView({
                         <button
                           type="button"
                           onClick={() => setReplayEvent(evt)}
-                          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-[#0284C7] border border-[#0284C7]/40 hover:bg-[#F0F9FF] rounded-lg transition-colors whitespace-nowrap"
+                          className="inline-flex items-center gap-2 px-5 py-2.5 text-[15px] font-semibold text-[#0284C7] border border-[#0284C7]/40 hover:bg-[#F0F9FF] rounded-lg transition-colors whitespace-nowrap"
                         >
-                          <RotateCcw className="w-3.5 h-3.5" />
+                          <RotateCcw className="w-4 h-4" />
                           <span>{lang === 'en' ? 'Replay' : 'Subiramo'}</span>
                         </button>
                       ) : evt.status === 'cancelled' ? (
-                        <span className="text-xs font-mono text-[#DC2626]">
+                        <span className="text-sm font-mono text-[#DC2626]">
                           {lang === 'en' ? 'Cancelled' : 'Byahagaritswe'}
                         </span>
                       ) : evt.status === 'fully_booked' ||
                         (evt.capacity > 0 && (evt.registeredCount ?? 0) >= evt.capacity) ? (
-                        <span className="text-xs font-mono text-[#D97706]">
+                        <span className="text-sm font-mono text-[#D97706]">
                           {lang === 'en' ? 'Fully Booked' : 'Byuzuye'}
                         </span>
                       ) : registered ? (
-                        <div className="flex flex-col items-end gap-1">
-                          <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#0D7A5F]">
-                            <CheckCircle2 className="w-3.5 h-3.5" />
+                        <div className="flex flex-col items-end gap-1.5">
+                          <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0D7A5F]">
+                            <CheckCircle2 className="w-4 h-4" />
                             <span>{lang === 'en' ? 'Registered' : 'Byemejwe'}</span>
                           </span>
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-3">
                             {evt.meetingUrl && (
                               <a
                                 href={evt.meetingUrl}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="text-[11px] font-medium text-[#0284C7] underline"
+                                className="text-sm font-medium text-[#0284C7] underline"
                               >
                                 {lang === 'en' ? 'Join' : 'Injira'}
                               </a>
@@ -478,7 +478,7 @@ export function EventsView({
                               type="button"
                               disabled={cancellingId === evt.id}
                               onClick={() => handleCancelRsvp(evt)}
-                              className="text-[11px] text-[#5D5D66] hover:text-[#DC2626] underline"
+                              className="text-sm text-[#5D5D66] hover:text-[#DC2626] underline"
                             >
                               {cancellingId === evt.id ? '...' : lang === 'en' ? 'Cancel' : 'Hagarika'}
                             </button>
@@ -496,7 +496,7 @@ export function EventsView({
                               setDoneMessage(null);
                             }
                           }}
-                          className="px-4 py-2 text-xs sm:text-sm font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg transition-colors whitespace-nowrap"
+                          className="px-5 py-2.5 text-[15px] font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg transition-colors whitespace-nowrap"
                         >
                           {lang === 'en' ? 'Register' : 'Iyandikishe'}
                         </button>
@@ -510,30 +510,30 @@ export function EventsView({
         </div>
       )}
 
-      {/* Replay / Summary Modal for Past Sessions */}
+      {/* Replay / Summary Modal (Responsive across Mobile, Tablet, Laptop) */}
       {replayEvent && (
         <div
-          className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/45 flex items-end sm:items-center justify-center p-0 sm:p-4"
           role="dialog"
           aria-modal="true"
         >
-          <div className="bg-white border border-black/10 rounded-2xl max-w-md w-full p-6 sm:p-8 space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-display font-bold text-[#0D0D0F]">
+          <div className="bg-white border border-black/10 rounded-t-2xl sm:rounded-2xl max-w-lg w-full max-h-[90dvh] overflow-y-auto p-6 sm:p-8 space-y-4">
+            <div className="flex items-center justify-between gap-4">
+              <h2 className="text-xl font-display font-bold text-[#0D0D0F]">
                 {lang === 'en' ? 'Session Recording & Notes' : 'Inyandiko n’Amashusho y’Ikiganiro'}
               </h2>
               <button
                 type="button"
                 onClick={() => setReplayEvent(null)}
-                className="text-xs font-medium text-[#5D5D66]"
+                className="px-3 py-1.5 text-sm font-medium text-[#5D5D66] hover:text-[#0D0D0F] rounded-lg hover:bg-[#F4F5F7]"
               >
                 {lang === 'en' ? 'Close' : 'Funga'}
               </button>
             </div>
-            <p className="text-base font-semibold text-[#0D0D0F]">
+            <p className="text-lg font-semibold text-[#0D0D0F]">
               {lang === 'en' ? replayEvent.titleEn : replayEvent.titleRw}
             </p>
-            <p className="text-xs text-[#5D5D66] leading-relaxed">
+            <p className="text-[15px] text-[#5D5D66] leading-relaxed">
               {lang === 'en' ? replayEvent.descriptionEn : replayEvent.descriptionRw}
             </p>
             {replayEvent.meetingUrl ? (
@@ -541,13 +541,13 @@ export function EventsView({
                 href={replayEvent.meetingUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-white bg-[#0284C7] rounded-lg"
+                className="w-full min-h-[44px] inline-flex items-center justify-center gap-2 px-5 py-3 text-[15px] font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg"
               >
                 <span>{lang === 'en' ? 'Watch Replay' : 'Reba Ikiganiro'}</span>
                 <ExternalLink className="w-4 h-4" />
               </a>
             ) : (
-              <p className="text-xs text-[#5D5D66] bg-[#F7F8FA] border border-black/[0.08] rounded-xl p-3">
+              <p className="text-[15px] text-[#5D5D66] bg-[#F7F8FA] border border-black/[0.08] rounded-xl p-4 leading-relaxed">
                 {lang === 'en'
                   ? 'Slide deck and prompt templates from this clinic are archived inside the Projects & Free Tools library.'
                   : 'Imfashanyigisho z’iki kiganiro ziboneka mu gice cy’Imishinga n’Ibikoresho.'}
@@ -557,22 +557,22 @@ export function EventsView({
         </div>
       )}
 
-      {/* RSVP Modal */}
+      {/* RSVP Modal (Responsive across Mobile, Tablet, Laptop) */}
       {rsvpEvent && (
         <div
-          className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/45 flex items-end sm:items-center justify-center p-0 sm:p-4"
           role="dialog"
           aria-modal="true"
         >
-          <div className="bg-white border border-black/10 rounded-2xl max-w-md w-full p-6 sm:p-8">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-display font-bold text-[#0D0D0F]">
+          <div className="bg-white border border-black/10 rounded-t-2xl sm:rounded-2xl max-w-lg w-full max-h-[90dvh] overflow-y-auto p-6 sm:p-8">
+            <div className="flex items-center justify-between gap-4 mb-4">
+              <h2 className="text-xl font-display font-bold text-[#0D0D0F]">
                 {lang === 'en' ? 'Confirm Event Registration' : 'Emeza Kwiyandikisha'}
               </h2>
               <button
                 type="button"
                 onClick={() => setRsvpEvent(null)}
-                className="text-xs font-medium text-[#5D5D66]"
+                className="px-3 py-1.5 text-sm font-medium text-[#5D5D66] hover:text-[#0D0D0F] rounded-lg hover:bg-[#F4F5F7]"
               >
                 {lang === 'en' ? 'Close' : 'Funga'}
               </button>
@@ -580,44 +580,46 @@ export function EventsView({
 
             {doneMessage ? (
               <div className="space-y-4">
-                <p className="text-sm text-[#0D7A5F]">{doneMessage}</p>
+                <p className="text-[15px] text-[#0D7A5F] font-medium">{doneMessage}</p>
                 {rsvpEvent.meetingUrl && (
                   <a
                     href={rsvpEvent.meetingUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs font-medium text-[#0284C7] underline"
+                    className="inline-flex items-center gap-1.5 text-sm font-medium text-[#0284C7] underline"
                   >
                     <span>{lang === 'en' ? 'Save Session Link' : 'Bika Link y’Ikiganiro'}</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
+                    <ExternalLink className="w-4 h-4" />
                   </a>
                 )}
                 <button
                   type="button"
                   onClick={() => setRsvpEvent(null)}
-                  className="w-full px-4 py-2 text-sm font-semibold text-white bg-[#0284C7] rounded-lg"
+                  className="w-full min-h-[44px] px-5 py-3 text-[15px] font-semibold text-white bg-[#0284C7] rounded-lg"
                 >
                   {lang === 'en' ? 'Done' : 'Byarangiye'}
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleConfirmRsvp} className="space-y-4">
-                <p className="text-sm font-semibold text-[#0D0D0F]">
-                  {lang === 'en' ? rsvpEvent.titleEn : rsvpEvent.titleRw}
-                </p>
-                <p className="text-xs text-[#5D5D66]">
-                  {rsvpEvent.dateLabel} · {rsvpEvent.timeLabel} ({rsvpEvent.timezone})
-                </p>
+              <form onSubmit={handleConfirmRsvp} className="space-y-5">
+                <div>
+                  <p className="text-lg font-semibold text-[#0D0D0F]">
+                    {lang === 'en' ? rsvpEvent.titleEn : rsvpEvent.titleRw}
+                  </p>
+                  <p className="text-[15px] text-[#5D5D66] mt-1">
+                    {rsvpEvent.dateLabel} · {rsvpEvent.timeLabel} ({rsvpEvent.timezone})
+                  </p>
+                </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-[#0D0D0F] mb-2">
+                  <label className="block text-sm font-semibold text-[#0D0D0F] mb-2">
                     {lang === 'en' ? 'Attendance preference' : 'Uko uzitabira'}
                   </label>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     <button
                       type="button"
                       onClick={() => setAttendanceMode('online')}
-                      className={`px-3 py-2 text-xs font-medium rounded-lg border ${
+                      className={`min-h-[44px] px-4 py-2.5 text-[15px] font-medium rounded-lg border ${
                         attendanceMode === 'online'
                           ? 'bg-[#0284C7] text-white border-[#0284C7]'
                           : 'bg-white text-[#0D0D0F] border-black/15'
@@ -628,7 +630,7 @@ export function EventsView({
                     <button
                       type="button"
                       onClick={() => setAttendanceMode('kigali_in_person')}
-                      className={`px-3 py-2 text-xs font-medium rounded-lg border ${
+                      className={`min-h-[44px] px-4 py-2.5 text-[15px] font-medium rounded-lg border ${
                         attendanceMode === 'kigali_in_person'
                           ? 'bg-[#0284C7] text-white border-[#0284C7]'
                           : 'bg-white text-[#0D0D0F] border-black/15'
@@ -640,7 +642,7 @@ export function EventsView({
                 </div>
 
                 {rsvpError && (
-                  <p className="text-xs text-[#DC2626] bg-[#FEF2F2] border border-[#DC2626]/20 rounded-lg px-3 py-2">
+                  <p className="text-sm text-[#DC2626] bg-[#FEF2F2] border border-[#DC2626]/20 rounded-lg px-4 py-3">
                     {rsvpError}
                   </p>
                 )}
@@ -648,7 +650,7 @@ export function EventsView({
                 <button
                   type="submit"
                   disabled={saving}
-                  className="w-full px-4 py-2.5 text-sm font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg"
+                  className="w-full min-h-[44px] px-5 py-3 text-[15px] font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg"
                 >
                   {saving
                     ? lang === 'en'

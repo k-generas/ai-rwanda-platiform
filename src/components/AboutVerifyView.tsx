@@ -143,14 +143,14 @@ export function AboutVerifyView({
       );
     }
     return (
-      <div className="max-w-[1220px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
+      <div className="max-w-[1260px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
         {/* Banner Header */}
-        <section className="rounded-2xl bg-gradient-to-r from-[#0284C7] via-[#0EA5E9] to-[#14B8A6] text-white p-8 sm:p-12">
-          <Award className="w-7 h-7 text-white mb-4" aria-hidden="true" />
-          <h1 className="text-3xl sm:text-4xl lg:text-[46px] font-display font-bold tracking-[-0.03em] leading-tight mb-2">
+        <section className="rounded-2xl bg-gradient-to-r from-[#0284C7] via-[#0EA5E9] to-[#14B8A6] text-white p-8 sm:p-12 lg:p-14">
+          <Award className="w-8 h-8 text-white mb-4" aria-hidden="true" />
+          <h1 className="text-[36px] sm:text-[48px] lg:text-[54px] font-display font-bold tracking-[-0.03em] leading-[1.08] mb-3">
             {lang === 'en' ? 'My Certificates & Verification' : 'Impamyabumenyi n’Igenzura'}
           </h1>
-          <p className="text-sm sm:text-lg text-white/90 max-w-2xl">
+          <p className="text-[16px] sm:text-[19px] text-white/95 max-w-2xl leading-relaxed">
             {lang === 'en'
               ? 'View your earned completion certificates or verify any Certificate ID issued by AI Education Rwanda.'
               : 'Reba impamyabumenyi zawe cyangwa ugenzure ukuri kw’impamyabumenyi zatanzwe na AI Education Rwanda.'}
@@ -158,13 +158,13 @@ export function AboutVerifyView({
         </section>
 
         {/* My Earned Certificates Card */}
-        <section className="bg-white border border-black/[0.08] rounded-2xl p-6 sm:p-8">
-          <div className="flex flex-wrap items-center justify-between gap-4 mb-5">
+        <section className="bg-white border border-black/[0.08] rounded-2xl p-6 sm:p-10">
+          <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
             <div>
-              <h2 className="text-xl font-display font-bold text-[#0D0D0F]">
+              <h2 className="text-2xl sm:text-3xl font-display font-bold text-[#0D0D0F]">
                 {lang === 'en' ? 'My Certificates' : 'Impamyabumenyi Zanjye'}
               </h2>
-              <p className="text-xs sm:text-sm text-[#5D5D66]">
+              <p className="text-[15px] text-[#5D5D66] mt-1">
                 {lang === 'en'
                   ? 'Verified completion credentials automatically appear here once course requirements and final project grading (>=70%) are approved.'
                   : 'Impamyabumenyi ziboneka hano umaze kurangiza isomo no gutsinda umushinga wa nyuma (>=70%).'}
@@ -174,7 +174,7 @@ export function AboutVerifyView({
               <button
                 type="button"
                 onClick={onSignIn}
-                className="px-4 py-2 text-xs sm:text-sm font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg"
+                className="px-5 py-2.5 text-[15px] font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg"
               >
                 {lang === 'en' ? 'Sign in to view yours' : 'Injira urebe izawe'}
               </button>
@@ -189,9 +189,9 @@ export function AboutVerifyView({
                   className="bg-[#FAFAFB] border border-black/[0.08] rounded-xl p-5 flex items-center justify-between gap-4"
                 >
                   <div>
-                    <p className="text-xs font-mono text-[#0284C7] mb-1">{cert.id}</p>
-                    <h3 className="text-base font-bold text-[#0D0D0F]">{cert.courseTitle}</h3>
-                    <p className="text-xs text-[#5D5D66] mt-1">
+                    <p className="text-sm font-mono text-[#0284C7] mb-1">{cert.id}</p>
+                    <h3 className="text-lg font-bold text-[#0D0D0F]">{cert.courseTitle}</h3>
+                    <p className="text-sm text-[#5D5D66] mt-1">
                       {cert.learnerName} · {cert.finalScore}% · {cert.status.toUpperCase()}
                     </p>
                   </div>
@@ -201,7 +201,7 @@ export function AboutVerifyView({
             </div>
           ) : (
             <div className="bg-[#FAFAFB] border border-black/[0.07] rounded-xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <p className="text-sm text-[#5D5D66]">
+              <p className="text-[15px] text-[#5D5D66]">
                 {user
                   ? lang === 'en'
                     ? 'You have not earned a certificate yet. Complete the 28-Day Practical AI Challenge to unlock your verified credential.'
@@ -214,7 +214,7 @@ export function AboutVerifyView({
                 <button
                   type="button"
                   onClick={() => onNavigate('courses')}
-                  className="px-4 py-2 text-xs sm:text-sm font-semibold text-[#0284C7] border border-[#0284C7]/40 hover:bg-[#F0F9FF] rounded-lg shrink-0"
+                  className="px-5 py-2.5 text-[15px] font-semibold text-[#0284C7] border border-[#0284C7]/40 hover:bg-[#F0F9FF] rounded-lg shrink-0"
                 >
                   {lang === 'en' ? 'Browse courses' : 'Reba amasomo'}
                 </button>
@@ -224,17 +224,17 @@ export function AboutVerifyView({
         </section>
 
         {/* Public Verifier Card */}
-        <section className="bg-white border border-black/[0.08] rounded-2xl p-6 sm:p-8">
+        <section className="bg-white border border-black/[0.08] rounded-2xl p-6 sm:p-10">
           <header className="mb-6">
-            <p className="text-xs font-semibold text-[#0284C7] uppercase mb-1.5">
+            <p className="text-[13px] sm:text-sm font-semibold text-[#0284C7] uppercase mb-1.5">
               {lang === 'en' ? 'Public Credential Registry' : 'Igenzura ry’Impamyabumenyi'}
             </p>
-            <h2 className="text-2xl sm:text-3xl font-display font-bold tracking-tight text-[#0D0D0F] mb-2">
+            <h2 className="text-[28px] sm:text-[36px] font-display font-bold tracking-tight text-[#0D0D0F] mb-2">
               {lang === 'en'
                 ? 'Verify a Certificate of Completion'
                 : 'Genzura Ukuri kw’Impamyabumenyi'}
             </h2>
-            <p className="text-sm text-[#5D5D66]">
+            <p className="text-[15px] sm:text-[16px] text-[#5D5D66]">
               {lang === 'en'
                 ? 'Enter the Certificate ID printed on a learner certificate (try sample ID RW-AI-2026-0042).'
                 : 'Andika nimero y’impamyabumenyi kugira ngo urebe niba yemewe (urugero: RW-AI-2026-0042).'}
@@ -254,12 +254,12 @@ export function AboutVerifyView({
               onChange={(e) => setCertQuery(e.target.value)}
               placeholder="RW-AI-2026-0042"
               aria-label="Certificate ID"
-              className="flex-1 px-4 py-2.5 text-sm font-mono bg-[#F7F8FA] border border-black/15 rounded-lg focus:outline-none focus:border-[#0284C7]"
+              className="flex-1 min-h-[48px] px-4 py-3 text-base font-mono bg-[#F7F8FA] border border-black/15 rounded-lg focus:outline-none focus:border-[#0284C7]"
             />
             <button
               type="submit"
               disabled={verifying}
-              className="px-5 py-2.5 text-sm font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg whitespace-nowrap"
+              className="min-h-[48px] px-6 py-3 text-[15px] font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg whitespace-nowrap"
             >
               {verifying
                 ? lang === 'en'
@@ -275,7 +275,7 @@ export function AboutVerifyView({
             <div className="bg-[#FAFAFB] border border-black/10 rounded-2xl p-6 sm:p-8">
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6 pb-6 border-b border-black/[0.08]">
                 <div>
-                  <div className="inline-flex items-center gap-2 text-xs font-medium text-[#0D7A5F] mb-2">
+                  <div className="inline-flex items-center gap-2 text-sm font-medium text-[#0D7A5F] mb-2">
                     <ShieldCheck className="w-4 h-4" />
                     <span>
                       {certResult.status === 'valid'
@@ -287,17 +287,17 @@ export function AboutVerifyView({
                           : 'Impamyabumenyi Yahagaritswe'}
                     </span>
                   </div>
-                  <h3 className="text-2xl font-display font-bold text-[#0D0D0F]">
+                  <h3 className="text-2xl sm:text-3xl font-display font-bold text-[#0D0D0F]">
                     {certResult.learnerName}
                   </h3>
-                  <p className="text-sm text-[#5D5D66] mt-1">{certResult.courseTitle}</p>
+                  <p className="text-[15px] text-[#5D5D66] mt-1">{certResult.courseTitle}</p>
                 </div>
                 <CertificateQrCode
                   value={`${window.location.origin}/?verify=${certResult.id}`}
                 />
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 text-xs">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 text-sm">
                 <div>
                   <p className="text-[#5D5D66] mb-1">Certificate ID</p>
                   <p className="font-mono font-medium text-[#0D0D0F]">{certResult.id}</p>
@@ -324,10 +324,10 @@ export function AboutVerifyView({
             <div className="bg-[#FEF2F2] border border-[#DC2626]/20 rounded-2xl p-6 flex items-start gap-3">
               <XCircle className="w-5 h-5 text-[#DC2626] shrink-0 mt-0.5" />
               <div>
-                <h3 className="text-sm font-semibold text-[#0D0D0F]">
+                <h3 className="text-base font-semibold text-[#0D0D0F]">
                   {lang === 'en' ? 'No matching certificate found' : 'Nta mpamyabumenyi ibonetse'}
                 </h3>
-                <p className="text-xs text-[#5D5D66] mt-1">
+                <p className="text-sm text-[#5D5D66] mt-1">
                   {lang === 'en'
                     ? 'Double-check the Certificate ID format (e.g. RW-AI-2026-0042).'
                     : 'Reba ko wanditse nimero neza (urugero: RW-AI-2026-0042).'}
@@ -341,19 +341,19 @@ export function AboutVerifyView({
   }
 
   return (
-    <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-12 space-y-16">
+    <div className="max-w-[1260px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-14">
       {/* Mission & Vision */}
       <header className="grid grid-cols-1 lg:grid-cols-12 gap-10 pb-12 border-b border-black/[0.08]">
         <div className="lg:col-span-7">
-          <p className="text-xs font-medium text-[#0D7A5F] mb-2">
+          <p className="text-sm font-semibold text-[#0284C7] mb-2">
             {lang === 'en' ? 'About AI Education Rwanda' : 'Ibyerekeye AI Education Rwanda'}
           </p>
-          <h1 className="text-3xl sm:text-4xl font-display font-semibold tracking-tight text-[#0D0D0F] text-balance mb-4">
+          <h1 className="text-[36px] sm:text-[48px] font-display font-bold tracking-[-0.03em] leading-[1.08] text-[#0D0D0F] text-balance mb-4">
             {lang === 'en'
               ? 'Moving learners from basic AI chat to practical systems.'
               : 'Kujyana abanyeshuri kuva ku kuganira na AI gusa bakagera ku kubaka sisitemu zikora.'}
           </h1>
-          <p className="text-base text-[#5D5D66] leading-relaxed">
+          <p className="text-[16px] sm:text-[18px] text-[#5D5D66] leading-relaxed">
             {lang === 'en'
               ? 'Our mission is to make practical AI education accessible in both English and Kinyarwanda—starting in Rwanda and expanding across East Africa—so individuals and small organizations can solve real problems responsibly.'
               : 'Intego yacu ni ugutanga uburezi bwa AI bufatika mu Cyongereza no mu Kinyarwanda—duhereye mu Rwanda—kugira ngo abantu n’ibigo bikemure ibibazo by’ukuri.'}

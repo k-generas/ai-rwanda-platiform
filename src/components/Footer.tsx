@@ -91,13 +91,13 @@ export function Footer({ lang, onChangeLang, onNavigate }: FooterProps) {
 
       {legalDoc && (
         <div
-          className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/45 flex items-end sm:items-center justify-center p-0 sm:p-4"
           role="dialog"
           aria-modal="true"
         >
-          <div className="bg-white border border-black/10 rounded-2xl max-w-lg w-full p-6 sm:p-8 space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+          <div className="bg-white border border-black/10 rounded-t-2xl sm:rounded-2xl max-w-lg w-full max-h-[90dvh] overflow-y-auto p-6 sm:p-8 space-y-4">
+            <div className="flex items-center justify-between gap-4">
+              <h2 className="text-xl font-display font-bold text-[#0D0D0F]">
                 {legalDoc === 'terms'
                   ? lang === 'en'
                     ? 'Terms & Conditions'
@@ -109,12 +109,12 @@ export function Footer({ lang, onChangeLang, onNavigate }: FooterProps) {
               <button
                 type="button"
                 onClick={() => setLegalDoc(null)}
-                className="text-xs font-medium text-[#5D5D66]"
+                className="px-3 py-1.5 text-sm font-medium text-[#5D5D66] hover:text-[#0D0D0F] rounded-lg hover:bg-[#F4F5F7]"
               >
                 {lang === 'en' ? 'Close' : 'Funga'}
               </button>
             </div>
-            <p className="text-sm text-[#5D5D66] leading-relaxed">
+            <p className="text-[15px] text-[#5D5D66] leading-relaxed">
               {legalDoc === 'terms'
                 ? 'Enrollment in the 28-Day Practical AI Challenge grants access to all 28 bilingual lessons, weekly quizzes, and project reviews. Certificates verify genuine completion of the challenge requirements (>= 70% overall and demonstrated final project) and do not claim external university or government accreditation unless explicitly stated.'
                 : 'AI Education Rwanda collects only the profile, enrollment, assessment, and project information needed to deliver courses and verify certificates, in accordance with Rwanda Law No. 058/2021 relating to the protection of personal data and privacy. Mobile Money PINs are never requested or stored. Learners may request account review or deletion via the Contact page.'}

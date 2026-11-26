@@ -211,18 +211,18 @@ export function AuthModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-black/45 flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 bg-black/45 flex items-end sm:items-center justify-center p-0 sm:p-4"
       role="dialog"
       aria-modal="true"
       aria-labelledby="auth-modal-title"
     >
-      <div className="bg-white border border-black/10 rounded-2xl max-w-md w-full p-6 sm:p-8 space-y-5">
+      <div className="bg-white border border-black/10 rounded-t-2xl sm:rounded-2xl max-w-lg w-full max-h-[92dvh] overflow-y-auto p-6 sm:p-8 space-y-5 shadow-2xl">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-xs font-medium text-[#0D7A5F] mb-1">
+            <p className="text-sm font-semibold text-[#0284C7] mb-1">
               AI Education Rwanda
             </p>
-            <h2 id="auth-modal-title" className="text-xl font-display font-semibold text-[#0D0D0F]">
+            <h2 id="auth-modal-title" className="text-2xl font-display font-bold text-[#0D0D0F]">
               {mode === 'verify'
                 ? lang === 'en'
                   ? 'Confirm Your Email Address'
@@ -244,9 +244,9 @@ export function AuthModal({
             type="button"
             onClick={onClose}
             aria-label="Close sign-in dialog"
-            className="p-1.5 rounded-lg text-[#5D5D66] hover:text-[#0D0D0F] hover:bg-[#F4F5F7]"
+            className="w-10 h-10 inline-flex items-center justify-center rounded-lg text-[#5D5D66] hover:text-[#0D0D0F] hover:bg-[#F4F5F7]"
           >
-            <X className="w-4 h-4" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 
@@ -254,7 +254,7 @@ export function AuthModal({
           type="button"
           disabled={busy}
           onClick={handleGoogleSignIn}
-          className="w-full px-4 py-2.5 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329] transition-colors disabled:opacity-60"
+          className="w-full min-h-[44px] px-5 py-3 text-[15px] font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg transition-colors disabled:opacity-60"
         >
           {lang === 'en' ? 'Continue with Google' : 'Komeza ukoresheje Google'}
         </button>
@@ -262,12 +262,12 @@ export function AuthModal({
         {mode === 'verify' ? (
           <div className="space-y-3 pt-1">
             {infoMsg && (
-              <p className="text-xs text-[#0D7A5F] bg-[#ECFDF5] border border-[#0D7A5F]/20 rounded-lg p-3 leading-relaxed">
+              <p className="text-sm text-[#0D7A5F] bg-[#ECFDF5] border border-[#0D7A5F]/20 rounded-lg p-3.5 leading-relaxed">
                 {infoMsg}
               </p>
             )}
             {errorMsg && (
-              <p className="text-xs text-[#DC2626] bg-[#FEF2F2] border border-[#DC2626]/20 rounded-lg p-3 leading-relaxed">
+              <p className="text-sm text-[#DC2626] bg-[#FEF2F2] border border-[#DC2626]/20 rounded-lg p-3.5 leading-relaxed">
                 {errorMsg}
               </p>
             )}
@@ -275,7 +275,7 @@ export function AuthModal({
               type="button"
               disabled={busy}
               onClick={handleCheckVerified}
-              className="w-full px-4 py-2.5 text-sm font-medium text-white bg-[#0D7A5F] rounded-lg hover:bg-[#0B664F] transition-colors disabled:opacity-60"
+              className="w-full min-h-[44px] px-5 py-3 text-[15px] font-semibold text-white bg-[#0D7A5F] rounded-lg hover:bg-[#0B664F] transition-colors disabled:opacity-60"
             >
               {busy
                 ? lang === 'en'
@@ -290,7 +290,7 @@ export function AuthModal({
                 type="button"
                 disabled={busy}
                 onClick={handleResendVerification}
-                className="text-xs font-medium text-[#0D0D0F] underline underline-offset-4"
+                className="text-sm font-medium text-[#0D0D0F] underline underline-offset-4"
               >
                 {lang === 'en' ? 'Resend verification email' : 'Ongera wohereze link'}
               </button>
@@ -302,7 +302,7 @@ export function AuthModal({
                   setErrorMsg(null);
                   setInfoMsg(null);
                 }}
-                className="text-xs text-[#5D5D66] hover:text-[#0D0D0F]"
+                className="text-sm text-[#5D5D66] hover:text-[#0D0D0F]"
               >
                 {lang === 'en' ? 'Back to Sign In' : 'Subira Kwinjira'}
               </button>
@@ -310,7 +310,7 @@ export function AuthModal({
           </div>
         ) : (
           <>
-            <div className="flex items-center gap-3 text-xs text-[#5D5D66]">
+            <div className="flex items-center gap-3 text-sm text-[#5D5D66]">
               <div className="flex-1 h-px bg-black/[0.08]" />
               <span>{lang === 'en' ? 'or with email' : 'cyangwa na imeli'}</span>
               <div className="flex-1 h-px bg-black/[0.08]" />
@@ -324,7 +324,7 @@ export function AuthModal({
                   setErrorMsg(null);
                   setInfoMsg(null);
                 }}
-                className={`flex-1 py-1.5 text-xs font-medium rounded-md transition-colors ${
+                className={`flex-1 min-h-[40px] py-2 text-sm font-medium rounded-md transition-colors ${
                   mode === 'signin' ? 'bg-white text-[#0D0D0F] shadow-xs' : 'text-[#5D5D66]'
                 }`}
               >
@@ -337,7 +337,7 @@ export function AuthModal({
                   setErrorMsg(null);
                   setInfoMsg(null);
                 }}
-                className={`flex-1 py-1.5 text-xs font-medium rounded-md transition-colors ${
+                className={`flex-1 min-h-[40px] py-2 text-sm font-medium rounded-md transition-colors ${
                   mode === 'signup' ? 'bg-white text-[#0D0D0F] shadow-xs' : 'text-[#5D5D66]'
                 }`}
               >
@@ -350,7 +350,7 @@ export function AuthModal({
                   setErrorMsg(null);
                   setInfoMsg(null);
                 }}
-                className={`flex-1 py-1.5 text-xs font-medium rounded-md transition-colors ${
+                className={`flex-1 min-h-[40px] py-2 text-sm font-medium rounded-md transition-colors ${
                   mode === 'reset' ? 'bg-white text-[#0D0D0F] shadow-xs' : 'text-[#5D5D66]'
                 }`}
               >
@@ -358,10 +358,10 @@ export function AuthModal({
               </button>
             </div>
 
-            <form onSubmit={handleEmailSubmit} className="space-y-3">
+            <form onSubmit={handleEmailSubmit} className="space-y-3.5">
               {mode === 'signup' && (
                 <div>
-                  <label className="block text-xs font-medium text-[#0D0D0F] mb-1">
+                  <label className="block text-sm font-medium text-[#0D0D0F] mb-1.5">
                     {lang === 'en' ? 'Full Name' : 'Amazina Yose'}
                   </label>
                   <input
@@ -370,13 +370,13 @@ export function AuthModal({
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="e.g. Aline Uwase"
-                    className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg"
+                    className="w-full min-h-[44px] px-4 py-2.5 text-base border border-black/15 rounded-lg focus:outline-none focus:border-[#0284C7]"
                   />
                 </div>
               )}
 
               <div>
-                <label className="block text-xs font-medium text-[#0D0D0F] mb-1">
+                <label className="block text-sm font-medium text-[#0D0D0F] mb-1.5">
                   {lang === 'en' ? 'Email Address' : 'Imeli'}
                 </label>
                 <input
@@ -385,13 +385,13 @@ export function AuthModal({
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@example.com"
-                  className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg"
+                  className="w-full min-h-[44px] px-4 py-2.5 text-base border border-black/15 rounded-lg focus:outline-none focus:border-[#0284C7]"
                 />
               </div>
 
               {mode !== 'reset' && (
                 <div>
-                  <label className="block text-xs font-medium text-[#0D0D0F] mb-1">
+                  <label className="block text-sm font-medium text-[#0D0D0F] mb-1.5">
                     {lang === 'en' ? 'Password' : 'Ijambo Banga'}
                   </label>
                   <input
@@ -400,18 +400,18 @@ export function AuthModal({
                     minLength={6}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg"
+                    className="w-full min-h-[44px] px-4 py-2.5 text-base border border-black/15 rounded-lg focus:outline-none focus:border-[#0284C7]"
                   />
                 </div>
               )}
 
               {errorMsg && (
-                <p className="text-xs text-[#DC2626] bg-[#FEF2F2] border border-[#DC2626]/20 rounded-lg p-3 leading-relaxed">
+                <p className="text-sm text-[#DC2626] bg-[#FEF2F2] border border-[#DC2626]/20 rounded-lg p-3.5 leading-relaxed">
                   {errorMsg}
                 </p>
               )}
               {infoMsg && (
-                <p className="text-xs text-[#0D7A5F] bg-[#ECFDF5] border border-[#0D7A5F]/20 rounded-lg p-3 leading-relaxed">
+                <p className="text-sm text-[#0D7A5F] bg-[#ECFDF5] border border-[#0D7A5F]/20 rounded-lg p-3.5 leading-relaxed">
                   {infoMsg}
                 </p>
               )}
@@ -419,7 +419,7 @@ export function AuthModal({
               <button
                 type="submit"
                 disabled={busy}
-                className="w-full px-4 py-2.5 text-sm font-medium text-[#0D0D0F] bg-[#F4F5F7] hover:bg-[#E7E9EE] border border-black/10 rounded-lg transition-colors disabled:opacity-60"
+                className="w-full min-h-[44px] px-5 py-3 text-[15px] font-semibold text-[#0D0D0F] bg-[#F4F5F7] hover:bg-[#E7E9EE] border border-black/10 rounded-lg transition-colors disabled:opacity-60"
               >
                 {busy
                   ? lang === 'en'

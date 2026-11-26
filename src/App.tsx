@@ -808,9 +808,18 @@ function PlatformShell() {
         user={user}
         staffRole={access.role}
         mobileOpen={mobileNavOpen}
+        courses={visibleCourses}
+        programmes={programmes}
         onToggleMobile={() => setMobileNavOpen((prev) => !prev)}
         onChangeLang={setLang}
         onNavigate={handleNavigate}
+        onSelectCourse={(id) => handleSelectCourse(id)}
+        onOpenLesson={(courseId, day) => {
+          setSelectedCourseId(courseId);
+          setSelectedDay(day);
+          setRoute('course-detail');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
         onSignIn={handleOpenSignIn}
         onSignOut={handleSignOut}
       />

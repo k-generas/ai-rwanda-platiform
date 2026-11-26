@@ -59,18 +59,18 @@ export function ProjectsHubView({ lang, resources = [], onNavigate }: ProjectsHu
   };
 
   return (
-    <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-12 space-y-16">
+    <div className="max-w-[1260px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-14">
       {/* Header */}
-      <header className="max-w-2xl">
-        <p className="text-xs font-medium text-[#0D7A5F] mb-2">
+      <header className="rounded-2xl bg-gradient-to-r from-[#0284C7] via-[#2563EB] to-[#4F46E5] text-white p-8 sm:p-12 lg:p-14">
+        <p className="text-sm font-semibold text-white/90 mb-2">
           {lang === 'en' ? 'Practical Builds, Tools & Templates' : 'Imishinga, Ibikoresho n’Impapuro'}
         </p>
-        <h1 className="text-3xl sm:text-4xl font-display font-semibold tracking-tight text-[#0D0D0F] mb-3">
+        <h1 className="text-[36px] sm:text-[48px] lg:text-[54px] font-display font-bold tracking-[-0.03em] leading-[1.08] mb-3">
           {lang === 'en'
             ? 'Projects & Downloadable Resources'
             : 'Imishinga Ngiro n’Ibikoresho byo Gukuramo'}
         </h1>
-        <p className="text-base text-[#5D5D66] leading-relaxed">
+        <p className="text-[16px] sm:text-[19px] text-white/95 leading-relaxed max-w-2xl">
           {lang === 'en'
             ? 'Every learner completes practical builds using free-tier tools—or proposes a custom workflow solving a real local problem.'
             : 'Buri munyeshuri akora umushinga ufatika akoresheje porogaramu z’ubuntu cyangwa agahimba uwe ukemura ikibazo cyo hafi.'}
@@ -78,12 +78,12 @@ export function ProjectsHubView({ lang, resources = [], onNavigate }: ProjectsHu
       </header>
 
       {/* 6 Practical Projects Interactive Explorer */}
-      <section>
-        <h2 className="text-xl font-display font-semibold text-[#0D0D0F] mb-6">
+      <section className="bg-white border border-black/[0.08] rounded-2xl p-6 sm:p-10">
+        <h2 className="text-[28px] sm:text-[36px] font-display font-bold tracking-[-0.025em] text-[#0D0D0F] mb-6">
           {lang === 'en' ? '01. Six Core Course Projects' : '01. Imishinga Itandatu y’Icyiciro'}
         </h2>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <div className="lg:col-span-5 space-y-2">
+          <div className="lg:col-span-5 space-y-2.5">
             {PRACTICAL_PROJECTS.map((proj) => {
               const active = proj.key === activeProject.key;
               return (
@@ -91,46 +91,46 @@ export function ProjectsHubView({ lang, resources = [], onNavigate }: ProjectsHu
                   key={proj.key}
                   type="button"
                   onClick={() => setSelectedProjectKey(proj.key)}
-                  className={`w-full text-left px-4 py-3.5 rounded-xl border transition-colors ${
+                  className={`w-full text-left px-4 py-4 rounded-xl border transition-colors ${
                     active
-                      ? 'bg-[#0D0D0F] text-white border-[#0D0D0F]'
-                      : 'bg-white text-[#0D0D0F] border-black/[0.08] hover:border-black/25'
+                      ? 'bg-[#0284C7] text-white border-[#0284C7]'
+                      : 'bg-[#FAFAFB] text-[#0D0D0F] border-black/[0.08] hover:border-black/25'
                   }`}
                 >
                   <p
-                    className={`text-xs font-mono tabular-nums mb-0.5 ${
-                      active ? 'text-[#34D399]' : 'text-[#5D5D66]'
+                    className={`text-xs font-mono tabular-nums mb-1 ${
+                      active ? 'text-white/90' : 'text-[#0284C7]'
                     }`}
                   >
                     Project {proj.number}
                   </p>
-                  <p className="text-sm font-semibold">{proj.title[lang]}</p>
+                  <p className="text-[16px] font-semibold">{proj.title[lang]}</p>
                 </button>
               );
             })}
           </div>
 
-          <div className="lg:col-span-7 bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6 sm:p-8">
-            <p className="text-xs font-mono text-[#0D7A5F] mb-2">
+          <div className="lg:col-span-7 bg-[#F7F8FA] border border-black/[0.08] rounded-2xl p-6 sm:p-8">
+            <p className="text-sm font-mono text-[#0284C7] mb-2">
               Project {activeProject.number} · {activeProject.tools.join(' · ')}
             </p>
-            <h3 className="text-2xl font-display font-semibold text-[#0D0D0F] mb-3">
+            <h3 className="text-2xl sm:text-[28px] font-display font-bold text-[#0D0D0F] mb-3">
               {activeProject.title[lang]}
             </h3>
-            <p className="text-sm sm:text-base text-[#5D5D66] leading-relaxed mb-6">
+            <p className="text-[15px] sm:text-[17px] text-[#5D5D66] leading-relaxed mb-6">
               {activeProject.summary[lang]}
             </p>
 
-            <h4 className="text-xs font-semibold text-[#0D0D0F] mb-3">
+            <h4 className="text-sm font-semibold text-[#0D0D0F] mb-3">
               {lang === 'en' ? 'Architecture & Execution Steps' : 'Imiterere n’Intambwe z’Umushinga'}
             </h4>
             <ol className="space-y-2.5 mb-6">
               {activeProject.workflowSteps[lang].map((step, i) => (
                 <li
                   key={step}
-                  className="bg-white border border-black/[0.06] rounded-xl px-4 py-3 text-sm text-[#0D0D0F] flex items-start gap-3"
+                  className="bg-white border border-black/[0.06] rounded-xl px-4 py-3.5 text-[15px] text-[#0D0D0F] flex items-start gap-3"
                 >
-                  <span className="font-mono text-xs text-[#0D7A5F] tabular-nums mt-0.5">
+                  <span className="font-mono text-sm text-[#0284C7] tabular-nums mt-0.5">
                     {`0${i + 1}`}
                   </span>
                   <span>{step}</span>
@@ -140,15 +140,15 @@ export function ProjectsHubView({ lang, resources = [], onNavigate }: ProjectsHu
 
             <div className="pt-4 border-t border-black/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <p className="text-xs font-semibold text-[#0D0D0F]">
+                <p className="text-sm font-semibold text-[#0D0D0F]">
                   {lang === 'en' ? 'Expected Deliverable' : 'Ibisabwa Gutangwa'}
                 </p>
-                <p className="text-xs text-[#5D5D66] mt-0.5">{activeProject.deliverable[lang]}</p>
+                <p className="text-[14px] text-[#5D5D66] mt-0.5">{activeProject.deliverable[lang]}</p>
               </div>
               <button
                 type="button"
                 onClick={() => onNavigate('dashboard')}
-                className="px-4 py-2 text-xs font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329] whitespace-nowrap shrink-0"
+                className="px-5 py-2.5 text-[15px] font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg whitespace-nowrap shrink-0"
               >
                 {lang === 'en' ? 'Submit in Dashboard' : 'Tanga Umushinga'}
               </button>
@@ -159,7 +159,7 @@ export function ProjectsHubView({ lang, resources = [], onNavigate }: ProjectsHu
 
       {/* Downloadable Worksheets & Templates */}
       <section>
-        <h2 className="text-xl font-display font-semibold text-[#0D0D0F] mb-2">
+        <h2 className="text-[28px] sm:text-[36px] font-display font-bold tracking-[-0.025em] text-[#0D0D0F] mb-2">
           {lang === 'en' ? '02. Downloadable Learning Templates' : '02. Impapuro z’Imyitozo zo Gukuramo'}
         </h2>
         <p className="text-sm text-[#5D5D66] mb-6">

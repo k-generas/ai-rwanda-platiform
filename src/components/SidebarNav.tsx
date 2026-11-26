@@ -92,7 +92,7 @@ export function SidebarNav({
     }
   ];
 
-  const renderLinks = (closeOnSelect: boolean) => (
+  const renderLinks = (isMobileDrawer: boolean) => (
     <>
       <nav aria-label="Primary navigation" className="space-y-1">
         {primaryItems.map((item) => {
@@ -105,18 +105,20 @@ export function SidebarNav({
               key={item.route}
               type="button"
               onClick={() => {
-                if (closeOnSelect) onCloseMobile();
+                if (isMobileDrawer) onCloseMobile();
                 onNavigate(item.route);
               }}
-              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[15px] transition-colors whitespace-nowrap ${
+              className={`w-full flex items-center gap-3.5 px-4 ${
+                isMobileDrawer ? 'py-3.5 text-[17px]' : 'py-3 text-[16px]'
+              } rounded-xl transition-colors whitespace-nowrap ${
                 isActive
                   ? 'bg-[#F0F9FF] text-[#0284C7] font-semibold'
-                  : 'text-[#4B4B55] hover:bg-[#F7F8FA] hover:text-[#0D0D0F] font-medium'
+                  : 'text-[#3F3F46] hover:bg-[#F7F8FA] hover:text-[#0D0D0F] font-medium'
               }`}
             >
               <Icon
-                className={`w-[18px] h-[18px] shrink-0 ${
-                  isActive ? 'text-[#0284C7]' : 'text-[#5D5D66]'
+                className={`w-5 h-5 shrink-0 ${
+                  isActive ? 'text-[#0284C7]' : 'text-[#52525B]'
                 }`}
               />
               <span className="truncate">{item.label}</span>
@@ -136,18 +138,20 @@ export function SidebarNav({
               key={track.id}
               type="button"
               onClick={() => {
-                if (closeOnSelect) onCloseMobile();
+                if (isMobileDrawer) onCloseMobile();
                 track.action();
               }}
-              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[14px] transition-colors whitespace-nowrap ${
+              className={`w-full flex items-center gap-3.5 px-4 ${
+                isMobileDrawer ? 'py-3 text-[16px]' : 'py-2.5 text-[15px]'
+              } rounded-xl transition-colors whitespace-nowrap ${
                 isActive
                   ? 'bg-[#F0F9FF] text-[#0284C7] font-semibold'
-                  : 'text-[#5D5D66] hover:bg-[#F7F8FA] hover:text-[#0D0D0F] font-medium'
+                  : 'text-[#52525B] hover:bg-[#F7F8FA] hover:text-[#0D0D0F] font-medium'
               }`}
             >
               <Icon
-                className={`w-[17px] h-[17px] shrink-0 ${
-                  isActive ? 'text-[#0284C7]' : 'text-[#70707A]'
+                className={`w-[19px] h-[19px] shrink-0 ${
+                  isActive ? 'text-[#0284C7]' : 'text-[#71717A]'
                 }`}
               />
               <span className="truncate">{track.label}</span>
@@ -157,8 +161,8 @@ export function SidebarNav({
       </div>
 
       <div className="mt-auto pt-6">
-        <div className="px-3.5 py-3 rounded-xl border border-black/[0.08] bg-[#FAFAFB] text-[11px] text-[#5D5D66] flex items-center gap-2">
-          <Building2 className="w-3.5 h-3.5 text-[#0284C7] shrink-0" />
+        <div className="px-4 py-3 rounded-xl border border-black/[0.08] bg-[#FAFAFB] text-[13px] text-[#5D5D66] flex items-center gap-2.5">
+          <Building2 className="w-4 h-4 text-[#0284C7] shrink-0" />
           <span className="truncate">Kigali · EN &amp; Kinyarwanda</span>
         </div>
       </div>
@@ -168,13 +172,13 @@ export function SidebarNav({
   return (
     <>
       {/* Desktop Persistent Sidebar */}
-      <div className="hidden lg:flex lg:w-[244px] shrink-0 flex-col border-r border-black/[0.08] bg-white sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto px-3 py-5">
+      <div className="hidden lg:flex lg:w-[256px] shrink-0 flex-col border-r border-black/[0.08] bg-white sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto px-3.5 py-5">
         {renderLinks(false)}
       </div>
 
-      {/* Mobile Slide-Over Drawer */}
+      {/* Mobile & Tablet Right Slide-Over Drawer (Matches OpenAI Academy drawer position & large font size) */}
       {mobileOpen && (
-        <div className="lg:hidden fixed inset-0 z-50 flex">
+        <div className="lg:hidden fixed inset-0 z-50 flex justify-end">
           <div
             className="fixed inset-0 bg-black/35"
             aria-hidden="true"
@@ -184,19 +188,19 @@ export function SidebarNav({
             role="dialog"
             aria-modal="true"
             aria-label="Navigation menu"
-            className="relative z-10 w-[272px] max-w-[82vw] h-full bg-white border-r border-black/10 px-4 py-5 flex flex-col overflow-y-auto"
+            className="relative z-10 w-[300px] sm:w-[340px] max-w-[88vw] h-full bg-white border-l border-black/10 px-4 py-5 flex flex-col overflow-y-auto shadow-2xl"
           >
             <div className="flex items-center justify-between pb-4 mb-3 border-b border-black/[0.08]">
-              <span className="text-base font-display font-bold text-[#0D0D0F]">
+              <span className="text-[17px] font-display font-bold text-[#0D0D0F]">
                 AI Education Rwanda
               </span>
               <button
                 type="button"
                 onClick={onCloseMobile}
                 aria-label="Close navigation menu"
-                className="w-9 h-9 inline-flex items-center justify-center rounded-lg border border-black/10 text-[#0D0D0F]"
+                className="w-10 h-10 inline-flex items-center justify-center rounded-lg bg-[#F4F5F7] text-[#0D0D0F] hover:bg-[#E5E7EB]"
               >
-                <X className="w-4 h-4" />
+                <X className="w-5 h-5" />
               </button>
             </div>
             {renderLinks(true)}

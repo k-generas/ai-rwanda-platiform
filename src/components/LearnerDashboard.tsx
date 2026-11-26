@@ -2157,11 +2157,11 @@ export function LearnerDashboard({
       {/* Printable Certificate Modal */}
       {printCert && (
         <div
-          className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/50 flex items-end sm:items-center justify-center p-0 sm:p-4"
           role="dialog"
           aria-modal="true"
         >
-          <div className="bg-white border border-black/15 rounded-2xl max-w-2xl w-full p-8 space-y-6">
+          <div className="bg-white border border-black/15 rounded-t-2xl sm:rounded-2xl max-w-2xl w-full max-h-[92dvh] overflow-y-auto p-5 sm:p-8 space-y-6">
             <div className="flex items-center justify-between print:hidden">
               <span className="text-xs font-mono text-[#5D5D66]">Certificate Preview</span>
               <div className="flex items-center gap-2">

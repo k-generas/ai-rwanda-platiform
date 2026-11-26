@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import { ArrowRight, CheckCircle2, ChevronDown, ChevronUp } from 'lucide-react';
+import {
+  ArrowRight,
+  Calendar,
+  CheckCircle2,
+  ChevronDown,
+  ChevronUp,
+  Clock,
+  MapPin,
+  Video
+} from 'lucide-react';
 import type { Course, Language, PageRoute, PlatformSettings, ProgrammeRecord } from '../types';
 import {
   COURSES,
@@ -73,6 +82,12 @@ const COURSE_GRADIENT_COVERS: Record<string, string> = {
   industry: 'bg-gradient-to-br from-[#0284C7] via-[#10B981] to-[#F59E0B]'
 };
 
+const HOME_EVENT_GRADIENTS = [
+  'bg-gradient-to-br from-[#0284C7] via-[#06B6D4] to-[#EC4899]',
+  'bg-gradient-to-br from-[#3B82F6] via-[#6366F1] to-[#A855F7]',
+  'bg-gradient-to-br from-[#2563EB] via-[#38BDF8] to-[#FACC15]'
+];
+
 export function HomeView({
   lang,
   courses,
@@ -99,9 +114,12 @@ export function HomeView({
     .map((p) => ({
       id: p.id,
       dateLabel: p.dateLabel,
+      timeLabel: p.timeLabel,
+      format: p.format,
       locationLabel: lang === 'en' ? p.locationEn : p.locationRw,
       languageLabel: p.languageLabel,
-      titleLabel: lang === 'en' ? p.titleEn : p.titleRw
+      titleLabel: lang === 'en' ? p.titleEn : p.titleRw,
+      speaker: p.speaker
     }));
 
   const upcomingEvents =
@@ -112,9 +130,12 @@ export function HomeView({
           .map((e) => ({
             id: e.id,
             dateLabel: e.dateLabel,
+            timeLabel: e.timeLabel,
+            format: e.format,
             locationLabel: e.location[lang],
             languageLabel: e.languageLabel,
-            titleLabel: e.title[lang]
+            titleLabel: e.title[lang],
+            speaker: e.speaker
           }));
 
   const showVerifyBox = platformSettings?.enablePublicVerify !== false;
@@ -127,9 +148,9 @@ export function HomeView({
   };
 
   return (
-    <div className="max-w-[1220px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
-      {/* 1. Wide Photographic Hero Banner (OpenAI Academy Home Banner Style) */}
-      <section className="relative rounded-2xl overflow-hidden bg-[#0D0D0F] min-h-[340px] sm:min-h-[400px] flex items-end border border-black/[0.08]">
+    <div className="max-w-[1260px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8 sm:space-y-10">
+      {/* 1. Wide Photographic Hero Banner (OpenAI Academy Home Banner Scale) */}
+      <section className="relative rounded-2xl overflow-hidden bg-[#0D0D0F] min-h-[360px] sm:min-h-[420px] flex items-end border border-black/[0.08]">
         {!heroImgFailed && (
           <img
             src={heroStudioBanner}
@@ -147,24 +168,24 @@ export function HomeView({
           aria-hidden="true"
           className="absolute inset-0 bg-gradient-to-t from-[#0D0D0F]/95 via-[#0D0D0F]/60 to-[#0D0D0F]/20"
         />
-        <div className="relative z-10 w-full p-6 sm:p-10 lg:p-12 flex flex-col lg:flex-row lg:items-end justify-between gap-6 text-white">
-          <div className="max-w-2xl">
-            <p className="text-xs sm:text-sm font-medium text-[#7DD3FC] mb-2">
+        <div className="relative z-10 w-full p-6 sm:p-10 lg:p-12 flex flex-col gap-6 text-white">
+          <div className="max-w-3xl">
+            <p className="text-sm sm:text-[15px] font-semibold text-[#7DD3FC] mb-2">
               {UI_COPY.hero.kicker[lang]}
             </p>
-            <h1 className="text-4xl sm:text-5xl lg:text-[60px] font-display font-bold tracking-[-0.03em] leading-[1.04] text-balance mb-4">
+            <h1 className="text-[36px] sm:text-[52px] lg:text-[64px] font-display font-bold tracking-[-0.03em] leading-[1.04] text-balance mb-4">
               {UI_COPY.hero.headline[lang]}
             </h1>
-            <p className="text-sm sm:text-base text-white/85 leading-relaxed max-w-xl">
+            <p className="text-[16px] sm:text-[19px] text-white/90 leading-relaxed max-w-2xl">
               {UI_COPY.hero.subheadline[lang]}
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 shrink-0">
+          <div className="flex flex-wrap items-center gap-3">
             <button
               type="button"
               onClick={() => onSelectCourse('challenge-28')}
-              className="inline-flex items-center gap-2 px-5 py-3 text-sm font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg transition-colors whitespace-nowrap"
+              className="inline-flex items-center gap-2 px-5 py-3 text-[15px] font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg transition-colors whitespace-nowrap"
             >
               <span>{UI_COPY.hero.primaryCta[lang]}</span>
               <ArrowRight className="w-4 h-4" />
@@ -172,14 +193,14 @@ export function HomeView({
             <button
               type="button"
               onClick={() => onOpenSampleDay(1)}
-              className="inline-flex items-center gap-2 px-5 py-3 text-sm font-semibold text-[#0D0D0F] bg-white hover:bg-[#F4F5F7] rounded-lg transition-colors whitespace-nowrap"
+              className="inline-flex items-center gap-2 px-5 py-3 text-[15px] font-semibold text-[#0D0D0F] bg-white hover:bg-[#F4F5F7] rounded-lg transition-colors whitespace-nowrap"
             >
               <span>{UI_COPY.hero.secondaryCta[lang]}</span>
             </button>
             <button
               type="button"
               onClick={() => onOpenSampleDay(2)}
-              className="inline-flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-medium text-white/90 hover:text-white underline underline-offset-4 whitespace-nowrap"
+              className="inline-flex items-center gap-1.5 px-3 py-2 text-sm sm:text-[15px] font-medium text-white/95 hover:text-white underline underline-offset-4 whitespace-nowrap"
             >
               <span>{lang === 'en' ? 'Day 2: AI vs ML vs DL' : 'Umunsi wa 2: AI vs ML vs DL'}</span>
             </button>
@@ -187,17 +208,17 @@ export function HomeView({
         </div>
       </section>
 
-      {/* 2. "Build the AI skills Rwanda needs" 4-Track Section (Exact OpenAI Academy Layout) */}
+      {/* 2. "Build the AI skills Rwanda needs" 4-Track Section (OpenAI Academy Typography Scale) */}
       <section className="bg-white border border-black/[0.08] rounded-2xl p-6 sm:p-10">
-        <div className="text-center max-w-2xl mx-auto mb-8">
-          <h2 className="text-2xl sm:text-4xl font-display font-bold tracking-[-0.025em] text-[#0D0D0F] text-balance">
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
+          <h2 className="text-[28px] sm:text-[38px] lg:text-[42px] font-display font-bold tracking-[-0.025em] leading-[1.15] text-[#0D0D0F] text-balance">
             {lang === 'en'
               ? 'Build the AI skills Rwanda needs'
               : 'Wubake ubumenyi bwa AI bukenewe mu Rwanda'}
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {AUDIENCE_TRACK_BANNERS.map((card) => (
             <button
               key={card.key}
@@ -206,12 +227,12 @@ export function HomeView({
               className="group text-left flex flex-col focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0284C7]"
             >
               <div
-                className={`w-full h-32 rounded-xl ${card.gradient} mb-3 transition-transform duration-200 group-hover:scale-[1.01]`}
+                className={`w-full h-36 rounded-xl ${card.gradient} mb-3.5 transition-transform duration-200 group-hover:scale-[1.01]`}
               />
-              <span className="text-sm sm:text-base font-semibold text-[#0284C7] group-hover:underline underline-offset-4">
+              <span className="text-[17px] sm:text-[18px] font-semibold text-[#0284C7] group-hover:underline underline-offset-4">
                 {card.title[lang]}
               </span>
-              <span className="text-xs sm:text-sm text-[#5D5D66] mt-1 leading-relaxed">
+              <span className="text-[15px] text-[#5D5D66] mt-1.5 leading-relaxed">
                 {card.subtitle[lang]}
               </span>
             </button>
@@ -219,28 +240,36 @@ export function HomeView({
         </div>
 
         {/* Clean 4-column Proof Figures Bar */}
-        <div className="mt-8 pt-6 border-t border-black/[0.07] grid grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="mt-9 pt-7 border-t border-black/[0.07] grid grid-cols-2 lg:grid-cols-4 gap-6">
           <div>
-            <p className="text-2xl font-display font-bold text-[#0D0D0F] tabular-nums">28 Days</p>
-            <p className="text-xs text-[#5D5D66] mt-0.5">
+            <p className="text-2xl sm:text-3xl font-display font-bold text-[#0D0D0F] tabular-nums">
+              28 Days
+            </p>
+            <p className="text-sm text-[#5D5D66] mt-1">
               {lang === 'en' ? '5–12 min bilingual daily lessons' : 'Amasomo y’iminota 5–12 buri munsi'}
             </p>
           </div>
           <div>
-            <p className="text-2xl font-display font-bold text-[#0D0D0F] tabular-nums">7 Levels</p>
-            <p className="text-xs text-[#5D5D66] mt-0.5">
+            <p className="text-2xl sm:text-3xl font-display font-bold text-[#0D0D0F] tabular-nums">
+              7 Levels
+            </p>
+            <p className="text-sm text-[#5D5D66] mt-1">
               {lang === 'en' ? 'From AI basics to real systems' : 'Kuva ku ntangiriro kugeza kuri sisitemu'}
             </p>
           </div>
           <div>
-            <p className="text-2xl font-display font-bold text-[#0D0D0F] tabular-nums">6 Projects</p>
-            <p className="text-xs text-[#5D5D66] mt-0.5">
+            <p className="text-2xl sm:text-3xl font-display font-bold text-[#0D0D0F] tabular-nums">
+              6 Projects
+            </p>
+            <p className="text-sm text-[#5D5D66] mt-1">
               {lang === 'en' ? 'Free-tier Workspace & Make builds' : 'Imishinga ikoresha porogaramu z’ubuntu'}
             </p>
           </div>
           <div>
-            <p className="text-2xl font-display font-bold text-[#0284C7] tabular-nums">1,000 RWF</p>
-            <p className="text-xs text-[#5D5D66] mt-0.5">
+            <p className="text-2xl sm:text-3xl font-display font-bold text-[#0284C7] tabular-nums">
+              1,000 RWF
+            </p>
+            <p className="text-sm text-[#5D5D66] mt-1">
               {lang === 'en' ? 'Pilot fee via MTN MoMo / Airtel' : 'Kwishyura na MTN MoMo / Airtel'}
             </p>
           </div>
@@ -251,17 +280,17 @@ export function HomeView({
       <section className="bg-white border border-black/[0.08] rounded-2xl p-6 sm:p-10">
         <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
           <div>
-            <p className="text-xs font-semibold tracking-wider text-[#0284C7] uppercase mb-1.5">
+            <p className="text-[13px] sm:text-sm font-semibold tracking-wider text-[#0284C7] uppercase mb-1.5">
               {lang === 'en' ? 'About the courses' : 'Ibyerekeye amasomo'}
             </p>
-            <h2 className="text-2xl sm:text-4xl font-display font-bold tracking-[-0.025em] text-[#0D0D0F] text-balance">
+            <h2 className="text-[28px] sm:text-[38px] lg:text-[42px] font-display font-bold tracking-[-0.025em] leading-[1.15] text-[#0D0D0F] text-balance">
               {lang === 'en' ? 'Learning is part of the work' : 'Kwiga ni igice cy’akazi ka buri munsi'}
             </h2>
           </div>
           <button
             type="button"
             onClick={() => onNavigate('courses')}
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0284C7] hover:underline whitespace-nowrap"
+            className="inline-flex items-center gap-1.5 text-[15px] sm:text-base font-semibold text-[#0284C7] hover:underline whitespace-nowrap"
           >
             <span>{lang === 'en' ? 'View all courses' : 'Reba amasomo yose'}</span>
             <ArrowRight className="w-4 h-4" />
@@ -279,9 +308,9 @@ export function HomeView({
                 className="bg-white border border-black/[0.08] rounded-2xl overflow-hidden flex flex-col justify-between"
               >
                 <div>
-                  <div className={`h-32 w-full ${coverGrad}`} />
+                  <div className={`h-36 w-full ${coverGrad}`} />
                   <div className="p-6">
-                    <p className="text-xs font-medium text-[#0284C7] mb-1.5">
+                    <p className="text-[15px] font-semibold text-[#0284C7] mb-2">
                       {course.code} · {course.durationDays} {lang === 'en' ? 'Days' : 'Iminsi'} ·{' '}
                       {course.status === 'active'
                         ? course.isFree || course.priceRwf === 0
@@ -293,23 +322,23 @@ export function HomeView({
                           ? 'Upcoming'
                           : 'Biri hafi'}
                     </p>
-                    <h3 className="text-xl sm:text-2xl font-display font-bold tracking-[-0.02em] text-[#0D0D0F] mb-2.5">
+                    <h3 className="text-[22px] sm:text-[24px] font-display font-bold tracking-[-0.02em] leading-[1.25] text-[#0D0D0F] mb-3">
                       {course.title[lang]}
                     </h3>
-                    <p className="text-sm text-[#5D5D66] leading-relaxed">
+                    <p className="text-[15px] sm:text-[16px] text-[#5D5D66] leading-relaxed">
                       {course.description[lang]}
                     </p>
                   </div>
                 </div>
 
                 <div className="px-6 pb-6 space-y-4">
-                  <div className="border-t border-black/[0.08] pt-3">
+                  <div className="border-t border-black/[0.08] pt-3.5">
                     <button
                       type="button"
                       onClick={() =>
                         setOpenOutlines((prev) => ({ ...prev, [course.id]: !prev[course.id] }))
                       }
-                      className="w-full flex items-center justify-between text-sm font-semibold text-[#0D0D0F] py-1"
+                      className="w-full flex items-center justify-between text-[16px] font-semibold text-[#0D0D0F] py-1.5"
                     >
                       <span>{lang === 'en' ? 'Course outline' : 'Incamake y’amasomo'}</span>
                       {outlineExpanded ? (
@@ -319,10 +348,10 @@ export function HomeView({
                       )}
                     </button>
                     {outlineExpanded && (
-                      <ul className="mt-2 space-y-1.5 text-xs text-[#5D5D66]">
+                      <ul className="mt-2.5 space-y-2 text-[14px] text-[#5D5D66]">
                         {course.outcomes[lang].slice(0, 4).map((out) => (
                           <li key={out} className="flex items-start gap-2">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-[#0284C7] shrink-0 mt-0.5" />
+                            <CheckCircle2 className="w-4 h-4 text-[#0284C7] shrink-0 mt-0.5" />
                             <span>{out}</span>
                           </li>
                         ))}
@@ -333,7 +362,7 @@ export function HomeView({
                   <button
                     type="button"
                     onClick={() => onSelectCourse(course.id)}
-                    className="w-full sm:w-auto px-5 py-2.5 text-sm font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg transition-colors"
+                    className="w-full sm:w-auto px-5 py-2.5 text-[15px] font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg transition-colors"
                   >
                     {lang === 'en' ? 'Go to course' : 'Jya ku isomo'}
                   </button>
@@ -344,18 +373,115 @@ export function HomeView({
         </div>
       </section>
 
-      {/* 4. 7 Learning Levels Interactive Framework */}
+      {/* 4. Upcoming Events Section (Exact OpenAI Academy Visual Event Cards from Screenshot Comparison) */}
+      <section className="bg-white border border-black/[0.08] rounded-2xl p-6 sm:p-10">
+        <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
+          <div>
+            <p className="text-[13px] sm:text-sm font-semibold tracking-wider text-[#0284C7] uppercase mb-1.5">
+              {lang === 'en' ? 'Live Workshops' : 'Amahugurwa Imbonankubone'}
+            </p>
+            <h2 className="text-[28px] sm:text-[38px] lg:text-[42px] font-display font-bold tracking-[-0.025em] leading-[1.15] text-[#0D0D0F]">
+              {lang === 'en' ? 'Upcoming Events' : 'Ibiganiro Biri Imbere'}
+            </h2>
+          </div>
+          <button
+            type="button"
+            onClick={() => onNavigate('events')}
+            className="inline-flex items-center gap-1.5 text-[15px] sm:text-base font-semibold text-[#0284C7] hover:underline whitespace-nowrap"
+          >
+            <span>{lang === 'en' ? 'All events' : 'Ibiganiro byose'}</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {upcomingEvents.map((evt, idx) => {
+            const grad = HOME_EVENT_GRADIENTS[idx % HOME_EVENT_GRADIENTS.length];
+            const formatLabel =
+              evt.format === 'kigali_in_person'
+                ? lang === 'en'
+                  ? 'In-Person'
+                  : 'I Kigali'
+                : evt.format === 'hybrid'
+                  ? lang === 'en'
+                    ? 'Hybrid'
+                    : 'Imbonankubone & Online'
+                  : lang === 'en'
+                    ? 'Livestream'
+                    : 'Kuri Interineti';
+            return (
+              <article
+                key={evt.id}
+                className="bg-white border border-black/[0.08] rounded-2xl overflow-hidden flex flex-col justify-between"
+              >
+                <div>
+                  <div className={`aspect-[16/9] ${grad} p-5 flex flex-col justify-between text-white`}>
+                    <div className="flex items-center justify-between text-xs font-medium text-white/90">
+                      <span>AI Education Rwanda</span>
+                      <span className="tabular-nums">{evt.dateLabel}</span>
+                    </div>
+                    <div>
+                      <p className="text-[20px] sm:text-[22px] font-display font-bold leading-snug text-balance">
+                        {evt.titleLabel}
+                      </p>
+                      <p className="text-sm text-white/90 mt-1">{evt.speaker}</p>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <p className="text-[15px] font-semibold text-[#0284C7] mb-1.5">
+                      {formatLabel} · {evt.languageLabel}
+                    </p>
+                    <h3 className="text-[21px] sm:text-[23px] font-display font-bold leading-[1.26] text-[#0D0D0F]">
+                      {evt.titleLabel}
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="px-6 pb-6 pt-3 border-t border-black/[0.06] flex items-end justify-between gap-3">
+                  <div className="space-y-1.5 text-[15px] text-[#5D5D66] min-w-0">
+                    <p className="inline-flex items-center gap-2 tabular-nums truncate w-full">
+                      <Clock className="w-4 h-4 shrink-0" />
+                      <span className="truncate">{evt.timeLabel}</span>
+                    </p>
+                    <p className="inline-flex items-center gap-2 tabular-nums truncate w-full">
+                      <Calendar className="w-4 h-4 shrink-0" />
+                      <span className="truncate">{evt.dateLabel}</span>
+                    </p>
+                    <p className="inline-flex items-center gap-2 truncate w-full">
+                      {evt.format === 'online' ? (
+                        <Video className="w-4 h-4 shrink-0" />
+                      ) : (
+                        <MapPin className="w-4 h-4 shrink-0" />
+                      )}
+                      <span className="truncate">{evt.locationLabel}</span>
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => onNavigate('events')}
+                    className="px-5 py-2.5 text-[15px] font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg transition-colors whitespace-nowrap shrink-0"
+                  >
+                    {lang === 'en' ? 'Register' : 'Iyandikishe'}
+                  </button>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* 5. 7 Learning Levels Interactive Framework */}
       <section className="bg-white border border-black/[0.08] rounded-2xl p-6 sm:p-10">
         <div className="max-w-3xl mb-8">
-          <p className="text-xs font-semibold tracking-wider text-[#0284C7] uppercase mb-1.5">
+          <p className="text-[13px] sm:text-sm font-semibold tracking-wider text-[#0284C7] uppercase mb-1.5">
             {lang === 'en' ? 'Educational Framework' : 'Imiterere y’Imyigire'}
           </p>
-          <h2 className="text-2xl sm:text-4xl font-display font-bold tracking-[-0.025em] text-[#0D0D0F] mb-3 text-balance">
+          <h2 className="text-[28px] sm:text-[38px] lg:text-[42px] font-display font-bold tracking-[-0.025em] leading-[1.15] text-[#0D0D0F] mb-3 text-balance">
             {lang === 'en'
               ? 'Seven levels from basic usage to AI systems'
               : 'Ibyiciro birindwi kuva ku ntangiriro kugeza kuri sisitemu za AI'}
           </h2>
-          <p className="text-sm sm:text-base text-[#5D5D66] leading-relaxed">
+          <p className="text-[15px] sm:text-[17px] text-[#5D5D66] leading-relaxed">
             {lang === 'en'
               ? 'Every cohort builds step by step—prioritizing practical workflows and human verification rather than empty hype.'
               : 'Buri cyiciro cyubaka intambwe ku yindi gishingiye ku bikorwa bifatika.'}
@@ -363,7 +489,7 @@ export function HomeView({
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          <div className="lg:col-span-5 space-y-2">
+          <div className="lg:col-span-5 space-y-2.5">
             {LEARNING_LEVELS.map((item) => {
               const active = item.level === activeLevel;
               return (
@@ -379,13 +505,15 @@ export function HomeView({
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <span
-                      className={`text-xs font-mono tabular-nums shrink-0 ${
+                      className={`text-sm font-mono tabular-nums shrink-0 ${
                         active ? 'text-white/90' : 'text-[#0284C7]'
                       }`}
                     >
                       0{item.level}
                     </span>
-                    <span className="text-sm font-semibold truncate">{item.title[lang]}</span>
+                    <span className="text-[15px] sm:text-base font-semibold truncate">
+                      {item.title[lang]}
+                    </span>
                   </div>
                   <ArrowRight className={`w-4 h-4 shrink-0 ${active ? 'text-white' : 'text-[#5D5D66]'}`} />
                 </button>
@@ -394,13 +522,13 @@ export function HomeView({
           </div>
 
           <div className="lg:col-span-7 bg-[#F7F8FA] border border-black/[0.08] rounded-2xl p-6 sm:p-8">
-            <p className="text-xs font-mono text-[#0284C7] mb-2 tabular-nums">
+            <p className="text-sm font-mono text-[#0284C7] mb-2 tabular-nums">
               {lang === 'en' ? `Level 0${selectedLevel.level}` : `Icyiciro cya 0${selectedLevel.level}`}
             </p>
-            <h3 className="text-xl sm:text-2xl font-display font-bold text-[#0D0D0F] mb-2">
+            <h3 className="text-2xl sm:text-[28px] font-display font-bold text-[#0D0D0F] mb-2.5">
               {selectedLevel.title[lang]}
             </h3>
-            <p className="text-sm sm:text-base text-[#5D5D66] leading-relaxed mb-6">
+            <p className="text-[15px] sm:text-[17px] text-[#5D5D66] leading-relaxed mb-6">
               {selectedLevel.summary[lang]}
             </p>
 
@@ -408,7 +536,7 @@ export function HomeView({
               {selectedLevel.topics[lang].map((topic) => (
                 <div
                   key={topic}
-                  className="bg-white border border-black/[0.06] rounded-xl px-4 py-3 text-xs sm:text-sm text-[#0D0D0F] flex items-start gap-2.5"
+                  className="bg-white border border-black/[0.06] rounded-xl px-4 py-3.5 text-[14px] sm:text-[15px] text-[#0D0D0F] flex items-start gap-2.5"
                 >
                   <CheckCircle2 className="w-4 h-4 text-[#0284C7] shrink-0 mt-0.5" />
                   <span>{topic}</span>
@@ -417,10 +545,10 @@ export function HomeView({
             </div>
 
             <div className="pt-4 border-t border-black/[0.08]">
-              <p className="text-xs font-semibold text-[#0D0D0F] mb-1">
+              <p className="text-sm font-semibold text-[#0D0D0F] mb-1">
                 {lang === 'en' ? 'Expected learner outcome' : 'Icyo umunyeshuri ageraho'}
               </p>
-              <p className="text-sm text-[#5D5D66] leading-relaxed">
+              <p className="text-[15px] text-[#5D5D66] leading-relaxed">
                 {selectedLevel.outcome[lang]}
               </p>
             </div>
@@ -428,22 +556,22 @@ export function HomeView({
         </div>
       </section>
 
-      {/* 5. Practical Projects, Upcoming Events & Quick Certificate Verifier */}
+      {/* 6. Practical Projects + Prompt Templates + Certificate Quick Verify */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <div className="lg:col-span-6 bg-white border border-black/[0.08] rounded-2xl p-6 sm:p-8">
-          <div className="flex flex-wrap items-end justify-between gap-4 mb-5">
+        <div className="lg:col-span-7 bg-white border border-black/[0.08] rounded-2xl p-6 sm:p-8">
+          <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
             <div>
-              <p className="text-xs font-semibold tracking-wider text-[#0284C7] uppercase mb-1">
+              <p className="text-[13px] sm:text-sm font-semibold tracking-wider text-[#0284C7] uppercase mb-1">
                 {lang === 'en' ? 'Hands-On Portfolio' : 'Imishinga Ngiro'}
               </p>
-              <h2 className="text-2xl font-display font-bold text-[#0D0D0F]">
+              <h2 className="text-2xl sm:text-[32px] font-display font-bold text-[#0D0D0F]">
                 {lang === 'en' ? 'Six projects learners build' : 'Imishinga 6 abanyeshuri bubaka'}
               </h2>
             </div>
             <button
               type="button"
               onClick={() => onNavigate('projects')}
-              className="text-xs sm:text-sm font-semibold text-[#0284C7] hover:underline whitespace-nowrap"
+              className="text-[15px] font-semibold text-[#0284C7] hover:underline whitespace-nowrap"
             >
               {lang === 'en' ? 'Open tools & templates ->' : 'Fungura ibikoresho ->'}
             </button>
@@ -453,24 +581,26 @@ export function HomeView({
             {PRACTICAL_PROJECTS.map((proj) => (
               <div
                 key={proj.key}
-                className="bg-[#FAFAFB] border border-black/[0.07] rounded-xl p-4"
+                className="bg-[#FAFAFB] border border-black/[0.07] rounded-xl p-4 sm:p-5"
               >
-                <div className="flex items-center justify-between gap-3 mb-1">
-                  <span className="text-sm font-semibold text-[#0D0D0F]">
+                <div className="flex flex-wrap items-center justify-between gap-3 mb-1.5">
+                  <span className="text-[16px] font-semibold text-[#0D0D0F]">
                     {proj.number}. {proj.title[lang]}
                   </span>
-                  <span className="text-xs text-[#5D5D66] font-mono shrink-0">
+                  <span className="text-xs sm:text-sm text-[#5D5D66] font-mono shrink-0">
                     {proj.tools.slice(0, 2).join(' · ')}
                   </span>
                 </div>
-                <p className="text-xs text-[#5D5D66] leading-relaxed">{proj.summary[lang]}</p>
+                <p className="text-[14px] sm:text-[15px] text-[#5D5D66] leading-relaxed">
+                  {proj.summary[lang]}
+                </p>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="lg:col-span-6 flex flex-col gap-6">
-          <div className="relative h-48 rounded-2xl overflow-hidden bg-[#0D0D0F] border border-black/[0.08] flex items-end">
+        <div className="lg:col-span-5 flex flex-col gap-6">
+          <div className="relative min-h-[240px] flex-1 rounded-2xl overflow-hidden bg-[#0D0D0F] border border-black/[0.08] flex items-end">
             {!workflowImgFailed && (
               <img
                 src={workflowsStudioBanner}
@@ -486,14 +616,14 @@ export function HomeView({
             )}
             <div
               aria-hidden="true"
-              className="absolute inset-0 bg-gradient-to-t from-[#0D0D0F]/90 via-[#0D0D0F]/35 to-transparent"
+              className="absolute inset-0 bg-gradient-to-t from-[#0D0D0F]/90 via-[#0D0D0F]/45 to-transparent"
             />
-            <div className="relative z-10 p-5 text-white flex flex-wrap items-end justify-between gap-3 w-full">
+            <div className="relative z-10 p-6 text-white flex flex-col items-start gap-4 w-full">
               <div>
-                <p className="text-xs font-mono text-[#7DD3FC] mb-0.5">
+                <p className="text-sm font-mono text-[#7DD3FC] mb-1">
                   {lang === 'en' ? 'Phone & Laptop Ready' : 'Kuri Telefoni & Mudasobwa'}
                 </p>
-                <p className="text-base sm:text-lg font-display font-bold">
+                <p className="text-xl sm:text-2xl font-display font-bold leading-snug">
                   {lang === 'en'
                     ? 'Copy prompt templates cleanly into daily tools.'
                     : 'Koporora inyandiko z’imyitozo ako kanya.'}
@@ -502,63 +632,24 @@ export function HomeView({
               <button
                 type="button"
                 onClick={() => onNavigate('projects')}
-                className="px-4 py-2 text-xs font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg whitespace-nowrap"
+                className="px-5 py-2.5 text-[15px] font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg whitespace-nowrap"
               >
                 {lang === 'en' ? 'Browse templates' : 'Reba imishinga'}
               </button>
             </div>
           </div>
 
-          <div className="bg-white border border-black/[0.08] rounded-2xl p-6">
-            <div className="flex items-end justify-between gap-4 mb-4">
-              <div>
-                <p className="text-xs font-semibold tracking-wider text-[#0284C7] uppercase mb-1">
-                  {lang === 'en' ? 'Live Workshops' : 'Amahugurwa Imbonankubone'}
-                </p>
-                <h2 className="text-xl font-display font-bold text-[#0D0D0F]">
-                  {lang === 'en' ? 'Upcoming sessions' : 'Ibiganiro biri imbere'}
-                </h2>
-              </div>
-              <button
-                type="button"
-                onClick={() => onNavigate('events')}
-                className="text-xs font-semibold text-[#0284C7] hover:underline whitespace-nowrap"
-              >
-                {lang === 'en' ? 'All events ->' : 'Byose ->'}
-              </button>
-            </div>
-
-            <div className="space-y-2.5">
-              {upcomingEvents.map((evt) => (
-                <div
-                  key={evt.id}
-                  onClick={() => onNavigate('events')}
-                  className="bg-[#FAFAFB] border border-black/[0.07] rounded-xl p-4 cursor-pointer hover:border-[#0284C7]/40 transition-colors"
-                >
-                  <div className="flex items-center gap-2 text-xs text-[#5D5D66] mb-1">
-                    <span className="tabular-nums font-medium text-[#0D0D0F]">{evt.dateLabel}</span>
-                    <span aria-hidden="true">·</span>
-                    <span>{evt.locationLabel}</span>
-                    <span aria-hidden="true">·</span>
-                    <span>{evt.languageLabel}</span>
-                  </div>
-                  <h3 className="text-sm font-semibold text-[#0D0D0F]">{evt.titleLabel}</h3>
-                </div>
-              ))}
-            </div>
-          </div>
-
           {showVerifyBox && (
-            <div className="bg-white border border-black/[0.08] rounded-2xl p-6">
-              <p className="text-xs font-semibold tracking-wider text-[#0284C7] uppercase mb-1">
+            <div className="bg-white border border-black/[0.08] rounded-2xl p-6 sm:p-8">
+              <p className="text-[13px] sm:text-sm font-semibold tracking-wider text-[#0284C7] uppercase mb-1.5">
                 {lang === 'en' ? 'Credential Verification' : 'Igenzura ry’Impamyabumenyi'}
               </p>
-              <h3 className="text-lg font-display font-bold text-[#0D0D0F] mb-1.5">
+              <h3 className="text-2xl font-display font-bold text-[#0D0D0F] mb-2">
                 {lang === 'en'
                   ? 'Verify a Certificate of Completion'
                   : 'Genzura ukuri kw’Impamyabumenyi'}
               </h3>
-              <p className="text-xs text-[#5D5D66] mb-4">
+              <p className="text-[15px] text-[#5D5D66] mb-5 leading-relaxed">
                 {lang === 'en'
                   ? 'Verify issued credentials by Certificate ID (sample: RW-AI-2026-0042).'
                   : 'Genzura impamyabumenyi ukoresheje nimero yayo (urugero: RW-AI-2026-0042).'}
@@ -568,7 +659,7 @@ export function HomeView({
                   e.preventDefault();
                   if (certInput.trim()) onQuickVerifyCert(certInput.trim());
                 }}
-                className="flex flex-col sm:flex-row gap-2"
+                className="flex flex-col sm:flex-row gap-2.5"
               >
                 <input
                   type="text"
@@ -576,11 +667,11 @@ export function HomeView({
                   onChange={(e) => setCertInput(e.target.value)}
                   placeholder="RW-AI-2026-0042"
                   aria-label="Certificate ID"
-                  className="flex-1 px-3.5 py-2 text-sm font-mono bg-[#F7F8FA] border border-black/15 rounded-lg focus:outline-none focus:border-[#0284C7]"
+                  className="flex-1 px-4 py-2.5 text-base font-mono bg-[#F7F8FA] border border-black/15 rounded-lg focus:outline-none focus:border-[#0284C7]"
                 />
                 <button
                   type="submit"
-                  className="px-4 py-2 text-sm font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg transition-colors whitespace-nowrap shrink-0"
+                  className="px-5 py-2.5 text-[15px] font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg transition-colors whitespace-nowrap shrink-0"
                 >
                   {lang === 'en' ? 'Verify ID' : 'Genzura'}
                 </button>

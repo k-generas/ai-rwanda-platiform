@@ -35,8 +35,8 @@ export function SubBar({
 
   return (
     <div className="bg-[#FAFAFB] border-b border-black/[0.06]">
-      <div className="max-w-[1280px] mx-auto px-4 sm:px-8 py-2 flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-8 py-2.5 flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center gap-3.5">
           <div
             className="inline-flex items-center p-0.5 bg-[#ECEEF2] rounded-lg"
             role="group"
@@ -45,7 +45,7 @@ export function SubBar({
             <button
               type="button"
               onClick={() => onChangeLang('en')}
-              className={`px-2.5 py-1 text-xs font-medium rounded-md transition-colors whitespace-nowrap shrink-0 ${
+              className={`px-3 py-1.5 text-[13px] sm:text-sm font-medium rounded-md transition-colors whitespace-nowrap shrink-0 ${
                 lang === 'en'
                   ? 'bg-white text-[#0D0D0F] shadow-xs'
                   : 'text-[#5D5D66] hover:text-[#0D0D0F]'
@@ -56,7 +56,7 @@ export function SubBar({
             <button
               type="button"
               onClick={() => onChangeLang('rw')}
-              className={`px-2.5 py-1 text-xs font-medium rounded-md transition-colors whitespace-nowrap shrink-0 ${
+              className={`px-3 py-1.5 text-[13px] sm:text-sm font-medium rounded-md transition-colors whitespace-nowrap shrink-0 ${
                 lang === 'rw'
                   ? 'bg-white text-[#0D0D0F] shadow-xs'
                   : 'text-[#5D5D66] hover:text-[#0D0D0F]'
@@ -69,7 +69,7 @@ export function SubBar({
           <button
             type="button"
             onClick={() => onNavigate('verify')}
-            className={`text-xs font-medium transition-colors whitespace-nowrap shrink-0 ${
+            className={`text-[13px] sm:text-sm font-medium transition-colors whitespace-nowrap shrink-0 ${
               currentRoute === 'verify'
                 ? 'text-[#0284C7] underline underline-offset-4'
                 : 'text-[#5D5D66] hover:text-[#0D0D0F]'
@@ -83,9 +83,9 @@ export function SubBar({
           {user && (
             <>
               <span
-                className={`text-[11px] font-mono tracking-wide whitespace-nowrap shrink-0 ${
+                className={`text-xs font-mono tracking-wide whitespace-nowrap shrink-0 ${
                   staffRole === 'superadmin'
-                    ? 'text-[#0D7A5F] font-semibold'
+                    ? 'text-[#0284C7] font-semibold'
                     : isStaff
                       ? 'text-[#0D0D0F] font-medium'
                       : 'text-[#5D5D66]'
@@ -93,13 +93,13 @@ export function SubBar({
               >
                 {roleTag}
               </span>
-              <span className="text-xs text-[#5D5D66] truncate max-w-[180px]" aria-label="Signed in email">
+              <span className="text-[13px] text-[#5D5D66] truncate max-w-[180px]" aria-label="Signed in email">
                 {user.email || user.displayName}
               </span>
               <button
                 type="button"
                 onClick={onSignOut}
-                className="text-xs font-medium text-[#5D5D66] hover:text-[#0D0D0F] transition-colors whitespace-nowrap shrink-0"
+                className="text-[13px] font-medium text-[#5D5D66] hover:text-[#0D0D0F] transition-colors whitespace-nowrap shrink-0"
               >
                 {UI_COPY.nav.signOut[lang]}
               </button>
