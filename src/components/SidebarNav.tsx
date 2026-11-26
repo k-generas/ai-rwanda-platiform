@@ -112,13 +112,13 @@ export function SidebarNav({
                 isMobileDrawer ? 'py-3.5 text-[17px]' : 'py-3 text-[16px]'
               } rounded-xl transition-colors whitespace-nowrap ${
                 isActive
-                  ? 'bg-[#F0F9FF] text-[#0284C7] font-semibold'
+                  ? 'bg-[#ECFDF5] text-[#0D7A5F] font-semibold'
                   : 'text-[#3F3F46] hover:bg-[#F7F8FA] hover:text-[#0D0D0F] font-medium'
               }`}
             >
               <Icon
                 className={`w-5 h-5 shrink-0 ${
-                  isActive ? 'text-[#0284C7]' : 'text-[#52525B]'
+                  isActive ? 'text-[#0D7A5F]' : 'text-[#52525B]'
                 }`}
               />
               <span className="truncate">{item.label}</span>
@@ -145,13 +145,13 @@ export function SidebarNav({
                 isMobileDrawer ? 'py-3 text-[16px]' : 'py-2.5 text-[15px]'
               } rounded-xl transition-colors whitespace-nowrap ${
                 isActive
-                  ? 'bg-[#F0F9FF] text-[#0284C7] font-semibold'
+                  ? 'bg-[#ECFDF5] text-[#0D7A5F] font-semibold'
                   : 'text-[#52525B] hover:bg-[#F7F8FA] hover:text-[#0D0D0F] font-medium'
               }`}
             >
               <Icon
                 className={`w-[19px] h-[19px] shrink-0 ${
-                  isActive ? 'text-[#0284C7]' : 'text-[#71717A]'
+                  isActive ? 'text-[#0D7A5F]' : 'text-[#71717A]'
                 }`}
               />
               <span className="truncate">{track.label}</span>
@@ -162,7 +162,7 @@ export function SidebarNav({
 
       <div className="mt-auto pt-6">
         <div className="px-4 py-3 rounded-xl border border-black/[0.08] bg-[#FAFAFB] text-[13px] text-[#5D5D66] flex items-center gap-2.5">
-          <Building2 className="w-4 h-4 text-[#0284C7] shrink-0" />
+          <Building2 className="w-4 h-4 text-[#0D7A5F] shrink-0" />
           <span className="truncate">Kigali · EN &amp; Kinyarwanda</span>
         </div>
       </div>

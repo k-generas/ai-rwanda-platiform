@@ -16,6 +16,7 @@ import { doc, runTransaction, serverTimestamp } from 'firebase/firestore';
 import { db, handleFirestoreError, OperationType } from '../firebase';
 import type { EventRegistration, Language, ProgrammeRecord } from '../types';
 import { WORKSHOP_EVENTS } from '../data/curriculum';
+import { LuminousCover, type LuminousCoverVariant } from './BrandVisuals';
 
 interface EventsViewProps {
   lang: Language;
@@ -51,12 +52,12 @@ interface UnifiedProgrammeItem {
   speaker: string;
 }
 
-const EVENT_BANNER_GRADIENTS = [
-  'bg-gradient-to-br from-[#0284C7] via-[#06B6D4] to-[#EC4899]',
-  'bg-gradient-to-br from-[#3B82F6] via-[#6366F1] to-[#A855F7]',
-  'bg-gradient-to-br from-[#2563EB] via-[#38BDF8] to-[#FACC15]',
-  'bg-gradient-to-br from-[#F59E0B] via-[#FB7185] to-[#8B5CF6]',
-  'bg-gradient-to-br from-[#0EA5E9] via-[#6366F1] to-[#10B981]'
+const EVENT_BANNER_VARIANTS: LuminousCoverVariant[] = [
+  'emerald',
+  'teal',
+  'amber',
+  'coral',
+  'lime'
 ];
 
 export function EventsView({
@@ -271,8 +272,11 @@ export function EventsView({
 
   return (
     <div className="max-w-[1260px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
-      {/* 1. OpenAI Academy Indigo-Purple Gradient Events Banner */}
-      <section className="rounded-2xl bg-gradient-to-r from-[#2563EB] via-[#4F46E5] to-[#7C3AED] text-white p-8 sm:p-12 lg:p-14 shadow-xs">
+      {/* Events Banner */}
+      <LuminousCover
+        variant="banner"
+        className="rounded-2xl text-white p-8 sm:p-12 lg:p-14 shadow-xs"
+      >
         <Radio className="w-8 h-8 text-white mb-4" aria-hidden="true" />
         <h1 className="text-[36px] sm:text-[48px] lg:text-[54px] font-display font-bold tracking-[-0.03em] leading-[1.08] mb-3">
           {lang === 'en' ? 'Events' : 'Ibiganiro n’Amahugurwa'}
@@ -282,7 +286,7 @@ export function EventsView({
             ? 'Hands-on learning brought to you by AI Education Rwanda and our community partners.'
             : 'Kwitabira amahugurwa imbonankubone i Kigali cyangwa kuri interineti mu Kinyarwanda n’Icyongereza.'}
         </p>
-      </section>
+      </LuminousCover>
 
       {/* 2. Filter & View Controls (Exact OpenAI Academy Bar) */}
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -299,7 +303,7 @@ export function EventsView({
               onClick={() => setFilter(tab.key as typeof filter)}
               className={`px-4 py-2.5 text-[15px] font-semibold rounded-lg transition-colors whitespace-nowrap shrink-0 ${
                 filter === tab.key
-                  ? 'bg-[#0284C7] text-white'
+                  ? 'bg-[#0D7A5F] text-white'
                   : 'bg-[#F4F5F7] text-[#4B4B55] hover:bg-[#EAECEF]'
               }`}
             >
@@ -326,7 +330,7 @@ export function EventsView({
               onClick={() => setViewMode('list')}
               aria-label="List view"
               className={`p-2 rounded-md ${
-                viewMode === 'list' ? 'bg-[#F0F9FF] text-[#0284C7]' : 'text-[#5D5D66]'
+                viewMode === 'list' ? 'bg-[#ECFDF5] text-[#0D7A5F]' : 'text-[#5D5D66]'
               }`}
             >
               <ListIcon className="w-4 h-4" />
@@ -336,7 +340,7 @@ export function EventsView({
               onClick={() => setViewMode('grid')}
               aria-label="Grid view"
               className={`p-2 rounded-md ${
-                viewMode === 'grid' ? 'bg-[#F0F9FF] text-[#0284C7]' : 'text-[#5D5D66]'
+                viewMode === 'grid' ? 'bg-[#ECFDF5] text-[#0D7A5F]' : 'text-[#5D5D66]'
               }`}
             >
               <LayoutGrid className="w-4 h-4" />
@@ -363,7 +367,7 @@ export function EventsView({
           {filteredEvents.map((evt, index) => {
             const registered = isRegistered(evt.id);
             const isPast = evt.status === 'past' || evt.status === 'completed';
-            const grad = EVENT_BANNER_GRADIENTS[index % EVENT_BANNER_GRADIENTS.length];
+            const coverVariant = EVENT_BANNER_VARIANTS[index % EVENT_BANNER_VARIANTS.length];
             const formatLabel =
               evt.format === 'kigali_in_person'
                 ? lang === 'en'
@@ -384,28 +388,30 @@ export function EventsView({
                   viewMode === 'list' ? 'flex-col md:flex-row' : 'flex-col justify-between'
                 }`}
               >
-                {/* Colorful Gradient Visual Banner */}
-                <div
-                  className={`relative ${grad} p-5 sm:p-6 flex flex-col justify-between text-white ${
+                {/* Luminous Gradient Visual Banner */}
+                <LuminousCover
+                  variant={coverVariant}
+                  scrim
+                  className={`p-5 sm:p-6 text-white ${
                     viewMode === 'list' ? 'md:w-80 shrink-0 min-h-[180px]' : 'aspect-[16/9]'
                   }`}
                 >
-                  <div className="flex items-center justify-between gap-2 text-xs font-medium text-white/90">
+                  <div className="flex items-center justify-between gap-2 text-xs font-medium text-white/95">
                     <span>AI Education Rwanda</span>
                     <span className="tabular-nums">{evt.dateLabel}</span>
                   </div>
                   <div>
-                    <p className="text-[20px] sm:text-[22px] font-display font-bold leading-snug text-balance">
+                    <p className="text-[20px] sm:text-[22px] font-display font-bold leading-snug text-balance text-white">
                       {lang === 'en' ? evt.titleEn : evt.titleRw}
                     </p>
                     <p className="text-sm text-white/90 mt-1">{evt.speaker}</p>
                   </div>
-                </div>
+                </LuminousCover>
 
                 {/* Card Body */}
                 <div className="p-6 flex-1 flex flex-col justify-between gap-5">
                   <div>
-                    <p className="text-[15px] font-semibold text-[#0284C7] mb-1.5">
+                    <p className="text-[15px] font-semibold text-[#0D7A5F] mb-1.5">
                       {formatLabel} · {evt.typeLabel} · {evt.languageLabel}
                     </p>
                     <h2 className="text-[22px] sm:text-[24px] font-display font-bold text-[#0D0D0F] leading-[1.25] tracking-[-0.015em] mb-2.5">
@@ -443,7 +449,7 @@ export function EventsView({
                         <button
                           type="button"
                           onClick={() => setReplayEvent(evt)}
-                          className="inline-flex items-center gap-2 px-5 py-2.5 text-[15px] font-semibold text-[#0284C7] border border-[#0284C7]/40 hover:bg-[#F0F9FF] rounded-lg transition-colors whitespace-nowrap"
+                          className="inline-flex items-center gap-2 px-5 py-2.5 text-[15px] font-semibold text-[#0D7A5F] border border-[#0D7A5F]/40 hover:bg-[#ECFDF5] rounded-lg transition-colors whitespace-nowrap"
                         >
                           <RotateCcw className="w-4 h-4" />
                           <span>{lang === 'en' ? 'Replay' : 'Subiramo'}</span>
@@ -469,7 +475,7 @@ export function EventsView({
                                 href={evt.meetingUrl}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="text-sm font-medium text-[#0284C7] underline"
+                                className="text-sm font-medium text-[#0D7A5F] underline"
                               >
                                 {lang === 'en' ? 'Join' : 'Injira'}
                               </a>
@@ -496,7 +502,7 @@ export function EventsView({
                               setDoneMessage(null);
                             }
                           }}
-                          className="px-5 py-2.5 text-[15px] font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg transition-colors whitespace-nowrap"
+                          className="px-5 py-2.5 text-[15px] font-semibold text-white bg-[#0D7A5F] hover:bg-[#095945] rounded-lg transition-colors whitespace-nowrap"
                         >
                           {lang === 'en' ? 'Register' : 'Iyandikishe'}
                         </button>
@@ -541,7 +547,7 @@ export function EventsView({
                 href={replayEvent.meetingUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="w-full min-h-[44px] inline-flex items-center justify-center gap-2 px-5 py-3 text-[15px] font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg"
+                className="w-full min-h-[44px] inline-flex items-center justify-center gap-2 px-5 py-3 text-[15px] font-semibold text-white bg-[#0D7A5F] hover:bg-[#095945] rounded-lg"
               >
                 <span>{lang === 'en' ? 'Watch Replay' : 'Reba Ikiganiro'}</span>
                 <ExternalLink className="w-4 h-4" />
@@ -586,7 +592,7 @@ export function EventsView({
                     href={rsvpEvent.meetingUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 text-sm font-medium text-[#0284C7] underline"
+                    className="inline-flex items-center gap-1.5 text-sm font-medium text-[#0D7A5F] underline"
                   >
                     <span>{lang === 'en' ? 'Save Session Link' : 'Bika Link y’Ikiganiro'}</span>
                     <ExternalLink className="w-4 h-4" />
@@ -595,7 +601,7 @@ export function EventsView({
                 <button
                   type="button"
                   onClick={() => setRsvpEvent(null)}
-                  className="w-full min-h-[44px] px-5 py-3 text-[15px] font-semibold text-white bg-[#0284C7] rounded-lg"
+                  className="w-full min-h-[44px] px-5 py-3 text-[15px] font-semibold text-white bg-[#0D7A5F] rounded-lg"
                 >
                   {lang === 'en' ? 'Done' : 'Byarangiye'}
                 </button>
@@ -621,7 +627,7 @@ export function EventsView({
                       onClick={() => setAttendanceMode('online')}
                       className={`min-h-[44px] px-4 py-2.5 text-[15px] font-medium rounded-lg border ${
                         attendanceMode === 'online'
-                          ? 'bg-[#0284C7] text-white border-[#0284C7]'
+                          ? 'bg-[#0D7A5F] text-white border-[#0D7A5F]'
                           : 'bg-white text-[#0D0D0F] border-black/15'
                       }`}
                     >
@@ -632,7 +638,7 @@ export function EventsView({
                       onClick={() => setAttendanceMode('kigali_in_person')}
                       className={`min-h-[44px] px-4 py-2.5 text-[15px] font-medium rounded-lg border ${
                         attendanceMode === 'kigali_in_person'
-                          ? 'bg-[#0284C7] text-white border-[#0284C7]'
+                          ? 'bg-[#0D7A5F] text-white border-[#0D7A5F]'
                           : 'bg-white text-[#0D0D0F] border-black/15'
                       }`}
                     >
@@ -650,7 +656,7 @@ export function EventsView({
                 <button
                   type="submit"
                   disabled={saving}
-                  className="w-full min-h-[44px] px-5 py-3 text-[15px] font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg"
+                  className="w-full min-h-[44px] px-5 py-3 text-[15px] font-semibold text-white bg-[#0D7A5F] hover:bg-[#095945] rounded-lg"
                 >
                   {saving
                     ? lang === 'en'

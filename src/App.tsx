@@ -801,7 +801,7 @@ function PlatformShell() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F7F8FA] text-[#0D0D0F]">
+    <div className="min-h-screen flex flex-col bg-[#FAFAFA] text-[#0D0D0F]">
       <Header
         currentRoute={route}
         lang={lang}
@@ -810,6 +810,8 @@ function PlatformShell() {
         mobileOpen={mobileNavOpen}
         courses={visibleCourses}
         programmes={programmes}
+        notifications={notifications}
+        announcements={announcements}
         onToggleMobile={() => setMobileNavOpen((prev) => !prev)}
         onChangeLang={setLang}
         onNavigate={handleNavigate}
@@ -819,6 +821,9 @@ function PlatformShell() {
           setSelectedDay(day);
           setRoute('course-detail');
           window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onRefreshNotifications={() => {
+          if (user) loadLearnerData(user);
         }}
         onSignIn={handleOpenSignIn}
         onSignOut={handleSignOut}
@@ -861,7 +866,7 @@ function PlatformShell() {
           )}
 
           {user && !user.emailVerified && route !== 'dashboard' && route !== 'admin' && (
-            <div className="bg-[#F0F9FF] border-b border-[#0284C7]/20 px-4 py-2.5">
+            <div className="bg-[#ECFDF5] border-b border-[#0D7A5F]/20 px-4 py-2.5">
               <div className="max-w-[1220px] mx-auto flex flex-wrap items-center justify-between gap-3 text-xs">
                 <span className="text-[#0D0D0F]">
                   {lang === 'en'
@@ -874,7 +879,7 @@ function PlatformShell() {
                     type="button"
                     disabled={verifyBusy}
                     onClick={handleRefreshVerification}
-                    className="px-3 py-1 bg-[#0284C7] text-white font-medium rounded-md"
+                    className="px-3 py-1 bg-[#0D7A5F] text-white font-medium rounded-md hover:bg-[#095945]"
                   >
                     {lang === 'en' ? "I've Verified — Refresh" : 'Nemeje — Genzura'}
                   </button>

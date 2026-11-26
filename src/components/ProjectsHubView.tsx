@@ -6,6 +6,7 @@ import {
   PRACTICAL_PROJECTS,
   TEMPLATE_RESOURCES
 } from '../data/curriculum';
+import { LuminousCover } from './BrandVisuals';
 
 interface ProjectsHubViewProps {
   lang: Language;
@@ -61,8 +62,11 @@ export function ProjectsHubView({ lang, resources = [], onNavigate }: ProjectsHu
   return (
     <div className="max-w-[1260px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-14">
       {/* Header */}
-      <header className="rounded-2xl bg-gradient-to-r from-[#0284C7] via-[#2563EB] to-[#4F46E5] text-white p-8 sm:p-12 lg:p-14">
-        <p className="text-sm font-semibold text-white/90 mb-2">
+      <LuminousCover
+        variant="banner"
+        className="rounded-2xl text-white p-8 sm:p-12 lg:p-14 shadow-xs"
+      >
+        <p className="text-sm font-semibold text-[#D1FAE5] mb-2">
           {lang === 'en' ? 'Practical Builds, Tools & Templates' : 'Imishinga, Ibikoresho n’Impapuro'}
         </p>
         <h1 className="text-[36px] sm:text-[48px] lg:text-[54px] font-display font-bold tracking-[-0.03em] leading-[1.08] mb-3">
@@ -75,7 +79,7 @@ export function ProjectsHubView({ lang, resources = [], onNavigate }: ProjectsHu
             ? 'Every learner completes practical builds using free-tier tools—or proposes a custom workflow solving a real local problem.'
             : 'Buri munyeshuri akora umushinga ufatika akoresheje porogaramu z’ubuntu cyangwa agahimba uwe ukemura ikibazo cyo hafi.'}
         </p>
-      </header>
+      </LuminousCover>
 
       {/* 6 Practical Projects Interactive Explorer */}
       <section className="bg-white border border-black/[0.08] rounded-2xl p-6 sm:p-10">
@@ -93,13 +97,13 @@ export function ProjectsHubView({ lang, resources = [], onNavigate }: ProjectsHu
                   onClick={() => setSelectedProjectKey(proj.key)}
                   className={`w-full text-left px-4 py-4 rounded-xl border transition-colors ${
                     active
-                      ? 'bg-[#0284C7] text-white border-[#0284C7]'
+                      ? 'bg-[#0D7A5F] text-white border-[#0D7A5F]'
                       : 'bg-[#FAFAFB] text-[#0D0D0F] border-black/[0.08] hover:border-black/25'
                   }`}
                 >
                   <p
                     className={`text-xs font-mono tabular-nums mb-1 ${
-                      active ? 'text-white/90' : 'text-[#0284C7]'
+                      active ? 'text-white/90' : 'text-[#0D7A5F]'
                     }`}
                   >
                     Project {proj.number}
@@ -110,8 +114,8 @@ export function ProjectsHubView({ lang, resources = [], onNavigate }: ProjectsHu
             })}
           </div>
 
-          <div className="lg:col-span-7 bg-[#F7F8FA] border border-black/[0.08] rounded-2xl p-6 sm:p-8">
-            <p className="text-sm font-mono text-[#0284C7] mb-2">
+          <div className="lg:col-span-7 bg-[#F7F8F6] border border-black/[0.08] rounded-2xl p-6 sm:p-8">
+            <p className="text-sm font-mono text-[#0D7A5F] mb-2">
               Project {activeProject.number} · {activeProject.tools.join(' · ')}
             </p>
             <h3 className="text-2xl sm:text-[28px] font-display font-bold text-[#0D0D0F] mb-3">
@@ -130,7 +134,7 @@ export function ProjectsHubView({ lang, resources = [], onNavigate }: ProjectsHu
                   key={step}
                   className="bg-white border border-black/[0.06] rounded-xl px-4 py-3.5 text-[15px] text-[#0D0D0F] flex items-start gap-3"
                 >
-                  <span className="font-mono text-sm text-[#0284C7] tabular-nums mt-0.5">
+                  <span className="font-mono text-sm text-[#0D7A5F] tabular-nums mt-0.5">
                     {`0${i + 1}`}
                   </span>
                   <span>{step}</span>
@@ -148,7 +152,7 @@ export function ProjectsHubView({ lang, resources = [], onNavigate }: ProjectsHu
               <button
                 type="button"
                 onClick={() => onNavigate('dashboard')}
-                className="px-5 py-2.5 text-[15px] font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg whitespace-nowrap shrink-0"
+                className="px-5 py-2.5 text-[15px] font-semibold text-white bg-[#0D7A5F] hover:bg-[#095945] rounded-lg whitespace-nowrap shrink-0"
               >
                 {lang === 'en' ? 'Submit in Dashboard' : 'Tanga Umushinga'}
               </button>

@@ -5,7 +5,7 @@ import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { db, handleFirestoreError, OperationType } from '../firebase';
 import type { Certificate, Language, PageRoute } from '../types';
 import { OPERATING_PRINCIPLES, SAMPLE_VERIFIED_CERTIFICATE } from '../data/curriculum';
-import { CertificateQrCode } from './BrandVisuals';
+import { CertificateQrCode, LuminousCover } from './BrandVisuals';
 
 interface AboutVerifyViewProps {
   lang: Language;
@@ -128,7 +128,7 @@ export function AboutVerifyView({
     if (!enablePublicVerify) {
       return (
         <div className="max-w-[760px] mx-auto px-4 sm:px-6 py-16 text-center space-y-3">
-          <p className="text-xs font-mono text-[#0284C7] uppercase">Public Registry Paused</p>
+          <p className="text-xs font-mono text-[#0D7A5F] uppercase">Public Registry Paused</p>
           <h1 className="text-2xl font-display font-semibold text-[#0D0D0F]">
             {lang === 'en'
               ? 'Public Certificate Verification is Currently Unavailable'
@@ -145,7 +145,10 @@ export function AboutVerifyView({
     return (
       <div className="max-w-[1260px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
         {/* Banner Header */}
-        <section className="rounded-2xl bg-gradient-to-r from-[#0284C7] via-[#0EA5E9] to-[#14B8A6] text-white p-8 sm:p-12 lg:p-14">
+        <LuminousCover
+          variant="banner"
+          className="rounded-2xl text-white p-8 sm:p-12 lg:p-14 shadow-xs"
+        >
           <Award className="w-8 h-8 text-white mb-4" aria-hidden="true" />
           <h1 className="text-[36px] sm:text-[48px] lg:text-[54px] font-display font-bold tracking-[-0.03em] leading-[1.08] mb-3">
             {lang === 'en' ? 'My Certificates & Verification' : 'Impamyabumenyi n’Igenzura'}
@@ -155,7 +158,7 @@ export function AboutVerifyView({
               ? 'View your earned completion certificates or verify any Certificate ID issued by AI Education Rwanda.'
               : 'Reba impamyabumenyi zawe cyangwa ugenzure ukuri kw’impamyabumenyi zatanzwe na AI Education Rwanda.'}
           </p>
-        </section>
+        </LuminousCover>
 
         {/* My Earned Certificates Card */}
         <section className="bg-white border border-black/[0.08] rounded-2xl p-6 sm:p-10">
@@ -174,7 +177,7 @@ export function AboutVerifyView({
               <button
                 type="button"
                 onClick={onSignIn}
-                className="px-5 py-2.5 text-[15px] font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg"
+                className="px-5 py-2.5 text-[15px] font-semibold text-white bg-[#0D7A5F] hover:bg-[#095945] rounded-lg"
               >
                 {lang === 'en' ? 'Sign in to view yours' : 'Injira urebe izawe'}
               </button>
@@ -189,7 +192,7 @@ export function AboutVerifyView({
                   className="bg-[#FAFAFB] border border-black/[0.08] rounded-xl p-5 flex items-center justify-between gap-4"
                 >
                   <div>
-                    <p className="text-sm font-mono text-[#0284C7] mb-1">{cert.id}</p>
+                    <p className="text-sm font-mono text-[#0D7A5F] mb-1">{cert.id}</p>
                     <h3 className="text-lg font-bold text-[#0D0D0F]">{cert.courseTitle}</h3>
                     <p className="text-sm text-[#5D5D66] mt-1">
                       {cert.learnerName} · {cert.finalScore}% · {cert.status.toUpperCase()}
@@ -214,7 +217,7 @@ export function AboutVerifyView({
                 <button
                   type="button"
                   onClick={() => onNavigate('courses')}
-                  className="px-5 py-2.5 text-[15px] font-semibold text-[#0284C7] border border-[#0284C7]/40 hover:bg-[#F0F9FF] rounded-lg shrink-0"
+                  className="px-5 py-2.5 text-[15px] font-semibold text-[#0D7A5F] border border-[#0D7A5F]/40 hover:bg-[#ECFDF5] rounded-lg shrink-0"
                 >
                   {lang === 'en' ? 'Browse courses' : 'Reba amasomo'}
                 </button>
@@ -226,7 +229,7 @@ export function AboutVerifyView({
         {/* Public Verifier Card */}
         <section className="bg-white border border-black/[0.08] rounded-2xl p-6 sm:p-10">
           <header className="mb-6">
-            <p className="text-[13px] sm:text-sm font-semibold text-[#0284C7] uppercase mb-1.5">
+            <p className="text-[13px] sm:text-sm font-semibold text-[#0D7A5F] uppercase mb-1.5">
               {lang === 'en' ? 'Public Credential Registry' : 'Igenzura ry’Impamyabumenyi'}
             </p>
             <h2 className="text-[28px] sm:text-[36px] font-display font-bold tracking-tight text-[#0D0D0F] mb-2">
@@ -254,12 +257,12 @@ export function AboutVerifyView({
               onChange={(e) => setCertQuery(e.target.value)}
               placeholder="RW-AI-2026-0042"
               aria-label="Certificate ID"
-              className="flex-1 min-h-[48px] px-4 py-3 text-base font-mono bg-[#F7F8FA] border border-black/15 rounded-lg focus:outline-none focus:border-[#0284C7]"
+              className="flex-1 min-h-[48px] px-4 py-3 text-base font-mono bg-[#F7F8F6] border border-black/15 rounded-lg focus:outline-none focus:border-[#0D7A5F]"
             />
             <button
               type="submit"
               disabled={verifying}
-              className="min-h-[48px] px-6 py-3 text-[15px] font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg whitespace-nowrap"
+              className="min-h-[48px] px-6 py-3 text-[15px] font-semibold text-white bg-[#0D7A5F] hover:bg-[#095945] rounded-lg whitespace-nowrap"
             >
               {verifying
                 ? lang === 'en'
@@ -345,7 +348,7 @@ export function AboutVerifyView({
       {/* Mission & Vision */}
       <header className="grid grid-cols-1 lg:grid-cols-12 gap-10 pb-12 border-b border-black/[0.08]">
         <div className="lg:col-span-7">
-          <p className="text-sm font-semibold text-[#0284C7] mb-2">
+          <p className="text-sm font-semibold text-[#0D7A5F] mb-2">
             {lang === 'en' ? 'About AI Education Rwanda' : 'Ibyerekeye AI Education Rwanda'}
           </p>
           <h1 className="text-[36px] sm:text-[48px] font-display font-bold tracking-[-0.03em] leading-[1.08] text-[#0D0D0F] text-balance mb-4">

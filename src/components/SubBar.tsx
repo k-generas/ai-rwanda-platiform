@@ -71,7 +71,7 @@ export function SubBar({
             onClick={() => onNavigate('verify')}
             className={`text-[13px] sm:text-sm font-medium transition-colors whitespace-nowrap shrink-0 ${
               currentRoute === 'verify'
-                ? 'text-[#0284C7] underline underline-offset-4'
+                ? 'text-[#0D7A5F] underline underline-offset-4'
                 : 'text-[#5D5D66] hover:text-[#0D0D0F]'
             }`}
           >
@@ -85,7 +85,7 @@ export function SubBar({
               <span
                 className={`text-xs font-mono tracking-wide whitespace-nowrap shrink-0 ${
                   staffRole === 'superadmin'
-                    ? 'text-[#0284C7] font-semibold'
+                    ? 'text-[#0D7A5F] font-semibold'
                     : isStaff
                       ? 'text-[#0D0D0F] font-medium'
                       : 'text-[#5D5D66]'

@@ -58,7 +58,7 @@ import {
   formatReleaseDateLabel,
   resolveLessonReleaseLock
 } from '../lib/domain';
-import { CourseArtwork } from './BrandVisuals';
+import { CourseArtwork, LuminousCover, type LuminousCoverVariant } from './BrandVisuals';
 import { Day2LessonView } from './Day2LessonView';
 import { LessonBlocksRenderer } from './LessonBlocksRenderer';
 
@@ -87,12 +87,12 @@ interface CoursesViewProps {
   onSubmitWaitlist: (courseSlug: string, name: string, email: string) => Promise<void>;
 }
 
-const COURSE_CATALOG_COVERS: Record<string, string> = {
-  foundations: 'bg-gradient-to-br from-[#0284C7] via-[#38BDF8] to-[#F472B6]',
-  prompting: 'bg-gradient-to-br from-[#38BDF8] via-[#818CF8] to-[#C084FC]',
-  automation: 'bg-gradient-to-br from-[#4F46E5] via-[#7C3AED] to-[#EC4899]',
-  agents: 'bg-gradient-to-br from-[#0EA5E9] via-[#6366F1] to-[#14B8A6]',
-  industry: 'bg-gradient-to-br from-[#0284C7] via-[#10B981] to-[#F59E0B]'
+const COURSE_CATALOG_COVERS: Record<string, LuminousCoverVariant> = {
+  foundations: 'emerald',
+  prompting: 'teal',
+  automation: 'amber',
+  agents: 'lime',
+  industry: 'coral'
 };
 
 export function CoursesView({
@@ -2443,7 +2443,7 @@ export function CoursesView({
                       setPaySuccessInfo(null);
                       onSelectDay(1);
                     }}
-                    className="w-full min-h-[44px] px-5 py-3 text-[15px] font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg"
+                    className="w-full min-h-[44px] px-5 py-3 text-[15px] font-semibold text-white bg-[#0D7A5F] hover:bg-[#095945] rounded-lg"
                   >
                     {lang === 'en' ? 'Open Day 1 Sample Lesson' : 'Tangira Umunsi wa 1'}
                   </button>
@@ -2541,7 +2541,7 @@ export function CoursesView({
                         onClick={() => setProvider('mtn_momo')}
                         className={`min-h-[44px] px-4 py-2.5 text-[15px] font-medium rounded-lg border transition-colors ${
                           provider === 'mtn_momo'
-                            ? 'bg-[#0284C7] text-white border-[#0284C7]'
+                            ? 'bg-[#0D7A5F] text-white border-[#0D7A5F]'
                             : 'bg-white text-[#0D0D0F] border-black/15'
                         }`}
                       >
@@ -2552,7 +2552,7 @@ export function CoursesView({
                         onClick={() => setProvider('airtel_money')}
                         className={`min-h-[44px] px-4 py-2.5 text-[15px] font-medium rounded-lg border transition-colors ${
                           provider === 'airtel_money'
-                            ? 'bg-[#0284C7] text-white border-[#0284C7]'
+                            ? 'bg-[#0D7A5F] text-white border-[#0D7A5F]'
                             : 'bg-white text-[#0D0D0F] border-black/15'
                         }`}
                       >
@@ -2572,7 +2572,7 @@ export function CoursesView({
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       placeholder={provider === 'mtn_momo' ? '0788 123 456' : '0738 123 456'}
-                      className="w-full min-h-[44px] px-3.5 py-2.5 text-base border border-black/15 rounded-lg focus:outline-none focus:border-[#0284C7]"
+                      className="w-full min-h-[44px] px-3.5 py-2.5 text-base border border-black/15 rounded-lg focus:outline-none focus:border-[#0D7A5F]"
                     />
                     <p className="text-xs text-[#5D5D66] mt-1.5 leading-relaxed">
                       {lang === 'en'
@@ -2590,7 +2590,7 @@ export function CoursesView({
                   <button
                     type="submit"
                     disabled={payLoading}
-                    className="w-full min-h-[44px] px-5 py-3 text-[15px] font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg disabled:opacity-60"
+                    className="w-full min-h-[44px] px-5 py-3 text-[15px] font-semibold text-white bg-[#0D7A5F] hover:bg-[#095945] rounded-lg disabled:opacity-60"
                   >
                     {payLoading
                       ? lang === 'en'
@@ -2614,13 +2614,16 @@ export function CoursesView({
 
   return (
     <div className="max-w-[1260px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
-      {/* 1. OpenAI Academy Cyan-Teal Courses Hero Banner */}
-      <section className="rounded-2xl bg-gradient-to-r from-[#0284C7] via-[#0EA5E9] to-[#14B8A6] text-white p-8 sm:p-12 lg:p-14 shadow-xs">
+      {/* Courses Hero Banner */}
+      <LuminousCover
+        variant="banner"
+        className="rounded-2xl text-white p-8 sm:p-12 lg:p-14 shadow-xs"
+      >
         <div className="max-w-3xl">
           <h1 className="text-[36px] sm:text-[52px] lg:text-[58px] font-display font-bold tracking-[-0.03em] leading-[1.06] mb-3 text-balance">
             {lang === 'en' ? 'AI Education Rwanda Courses' : 'Amasomo ya AI Education Rwanda'}
           </h1>
-          <p className="text-xl sm:text-2xl font-display font-semibold text-white mb-3">
+          <p className="text-xl sm:text-2xl font-display font-semibold text-[#D1FAE5] mb-3">
             {lang === 'en'
               ? 'Build the AI skills Rwanda needs'
               : 'Wubake ubumenyi bwa AI bukenewe mu Rwanda'}
@@ -2634,7 +2637,7 @@ export function CoursesView({
             <button
               type="button"
               onClick={() => onSelectCourse('challenge-28')}
-              className="inline-flex items-center gap-2 px-5 py-3 text-[15px] font-semibold text-[#0284C7] bg-white hover:bg-[#F0F9FF] rounded-lg transition-colors whitespace-nowrap"
+              className="inline-flex items-center gap-2 px-5 py-3 text-[15px] font-semibold text-[#0D7A5F] bg-white hover:bg-[#ECFDF5] rounded-lg transition-colors whitespace-nowrap"
             >
               <span>{lang === 'en' ? 'Open 28-Day Challenge' : 'Fungura Iminsi 28'}</span>
               <ArrowRight className="w-4 h-4" />
@@ -2645,19 +2648,19 @@ export function CoursesView({
                 onSelectCourse('challenge-28');
                 onSelectDay(1);
               }}
-              className="inline-flex items-center gap-2 px-5 py-3 text-[15px] font-semibold text-white bg-white/15 hover:bg-white/25 border border-white/25 rounded-lg transition-colors whitespace-nowrap"
+              className="inline-flex items-center gap-2 px-5 py-3 text-[15px] font-semibold text-white bg-white/15 hover:bg-white/25 border border-white/30 rounded-lg transition-colors whitespace-nowrap"
             >
               <span>{lang === 'en' ? 'Read Day 1 Free' : 'Soma Umunsi wa 1'}</span>
             </button>
           </div>
         </div>
-      </section>
+      </LuminousCover>
 
       {/* 2. White Courses Container Card ("ABOUT THE COURSES") */}
       <section className="bg-white border border-black/[0.08] rounded-2xl p-6 sm:p-10">
         <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
           <div>
-            <p className="text-[13px] sm:text-sm font-semibold tracking-wider text-[#0284C7] uppercase mb-1.5">
+            <p className="text-[13px] sm:text-sm font-semibold tracking-wider text-[#0D7A5F] uppercase mb-1.5">
               {lang === 'en' ? 'About the courses' : 'Ibyerekeye amasomo'}
             </p>
             <h2 className="text-[28px] sm:text-[38px] lg:text-[42px] font-display font-bold tracking-[-0.025em] leading-[1.15] text-[#0D0D0F] text-balance">
@@ -2668,9 +2671,9 @@ export function CoursesView({
 
         {/* Fast Resume Strip */}
         {resumeBanner && (
-          <div className="mb-8 bg-[#F0F9FF] border border-[#0284C7]/25 rounded-xl p-5 flex flex-wrap items-center justify-between gap-4">
+          <div className="mb-8 bg-[#ECFDF5] border border-[#0D7A5F]/25 rounded-xl p-5 flex flex-wrap items-center justify-between gap-4">
             <div>
-              <p className="text-xs font-mono text-[#0284C7]">
+              <p className="text-xs font-mono text-[#0D7A5F]">
                 {lang === 'en' ? 'CONTINUE LEARNING' : 'KOMEZA KWIGA'}
               </p>
               <p className="text-lg font-semibold text-[#0D0D0F]">
@@ -2684,7 +2687,7 @@ export function CoursesView({
                 onSelectCourse(resumeBanner.course.id);
                 onSelectDay(resumeBanner.day);
               }}
-              className="inline-flex items-center gap-2 px-5 py-2.5 text-[15px] font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg"
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-[15px] font-semibold text-white bg-[#0D7A5F] hover:bg-[#095945] rounded-lg"
             >
               <Play className="w-4 h-4" />
               <span>{lang === 'en' ? `Resume Day ${resumeBanner.day}` : `Komeza Umunsi wa ${resumeBanner.day}`}</span>
@@ -2710,7 +2713,7 @@ export function CoursesView({
                   onClick={() => setCategoryFilter(tab.key)}
                   className={`px-4 py-2 text-[15px] font-semibold rounded-lg transition-colors whitespace-nowrap shrink-0 ${
                     categoryFilter === tab.key
-                      ? 'bg-[#0284C7] text-white'
+                      ? 'bg-[#0D7A5F] text-white'
                       : 'bg-[#F4F5F7] text-[#4B4B55] hover:bg-[#EAECEF]'
                   }`}
                 >
@@ -2726,7 +2729,7 @@ export function CoursesView({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={lang === 'en' ? 'Search courses...' : 'Shakisha isomo...'}
-                className="w-full pl-10 pr-4 py-2.5 text-[15px] bg-[#F7F8FA] border border-black/10 rounded-lg focus:outline-none focus:border-[#0284C7]"
+                className="w-full pl-10 pr-4 py-2.5 text-[15px] bg-[#F7F8FA] border border-black/10 rounded-lg focus:outline-none focus:border-[#0D7A5F]"
               />
             </div>
           </div>
@@ -2761,7 +2764,7 @@ export function CoursesView({
               <button
                 type="button"
                 onClick={() => setCompareOpen(true)}
-                className="px-4 py-2 text-sm font-semibold text-white bg-[#0284C7] rounded-lg"
+                className="px-4 py-2 text-sm font-semibold text-white bg-[#0D7A5F] rounded-lg"
               >
                 {lang === 'en'
                   ? `Compare Selected (${compareIds.length})`
@@ -2806,10 +2809,10 @@ export function CoursesView({
                         className="w-full h-36 object-cover"
                       />
                     ) : (
-                      <div className={`h-36 w-full ${coverGrad}`} />
+                      <LuminousCover variant={coverGrad} className="h-36 w-full" />
                     )}
                     <div className="p-6">
-                      <p className="text-[15px] font-semibold text-[#0284C7] mb-2">
+                      <p className="text-[15px] font-semibold text-[#0D7A5F] mb-2">
                         {course.code} · {course.levelRange} · {course.durationDays}d ·{' '}
                         {isEnrolled
                           ? lang === 'en'
@@ -2861,7 +2864,7 @@ export function CoursesView({
                         <ul className="mt-2.5 space-y-2 text-[14px] text-[#5D5D66]">
                           {course.outcomes[lang].slice(0, 4).map((out) => (
                             <li key={out} className="flex items-start gap-2">
-                              <CheckCircle2 className="w-4 h-4 text-[#0284C7] shrink-0 mt-0.5" />
+                              <CheckCircle2 className="w-4 h-4 text-[#0D7A5F] shrink-0 mt-0.5" />
                               <span>{out}</span>
                             </li>
                           ))}
@@ -2873,7 +2876,7 @@ export function CoursesView({
                       <button
                         type="button"
                         onClick={() => onSelectCourse(course.id)}
-                        className="px-5 py-2.5 text-[15px] font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg transition-colors whitespace-nowrap"
+                        className="px-5 py-2.5 text-[15px] font-semibold text-white bg-[#0D7A5F] hover:bg-[#095945] rounded-lg transition-colors whitespace-nowrap"
                       >
                         {lang === 'en' ? 'Go to course' : 'Jya ku isomo'}
                       </button>
@@ -2881,7 +2884,7 @@ export function CoursesView({
                         type="button"
                         onClick={(e) => handleToggleCompare(course.id, e)}
                         className={`text-sm font-medium underline underline-offset-2 ${
-                          isCompared ? 'text-[#0284C7]' : 'text-[#5D5D66] hover:text-[#0D0D0F]'
+                          isCompared ? 'text-[#0D7A5F]' : 'text-[#5D5D66] hover:text-[#0D0D0F]'
                         }`}
                       >
                         {isCompared ? 'Selected' : 'Compare'}
@@ -2899,7 +2902,7 @@ export function CoursesView({
       <section className="mt-16 pt-10 border-t border-black/[0.08] space-y-6">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-[13px] sm:text-sm font-semibold tracking-wider text-[#0284C7] uppercase mb-1">
+            <p className="text-[13px] sm:text-sm font-semibold tracking-wider text-[#0D7A5F] uppercase mb-1">
               {lang === 'en' ? 'Guided sequences & industry tracks' : 'Inzira z’amasomo n’inzego'}
             </p>
             <h2 className="text-[28px] sm:text-[36px] font-display font-bold text-[#0D0D0F]">
@@ -2939,10 +2942,10 @@ export function CoursesView({
                         key={cid}
                         type="button"
                         onClick={() => onSelectCourse(c.id)}
-                        className="w-full flex items-center justify-between gap-3 px-4 py-3 bg-[#FAFAFB] border border-black/[0.08] rounded-xl text-left text-sm hover:border-[#0284C7]"
+                        className="w-full flex items-center justify-between gap-3 px-4 py-3 bg-[#FAFAFB] border border-black/[0.08] rounded-xl text-left text-sm hover:border-[#0D7A5F]"
                       >
                         <span className="font-semibold text-[#0D0D0F]">
-                          <span className="font-mono text-[#0284C7] mr-2">0{idx + 1}.</span>
+                          <span className="font-mono text-[#0D7A5F] mr-2">0{idx + 1}.</span>
                           {c.title[lang]}
                         </span>
                         <ArrowRight className="w-4 h-4 text-[#5D5D66]" />
@@ -2962,7 +2965,7 @@ export function CoursesView({
               className="bg-white border border-black/[0.08] rounded-2xl p-6 flex flex-col justify-between gap-4"
             >
               <div>
-                <p className="text-xs font-mono text-[#0284C7] mb-1.5">
+                <p className="text-xs font-mono text-[#0D7A5F] mb-1.5">
                   {ind.sectorCode} · {lang === 'en' ? 'Industry Path' : 'Urwego'}
                 </p>
                 <h3 className="text-lg font-display font-bold text-[#0D0D0F] mb-2">
@@ -2982,7 +2985,7 @@ export function CoursesView({
                     onSelectCourse('challenge-28');
                     onSelectDay(ind.recommendedDays[0] || 1);
                   }}
-                  className="text-sm font-semibold text-[#0284C7] hover:underline"
+                  className="text-sm font-semibold text-[#0D7A5F] hover:underline"
                 >
                   {lang === 'en' ? 'Start Track ->' : 'Tangira ->'}
                 </button>
@@ -3016,7 +3019,7 @@ export function CoursesView({
               {comparedCourses.map((c) => (
                 <div key={c.id} className="bg-[#F9F9FB] border border-black/[0.08] rounded-xl p-5 space-y-3">
                   <div>
-                    <p className="text-xs font-mono text-[#0284C7]">{c.code}</p>
+                    <p className="text-xs font-mono text-[#0D7A5F]">{c.code}</p>
                     <h3 className="text-lg font-display font-bold text-[#0D0D0F] mt-0.5">
                       {c.title[lang]}
                     </h3>
@@ -3047,7 +3050,7 @@ export function CoursesView({
                       setCompareOpen(false);
                       onSelectCourse(c.id);
                     }}
-                    className="w-full min-h-[44px] px-4 py-2.5 text-sm font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg"
+                    className="w-full min-h-[44px] px-4 py-2.5 text-sm font-semibold text-white bg-[#0D7A5F] hover:bg-[#095945] rounded-lg"
                   >
                     {lang === 'en' ? 'Open Course' : 'Fungura'}
                   </button>
@@ -3089,7 +3092,7 @@ export function CoursesView({
                 <button
                   type="button"
                   onClick={() => setWaitlistCourse(null)}
-                  className="w-full min-h-[44px] px-5 py-3 text-[15px] font-semibold text-white bg-[#0284C7] rounded-lg"
+                  className="w-full min-h-[44px] px-5 py-3 text-[15px] font-semibold text-white bg-[#0D7A5F] rounded-lg"
                 >
                   {lang === 'en' ? 'Done' : 'Byarangiye'}
                 </button>
@@ -3129,7 +3132,7 @@ export function CoursesView({
                 <button
                   type="submit"
                   disabled={waitlistBusy}
-                  className="w-full min-h-[44px] px-5 py-3 text-[15px] font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg"
+                  className="w-full min-h-[44px] px-5 py-3 text-[15px] font-semibold text-white bg-[#0D7A5F] hover:bg-[#095945] rounded-lg"
                 >
                   {waitlistBusy
                     ? lang === 'en'

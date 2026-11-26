@@ -2,6 +2,104 @@ import React, { useEffect, useState } from 'react';
 import QRCode from 'qrcode';
 import type { Language } from '../types';
 
+export type LuminousCoverVariant =
+  | 'emerald'
+  | 'amber'
+  | 'teal'
+  | 'coral'
+  | 'lime'
+  | 'banner';
+
+const LUMINOUS_VARIANTS: Record<
+  LuminousCoverVariant,
+  {
+    base: string;
+    glowA: string;
+    glowB: string;
+    glowC: string;
+  }
+> = {
+  emerald: {
+    base: 'bg-gradient-to-br from-[#0E8768] via-[#10B981] to-[#6EE7B7]',
+    glowA: 'bg-[#FFFFFF]/55',
+    glowB: 'bg-[#A7F3D0]/80',
+    glowC: 'bg-[#0F766E]/45'
+  },
+  amber: {
+    base: 'bg-gradient-to-br from-[#D97706] via-[#F59E0B] to-[#FDE047]',
+    glowA: 'bg-[#FFFFFF]/55',
+    glowB: 'bg-[#FEF08A]/75',
+    glowC: 'bg-[#10B981]/30'
+  },
+  teal: {
+    base: 'bg-gradient-to-br from-[#0F766E] via-[#14B8A6] to-[#5EEAD4]',
+    glowA: 'bg-[#FFFFFF]/55',
+    glowB: 'bg-[#99F6E4]/75',
+    glowC: 'bg-[#059669]/40'
+  },
+  coral: {
+    base: 'bg-gradient-to-br from-[#EA580C] via-[#FB923C] to-[#FCD34D]',
+    glowA: 'bg-[#FFFFFF]/55',
+    glowB: 'bg-[#FED7AA]/80',
+    glowC: 'bg-[#0D9488]/30'
+  },
+  lime: {
+    base: 'bg-gradient-to-br from-[#0D7A5F] via-[#34D399] to-[#BEF264]',
+    glowA: 'bg-[#FFFFFF]/55',
+    glowB: 'bg-[#D9F99D]/75',
+    glowC: 'bg-[#0F766E]/40'
+  },
+  banner: {
+    base: 'bg-gradient-to-br from-[#0B4F3E] via-[#0D7A5F] to-[#14B8A6]',
+    glowA: 'bg-[#6EE7B7]/35',
+    glowB: 'bg-[#FFFFFF]/25',
+    glowC: 'bg-[#FDE68A]/20'
+  }
+};
+
+export function LuminousCover({
+  variant = 'emerald',
+  scrim = false,
+  className = '',
+  children
+}: {
+  variant?: LuminousCoverVariant;
+  scrim?: boolean;
+  className?: string;
+  children?: React.ReactNode;
+}) {
+  const palette = LUMINOUS_VARIANTS[variant] || LUMINOUS_VARIANTS.emerald;
+
+  return (
+    <div className={`relative overflow-hidden ${palette.base} ${className}`}>
+      {/* Soft blurred sunlit white & mineral aurora blooms */}
+      <div
+        aria-hidden="true"
+        className={`pointer-events-none absolute -top-10 -right-8 w-44 h-44 rounded-full blur-2xl ${palette.glowA}`}
+      />
+      <div
+        aria-hidden="true"
+        className={`pointer-events-none absolute -bottom-10 left-1/4 w-48 h-36 rounded-full blur-2xl ${palette.glowB}`}
+      />
+      <div
+        aria-hidden="true"
+        className={`pointer-events-none absolute top-1/3 -left-8 w-40 h-40 rounded-full blur-2xl ${palette.glowC}`}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-white/15 via-transparent to-white/25"
+      />
+      {scrim && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-black/20 to-black/10"
+        />
+      )}
+      {children ? <div className="relative z-10 h-full flex flex-col justify-between">{children}</div> : null}
+    </div>
+  );
+}
+
 export function CourseArtwork({
   category,
   code
@@ -126,7 +224,7 @@ export function HeroSystemCanvas({ lang }: { lang: Language }) {
         ];
 
   return (
-    <div className="w-full h-full min-h-[340px] bg-[#F7F8FA] border border-black/[0.08] rounded-2xl p-6 lg:p-8 flex flex-col justify-between">
+    <div className="w-full h-full min-h-[340px] bg-[#F7F8F6] border border-black/[0.08] rounded-2xl p-6 lg:p-8 flex flex-col justify-between">
       <div className="flex items-center justify-between border-b border-black/[0.07] pb-4 mb-6">
         <span className="text-xs font-mono text-[#5D5D66]">
           {lang === 'en' ? '28-Day Practical Progression' : 'Urwego rw’imyigire y’iminsi 28'}

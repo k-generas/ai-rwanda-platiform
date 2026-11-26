@@ -219,7 +219,7 @@ export function AuthModal({
       <div className="bg-white border border-black/10 rounded-t-2xl sm:rounded-2xl max-w-lg w-full max-h-[92dvh] overflow-y-auto p-6 sm:p-8 space-y-5 shadow-2xl">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-sm font-semibold text-[#0284C7] mb-1">
+            <p className="text-sm font-semibold text-[#0D7A5F] mb-1">
               AI Education Rwanda
             </p>
             <h2 id="auth-modal-title" className="text-2xl font-display font-bold text-[#0D0D0F]">
@@ -254,7 +254,7 @@ export function AuthModal({
           type="button"
           disabled={busy}
           onClick={handleGoogleSignIn}
-          className="w-full min-h-[44px] px-5 py-3 text-[15px] font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg transition-colors disabled:opacity-60"
+          className="w-full min-h-[44px] px-5 py-3 text-[15px] font-semibold text-white bg-[#0D7A5F] hover:bg-[#095945] rounded-lg transition-colors disabled:opacity-60"
         >
           {lang === 'en' ? 'Continue with Google' : 'Komeza ukoresheje Google'}
         </button>
@@ -370,7 +370,7 @@ export function AuthModal({
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="e.g. Aline Uwase"
-                    className="w-full min-h-[44px] px-4 py-2.5 text-base border border-black/15 rounded-lg focus:outline-none focus:border-[#0284C7]"
+                    className="w-full min-h-[44px] px-4 py-2.5 text-base border border-black/15 rounded-lg focus:outline-none focus:border-[#0D7A5F]"
                   />
                 </div>
               )}
@@ -385,7 +385,7 @@ export function AuthModal({
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@example.com"
-                  className="w-full min-h-[44px] px-4 py-2.5 text-base border border-black/15 rounded-lg focus:outline-none focus:border-[#0284C7]"
+                  className="w-full min-h-[44px] px-4 py-2.5 text-base border border-black/15 rounded-lg focus:outline-none focus:border-[#0D7A5F]"
                 />
               </div>
 
@@ -400,7 +400,7 @@ export function AuthModal({
                     minLength={6}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full min-h-[44px] px-4 py-2.5 text-base border border-black/15 rounded-lg focus:outline-none focus:border-[#0284C7]"
+                    className="w-full min-h-[44px] px-4 py-2.5 text-base border border-black/15 rounded-lg focus:outline-none focus:border-[#0D7A5F]"
                   />
                 </div>
               )}

@@ -19,6 +19,7 @@ import {
 } from '../data/curriculum';
 import heroStudioBanner from '../assets/images/banner_academy_hero_1795639441836.jpg';
 import workflowsStudioBanner from '../assets/images/banner_practical_workflows_1795639442156.jpg';
+import { LuminousCover, type LuminousCoverVariant } from './BrandVisuals';
 
 interface HomeViewProps {
   lang: Language;
@@ -31,62 +32,64 @@ interface HomeViewProps {
   onQuickVerifyCert: (certId: string) => void;
 }
 
-const AUDIENCE_TRACK_BANNERS = [
+const AUDIENCE_TRACK_BANNERS: Array<{
+  key: string;
+  variant: LuminousCoverVariant;
+  title: { en: string; rw: string };
+  subtitle: { en: string; rw: string };
+  action: 'sample1' | 'projects' | 'courses' | 'challenge';
+}> = [
   {
     key: 'beginners',
-    gradient: 'bg-gradient-to-br from-[#0284C7] via-[#38BDF8] to-[#EC4899]',
+    variant: 'emerald',
     title: { en: 'For learners & beginners', rw: 'Ku banyeshuri n’abatangira' },
     subtitle: {
       en: 'Start the 28-Day Challenge with free Day 1 & Day 2 samples.',
       rw: 'Tangira amasomo y’iminsi 28 n’amasomo y’ubuntu.'
     },
-    action: 'sample1' as const
+    action: 'sample1'
   },
   {
     key: 'builders',
-    gradient: 'bg-gradient-to-br from-[#84CC16] via-[#22C55E] to-[#0EA5E9]',
+    variant: 'amber',
     title: { en: 'For builders', rw: 'Ku bubaka sisitemu' },
     subtitle: {
       en: 'Automate Google Forms, Sheets, and Make workflows.',
       rw: 'Huza Google Forms, Sheets n’imiyoboro yikoresha.'
     },
-    action: 'projects' as const
+    action: 'projects'
   },
   {
     key: 'leaders',
-    gradient: 'bg-gradient-to-br from-[#FB923C] via-[#A855F7] to-[#6366F1]',
+    variant: 'teal',
     title: { en: 'For leaders & SMEs', rw: 'Ku bayobozi n’ibigo' },
     subtitle: {
       en: 'Explore 8 Rwanda sector tracks and team AI adoption.',
       rw: 'Reba inzego 8 z’akazi zifasha ibigo mu Rwanda.'
     },
-    action: 'courses' as const
+    action: 'courses'
   },
   {
     key: 'education',
-    gradient: 'bg-gradient-to-br from-[#38BDF8] via-[#A5B4FC] to-[#FDE047]',
+    variant: 'coral',
     title: { en: 'For education', rw: 'Mu burezi n’abarimu' },
     subtitle: {
       en: 'Bilingual lesson kits for TVET, university & teachers.',
       rw: 'Imfashanyigisho mu Cyongereza n’Ikinyarwanda.'
     },
-    action: 'challenge' as const
+    action: 'challenge'
   }
 ];
 
-const COURSE_GRADIENT_COVERS: Record<string, string> = {
-  foundations: 'bg-gradient-to-br from-[#0284C7] via-[#38BDF8] to-[#F472B6]',
-  prompting: 'bg-gradient-to-br from-[#38BDF8] via-[#818CF8] to-[#C084FC]',
-  automation: 'bg-gradient-to-br from-[#4F46E5] via-[#7C3AED] to-[#EC4899]',
-  agents: 'bg-gradient-to-br from-[#0EA5E9] via-[#6366F1] to-[#14B8A6]',
-  industry: 'bg-gradient-to-br from-[#0284C7] via-[#10B981] to-[#F59E0B]'
+const COURSE_GRADIENT_COVERS: Record<string, LuminousCoverVariant> = {
+  foundations: 'emerald',
+  prompting: 'teal',
+  automation: 'amber',
+  agents: 'lime',
+  industry: 'coral'
 };
 
-const HOME_EVENT_GRADIENTS = [
-  'bg-gradient-to-br from-[#0284C7] via-[#06B6D4] to-[#EC4899]',
-  'bg-gradient-to-br from-[#3B82F6] via-[#6366F1] to-[#A855F7]',
-  'bg-gradient-to-br from-[#2563EB] via-[#38BDF8] to-[#FACC15]'
-];
+const HOME_EVENT_VARIANTS: LuminousCoverVariant[] = ['emerald', 'teal', 'amber'];
 
 export function HomeView({
   lang,
@@ -166,11 +169,11 @@ export function HomeView({
         )}
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-gradient-to-t from-[#0D0D0F]/95 via-[#0D0D0F]/60 to-[#0D0D0F]/20"
+          className="absolute inset-0 bg-gradient-to-t from-[#0D0D0F]/95 via-[#0D0D0F]/65 to-[#0D0D0F]/40"
         />
         <div className="relative z-10 w-full p-6 sm:p-10 lg:p-12 flex flex-col gap-6 text-white">
           <div className="max-w-3xl">
-            <p className="text-sm sm:text-[15px] font-semibold text-[#7DD3FC] mb-2">
+            <p className="text-sm sm:text-[15px] font-semibold text-[#A7F3D0] mb-2">
               {UI_COPY.hero.kicker[lang]}
             </p>
             <h1 className="text-[36px] sm:text-[52px] lg:text-[64px] font-display font-bold tracking-[-0.03em] leading-[1.04] text-balance mb-4">
@@ -185,7 +188,7 @@ export function HomeView({
             <button
               type="button"
               onClick={() => onSelectCourse('challenge-28')}
-              className="inline-flex items-center gap-2 px-5 py-3 text-[15px] font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg transition-colors whitespace-nowrap"
+              className="inline-flex items-center gap-2 px-5 py-3 text-[15px] font-semibold text-white bg-[#0D7A5F] hover:bg-[#095945] rounded-lg transition-colors whitespace-nowrap"
             >
               <span>{UI_COPY.hero.primaryCta[lang]}</span>
               <ArrowRight className="w-4 h-4" />
@@ -224,12 +227,13 @@ export function HomeView({
               key={card.key}
               type="button"
               onClick={() => handleTrackCardClick(card.action)}
-              className="group text-left flex flex-col focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0284C7]"
+              className="group text-left flex flex-col focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0D7A5F]"
             >
-              <div
-                className={`w-full h-36 rounded-xl ${card.gradient} mb-3.5 transition-transform duration-200 group-hover:scale-[1.01]`}
+              <LuminousCover
+                variant={card.variant}
+                className="w-full h-36 rounded-xl mb-3.5 transition-transform duration-200 group-hover:scale-[1.01]"
               />
-              <span className="text-[17px] sm:text-[18px] font-semibold text-[#0284C7] group-hover:underline underline-offset-4">
+              <span className="text-[17px] sm:text-[18px] font-semibold text-[#0D7A5F] group-hover:underline underline-offset-4">
                 {card.title[lang]}
               </span>
               <span className="text-[15px] text-[#5D5D66] mt-1.5 leading-relaxed">
@@ -266,7 +270,7 @@ export function HomeView({
             </p>
           </div>
           <div>
-            <p className="text-2xl sm:text-3xl font-display font-bold text-[#0284C7] tabular-nums">
+            <p className="text-2xl sm:text-3xl font-display font-bold text-[#0D7A5F] tabular-nums">
               1,000 RWF
             </p>
             <p className="text-sm text-[#5D5D66] mt-1">
@@ -280,7 +284,7 @@ export function HomeView({
       <section className="bg-white border border-black/[0.08] rounded-2xl p-6 sm:p-10">
         <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
           <div>
-            <p className="text-[13px] sm:text-sm font-semibold tracking-wider text-[#0284C7] uppercase mb-1.5">
+            <p className="text-[13px] sm:text-sm font-semibold tracking-wider text-[#0D7A5F] uppercase mb-1.5">
               {lang === 'en' ? 'About the courses' : 'Ibyerekeye amasomo'}
             </p>
             <h2 className="text-[28px] sm:text-[38px] lg:text-[42px] font-display font-bold tracking-[-0.025em] leading-[1.15] text-[#0D0D0F] text-balance">
@@ -290,7 +294,7 @@ export function HomeView({
           <button
             type="button"
             onClick={() => onNavigate('courses')}
-            className="inline-flex items-center gap-1.5 text-[15px] sm:text-base font-semibold text-[#0284C7] hover:underline whitespace-nowrap"
+            className="inline-flex items-center gap-1.5 text-[15px] sm:text-base font-semibold text-[#0D7A5F] hover:underline whitespace-nowrap"
           >
             <span>{lang === 'en' ? 'View all courses' : 'Reba amasomo yose'}</span>
             <ArrowRight className="w-4 h-4" />
@@ -308,9 +312,9 @@ export function HomeView({
                 className="bg-white border border-black/[0.08] rounded-2xl overflow-hidden flex flex-col justify-between"
               >
                 <div>
-                  <div className={`h-36 w-full ${coverGrad}`} />
+                  <LuminousCover variant={coverGrad} className="h-36 w-full" />
                   <div className="p-6">
-                    <p className="text-[15px] font-semibold text-[#0284C7] mb-2">
+                    <p className="text-[15px] font-semibold text-[#0D7A5F] mb-2">
                       {course.code} · {course.durationDays} {lang === 'en' ? 'Days' : 'Iminsi'} ·{' '}
                       {course.status === 'active'
                         ? course.isFree || course.priceRwf === 0
@@ -351,7 +355,7 @@ export function HomeView({
                       <ul className="mt-2.5 space-y-2 text-[14px] text-[#5D5D66]">
                         {course.outcomes[lang].slice(0, 4).map((out) => (
                           <li key={out} className="flex items-start gap-2">
-                            <CheckCircle2 className="w-4 h-4 text-[#0284C7] shrink-0 mt-0.5" />
+                            <CheckCircle2 className="w-4 h-4 text-[#0D7A5F] shrink-0 mt-0.5" />
                             <span>{out}</span>
                           </li>
                         ))}
@@ -362,7 +366,7 @@ export function HomeView({
                   <button
                     type="button"
                     onClick={() => onSelectCourse(course.id)}
-                    className="w-full sm:w-auto px-5 py-2.5 text-[15px] font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg transition-colors"
+                    className="w-full sm:w-auto px-5 py-2.5 text-[15px] font-semibold text-white bg-[#0D7A5F] hover:bg-[#095945] rounded-lg transition-colors"
                   >
                     {lang === 'en' ? 'Go to course' : 'Jya ku isomo'}
                   </button>
@@ -377,7 +381,7 @@ export function HomeView({
       <section className="bg-white border border-black/[0.08] rounded-2xl p-6 sm:p-10">
         <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
           <div>
-            <p className="text-[13px] sm:text-sm font-semibold tracking-wider text-[#0284C7] uppercase mb-1.5">
+            <p className="text-[13px] sm:text-sm font-semibold tracking-wider text-[#0D7A5F] uppercase mb-1.5">
               {lang === 'en' ? 'Live Workshops' : 'Amahugurwa Imbonankubone'}
             </p>
             <h2 className="text-[28px] sm:text-[38px] lg:text-[42px] font-display font-bold tracking-[-0.025em] leading-[1.15] text-[#0D0D0F]">
@@ -387,7 +391,7 @@ export function HomeView({
           <button
             type="button"
             onClick={() => onNavigate('events')}
-            className="inline-flex items-center gap-1.5 text-[15px] sm:text-base font-semibold text-[#0284C7] hover:underline whitespace-nowrap"
+            className="inline-flex items-center gap-1.5 text-[15px] sm:text-base font-semibold text-[#0D7A5F] hover:underline whitespace-nowrap"
           >
             <span>{lang === 'en' ? 'All events' : 'Ibiganiro byose'}</span>
             <ArrowRight className="w-4 h-4" />
@@ -396,7 +400,7 @@ export function HomeView({
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {upcomingEvents.map((evt, idx) => {
-            const grad = HOME_EVENT_GRADIENTS[idx % HOME_EVENT_GRADIENTS.length];
+            const coverVariant = HOME_EVENT_VARIANTS[idx % HOME_EVENT_VARIANTS.length];
             const formatLabel =
               evt.format === 'kigali_in_person'
                 ? lang === 'en'
@@ -415,20 +419,20 @@ export function HomeView({
                 className="bg-white border border-black/[0.08] rounded-2xl overflow-hidden flex flex-col justify-between"
               >
                 <div>
-                  <div className={`aspect-[16/9] ${grad} p-5 flex flex-col justify-between text-white`}>
-                    <div className="flex items-center justify-between text-xs font-medium text-white/90">
+                  <LuminousCover variant={coverVariant} scrim className="aspect-[16/9] p-5 text-white">
+                    <div className="flex items-center justify-between text-xs font-medium text-white/95">
                       <span>AI Education Rwanda</span>
                       <span className="tabular-nums">{evt.dateLabel}</span>
                     </div>
                     <div>
-                      <p className="text-[20px] sm:text-[22px] font-display font-bold leading-snug text-balance">
+                      <p className="text-[20px] sm:text-[22px] font-display font-bold leading-snug text-balance text-white">
                         {evt.titleLabel}
                       </p>
                       <p className="text-sm text-white/90 mt-1">{evt.speaker}</p>
                     </div>
-                  </div>
+                  </LuminousCover>
                   <div className="p-6">
-                    <p className="text-[15px] font-semibold text-[#0284C7] mb-1.5">
+                    <p className="text-[15px] font-semibold text-[#0D7A5F] mb-1.5">
                       {formatLabel} · {evt.languageLabel}
                     </p>
                     <h3 className="text-[21px] sm:text-[23px] font-display font-bold leading-[1.26] text-[#0D0D0F]">
@@ -459,7 +463,7 @@ export function HomeView({
                   <button
                     type="button"
                     onClick={() => onNavigate('events')}
-                    className="px-5 py-2.5 text-[15px] font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg transition-colors whitespace-nowrap shrink-0"
+                    className="px-5 py-2.5 text-[15px] font-semibold text-white bg-[#0D7A5F] hover:bg-[#095945] rounded-lg transition-colors whitespace-nowrap shrink-0"
                   >
                     {lang === 'en' ? 'Register' : 'Iyandikishe'}
                   </button>
@@ -473,7 +477,7 @@ export function HomeView({
       {/* 5. 7 Learning Levels Interactive Framework */}
       <section className="bg-white border border-black/[0.08] rounded-2xl p-6 sm:p-10">
         <div className="max-w-3xl mb-8">
-          <p className="text-[13px] sm:text-sm font-semibold tracking-wider text-[#0284C7] uppercase mb-1.5">
+          <p className="text-[13px] sm:text-sm font-semibold tracking-wider text-[#0D7A5F] uppercase mb-1.5">
             {lang === 'en' ? 'Educational Framework' : 'Imiterere y’Imyigire'}
           </p>
           <h2 className="text-[28px] sm:text-[38px] lg:text-[42px] font-display font-bold tracking-[-0.025em] leading-[1.15] text-[#0D0D0F] mb-3 text-balance">
@@ -499,14 +503,14 @@ export function HomeView({
                   onClick={() => setActiveLevel(item.level)}
                   className={`w-full text-left px-4 py-3.5 rounded-xl border transition-colors flex items-center justify-between gap-3 ${
                     active
-                      ? 'bg-[#0284C7] text-white border-[#0284C7]'
+                      ? 'bg-[#0D7A5F] text-white border-[#0D7A5F]'
                       : 'bg-[#FAFAFB] text-[#0D0D0F] border-black/[0.08] hover:border-black/25'
                   }`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <span
                       className={`text-sm font-mono tabular-nums shrink-0 ${
-                        active ? 'text-white/90' : 'text-[#0284C7]'
+                        active ? 'text-white/90' : 'text-[#0D7A5F]'
                       }`}
                     >
                       0{item.level}
@@ -521,8 +525,8 @@ export function HomeView({
             })}
           </div>
 
-          <div className="lg:col-span-7 bg-[#F7F8FA] border border-black/[0.08] rounded-2xl p-6 sm:p-8">
-            <p className="text-sm font-mono text-[#0284C7] mb-2 tabular-nums">
+          <div className="lg:col-span-7 bg-[#F7F8F6] border border-black/[0.08] rounded-2xl p-6 sm:p-8">
+            <p className="text-sm font-mono text-[#0D7A5F] mb-2 tabular-nums">
               {lang === 'en' ? `Level 0${selectedLevel.level}` : `Icyiciro cya 0${selectedLevel.level}`}
             </p>
             <h3 className="text-2xl sm:text-[28px] font-display font-bold text-[#0D0D0F] mb-2.5">
@@ -538,7 +542,7 @@ export function HomeView({
                   key={topic}
                   className="bg-white border border-black/[0.06] rounded-xl px-4 py-3.5 text-[14px] sm:text-[15px] text-[#0D0D0F] flex items-start gap-2.5"
                 >
-                  <CheckCircle2 className="w-4 h-4 text-[#0284C7] shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-4 h-4 text-[#0D7A5F] shrink-0 mt-0.5" />
                   <span>{topic}</span>
                 </div>
               ))}
@@ -561,7 +565,7 @@ export function HomeView({
         <div className="lg:col-span-7 bg-white border border-black/[0.08] rounded-2xl p-6 sm:p-8">
           <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
             <div>
-              <p className="text-[13px] sm:text-sm font-semibold tracking-wider text-[#0284C7] uppercase mb-1">
+              <p className="text-[13px] sm:text-sm font-semibold tracking-wider text-[#0D7A5F] uppercase mb-1">
                 {lang === 'en' ? 'Hands-On Portfolio' : 'Imishinga Ngiro'}
               </p>
               <h2 className="text-2xl sm:text-[32px] font-display font-bold text-[#0D0D0F]">
@@ -571,7 +575,7 @@ export function HomeView({
             <button
               type="button"
               onClick={() => onNavigate('projects')}
-              className="text-[15px] font-semibold text-[#0284C7] hover:underline whitespace-nowrap"
+              className="text-[15px] font-semibold text-[#0D7A5F] hover:underline whitespace-nowrap"
             >
               {lang === 'en' ? 'Open tools & templates ->' : 'Fungura ibikoresho ->'}
             </button>
@@ -620,7 +624,7 @@ export function HomeView({
             />
             <div className="relative z-10 p-6 text-white flex flex-col items-start gap-4 w-full">
               <div>
-                <p className="text-sm font-mono text-[#7DD3FC] mb-1">
+                <p className="text-sm font-mono text-[#6EE7B7] mb-1">
                   {lang === 'en' ? 'Phone & Laptop Ready' : 'Kuri Telefoni & Mudasobwa'}
                 </p>
                 <p className="text-xl sm:text-2xl font-display font-bold leading-snug">
@@ -632,7 +636,7 @@ export function HomeView({
               <button
                 type="button"
                 onClick={() => onNavigate('projects')}
-                className="px-5 py-2.5 text-[15px] font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg whitespace-nowrap"
+                className="px-5 py-2.5 text-[15px] font-semibold text-white bg-[#0D7A5F] hover:bg-[#095945] rounded-lg whitespace-nowrap"
               >
                 {lang === 'en' ? 'Browse templates' : 'Reba imishinga'}
               </button>
@@ -641,7 +645,7 @@ export function HomeView({
 
           {showVerifyBox && (
             <div className="bg-white border border-black/[0.08] rounded-2xl p-6 sm:p-8">
-              <p className="text-[13px] sm:text-sm font-semibold tracking-wider text-[#0284C7] uppercase mb-1.5">
+              <p className="text-[13px] sm:text-sm font-semibold tracking-wider text-[#0D7A5F] uppercase mb-1.5">
                 {lang === 'en' ? 'Credential Verification' : 'Igenzura ry’Impamyabumenyi'}
               </p>
               <h3 className="text-2xl font-display font-bold text-[#0D0D0F] mb-2">
@@ -667,11 +671,11 @@ export function HomeView({
                   onChange={(e) => setCertInput(e.target.value)}
                   placeholder="RW-AI-2026-0042"
                   aria-label="Certificate ID"
-                  className="flex-1 px-4 py-2.5 text-base font-mono bg-[#F7F8FA] border border-black/15 rounded-lg focus:outline-none focus:border-[#0284C7]"
+                  className="flex-1 px-4 py-2.5 text-base font-mono bg-[#F7F8F6] border border-black/15 rounded-lg focus:outline-none focus:border-[#0D7A5F]"
                 />
                 <button
                   type="submit"
-                  className="px-5 py-2.5 text-[15px] font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg transition-colors whitespace-nowrap shrink-0"
+                  className="px-5 py-2.5 text-[15px] font-semibold text-white bg-[#0D7A5F] hover:bg-[#095945] rounded-lg transition-colors whitespace-nowrap shrink-0"
                 >
                   {lang === 'en' ? 'Verify ID' : 'Genzura'}
                 </button>

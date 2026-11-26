@@ -85,7 +85,7 @@ export function LessonBlocksRenderer({ lang, blocks }: LessonBlocksRendererProps
               : block.variant === 'warning'
                 ? 'bg-[#FFFBEB] border-[#D97706]/30 text-[#0D0D0F]'
                 : block.variant === 'tip'
-                  ? 'bg-[#F0F9FF] border-[#0369A1]/20 text-[#0D0D0F]'
+                  ? 'bg-[#EFF8F5] border-[#0D7A5F]/20 text-[#0D0D0F]'
                   : 'bg-[#F9F9FB] border-black/[0.08] text-[#0D0D0F]';
 
           return (
