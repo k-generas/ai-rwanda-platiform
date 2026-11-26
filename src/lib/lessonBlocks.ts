@@ -146,6 +146,27 @@ export function convertStaticLessonToBlocks(lesson: LessonContent, lang: Languag
     },
     {
       id: makeBlockId(),
+      type: 'assignment',
+      title: lang === 'en' ? 'Expected Lesson Deliverable' : 'Umwitozo Ugomba Gutangwa',
+      body:
+        lesson.deliverable?.[lang] ||
+        (lang === 'en'
+          ? `Submit or archive your Day ${lesson.dayNumber} practical evidence.`
+          : `Bika cyangwa wohereze ibimenyetso by’umwitozo w’Umunsi wa ${lesson.dayNumber}.`)
+    },
+    ...(lesson.downloadableResourceTitle
+      ? [
+          {
+            id: makeBlockId(),
+            type: 'download' as const,
+            title: lang === 'en' ? 'Downloadable Worksheet' : 'Urupapuro rw’Umwitozo',
+            label: lesson.downloadableResourceTitle[lang],
+            url: '/?course=challenge-28#resources'
+          }
+        ]
+      : []),
+    {
+      id: makeBlockId(),
       type: 'quiz',
       title: lang === 'en' ? 'Knowledge Check' : 'Isuzuma ry’Isomo',
       question: lesson.knowledgeCheck.question[lang],
@@ -206,8 +227,142 @@ export const LESSON_STARTER_TEMPLATES: LessonTemplatePreset[] = [
       createDefaultBlock('external_resource'),
       createDefaultBlock('quiz')
     ]
+  },
+  {
+    id: 'blueprint_16_part',
+    name: 'Blueprint 16-Section Lesson Standard',
+    description: 'Full AI Education Rwanda academic standard: Simple & Technical depth, Global & Rwanda examples, Demo, Exercise, Downloadable worksheet, Mistakes, Quiz, Reflection & Further Resources.',
+    buildBlocks: () => [
+      { ...createDefaultBlock('rich_text'), title: 'Simple Explanation' },
+      { ...createDefaultBlock('rich_text'), title: 'Technical Explanation' },
+      { ...createDefaultBlock('callout'), variant: 'note', title: 'Real-World Example' },
+      { ...createDefaultBlock('callout'), variant: 'rwanda_context', title: 'Rwanda-Relevant Example' },
+      { ...createDefaultBlock('checklist'), title: 'Practical Demonstration & Step-by-Step Exercise' },
+      { ...createDefaultBlock('code'), title: 'Reusable Prompt / Workflow Template' },
+      { ...createDefaultBlock('download'), title: 'Downloadable Resource Worksheet' },
+      { ...createDefaultBlock('assignment'), title: 'Lesson Deliverable & Evidence' },
+      { ...createDefaultBlock('callout'), variant: 'warning', title: 'Common Mistakes, Limitations & Privacy Risks' },
+      { ...createDefaultBlock('quiz'), title: 'Knowledge Check' },
+      { ...createDefaultBlock('reflection'), title: 'Reflection Question' },
+      { ...createDefaultBlock('external_resource'), title: 'Further Learning Resources' }
+    ]
   }
 ];
+
+export interface CourseScaffoldModuleItem {
+  id: string;
+  courseId: string;
+  orderIndex: number;
+  titleEn: string;
+  titleRw: string;
+  summaryEn: string;
+  summaryRw: string;
+  isPublished: boolean;
+}
+
+export interface CourseScaffoldLessonItem {
+  id: string;
+  courseId: string;
+  moduleId: string;
+  orderIndex: number;
+  dayNumber: number;
+  weekNumber: number;
+  isSample: boolean;
+  isRequired: boolean;
+  estimatedMinutes: number;
+  enStatus: 'published';
+  rwStatus: 'published';
+  titleEn: string;
+  titleRw: string;
+  summaryEn: string;
+  summaryRw: string;
+  objectivesEn: string[];
+  objectivesRw: string[];
+  deliverableEn: string;
+  deliverableRw: string;
+  levelTag: string;
+  tools: string[];
+  blocksEnJson: string;
+  blocksRwJson: string;
+}
+
+export function buildCourseScaffoldPayload(params: {
+  courseId: string;
+  courseTitleEn: string;
+  courseTitleRw: string;
+  weekCount: number;
+  daysCount: number;
+  levelTag?: string;
+  tools?: string[];
+  markFirstDayAsSample?: boolean;
+}): {
+  modules: CourseScaffoldModuleItem[];
+  lessons: CourseScaffoldLessonItem[];
+} {
+  const safeWeeks = Math.max(1, Math.min(24, Math.round(params.weekCount)));
+  const safeDays = Math.max(safeWeeks, Math.min(180, Math.round(params.daysCount)));
+  const levelTag = params.levelTag?.trim() || 'Practical AI';
+  const tools = params.tools && params.tools.length > 0 ? params.tools : ['ChatGPT', 'Google Gemini', 'Google Workspace'];
+  const blueprintPreset = LESSON_STARTER_TEMPLATES.find((p) => p.id === 'blueprint_16_part') ?? LESSON_STARTER_TEMPLATES[0];
+
+  const modules: CourseScaffoldModuleItem[] = Array.from({ length: safeWeeks }, (_, i) => {
+    const wk = i + 1;
+    return {
+      id: `${params.courseId}_mod_w${wk}`,
+      courseId: params.courseId,
+      orderIndex: wk,
+      titleEn: `Module ${wk} — ${params.courseTitleEn} (Phase ${wk})`,
+      titleRw: `Igice cya ${wk} — ${params.courseTitleRw} (Icyiciro ${wk})`,
+      summaryEn: `Structured weekly learning module ${wk} following the AI Education Rwanda 16-part delivery standard.`,
+      summaryRw: `Igice cya ${wk} cy’amasomo gikurikiza imiterere y’ubuziranenge ya AI Education Rwanda.`,
+      isPublished: true
+    };
+  });
+
+  const daysPerWeek = Math.max(1, Math.ceil(safeDays / safeWeeks));
+  const lessons: CourseScaffoldLessonItem[] = Array.from({ length: safeDays }, (_, idx) => {
+    const day = idx + 1;
+    const wk = Math.min(safeWeeks, Math.floor(idx / daysPerWeek) + 1);
+    const isSample = params.markFirstDayAsSample !== false && (day === 1 || (safeDays >= 8 && day % 7 === 1));
+    const blocksEn = blueprintPreset.buildBlocks();
+    const blocksRw = blueprintPreset.buildBlocks();
+    return {
+      id: `${params.courseId}_day_${day}`,
+      courseId: params.courseId,
+      moduleId: `${params.courseId}_mod_w${wk}`,
+      orderIndex: day,
+      dayNumber: day,
+      weekNumber: wk,
+      isSample,
+      isRequired: true,
+      estimatedMinutes: 15,
+      enStatus: 'published',
+      rwStatus: 'published',
+      titleEn: `Day ${day} — Practical AI Lesson`,
+      titleRw: `Umunsi wa ${day} — Isomo Ngiro rya AI`,
+      summaryEn: `Day ${day} of ${params.courseTitleEn}: practical concepts, Rwanda-relevant example, step-by-step exercise, and verification check.`,
+      summaryRw: `Umunsi wa ${day} muri ${params.courseTitleRw}: ubumenyi ngiro, urugero rwo mu Rwanda, umwitozo n’isuzuma.`,
+      objectivesEn: [
+        `Understand the core objective of Day ${day}.`,
+        'Apply the concept in a guided workflow or prompt test.',
+        'Verify output quality, safety, and accuracy.'
+      ],
+      objectivesRw: [
+        `Gusobanukirwa intego nyamukuru y’Umunsi wa ${day}.`,
+        'Gushyira mu bikorwa ibyo wize mu myitozo ngiro.',
+        'Kugenzura ukuri n’umutekano w’igisubizo.'
+      ],
+      deliverableEn: `Completed Day ${day} practical worksheet`,
+      deliverableRw: `Urupapuro rw’umwitozo w’Umunsi wa ${day} rwuzuye`,
+      levelTag,
+      tools,
+      blocksEnJson: serializeLessonBlocks(blocksEn),
+      blocksRwJson: serializeLessonBlocks(blocksRw)
+    };
+  });
+
+  return { modules, lessons };
+}
 
 export interface TranslationCompleteness {
   enBlockCount: number;

@@ -6,46 +6,50 @@ interface DayOutline {
   isSample?: boolean;
   titleEn: string;
   titleRw: string;
+  deliverableEn: string;
+  deliverableRw: string;
+  resourceTitleEn: string;
+  resourceTitleRw: string;
   tools: string[];
   levelTag: string;
 }
 
 const DAY_OUTLINES: DayOutline[] = [
-  // Week 1 — Understanding Artificial Intelligence
-  { day: 1, week: 1, isSample: true, titleEn: 'Introduction to Artificial Intelligence', titleRw: 'Intangiriro ku Bwenge Bwubatswe (AI)', tools: ['ChatGPT', 'Google Gemini'], levelTag: 'Level 1' },
-  { day: 2, week: 1, isSample: true, titleEn: 'AI vs Machine Learning vs Deep Learning', titleRw: 'AI vs Machine Learning vs Deep Learning', tools: ['Teachable Machine', 'Google Gemini'], levelTag: 'Level 1' },
-  { day: 3, week: 1, titleEn: 'Generative AI and Large Language Models', titleRw: 'Generative AI na Large Language Models (LLMs)', tools: ['ChatGPT', 'Google Gemini'], levelTag: 'Level 1' },
-  { day: 4, week: 1, titleEn: 'How AI Generates Responses', titleRw: 'Uko AI Itanga Ibisubizo', tools: ['ChatGPT'], levelTag: 'Level 1' },
-  { day: 5, week: 1, titleEn: 'Hallucinations, Bias and Fact-Checking', titleRw: 'Amakosa ya AI (Hallucinations), Kubogama n’Igenzura', tools: ['NotebookLM', 'Google Gemini'], levelTag: 'Level 1' },
-  { day: 6, week: 1, titleEn: 'Responsible AI, Privacy and Ethics', titleRw: 'Gukoresha AI neza, Ibanga n’Amategeko', tools: ['Google Gemini'], levelTag: 'Level 1' },
-  { day: 7, week: 1, titleEn: 'Week 1 Assessment & Reflection', titleRw: 'Isuzuma ry’Icyumweru cya 1', tools: ['Platform Quiz'], levelTag: 'Level 1' },
+  // Week 1 — AI Foundations
+  { day: 1, week: 1, isSample: true, titleEn: 'Introduction to Artificial Intelligence', titleRw: 'Intangiriro ku Bwenge Bwubatswe (AI)', deliverableEn: 'Personal AI application worksheet', deliverableRw: 'Urupapuro rw’aho AI ikoreshwa mu buzima busanzwe', resourceTitleEn: 'Day 1 Personal AI Worksheet', resourceTitleRw: 'Urupapuro rw’Umunsi wa 1', tools: ['ChatGPT', 'Google Gemini'], levelTag: 'Level 1' },
+  { day: 2, week: 1, isSample: true, titleEn: 'AI vs Machine Learning vs Deep Learning', titleRw: 'AI vs Machine Learning vs Deep Learning', deliverableEn: 'AI concepts comparison exercise', deliverableRw: 'Umwitozo wo kugereranya ibyiciro bya AI', resourceTitleEn: 'AI Taxonomy Comparison Sheet', resourceTitleRw: 'Imbonerahamwe yo Kugereranya AI', tools: ['Teachable Machine', 'Google Gemini'], levelTag: 'Level 1' },
+  { day: 3, week: 1, titleEn: 'Generative AI and Large Language Models', titleRw: 'Generative AI na Large Language Models (LLMs)', deliverableEn: 'AI model comparison worksheet', deliverableRw: 'Urupapuro rugereranya ibisubizo bya AI ebyiri', resourceTitleEn: 'LLM Output Comparison Log', resourceTitleRw: 'Urupapuro rwo Kugereranya Models', tools: ['ChatGPT', 'Google Gemini'], levelTag: 'Level 1' },
+  { day: 4, week: 1, titleEn: 'How AI Generates Responses', titleRw: 'Uko AI Itanga Ibisubizo', deliverableEn: 'AI response experiment report', deliverableRw: 'Raporo y’igerageza ry’uko imiterere ihindura igisubizo', resourceTitleEn: 'Context & Token Experiment Sheet', resourceTitleRw: 'Urupapuro rw’Igerageza rya Context', tools: ['ChatGPT'], levelTag: 'Level 1' },
+  { day: 5, week: 1, titleEn: 'Hallucinations, Bias and Fact-Checking', titleRw: 'Amakosa ya AI (Hallucinations), Kubogama n’Igenzura', deliverableEn: 'AI fact-checking report', deliverableRw: 'Raporo yo kugenzura ukuri kw’amakuru ya AI', resourceTitleEn: 'Fact-Checking & Source Log', resourceTitleRw: 'Inyandiko yo Kugenzura Ukuri', tools: ['NotebookLM', 'Google Gemini'], levelTag: 'Level 1' },
+  { day: 6, week: 1, titleEn: 'Responsible AI, Privacy and Ethics', titleRw: 'Gukoresha AI neza, Ibanga n’Amategeko', deliverableEn: 'Responsible AI checklist', deliverableRw: 'Urutonde rwo gukoresha AI mu buryo buboneye', resourceTitleEn: 'Law No. 058/2021 Privacy Checklist', resourceTitleRw: 'Urutonde rw’Umutekano w’Amakuru', tools: ['Google Gemini'], levelTag: 'Level 1' },
+  { day: 7, week: 1, titleEn: 'Weekly Assessment 01', titleRw: 'Isuzuma ry’Icyumweru cya 1', deliverableEn: 'Completed Week 1 assessment (5% weight)', deliverableRw: 'Isuzuma ry’Icyumweru cya 1 ryuzuye (5%)', resourceTitleEn: 'Week 1 Revision & Marking Guide', resourceTitleRw: 'Inshamake y’Isuzuma rya 1', tools: ['Platform Quiz'], levelTag: 'Level 1' },
 
   // Week 2 — Prompt Engineering
-  { day: 8, week: 2, isSample: true, titleEn: 'Introduction to Prompt Engineering', titleRw: 'Intangiriro ku Kwandika Amabwiriza (Prompts)', tools: ['ChatGPT', 'Google Gemini'], levelTag: 'Level 2' },
-  { day: 9, week: 2, titleEn: 'Structuring Effective Prompts', titleRw: 'Imiterere y’Ibwiriza Ritanga Igisubizo Cyiza', tools: ['ChatGPT', 'Google Gemini'], levelTag: 'Level 2' },
-  { day: 10, week: 2, titleEn: 'Advanced Prompting Techniques', titleRw: 'Uburyo Bwisumbuye bwo Kwandika Amabwiriza', tools: ['ChatGPT'], levelTag: 'Level 2' },
-  { day: 11, week: 2, titleEn: 'AI for Research and Document Analysis', titleRw: 'AI mu Bushakashatsi no Gusesengura Inyandiko', tools: ['NotebookLM', 'Google Gemini'], levelTag: 'Level 2' },
-  { day: 12, week: 2, titleEn: 'AI for Writing and Productivity', titleRw: 'AI mu Kwandika no Kongera Umusaruro', tools: ['ChatGPT', 'Google Docs'], levelTag: 'Level 2' },
-  { day: 13, week: 2, titleEn: 'Prompt Chaining and Reusable Prompt Systems', titleRw: 'Kujyanisha Amabwiriza n’Ububiko Bwayo', tools: ['ChatGPT', 'Google Sheets'], levelTag: 'Level 2' },
-  { day: 14, week: 2, titleEn: 'Week 2 Assessment & Prompt Assignment', titleRw: 'Isuzuma ry’Icyumweru cya 2', tools: ['Platform Quiz'], levelTag: 'Level 2' },
+  { day: 8, week: 2, isSample: true, titleEn: 'Introduction to Prompt Engineering', titleRw: 'Intangiriro ku Kwandika Amabwiriza (Prompts)', deliverableEn: 'Prompt improvement worksheet (5 prompts improved)', deliverableRw: 'Urupapuro rwo kunoza amabwiriza 5 atari meza', resourceTitleEn: 'Before & After Prompt Worksheet', resourceTitleRw: 'Urupapuro rwo Kunoza Amabwiriza', tools: ['ChatGPT', 'Google Gemini'], levelTag: 'Level 2' },
+  { day: 9, week: 2, titleEn: 'Anatomy of a Good Prompt', titleRw: 'Ibice Bigize Ibwiriza Ritanga Igisubizo Cyiza', deliverableEn: 'Reusable prompt template', deliverableRw: 'Ibwiriza fatizo rikoreshwa kenshi', resourceTitleEn: 'Structured Prompt Anatomy Sheet', resourceTitleRw: 'Imiterere y’Ibwiriza Ryuzuye', tools: ['ChatGPT', 'Google Gemini'], levelTag: 'Level 2' },
+  { day: 10, week: 2, titleEn: 'Advanced Prompting Techniques', titleRw: 'Uburyo Bwisumbuye bwo Kwandika Amabwiriza', deliverableEn: 'Advanced prompt collection (zero-shot, few-shot, JSON/tables)', deliverableRw: 'Ububiko bw’amabwiriza arimo ingero n’imbonerahamwe', resourceTitleEn: 'Few-Shot & Structured Output Guide', resourceTitleRw: 'Urupapuro rwa Few-Shot na JSON', tools: ['ChatGPT'], levelTag: 'Level 2' },
+  { day: 11, week: 2, titleEn: 'AI Research and Document Analysis', titleRw: 'AI mu Bushakashatsi no Gusesengura Inyandiko', deliverableEn: 'Document analysis report', deliverableRw: 'Raporo yo gusesengura inyandiko ifite aho ikomoka', resourceTitleEn: 'Document Analysis & Citation Sheet', resourceTitleRw: 'Urupapuro rwo Gusesengura Inyandiko', tools: ['NotebookLM', 'Google Gemini'], levelTag: 'Level 2' },
+  { day: 12, week: 2, titleEn: 'AI for Writing, Communication and Productivity', titleRw: 'AI mu Kwandika, Itumanaho no Kongera Umusaruro', deliverableEn: 'Personal productivity prompt toolkit', deliverableRw: 'Ibikoresho by’amabwiriza byongera umusaruro', resourceTitleEn: 'Bilingual Writing & Editing Prompts', resourceTitleRw: 'Amabwiriza yo Kwandika neza', tools: ['ChatGPT', 'Google Docs'], levelTag: 'Level 2' },
+  { day: 13, week: 2, titleEn: 'Prompt Chaining and Reusable Prompt Systems', titleRw: 'Kujyanisha Amabwiriza n’Ububiko Bwayo', deliverableEn: 'Reusable prompt workflow (3-stage chain)', deliverableRw: 'Uruhererekane rw’amabwiriza atatu yikoresha', resourceTitleEn: '3-Stage Prompt Chaining Canvas', resourceTitleRw: 'Igishushanyo cyo Kujyanisha Amabwiriza', tools: ['ChatGPT', 'Google Sheets'], levelTag: 'Level 2' },
+  { day: 14, week: 2, titleEn: 'Weekly Assessment 02', titleRw: 'Isuzuma ry’Icyumweru cya 2', deliverableEn: 'Personal prompt library with at least 10 tested prompts (15% weight)', deliverableRw: 'Ububiko burimo nibura amabwiriza 10 yageragejwe (15%)', resourceTitleEn: 'Prompt Library Template & Rubric', resourceTitleRw: 'Urupapuro rw’Ububiko bw’Amabwiriza', tools: ['Platform Quiz', 'Google Sheets'], levelTag: 'Level 2' },
 
-  // Week 3 — Workflow Thinking and Automation
-  { day: 15, week: 3, isSample: true, titleEn: 'Introduction to Automation', titleRw: 'Intangiriro ku Koroshya Imirimo (Automation)', tools: ['Make', 'Zapier'], levelTag: 'Level 3' },
-  { day: 16, week: 3, titleEn: 'Understanding and Mapping Workflows', titleRw: 'Gusobanukirwa no Gushushanya Imiyoboro y’Akazi', tools: ['Google Sheets'], levelTag: 'Level 3' },
-  { day: 17, week: 3, titleEn: 'Introduction to Automation Platforms', titleRw: 'Porogaramu Zikoresha Imiyoboro (Make, Zapier, n8n)', tools: ['Make', 'Zapier', 'n8n'], levelTag: 'Level 4' },
-  { day: 18, week: 3, titleEn: 'Connecting Applications and Mapping Data', titleRw: 'Guhuza Porogaramu n’Amakuru', tools: ['Google Forms', 'Google Sheets', 'Make'], levelTag: 'Level 4' },
-  { day: 19, week: 3, titleEn: 'Building a Form → Spreadsheet → Email Workflow', titleRw: 'Kubaka Umuyoboro wa Form → Spreadsheet → Email', tools: ['Google Forms', 'Google Sheets', 'Make', 'Google Apps Script'], levelTag: 'Level 4' },
-  { day: 20, week: 3, titleEn: 'Conditions, Filters, Scheduling and Error Handling', titleRw: 'Amategeko, Gutoranya, Gupanga Igihe n’Amakosa', tools: ['Make', 'Zapier'], levelTag: 'Level 4' },
-  { day: 21, week: 3, titleEn: 'Practical Automation Assessment', titleRw: 'Isuzuma Ngiro ry’Icyumweru cya 3', tools: ['Google Forms', 'Google Sheets'], levelTag: 'Level 4' },
+  // Week 3 — Workflow Thinking and No-Code Automation
+  { day: 15, week: 3, isSample: true, titleEn: 'Introduction to Automation', titleRw: 'Intangiriro ku Koroshya Imirimo (Automation)', deliverableEn: 'Automation opportunity worksheet', deliverableRw: 'Urupapuro rw’imirimo 5 ishobora gukorwa mu buryo bwikoresha', resourceTitleEn: 'Automation Opportunity Worksheet', resourceTitleRw: 'Urupapuro rw’Imirimo Yoroshwa', tools: ['Make', 'Zapier'], levelTag: 'Level 3' },
+  { day: 16, week: 3, titleEn: 'Workflow Mapping and Process Design', titleRw: 'Gushushanya Imiyoboro n’Imikorere y’Akazi', deliverableEn: 'Workflow diagram (registration process map)', deliverableRw: 'Igishushanyo cy’inzira yo kwiyandikisha', resourceTitleEn: 'Workflow Mapping & Decision Sheet', resourceTitleRw: 'Igishushanyo cy’Inzira y’Akazi', tools: ['Google Sheets'], levelTag: 'Level 3' },
+  { day: 17, week: 3, titleEn: 'Introduction to Automation Platforms', titleRw: 'Porogaramu Zikoresha Imiyoboro (Make, Zapier, n8n)', deliverableEn: 'Automation platform comparison', deliverableRw: 'Igereranya rya Make, Zapier na n8n ku buntu', resourceTitleEn: 'Make vs Zapier vs n8n Comparison', resourceTitleRw: 'Igereranya rya Porogaramu', tools: ['Make', 'Zapier', 'n8n'], levelTag: 'Level 4' },
+  { day: 18, week: 3, titleEn: 'Connecting Applications and Mapping Data', titleRw: 'Guhuza Porogaramu n’Amakuru', deliverableEn: 'Data mapping worksheet', deliverableRw: 'Urupapuro rwo guhuza ibyinjira n’inkingi z’amakuru', resourceTitleEn: 'Data Mapping & JSON Guide', resourceTitleRw: 'Urupapuro rwo Guhuza Amakuru', tools: ['Google Forms', 'Google Sheets', 'Make'], levelTag: 'Level 4' },
+  { day: 19, week: 3, titleEn: 'Build a Form-to-Spreadsheet-to-Email Workflow', titleRw: 'Kubaka Umuyoboro wa Form → Spreadsheet → Email', deliverableEn: 'Working registration automation', deliverableRw: 'Umuyoboro ukora wo kwiyandikisha wohereza na Email', resourceTitleEn: 'Registration Workflow Lab Guide', resourceTitleRw: 'Amabwiriza ya Form → Sheets → Email', tools: ['Google Forms', 'Google Sheets', 'Make', 'Google Apps Script'], levelTag: 'Level 4' },
+  { day: 20, week: 3, titleEn: 'Conditions, Filters, Scheduling and Error Handling', titleRw: 'Amategeko, Gutoranya, Gupanga Igihe n’Amakosa', deliverableEn: 'Improved workflow and test report', deliverableRw: 'Umuyoboro unonosoye hamwe na raporo y’igerageza', resourceTitleEn: 'Automation Testing & Error Log', resourceTitleRw: 'Inyandiko yo Kugerageza Amakosa', tools: ['Make', 'Zapier'], levelTag: 'Level 4' },
+  { day: 21, week: 3, titleEn: 'Weekly Assessment 03', titleRw: 'Isuzuma ry’Icyumweru cya 3', deliverableEn: 'Completed automation project and documentation (20% weight)', deliverableRw: 'Umushinga w’umuyoboro ukora n’inyandiko yawo (20%)', resourceTitleEn: 'Week 3 Automation Assessment Rubric', resourceTitleRw: 'Ibipimo by’Isuzuma rya 3', tools: ['Google Forms', 'Google Sheets'], levelTag: 'Level 4' },
 
-  // Week 4 — AI-Powered Automation and Agents
-  { day: 22, week: 4, isSample: true, titleEn: 'Introduction to AI-Powered Automation', titleRw: 'Intangiriro ku Miyoboro Ikoresha AI', tools: ['Make', 'Google Gemini'], levelTag: 'Level 5' },
-  { day: 23, week: 4, titleEn: 'AI Classification, Extraction and Summarization', titleRw: 'Gushyira mu Byiciro, Kuvana Ingamba no Guhinira', tools: ['Google Gemini', 'Make', 'Google Sheets'], levelTag: 'Level 5' },
-  { day: 24, week: 4, titleEn: 'Building an AI-Powered Information Processing Workflow', titleRw: 'Kubaka Umuyoboro wa AI Usesengura Amakuru', tools: ['Google Forms', 'Make', 'Google Gemini'], levelTag: 'Level 5' },
-  { day: 25, week: 4, titleEn: 'Introduction to AI Agents', titleRw: 'Intangiriro kuri AI Agents', tools: ['n8n', 'Google Gemini'], levelTag: 'Level 6' },
-  { day: 26, week: 4, titleEn: 'Human Approval, Security and Reliability', titleRw: 'Ubugenzuzi bw’Umuntu, Umutekano n’Ubuziranenge', tools: ['Google Sheets', 'Make'], levelTag: 'Level 6' },
-  { day: 27, week: 4, titleEn: 'Final Project Development', titleRw: 'Gutegura Umushinga wa Nyuma', tools: ['All Course Tools'], levelTag: 'Level 7' },
-  { day: 28, week: 4, titleEn: 'Final Assessment and Project Demonstration', titleRw: 'Isuzuma rya Nyuma no Kumurika Umushinga', tools: ['Platform Capstone'], levelTag: 'Level 7' }
+  // Week 4 — AI-Powered Automation and AI Agents
+  { day: 22, week: 4, isSample: true, titleEn: 'Introduction to AI-Powered Automation', titleRw: 'Intangiriro ku Miyoboro Ikoresha AI', deliverableEn: 'AI workflow design', deliverableRw: 'Igishushanyo cy’umuyoboro w’ikigo ukoresha AI', resourceTitleEn: 'AI-Powered Workflow Blueprint', resourceTitleRw: 'Igishushanyo cya AI Workflow', tools: ['Make', 'Google Gemini'], levelTag: 'Level 5' },
+  { day: 23, week: 4, titleEn: 'AI Classification, Extraction and Summarization', titleRw: 'Gushyira mu Byiciro, Kuvana Ingamba no Guhinira', deliverableEn: 'AI information processing exercise', deliverableRw: 'Umwitozo wo gushyira ibibazo by’abakiriya mu byiciro', resourceTitleEn: 'Classification & Extraction Sheet', resourceTitleRw: 'Urupapuro rwo Gushyira mu Byiciro', tools: ['Google Gemini', 'Make', 'Google Sheets'], levelTag: 'Level 5' },
+  { day: 24, week: 4, titleEn: 'Build an AI-Powered Information Processing Workflow', titleRw: 'Kubaka Umuyoboro wa AI Usesengura Amakuru', deliverableEn: 'Working demonstration or documented prototype', deliverableRw: 'Imurika ry’umuyoboro ufite ubugenzuzi bw’umuntu', resourceTitleEn: 'Human Approval Gate Checklist', resourceTitleRw: 'Urutonde rw’Igenzura ry’Umuntu', tools: ['Google Forms', 'Make', 'Google Gemini'], levelTag: 'Level 5' },
+  { day: 25, week: 4, titleEn: 'Introduction to AI Agents', titleRw: 'Intangiriro kuri AI Agents', deliverableEn: 'Agent architecture worksheet', deliverableRw: 'Urupapuro rw’ibice bigize AI Agent n’imikorere yayo', resourceTitleEn: 'Agent Design Canvas Worksheet', resourceTitleRw: 'Igishushanyo cya AI Agent', tools: ['n8n', 'Google Gemini'], levelTag: 'Level 6' },
+  { day: 26, week: 4, titleEn: 'Human Approval, Security and Reliability', titleRw: 'Ubugenzuzi bw’Umuntu, Umutekano n’Ubuziranenge', deliverableEn: 'Agent risk assessment', deliverableRw: 'Isuzuma ry’ibyago n’amategeko y’umutekano kuri Agent', resourceTitleEn: 'Agent Safety & Prompt Injection Log', resourceTitleRw: 'Igenzura ry’Umutekano wa Agent', tools: ['Google Sheets', 'Make'], levelTag: 'Level 6' },
+  { day: 27, week: 4, titleEn: 'Final Project Development', titleRw: 'Gutegura Umushinga wa Nyuma', deliverableEn: 'Final project submission (30% capstone prep)', deliverableRw: 'Gutegura no kunoza umushinga wa nyuma (30%)', resourceTitleEn: 'Final Project Proposal & Documentation Template', resourceTitleRw: 'Urupapuro rw’Umushinga wa Nyuma', tools: ['All Course Tools'], levelTag: 'Level 7' },
+  { day: 28, week: 4, titleEn: 'Final Assessment and Project Demonstration', titleRw: 'Isuzuma rya Nyuma no Kumurika Umushinga', deliverableEn: 'Completed final project and course assessment (15% W4 + 30% Capstone)', deliverableRw: 'Umushinga wa nyuma wamuritswe n’isuzuma rya nyuma', resourceTitleEn: '7-Criterion Final Evaluation Rubric', resourceTitleRw: 'Ibipimo 7 by’Umushinga wa Nyuma', tools: ['Platform Capstone'], levelTag: 'Level 7' }
 ];
 
 const WEEK_TITLES = {
@@ -315,9 +319,15 @@ export const LESSONS_28: LessonContent[] = DAY_OUTLINES.map((outline) => {
     weekNumber: outline.week,
     weekTitle,
     isSample: Boolean(outline.isSample),
-    durationMinutes: override.durationMinutes ?? 8,
+    durationMinutes: override.durationMinutes ?? 10,
     levelTag: outline.levelTag,
     title: { en: outline.titleEn, rw: outline.titleRw },
+    deliverable: { en: outline.deliverableEn, rw: outline.deliverableRw },
+    downloadableResourceTitle: { en: outline.resourceTitleEn, rw: outline.resourceTitleRw },
+    lowBandwidthTip: {
+      en: 'Low-bandwidth mode: All instructions, examples, and templates can be studied in text without loading video.',
+      rw: 'Uburyo butwara interineti nke: Inyandiko, ingero n’amabwiriza byose bisomeka neza utabanje gufungura amashusho.'
+    },
     objectives: override.objectives ?? {
       en: [
         `Understand the core concepts behind ${outline.titleEn}.`,
@@ -428,7 +438,7 @@ export const WEEKLY_ASSESSMENTS: WeeklyAssessment[] = [
       en: 'Week 1 Assessment — AI Foundations & Responsible Usage',
       rw: 'Isuzuma ry’Icyumweru cya 1 — Ibanze kuri AI n’Umutekano'
     },
-    weightLabel: '5% of total grade (20% Weekly Assessments)',
+    weightLabel: '5% of course total (Week 1 Knowledge Assessment)',
     questions: [
       {
         question: {
@@ -530,7 +540,7 @@ export const WEEKLY_ASSESSMENTS: WeeklyAssessment[] = [
       en: 'Week 2 Assessment — Prompt Engineering & Research',
       rw: 'Isuzuma ry’Icyumweru cya 2 — Kwandika Amabwiriza n’Ubushakashatsi'
     },
-    weightLabel: '5% of total grade (20% Weekly Assessments)',
+    weightLabel: '15% of course total (Week 2 Knowledge & Prompt Assignment)',
     questions: [
       {
         question: {
@@ -609,7 +619,7 @@ export const WEEKLY_ASSESSMENTS: WeeklyAssessment[] = [
       en: 'Week 3 Assessment — Workflow Thinking & No-Code Automation',
       rw: 'Isuzuma ry’Icyumweru cya 3 — Imiyoboro n’Ikoranabuhanga'
     },
-    weightLabel: '5% of total grade (20% Weekly Assessments)',
+    weightLabel: '20% of course total (Week 3 Workflow & Automation)',
     questions: [
       {
         question: {
@@ -688,7 +698,7 @@ export const WEEKLY_ASSESSMENTS: WeeklyAssessment[] = [
       en: 'Week 4 Assessment — AI Automation, Agents & Systems',
       rw: 'Isuzuma ry’Icyumweru cya 4 — AI Automation, Agents & Sisitemu'
     },
-    weightLabel: '5% of total grade (20% Weekly Assessments)',
+    weightLabel: '15% of course total (Week 4 Practical Assessment)',
     questions: [
       {
         question: {

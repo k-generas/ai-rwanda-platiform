@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   ArrowLeft,
   ArrowRight,
@@ -9,10 +9,12 @@ import {
   ChevronUp,
   Clock,
   Copy,
+  FileText,
   Flag,
   Laptop,
   List,
   Lock,
+  Play,
   Search,
   Smartphone,
   Tag
@@ -42,7 +44,13 @@ import type {
   PlatformSettings,
   StructuredLessonRecord
 } from '../types';
-import { COURSES } from '../data/curriculum';
+import {
+  BLUEPRINT_GRADING_BREAKDOWN,
+  COURSES,
+  FINAL_PROJECT_RUBRIC_7,
+  INDUSTRY_LEARNING_PATHS_PRESETS,
+  LEARNING_LEVELS
+} from '../data/curriculum';
 import { LESSONS_28 } from '../data/lessons28';
 import { parseLessonBlocks } from '../lib/lessonBlocks';
 import {
@@ -65,6 +73,7 @@ interface CoursesViewProps {
   platformSettings?: PlatformSettings | null;
   selectedCourseId: string | null;
   selectedDay: number | null;
+  initialCategoryFilter?: string;
   user: User | null;
   enrollments: Enrollment[];
   isAdmin: boolean;
@@ -78,6 +87,14 @@ interface CoursesViewProps {
   onSubmitWaitlist: (courseSlug: string, name: string, email: string) => Promise<void>;
 }
 
+const COURSE_CATALOG_COVERS: Record<string, string> = {
+  foundations: 'bg-gradient-to-br from-[#0284C7] via-[#38BDF8] to-[#F472B6]',
+  prompting: 'bg-gradient-to-br from-[#38BDF8] via-[#818CF8] to-[#C084FC]',
+  automation: 'bg-gradient-to-br from-[#4F46E5] via-[#7C3AED] to-[#EC4899]',
+  agents: 'bg-gradient-to-br from-[#0EA5E9] via-[#6366F1] to-[#14B8A6]',
+  industry: 'bg-gradient-to-br from-[#0284C7] via-[#10B981] to-[#F59E0B]'
+};
+
 export function CoursesView({
   lang,
   courses,
@@ -89,6 +106,7 @@ export function CoursesView({
   platformSettings,
   selectedCourseId,
   selectedDay,
+  initialCategoryFilter = 'all',
   user,
   enrollments,
   isAdmin,
@@ -102,15 +120,36 @@ export function CoursesView({
   onSubmitWaitlist
 }: CoursesViewProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState<string>('all');
+  const [categoryFilter, setCategoryFilter] = useState<string>(initialCategoryFilter);
   const [levelFilter, setLevelFilter] = useState<string>('all');
   const [priceFilter, setPriceFilter] = useState<'all' | 'free' | 'paid'>('all');
   const [compareIds, setCompareIds] = useState<string[]>([]);
   const [compareOpen, setCompareOpen] = useState(false);
+  const [cardOutlineOpen, setCardOutlineOpen] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    setCategoryFilter(initialCategoryFilter);
+  }, [initialCategoryFilter]);
 
   const [openWeek, setOpenWeek] = useState<number>(1);
   const [openModuleId, setOpenModuleId] = useState<string | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [railSearch, setRailSearch] = useState('');
+  const [railWeekFilter, setRailWeekFilter] = useState<'all' | number>('all');
+  const [syllabusSearch, setSyllabusSearch] = useState('');
+  const [syllabusWeekFilter, setSyllabusWeekFilter] = useState<'all' | number>('all');
+  const [expandAllSyllabus, setExpandAllSyllabus] = useState(false);
+  const [showAllOutcomes, setShowAllOutcomes] = useState(false);
+  const [detailTab, setDetailTab] = useState<'syllabus' | 'blueprint'>('syllabus');
+  const [lastVisitedByCourse, setLastVisitedByCourse] = useState<Record<string, number>>(() => {
+    if (typeof window === 'undefined') return {};
+    try {
+      const raw = window.localStorage.getItem('aer_last_visited_day');
+      return raw ? (JSON.parse(raw) as Record<string, number>) : {};
+    } catch {
+      return {};
+    }
+  });
   const [copiedDay, setCopiedDay] = useState<number | null>(null);
   const [quizAnswer, setQuizAnswer] = useState<Record<number, number | null>>({});
   const [markingComplete, setMarkingComplete] = useState(false);
@@ -166,9 +205,22 @@ export function CoursesView({
 
   const hasFullAccess = Boolean(activeEnrollment) || isAdmin;
 
-  // Sync local note editor state when switching lesson/course
+  // Persist last visited day per course & smooth scroll to top on lesson navigation
   useEffect(() => {
     if (!activeCourse || selectedDay === null) return;
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try {
+        setLastVisitedByCourse((prev) => {
+          if (prev[activeCourse.id] === selectedDay) return prev;
+          const next = { ...prev, [activeCourse.id]: selectedDay };
+          window.localStorage.setItem('aer_last_visited_day', JSON.stringify(next));
+          return next;
+        });
+      } catch {
+        // Ignore storage restrictions
+      }
+    }
     const existingNote = learnerNotes.find(
       (n) => n.courseId === activeCourse.id && n.dayNumber === selectedDay
     );
@@ -177,6 +229,52 @@ export function CoursesView({
     setNoteSavedMsg(null);
     setDrawerOpen(false);
   }, [activeCourse?.id, selectedDay, learnerNotes]);
+
+  // Fast keyboard navigation inside Lesson Reader (Alt + Left / Alt + Right)
+  useEffect(() => {
+    if (!activeCourse || selectedDay === null) return;
+    const maxDays = Math.max(activeCourse.durationDays || 1, activeCourse.id === 'challenge-28' ? 28 : 1);
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (!e.altKey) return;
+      const targetTag = (e.target as HTMLElement | null)?.tagName;
+      if (targetTag === 'INPUT' || targetTag === 'TEXTAREA' || targetTag === 'SELECT') return;
+      if (e.key === 'ArrowLeft' && selectedDay > 1) {
+        e.preventDefault();
+        onSelectDay(selectedDay - 1);
+      } else if (e.key === 'ArrowRight' && selectedDay < maxDays) {
+        e.preventDefault();
+        onSelectDay(selectedDay + 1);
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [activeCourse?.id, activeCourse?.durationDays, selectedDay, onSelectDay]);
+
+  const resumeBanner = useMemo(() => {
+    const firstActive = enrollments.find((e) => e.status === 'active');
+    if (firstActive) {
+      const c = catalog.find((x) => x.id === firstActive.courseId);
+      if (c) {
+        return {
+          course: c,
+          day: lastVisitedByCourse[c.id] || firstActive.currentDay || 1,
+          completedCount: firstActive.completedDays.length
+        };
+      }
+    }
+    const localIds = Object.keys(lastVisitedByCourse);
+    for (const cid of localIds) {
+      const c = catalog.find((x) => x.id === cid);
+      if (c) {
+        return {
+          course: c,
+          day: lastVisitedByCourse[cid],
+          completedCount: 0
+        };
+      }
+    }
+    return null;
+  }, [enrollments, catalog, lastVisitedByCourse]);
 
   const filteredCatalog = catalog.filter((course) => {
     const matchesCategory = categoryFilter === 'all' || course.category === categoryFilter;
@@ -624,6 +722,14 @@ export function CoursesView({
     }
 
     const dayIndices = Array.from({ length: totalCourseDays }, (_, i) => i + 1);
+    const totalWeeks = Math.max(1, Math.ceil(totalCourseDays / 7));
+    const weekNumbers = Array.from({ length: totalWeeks }, (_, i) => i + 1);
+    const displayDeliverable = structuredRec
+      ? lang === 'en'
+        ? structuredRec.deliverableEn || lesson.deliverable?.en || ''
+        : structuredRec.deliverableRw || structuredRec.deliverableEn || lesson.deliverable?.rw || ''
+      : lesson.deliverable?.[lang] || '';
+    const displayWorksheet = lesson.downloadableResourceTitle?.[lang] || '';
     const releaseDateFormatted = releaseLock.locked
       ? formatReleaseDateLabel(
           releaseLock.effectiveReleaseAt,
@@ -632,9 +738,179 @@ export function CoursesView({
         )
       : '';
 
+    const railDays = dayIndices.map((dayNum) => {
+      const sRec = courseStructuredLessons.find((l) => l.dayNumber === dayNum) ?? null;
+      const staticRec =
+        activeCourse.id === 'challenge-28'
+          ? LESSONS_28.find((l) => l.dayNumber === dayNum) ?? null
+          : null;
+      const dWeek = sRec?.weekNumber ?? staticRec?.weekNumber ?? Math.ceil(dayNum / 7);
+      const dMod = sRec?.moduleId
+        ? modules.find((m) => m.id === sRec.moduleId) ?? null
+        : modules.find((m) => m.courseId === activeCourse.id && m.orderIndex === dWeek - 1) ?? null;
+      const dReleaseLock = resolveLessonReleaseLock({
+        courseModule: dMod,
+        lesson: sRec,
+        isStaff: isAdmin
+      });
+      const daySample = Boolean(sRec?.isSample || staticRec?.isSample);
+      const dayUnlocked =
+        !dReleaseLock.locked && Boolean(daySample || isFreeCourse || hasFullAccess);
+      const dayDone = Boolean(activeEnrollment?.completedDays.includes(dayNum));
+      const dayTitle = sRec
+        ? lang === 'en'
+          ? sRec.titleEn
+          : sRec.titleRw
+        : staticRec
+          ? staticRec.title[lang]
+          : lang === 'en'
+            ? `Lesson Day ${dayNum}`
+            : `Isomo ry’Umunsi ${dayNum}`;
+      const dayDeliverable = sRec
+        ? lang === 'en'
+          ? sRec.deliverableEn || staticRec?.deliverable?.en || ''
+          : sRec.deliverableRw || staticRec?.deliverable?.rw || ''
+        : staticRec?.deliverable?.[lang] || '';
+      return {
+        dayNum,
+        dWeek,
+        dayTitle,
+        dayDeliverable,
+        daySample,
+        dayUnlocked,
+        dayDone,
+        timeLocked: dReleaseLock.locked
+      };
+    });
+
+    const filteredRailDays = railDays.filter((item) => {
+      const matchWeek = railWeekFilter === 'all' || item.dWeek === railWeekFilter;
+      const q = railSearch.trim().toLowerCase();
+      const matchQ =
+        !q ||
+        `day ${item.dayNum}`.includes(q) ||
+        `d${item.dayNum}` === q ||
+        item.dayTitle.toLowerCase().includes(q) ||
+        item.dayDeliverable.toLowerCase().includes(q);
+      return matchWeek && matchQ;
+    });
+
+    const renderNavigatorRail = () => (
+      <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-4 space-y-3">
+        <div className="flex items-center justify-between gap-2">
+          <div>
+            <p className="text-[11px] font-mono text-[#0D7A5F] uppercase">
+              {activeCourse.code} · {lang === 'en' ? 'Navigator' : 'Amasomo'}
+            </p>
+            <p className="text-xs font-semibold text-[#0D0D0F] tabular-nums">
+              {activeEnrollment
+                ? `${activeEnrollment.completedDays.length}/${totalCourseDays} ${lang === 'en' ? 'completed' : 'byarangiye'}`
+                : `${totalCourseDays} ${lang === 'en' ? 'days' : 'iminsi'}`}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => onSelectDay(null)}
+            className="text-xs font-medium text-[#5D5D66] hover:text-[#0D0D0F]"
+          >
+            {lang === 'en' ? 'Syllabus' : 'Urutonde'}
+          </button>
+        </div>
+
+        <div className="relative">
+          <Search className="w-3.5 h-3.5 text-[#5D5D66] absolute left-2.5 top-1/2 -translate-y-1/2" />
+          <input
+            type="search"
+            value={railSearch}
+            onChange={(e) => setRailSearch(e.target.value)}
+            placeholder={lang === 'en' ? 'Find day or topic...' : 'Shakisha umunsi...'}
+            className="w-full pl-8 pr-2.5 py-1.5 text-xs bg-white border border-black/10 rounded-lg"
+          />
+        </div>
+
+        <div className="flex flex-wrap gap-1">
+          <button
+            type="button"
+            onClick={() => setRailWeekFilter('all')}
+            className={`px-2 py-1 text-[11px] font-mono rounded-md border ${
+              railWeekFilter === 'all'
+                ? 'bg-[#0D0D0F] text-white border-[#0D0D0F]'
+                : 'bg-white text-[#5D5D66] border-black/10'
+            }`}
+          >
+            {lang === 'en' ? 'All' : 'Yose'}
+          </button>
+          {weekNumbers.map((wk) => (
+            <button
+              key={wk}
+              type="button"
+              onClick={() => setRailWeekFilter(wk)}
+              className={`px-2 py-1 text-[11px] font-mono rounded-md border ${
+                railWeekFilter === wk
+                  ? 'bg-[#0D0D0F] text-white border-[#0D0D0F]'
+                  : 'bg-white text-[#5D5D66] border-black/10'
+              }`}
+            >
+              W{wk}
+            </button>
+          ))}
+        </div>
+
+        <div className="space-y-1 max-h-[58vh] overflow-y-auto pr-1">
+          {filteredRailDays.map((item) => {
+            const isCurrent = item.dayNum === displayDay;
+            return (
+              <button
+                key={item.dayNum}
+                type="button"
+                onClick={() => {
+                  onSelectDay(item.dayNum);
+                  setDrawerOpen(false);
+                }}
+                className={`w-full px-3 py-2 rounded-xl border text-left transition-colors flex items-start justify-between gap-2 ${
+                  isCurrent
+                    ? 'bg-[#0D0D0F] text-white border-[#0D0D0F]'
+                    : item.dayDone
+                      ? 'bg-[#ECFDF5]/80 border-[#0D7A5F]/25 text-[#0D0D0F]'
+                      : 'bg-white border-black/[0.08] text-[#0D0D0F] hover:border-black/25'
+                }`}
+              >
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1.5 text-[10px] font-mono tabular-nums">
+                    <span className={isCurrent ? 'text-[#34D399]' : 'text-[#0D7A5F]'}>
+                      D{item.dayNum}
+                    </span>
+                    {item.daySample && !hasFullAccess && (
+                      <span className={isCurrent ? 'text-white/75' : 'text-[#5D5D66]'}>
+                        · {lang === 'en' ? 'Sample' : 'Ubuntu'}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs font-medium truncate">{item.dayTitle}</p>
+                </div>
+                <span className="shrink-0 mt-0.5">
+                  {item.dayDone ? (
+                    <Check className={`w-3.5 h-3.5 ${isCurrent ? 'text-[#34D399]' : 'text-[#0D7A5F]'}`} />
+                  ) : item.timeLocked ? (
+                    <Clock className="w-3.5 h-3.5 opacity-70" />
+                  ) : !item.dayUnlocked ? (
+                    <Lock className="w-3.5 h-3.5 opacity-60" />
+                  ) : null}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        <p className="text-[10px] text-[#5D5D66] font-mono pt-1 border-t border-black/[0.06]">
+          {lang === 'en' ? 'Tip: Alt + ← / → switches day' : 'Alt + ← / → guhindura umunsi'}
+        </p>
+      </div>
+    );
+
     return (
-      <div className="max-w-[1000px] mx-auto px-4 sm:px-6 py-10">
-        <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-black/[0.08] mb-6">
+      <div className="max-w-[1360px] mx-auto px-4 sm:px-6 py-8">
+        <div className="flex flex-wrap items-center justify-between gap-4 pb-5 border-b border-black/[0.08] mb-6">
           <div className="flex flex-wrap items-center gap-3">
             <button
               type="button"
@@ -647,84 +923,35 @@ export function CoursesView({
             <button
               type="button"
               onClick={() => setDrawerOpen((prev) => !prev)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border border-black/15 rounded-lg hover:border-black/30"
+              className="lg:hidden inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border border-black/15 rounded-lg hover:border-black/30"
             >
               <List className="w-3.5 h-3.5" />
-              <span>{lang === 'en' ? 'Jump to Lesson' : 'Hitamo Isomo'}</span>
+              <span>{lang === 'en' ? 'Course Navigator' : 'Hitamo Isomo'}</span>
             </button>
           </div>
 
-          <div className="flex items-center gap-3 text-xs text-[#5D5D66] font-mono tabular-nums">
+          <div className="flex flex-wrap items-center gap-3 text-xs text-[#5D5D66] font-mono tabular-nums">
             <span>{`Day ${displayDay} / ${totalCourseDays}`}</span>
             <span aria-hidden="true">·</span>
             <span>{`${structuredRec?.estimatedMinutes ?? lesson.durationMinutes} min`}</span>
+            <span aria-hidden="true">·</span>
+            <span>{structuredRec?.levelTag || lesson.levelTag}</span>
             <span aria-hidden="true">·</span>
             <span>{activeCourse.code}</span>
           </div>
         </div>
 
-        {/* Collapsible Curriculum Jumper Drawer */}
-        {drawerOpen && (
-          <div className="mb-8 bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-5">
-            <div className="flex items-center justify-between mb-3">
-              <p className="text-xs font-semibold text-[#0D0D0F]">
-                {activeCourse.title[lang]} — {lang === 'en' ? 'All Lessons' : 'Amasomo yose'}
-              </p>
-              <button
-                type="button"
-                onClick={() => setDrawerOpen(false)}
-                className="text-xs text-[#5D5D66]"
-              >
-                {lang === 'en' ? 'Close' : 'Funga'}
-              </button>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2">
-              {dayIndices.map((dayNum) => {
-                const sRec = courseStructuredLessons.find((l) => l.dayNumber === dayNum);
-                const staticRec =
-                  activeCourse.id === 'challenge-28'
-                    ? LESSONS_28.find((l) => l.dayNumber === dayNum)
-                    : null;
-                const dWeek = sRec?.weekNumber ?? staticRec?.weekNumber ?? Math.ceil(dayNum / 7);
-                const dMod = sRec?.moduleId
-                  ? modules.find((m) => m.id === sRec.moduleId) ?? null
-                  : modules.find((m) => m.courseId === activeCourse.id && m.orderIndex === dWeek - 1) ?? null;
-                const dReleaseLock = resolveLessonReleaseLock({
-                  courseModule: dMod,
-                  lesson: sRec,
-                  isStaff: isAdmin
-                });
-                const dayUnlocked =
-                  !dReleaseLock.locked &&
-                  Boolean(sRec?.isSample || staticRec?.isSample || isFreeCourse || hasFullAccess);
-                const dayDone = activeEnrollment?.completedDays.includes(dayNum);
-                const isCurrent = dayNum === displayDay;
-                return (
-                  <button
-                    key={dayNum}
-                    type="button"
-                    onClick={() => {
-                      onSelectDay(dayNum);
-                      setDrawerOpen(false);
-                    }}
-                    className={`px-2.5 py-2 text-xs font-mono rounded-lg border text-left flex items-center justify-between ${
-                      isCurrent
-                        ? 'bg-[#0D0D0F] text-white border-[#0D0D0F]'
-                        : dayDone
-                          ? 'bg-[#ECFDF5] border-[#0D7A5F]/30 text-[#0D7A5F]'
-                          : 'bg-white border-black/10 text-[#0D0D0F]'
-                    }`}
-                  >
-                    <span>D{dayNum}</span>
-                    {!dayUnlocked && <Lock className="w-3 h-3 opacity-60" />}
-                    {dayDone && !isCurrent && <Check className="w-3 h-3" />}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        )}
+        {/* Mobile Lesson Navigator Drawer */}
+        {drawerOpen && <div className="lg:hidden mb-6">{renderNavigatorRail()}</div>}
 
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Desktop Persistent Left Lesson Navigator Rail */}
+          <aside className="hidden lg:block lg:col-span-4 xl:col-span-3 sticky top-20">
+            {renderNavigatorRail()}
+          </aside>
+
+          {/* Main Lesson Workspace */}
+          <div className="lg:col-span-8 xl:col-span-9 min-w-0">
         {releaseLock.locked ? (
           <div className="bg-[#FFFBEB] border border-[#D97706]/30 rounded-2xl p-8 sm:p-12 text-center max-w-2xl mx-auto">
             <Clock className="w-8 h-8 text-[#B45309] mx-auto mb-4" />
@@ -804,7 +1031,7 @@ export function CoursesView({
             </div>
           </div>
         ) : (
-          <article className="space-y-10">
+          <article className="space-y-8">
             <header className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
               <div>
                 <p className="text-xs font-medium text-[#0D7A5F] mb-2">
@@ -850,8 +1077,64 @@ export function CoursesView({
               )}
             </header>
 
+            {/* In-Lesson Quick Jump Strip & Low-Bandwidth / Deliverable Summary */}
+            <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-4 space-y-3">
+              {(displayDeliverable || displayWorksheet) && (
+                <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
+                  <div className="space-y-0.5">
+                    {displayDeliverable && (
+                      <p className="text-[#0D0D0F]">
+                        <strong className="text-[#0D7A5F]">
+                          {lang === 'en' ? 'Expected Deliverable: ' : 'Umwitozo Usabwa: '}
+                        </strong>
+                        {displayDeliverable}
+                      </p>
+                    )}
+                    {displayWorksheet && (
+                      <p className="text-[#5D5D66]">
+                        {lang === 'en' ? 'Worksheet: ' : 'Urupapuro: '}
+                        {displayWorksheet}
+                      </p>
+                    )}
+                  </div>
+                  {onNavigate && (
+                    <button
+                      type="button"
+                      onClick={() => onNavigate('projects')}
+                      className="px-3 py-1.5 text-xs font-medium bg-white border border-black/15 rounded-lg hover:border-black/35 shrink-0"
+                    >
+                      {lang === 'en' ? 'Open Toolkit & Templates' : 'Ibikoresho & Impapuro'}
+                    </button>
+                  )}
+                </div>
+              )}
+
+              {!useStructuredReader && (
+                <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-black/[0.06] text-xs">
+                  <span className="text-[#5D5D66] font-mono">
+                    {lang === 'en' ? 'Jump:' : 'Jya kuri:'}
+                  </span>
+                  {[
+                    { href: '#sec-objectives', label: lang === 'en' ? '01 Objectives' : '01 Intego' },
+                    { href: '#sec-explanations', label: lang === 'en' ? '02–03 Explanations' : '02–03 Ibisobanuro' },
+                    { href: '#sec-examples', label: lang === 'en' ? '04–05 Examples' : '04–05 Ingero' },
+                    { href: '#sec-exercise', label: lang === 'en' ? '06 Exercise & Template' : '06 Umwitozo' },
+                    { href: '#sec-check', label: lang === 'en' ? '09 Knowledge Check' : '09 Isuzuma' }
+                  ].map((anchor) => (
+                    <a
+                      key={anchor.href}
+                      href={anchor.href}
+                      className="px-2.5 py-1 rounded-md bg-white border border-black/10 text-[#0D0D0F] hover:border-[#0D7A5F]"
+                    >
+                      {anchor.label}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+
             {displayObjectives.length > 0 && (
-              <section className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6">
+              <section id="sec-objectives" className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6">
                 <h2 className="text-sm font-semibold text-[#0D0D0F] mb-3">
                   {lang === 'en' ? '01. Learning Objectives' : '01. Intego z’Isomo'}
                 </h2>
@@ -871,7 +1154,7 @@ export function CoursesView({
             ) : (
               <>
                 {/* Simple vs Technical Explanation */}
-                <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <section id="sec-explanations" className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="border border-black/[0.08] rounded-2xl p-6">
                     <h2 className="text-sm font-semibold text-[#0D0D0F] mb-2">
                       {lang === 'en' ? '02. Simple Explanation' : '02. Ibisobanuro Byoroshye'}
@@ -891,7 +1174,7 @@ export function CoursesView({
                 </section>
 
                 {/* Real-World & Rwanda Examples */}
-                <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <section id="sec-examples" className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6">
                     <h2 className="text-sm font-semibold text-[#0D0D0F] mb-2">
                       {lang === 'en' ? '04. Global Real-World Example' : '04. Urugero Rusanzwe ku Isi'}
@@ -911,7 +1194,7 @@ export function CoursesView({
                 </section>
 
                 {/* Practical Demonstration & Tools */}
-                <section className="border border-black/[0.08] rounded-2xl p-6 space-y-5">
+                <section id="sec-exercise" className="border border-black/[0.08] rounded-2xl p-6 space-y-5">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <h2 className="text-base font-semibold text-[#0D0D0F]">
                       {lang === 'en'
@@ -990,7 +1273,7 @@ export function CoursesView({
                 </section>
 
                 {/* Knowledge Check */}
-                <section className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6">
+                <section id="sec-check" className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6">
                   <h2 className="text-sm font-semibold text-[#0D0D0F] mb-2">
                     {lang === 'en' ? '09. Knowledge Check' : '09. Isuzuma ry’Isomo'}
                   </h2>
@@ -1187,6 +1470,8 @@ export function CoursesView({
             </section>
           </article>
         )}
+          </div>
+        </div>
       </div>
     );
   }
@@ -1219,7 +1504,7 @@ export function CoursesView({
               {activeCourse.code} · {activeCourse.levelRange} · {activeCourse.durationDays}{' '}
               {lang === 'en' ? 'Days' : 'Iminsi'}
             </p>
-            <h1 className="text-3xl sm:text-4xl font-display font-semibold tracking-tight text-[#0D0D0F] text-balance mb-4">
+            <h1 className="text-3xl sm:text-5xl font-display font-bold tracking-[-0.03em] leading-[1.06] text-[#0D0D0F] text-balance mb-4">
               {activeCourse.title[lang]}
             </h1>
             <p className="text-base text-[#5D5D66] leading-relaxed mb-6">
@@ -1259,17 +1544,50 @@ export function CoursesView({
               </div>
             )}
 
-            <h2 className="text-sm font-semibold text-[#0D0D0F] mb-3">
-              {lang === 'en' ? 'What you will achieve' : 'Icyo uzageraho'}
-            </h2>
-            <ul className="space-y-2.5 mb-6">
-              {activeCourse.outcomes[lang].map((outcome) => (
+            <div className="flex items-center justify-between gap-3 mb-3">
+              <h2 className="text-sm font-semibold text-[#0D0D0F]">
+                {lang === 'en'
+                  ? `Learning Outcomes (${activeCourse.outcomes[lang].length})`
+                  : `Icyo uzageraho (${activeCourse.outcomes[lang].length})`}
+              </h2>
+              {activeCourse.outcomes[lang].length > 5 && (
+                <button
+                  type="button"
+                  onClick={() => setShowAllOutcomes((v) => !v)}
+                  className="text-xs font-medium text-[#0D7A5F] hover:underline"
+                >
+                  {showAllOutcomes
+                    ? lang === 'en'
+                      ? 'Show summary'
+                      : 'Reba bike'
+                    : lang === 'en'
+                      ? `Show all ${activeCourse.outcomes[lang].length} outcomes`
+                      : `Reba byose (${activeCourse.outcomes[lang].length})`}
+                </button>
+              )}
+            </div>
+            <ul className="space-y-2 mb-6">
+              {(showAllOutcomes
+                ? activeCourse.outcomes[lang]
+                : activeCourse.outcomes[lang].slice(0, 5)
+              ).map((outcome) => (
                 <li key={outcome} className="text-sm text-[#5D5D66] flex items-start gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-[#0D7A5F] shrink-0 mt-0.5" />
                   <span>{outcome}</span>
                 </li>
               ))}
             </ul>
+
+            {activeCourse.audience[lang].length > 0 && (
+              <div className="mb-6 bg-[#F9F9FB] border border-black/[0.08] rounded-xl p-4">
+                <p className="text-xs font-semibold text-[#0D0D0F] mb-2">
+                  {lang === 'en' ? 'Target Learners' : 'Abo isomo rigenewe'}
+                </p>
+                <p className="text-xs text-[#5D5D66] leading-relaxed">
+                  {activeCourse.audience[lang].join(' · ')}
+                </p>
+              </div>
+            )}
 
             <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-xl p-4 flex items-start gap-3">
               <div className="flex items-center gap-1 text-[#0D0D0F] shrink-0 mt-0.5">
@@ -1364,12 +1682,16 @@ export function CoursesView({
                       )}
                       <button
                         type="button"
-                        onClick={() => onSelectDay(activeEnrollment?.currentDay ?? 1)}
+                        onClick={() =>
+                          onSelectDay(
+                            lastVisitedByCourse[activeCourse.id] || activeEnrollment?.currentDay || 1
+                          )
+                        }
                         className="w-full px-4 py-3 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329] transition-colors"
                       >
                         {lang === 'en'
-                          ? `Continue Day ${activeEnrollment?.currentDay ?? 1}`
-                          : `Komeza Umunsi wa ${activeEnrollment?.currentDay ?? 1}`}
+                          ? `Continue Day ${lastVisitedByCourse[activeCourse.id] || activeEnrollment?.currentDay || 1}`
+                          : `Komeza Umunsi wa ${lastVisitedByCourse[activeCourse.id] || activeEnrollment?.currentDay || 1}`}
                       </button>
                     </div>
                   ) : pendingEnrollment ? (
@@ -1454,7 +1776,7 @@ export function CoursesView({
           </div>
         </div>
 
-        {/* Hierarchical Firestore Modules OR 28-Day Static Syllabus Accordion */}
+        {/* Fast Course Action Strip & Sub-Tab Switcher */}
         {(() => {
           const courseModules = modules
             .filter((m) => m.courseId === activeCourse.id && (m.isPublished || isAdmin))
@@ -1462,264 +1784,598 @@ export function CoursesView({
           const courseStructuredLessons = structuredLessons
             .filter((l) => l.courseId === activeCourse.id)
             .sort((a, b) => (a.dayNumber ?? 0) - (b.dayNumber ?? 0));
+          const hasStructured = courseModules.length > 0 && courseStructuredLessons.length > 0;
+          const sampleDays = hasStructured
+            ? courseStructuredLessons.filter((l) => l.isSample).map((l) => l.dayNumber)
+            : activeCourse.id === 'challenge-28'
+              ? [1, 2, 8, 15, 22]
+              : [1];
+          const resumeDay =
+            lastVisitedByCourse[activeCourse.id] || activeEnrollment?.currentDay || 1;
+          const qSyll = syllabusSearch.trim().toLowerCase();
 
-          if (courseModules.length > 0 && courseStructuredLessons.length > 0) {
-            return (
-              <section className="pt-12">
-                <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
-                  <div>
-                    <h2 className="text-2xl font-display font-semibold text-[#0D0D0F]">
-                      {lang === 'en' ? 'Structured Course Curriculum' : 'Gahunda y’Amasomo'}
-                    </h2>
-                    <p className="text-sm text-[#5D5D66] mt-1">
-                      {courseModules.length} {lang === 'en' ? 'modules' : 'ibyiciro'} ·{' '}
-                      {courseStructuredLessons.length} {lang === 'en' ? 'lessons' : 'amasomo'}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  {courseModules.map((mod, mIdx) => {
-                    const modLessons = courseStructuredLessons.filter((l) => l.moduleId === mod.id);
-                    const isOpen = (openModuleId ?? courseModules[0].id) === mod.id;
-                    const modReleaseLock = resolveLessonReleaseLock({
-                      courseModule: mod,
-                      isStaff: isAdmin
-                    });
-                    return (
-                      <div
-                        key={mod.id}
-                        className="border border-black/[0.08] rounded-2xl overflow-hidden bg-white"
-                      >
-                        <button
-                          type="button"
-                          onClick={() => setOpenModuleId(isOpen ? '' : mod.id)}
-                          className="w-full px-6 py-4 flex items-center justify-between gap-4 text-left hover:bg-[#F9F9FB] transition-colors"
-                        >
-                          <div>
-                            <p className="text-xs font-mono text-[#0D7A5F] tabular-nums">
-                              {lang === 'en' ? `Module 0${mIdx + 1}` : `Igice cya 0${mIdx + 1}`}
-                              {modReleaseLock.locked && (
-                                <span className="ml-2 text-[#B45309]">
-                                  ·{' '}
-                                  {lang === 'en'
-                                    ? `Unlocks ${formatReleaseDateLabel(modReleaseLock.effectiveReleaseAt, modReleaseLock.effectiveReleaseAtMs, lang)}`
-                                    : `Izafungurwa ${formatReleaseDateLabel(modReleaseLock.effectiveReleaseAt, modReleaseLock.effectiveReleaseAtMs, lang)}`}
-                                </span>
-                              )}
-                            </p>
-                            <h3 className="text-base font-semibold text-[#0D0D0F]">
-                              {lang === 'en' ? mod.titleEn : mod.titleRw}
-                            </h3>
-                          </div>
-                          {isOpen ? (
-                            <ChevronUp className="w-5 h-5 text-[#5D5D66]" />
-                          ) : (
-                            <ChevronDown className="w-5 h-5 text-[#5D5D66]" />
-                          )}
-                        </button>
-
-                        {isOpen && (
-                          <div className="border-t border-black/[0.06] divide-y divide-black/[0.06]">
-                            {modLessons.map((les) => {
-                              const lesLock = resolveLessonReleaseLock({
-                                courseModule: mod,
-                                lesson: les,
-                                isStaff: isAdmin
-                              });
-                              const unlocked =
-                                !lesLock.locked && (les.isSample || isFreeCourse || hasFullAccess);
-                              const done = activeEnrollment?.completedDays.includes(les.dayNumber);
-                              return (
-                                <button
-                                  key={les.id}
-                                  type="button"
-                                  onClick={() => onSelectDay(les.dayNumber)}
-                                  className="w-full px-6 py-4 flex items-center justify-between gap-4 text-left hover:bg-[#F9F9FB] transition-colors"
-                                >
-                                  <div className="flex items-center gap-4 min-w-0">
-                                    <span className="text-xs font-mono tabular-nums text-[#5D5D66] w-14 shrink-0">
-                                      {lang === 'en' ? `Day ${les.dayNumber}` : `Umunsi ${les.dayNumber}`}
-                                    </span>
-                                    <div className="min-w-0">
-                                      <p className="text-sm font-medium text-[#0D0D0F] truncate">
-                                        {lang === 'en' ? les.titleEn : les.titleRw}
-                                      </p>
-                                      <p className="text-xs text-[#5D5D66] font-mono tabular-nums">
-                                        {les.estimatedMinutes || 15} min
-                                      </p>
-                                    </div>
-                                  </div>
-                                  <div className="flex items-center gap-3 shrink-0">
-                                    {done && (
-                                      <span className="text-xs font-medium text-[#0D7A5F]">
-                                        {lang === 'en' ? 'Done' : 'Byarangiye'}
-                                      </span>
-                                    )}
-                                    {lesLock.locked && (
-                                      <span className="inline-flex items-center gap-1 text-xs font-medium text-[#B45309]">
-                                        <Clock className="w-3.5 h-3.5" />
-                                        <span>
-                                          {formatReleaseDateLabel(
-                                            lesLock.effectiveReleaseAt,
-                                            lesLock.effectiveReleaseAtMs,
-                                            lang
-                                          )}
-                                        </span>
-                                      </span>
-                                    )}
-                                    {!lesLock.locked && les.isSample && !hasFullAccess && (
-                                      <span className="text-xs font-medium text-[#0D7A5F]">
-                                        {lang === 'en' ? 'Free sample' : 'Ubuntu'}
-                                      </span>
-                                    )}
-                                    {!unlocked ? (
-                                      <Lock className="w-4 h-4 text-[#5D5D66]" />
-                                    ) : (
-                                      <ArrowRight className="w-4 h-4 text-[#0D0D0F]" />
-                                    )}
-                                  </div>
-                                </button>
-                              );
-                            })}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </section>
-            );
-          }
-
-          if (activeCourse.id === 'challenge-28') {
-            return (
-              <section className="pt-12">
-                <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
-                  <div>
-                    <h2 className="text-2xl font-display font-semibold text-[#0D0D0F]">
-                      {lang === 'en' ? 'Complete 28-Day Curriculum' : 'Gahunda yuzuye y’Iminsi 28'}
-                    </h2>
-                    <p className="text-sm text-[#5D5D66] mt-1">
+          return (
+            <section className="pt-8 space-y-6">
+              {/* Quick Navigation Strip */}
+              <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3">
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => onSelectDay(resumeDay)}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-white bg-[#0D7A5F] rounded-lg hover:bg-[#0B664F]"
+                  >
+                    <Play className="w-3.5 h-3.5" />
+                    <span>
                       {lang === 'en'
-                        ? 'Days 1, 2, 8, 15, and 22 are unlocked as free sample lessons for all visitors.'
-                        : 'Iminsi ya 1, 2, 8, 15 na 22 irafunguye ku buntu kuri buri wese.'}
-                    </p>
+                        ? `Jump to Day ${resumeDay}`
+                        : `Fungura Umunsi wa ${resumeDay}`}
+                    </span>
+                  </button>
+                  <div className="flex flex-wrap items-center gap-1.5 text-xs">
+                    <span className="text-[#5D5D66] ml-1">
+                      {lang === 'en' ? 'Free Samples:' : 'Ubuntu:'}
+                    </span>
+                    {sampleDays.map((sDay) => (
+                      <button
+                        key={sDay}
+                        type="button"
+                        onClick={() => onSelectDay(sDay)}
+                        className="px-2.5 py-1.5 font-mono text-xs bg-white border border-black/15 rounded-lg hover:border-[#0D7A5F]"
+                      >
+                        D{sDay}
+                      </button>
+                    ))}
                   </div>
                 </div>
 
-                <div className="space-y-4">
-                  {weeks.map((weekNum) => {
-                    const weekLessons = LESSONS_28.filter((l) => l.weekNumber === weekNum);
-                    const weekTitle = weekLessons[0]?.weekTitle[lang] ?? `Week ${weekNum}`;
-                    const isOpen = openWeek === weekNum;
-                    const weekMod =
-                      modules.find(
-                        (m) => m.courseId === activeCourse.id && m.orderIndex === weekNum - 1
-                      ) ?? null;
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setDetailTab('syllabus')}
+                    className={`px-3 py-1.5 text-xs font-medium rounded-lg border ${
+                      detailTab === 'syllabus'
+                        ? 'bg-[#0D0D0F] text-white border-[#0D0D0F]'
+                        : 'bg-white text-[#5D5D66] border-black/10'
+                    }`}
+                  >
+                    {lang === 'en' ? 'Syllabus & Finder' : 'Amasomo'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setDetailTab('blueprint')}
+                    className={`px-3 py-1.5 text-xs font-medium rounded-lg border ${
+                      detailTab === 'blueprint'
+                        ? 'bg-[#0D0D0F] text-white border-[#0D0D0F]'
+                        : 'bg-white text-[#5D5D66] border-black/10'
+                    }`}
+                  >
+                    {lang === 'en' ? '7 Levels & Grading Rubric' : 'Ibyiciro & Amanota'}
+                  </button>
+                  {onNavigate && (
+                    <button
+                      type="button"
+                      onClick={() => onNavigate('projects')}
+                      className="px-3 py-1.5 text-xs font-medium bg-white border border-black/15 rounded-lg hover:border-black/30"
+                    >
+                      {lang === 'en' ? '6 Projects & Toolkits' : 'Imishinga 6'}
+                    </button>
+                  )}
+                </div>
+              </div>
 
-                    return (
-                      <div
-                        key={weekNum}
-                        className="border border-black/[0.08] rounded-2xl overflow-hidden bg-white"
-                      >
-                        <button
-                          type="button"
-                          onClick={() => setOpenWeek(isOpen ? 0 : weekNum)}
-                          className="w-full px-6 py-4 flex items-center justify-between gap-4 text-left hover:bg-[#F9F9FB] transition-colors"
+              {detailTab === 'blueprint' ? (
+                <div className="space-y-8 pt-2">
+                  {/* Blueprint Master Specification PDF Link & Course Scope */}
+                  <div className="bg-white border border-black/[0.08] rounded-2xl p-6 flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                      <p className="text-xs font-mono text-[#0D7A5F] mb-1">
+                        ACADEMIC &amp; PRODUCT MASTER BLUEPRINT · VERSION 1.0
+                      </p>
+                      <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+                        {lang === 'en'
+                          ? 'Grading Structure, 7-Level Alignment & Course Standards'
+                          : 'Imiterere y’Amanota n’Ibyiciro 7'}
+                      </h2>
+                      <p className="text-xs text-[#5D5D66] mt-1 max-w-2xl">
+                        {lang === 'en'
+                          ? 'Every lesson includes 16 structured sections (simple & technical explanations, Rwanda example, guided exercise, downloadable resource, verification check & reflection). Passing requires >=70% overall plus Final Project demonstration.'
+                          : 'Buri somo ririmo ibice 16 birimo imyitozo ngiro, urugero rwo mu Rwanda, impapuro n’isuzuma. Gutahukana impamyabumenyi bisaba nibura 70%.'}
+                      </p>
+                    </div>
+                    <a
+                      href="/assets/aistudio/first_28_day_AI_COURSE_f519e752.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2 text-xs font-medium bg-[#0D0D0F] text-white rounded-lg hover:bg-[#232329]"
+                    >
+                      <FileText className="w-3.5 h-3.5" />
+                      <span>
+                        {lang === 'en' ? 'Open Master Blueprint PDF' : 'Fungura Inyandiko ya Blueprint'}
+                      </span>
+                    </a>
+                  </div>
+
+                  {/* Section 6 Assessment Weights */}
+                  <div>
+                    <h3 className="text-base font-semibold text-[#0D0D0F] mb-3">
+                      {lang === 'en'
+                        ? 'Section 6 Assessment Weighting (100%)'
+                        : 'Uko Amanota Agabanywa (100%)'}
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {BLUEPRINT_GRADING_BREAKDOWN.map((w) => (
+                        <div
+                          key={w.id}
+                          className="bg-white border border-black/[0.08] rounded-xl p-4 space-y-1.5"
+                        >
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="text-xs font-semibold text-[#0D0D0F]">
+                              {w.label[lang]}
+                            </span>
+                            <span className="text-sm font-mono font-semibold text-[#0D7A5F] tabular-nums">
+                              {w.weightPct}%
+                            </span>
+                          </div>
+                          <p className="text-xs text-[#5D5D66] leading-relaxed">
+                            {w.requirement[lang]}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 7-Criterion Final Project Rubric */}
+                  <div>
+                    <h3 className="text-base font-semibold text-[#0D0D0F] mb-3">
+                      {lang === 'en'
+                        ? 'Final Project Rubric (7 Criteria · 30% Capstone)'
+                        : 'Ibipimo 7 by’Umushinga wa Nyuma (30%)'}
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {FINAL_PROJECT_RUBRIC_7.map((c) => (
+                        <div
+                          key={c.id}
+                          className="bg-[#F9F9FB] border border-black/[0.08] rounded-xl p-4 flex items-start justify-between gap-4"
                         >
                           <div>
-                            <p className="text-xs font-mono text-[#0D7A5F] tabular-nums">
-                              {lang === 'en' ? `Week 0${weekNum}` : `Icyumweru cya 0${weekNum}`}
-                            </p>
-                            <h3 className="text-base font-semibold text-[#0D0D0F]">{weekTitle}</h3>
+                            <p className="text-xs font-semibold text-[#0D0D0F]">{c.criterion[lang]}</p>
+                            <p className="text-xs text-[#5D5D66] mt-0.5">{c.description[lang]}</p>
                           </div>
-                          {isOpen ? (
-                            <ChevronUp className="w-5 h-5 text-[#5D5D66]" />
-                          ) : (
-                            <ChevronDown className="w-5 h-5 text-[#5D5D66]" />
-                          )}
-                        </button>
+                          <span className="text-xs font-mono font-semibold text-[#0D7A5F] tabular-nums shrink-0">
+                            {c.weightPct}%
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
 
-                        {isOpen && (
-                          <div className="border-t border-black/[0.06] divide-y divide-black/[0.06]">
-                            {weekLessons.map((lesson) => {
-                              const sRec =
-                                courseStructuredLessons.find(
-                                  (l) => l.dayNumber === lesson.dayNumber
-                                ) ?? null;
-                              const lesLock = resolveLessonReleaseLock({
-                                courseModule: weekMod,
-                                lesson: sRec,
-                                isStaff: isAdmin
-                              });
-                              const unlocked =
-                                !lesLock.locked && (lesson.isSample || hasFullAccess);
-                              const done = activeEnrollment?.completedDays.includes(lesson.dayNumber);
-                              return (
-                                <button
-                                  key={lesson.dayNumber}
-                                  type="button"
-                                  onClick={() => onSelectDay(lesson.dayNumber)}
-                                  className="w-full px-6 py-4 flex items-center justify-between gap-4 text-left hover:bg-[#F9F9FB] transition-colors"
-                                >
-                                  <div className="flex items-center gap-4 min-w-0">
-                                    <span className="text-xs font-mono tabular-nums text-[#5D5D66] w-14 shrink-0">
-                                      {lang === 'en' ? `Day ${lesson.dayNumber}` : `Umunsi ${lesson.dayNumber}`}
-                                    </span>
-                                    <div className="min-w-0">
-                                      <p className="text-sm font-medium text-[#0D0D0F] truncate">
-                                        {lesson.title[lang]}
-                                      </p>
-                                      <p className="text-xs text-[#5D5D66] truncate">
-                                        {lesson.tools.join(' · ')}
-                                      </p>
-                                    </div>
-                                  </div>
-
-                                  <div className="flex items-center gap-3 shrink-0">
-                                    {done && (
-                                      <span className="text-xs font-medium text-[#0D7A5F]">
-                                        {lang === 'en' ? 'Done' : 'Byarangiye'}
-                                      </span>
-                                    )}
-                                    {lesLock.locked && (
-                                      <span className="inline-flex items-center gap-1 text-xs font-medium text-[#B45309]">
-                                        <Clock className="w-3.5 h-3.5" />
-                                        <span>
-                                          {formatReleaseDateLabel(
-                                            lesLock.effectiveReleaseAt,
-                                            lesLock.effectiveReleaseAtMs,
-                                            lang
-                                          )}
-                                        </span>
-                                      </span>
-                                    )}
-                                    {!lesLock.locked && lesson.isSample && !hasFullAccess && (
-                                      <span className="text-xs font-medium text-[#0D7A5F]">
-                                        {lang === 'en' ? 'Free sample' : 'Ubuntu'}
-                                      </span>
-                                    )}
-                                    {!unlocked ? (
-                                      <Lock className="w-4 h-4 text-[#5D5D66]" />
-                                    ) : (
-                                      <ArrowRight className="w-4 h-4 text-[#0D0D0F]" />
-                                    )}
-                                  </div>
-                                </button>
-                              );
-                            })}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
+                  {/* 7-Level Skills Matrix */}
+                  <div>
+                    <h3 className="text-base font-semibold text-[#0D0D0F] mb-3">
+                      {lang === 'en' ? 'Seven-Level AI Skills Progression' : 'Ibyiciro 7 by’Ubumenyi'}
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {LEARNING_LEVELS.map((lvl) => (
+                        <div
+                          key={lvl.level}
+                          className="bg-white border border-black/[0.08] rounded-xl p-4 space-y-1.5"
+                        >
+                          <p className="text-xs font-mono text-[#0D7A5F] tabular-nums">
+                            Level 0{lvl.level} {lvl.codeRange ? `· ${lvl.codeRange}` : ''}
+                          </p>
+                          <p className="text-sm font-semibold text-[#0D0D0F]">{lvl.title[lang]}</p>
+                          <p className="text-xs text-[#5D5D66]">{lvl.outcome[lang]}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              </section>
-            );
-          }
+              ) : hasStructured ? (
+                <div className="space-y-4">
+                  <div className="flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                      <h2 className="text-2xl font-display font-semibold text-[#0D0D0F]">
+                        {lang === 'en' ? 'Structured Course Curriculum' : 'Gahunda y’Amasomo'}
+                      </h2>
+                      <p className="text-sm text-[#5D5D66] mt-1">
+                        {courseModules.length} {lang === 'en' ? 'modules' : 'ibyiciro'} ·{' '}
+                        {courseStructuredLessons.length} {lang === 'en' ? 'lessons' : 'amasomo'}
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <div className="relative">
+                        <Search className="w-3.5 h-3.5 text-[#5D5D66] absolute left-3 top-1/2 -translate-y-1/2" />
+                        <input
+                          type="search"
+                          value={syllabusSearch}
+                          onChange={(e) => setSyllabusSearch(e.target.value)}
+                          placeholder={lang === 'en' ? 'Search syllabus...' : 'Shakisha isomo...'}
+                          className="pl-8 pr-3 py-1.5 text-xs bg-white border border-black/15 rounded-lg"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setExpandAllSyllabus((v) => !v)}
+                        className="px-3 py-1.5 text-xs font-medium bg-white border border-black/15 rounded-lg hover:border-black/30"
+                      >
+                        {expandAllSyllabus
+                          ? lang === 'en'
+                            ? 'Collapse All'
+                            : 'Funga Yose'
+                          : lang === 'en'
+                            ? 'Expand All'
+                            : 'Fungura Yose'}
+                      </button>
+                    </div>
+                  </div>
 
-          return null;
+                  {/* Module / Week Quick Tabs */}
+                  <div className="flex flex-wrap gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setSyllabusWeekFilter('all')}
+                      className={`px-3 py-1.5 text-xs font-medium rounded-lg border ${
+                        syllabusWeekFilter === 'all'
+                          ? 'bg-[#0D0D0F] text-white border-[#0D0D0F]'
+                          : 'bg-white text-[#5D5D66] border-black/10'
+                      }`}
+                    >
+                      {lang === 'en' ? 'All Modules' : 'Byose'}
+                    </button>
+                    {courseModules.map((m, idx) => (
+                      <button
+                        key={m.id}
+                        type="button"
+                        onClick={() => {
+                          setSyllabusWeekFilter(idx + 1);
+                          setOpenModuleId(m.id);
+                        }}
+                        className={`px-3 py-1.5 text-xs font-medium rounded-lg border ${
+                          syllabusWeekFilter === idx + 1
+                            ? 'bg-[#0D0D0F] text-white border-[#0D0D0F]'
+                            : 'bg-white text-[#5D5D66] border-black/10'
+                        }`}
+                      >
+                        {lang === 'en' ? `Module ${idx + 1}` : `Igice ${idx + 1}`}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="space-y-4">
+                    {courseModules
+                      .filter((_, idx) => syllabusWeekFilter === 'all' || syllabusWeekFilter === idx + 1)
+                      .map((mod, mIdx) => {
+                        const modLessons = courseStructuredLessons.filter((l) => {
+                          if (l.moduleId !== mod.id) return false;
+                          if (!qSyll) return true;
+                          return (
+                            l.titleEn.toLowerCase().includes(qSyll) ||
+                            l.titleRw.toLowerCase().includes(qSyll) ||
+                            (l.deliverableEn || '').toLowerCase().includes(qSyll) ||
+                            `day ${l.dayNumber}`.includes(qSyll)
+                          );
+                        });
+                        if (qSyll && modLessons.length === 0) return null;
+                        const isOpen =
+                          expandAllSyllabus ||
+                          Boolean(qSyll) ||
+                          (openModuleId ?? courseModules[0].id) === mod.id;
+                        const modReleaseLock = resolveLessonReleaseLock({
+                          courseModule: mod,
+                          isStaff: isAdmin
+                        });
+                        return (
+                          <div
+                            key={mod.id}
+                            className="border border-black/[0.08] rounded-2xl overflow-hidden bg-white"
+                          >
+                            <button
+                              type="button"
+                              onClick={() => setOpenModuleId(isOpen ? '' : mod.id)}
+                              className="w-full px-6 py-4 flex items-center justify-between gap-4 text-left hover:bg-[#F9F9FB] transition-colors"
+                            >
+                              <div>
+                                <p className="text-xs font-mono text-[#0D7A5F] tabular-nums">
+                                  {lang === 'en' ? `Module 0${mIdx + 1}` : `Igice cya 0${mIdx + 1}`}
+                                  {modReleaseLock.locked && (
+                                    <span className="ml-2 text-[#B45309]">
+                                      ·{' '}
+                                      {lang === 'en'
+                                        ? `Unlocks ${formatReleaseDateLabel(modReleaseLock.effectiveReleaseAt, modReleaseLock.effectiveReleaseAtMs, lang)}`
+                                        : `Izafungurwa ${formatReleaseDateLabel(modReleaseLock.effectiveReleaseAt, modReleaseLock.effectiveReleaseAtMs, lang)}`}
+                                    </span>
+                                  )}
+                                </p>
+                                <h3 className="text-base font-semibold text-[#0D0D0F]">
+                                  {lang === 'en' ? mod.titleEn : mod.titleRw}
+                                </h3>
+                              </div>
+                              {isOpen ? (
+                                <ChevronUp className="w-5 h-5 text-[#5D5D66]" />
+                              ) : (
+                                <ChevronDown className="w-5 h-5 text-[#5D5D66]" />
+                              )}
+                            </button>
+
+                            {isOpen && (
+                              <div className="border-t border-black/[0.06] divide-y divide-black/[0.06]">
+                                {modLessons.map((les) => {
+                                  const lesLock = resolveLessonReleaseLock({
+                                    courseModule: mod,
+                                    lesson: les,
+                                    isStaff: isAdmin
+                                  });
+                                  const unlocked =
+                                    !lesLock.locked && (les.isSample || isFreeCourse || hasFullAccess);
+                                  const done = activeEnrollment?.completedDays.includes(les.dayNumber);
+                                  return (
+                                    <button
+                                      key={les.id}
+                                      type="button"
+                                      onClick={() => onSelectDay(les.dayNumber)}
+                                      className="w-full px-6 py-4 flex items-center justify-between gap-4 text-left hover:bg-[#F9F9FB] transition-colors"
+                                    >
+                                      <div className="flex items-center gap-4 min-w-0">
+                                        <span className="text-xs font-mono tabular-nums text-[#5D5D66] w-14 shrink-0">
+                                          {lang === 'en' ? `Day ${les.dayNumber}` : `Umunsi ${les.dayNumber}`}
+                                        </span>
+                                        <div className="min-w-0">
+                                          <p className="text-sm font-medium text-[#0D0D0F] truncate">
+                                            {lang === 'en' ? les.titleEn : les.titleRw}
+                                          </p>
+                                          <p className="text-xs text-[#5D5D66] truncate tabular-nums">
+                                            {les.estimatedMinutes || 15} min
+                                            {les.deliverableEn
+                                              ? ` · ${lang === 'en' ? les.deliverableEn : les.deliverableRw || les.deliverableEn}`
+                                              : ''}
+                                          </p>
+                                        </div>
+                                      </div>
+                                      <div className="flex items-center gap-3 shrink-0">
+                                        {done && (
+                                          <span className="text-xs font-medium text-[#0D7A5F]">
+                                            {lang === 'en' ? 'Done' : 'Byarangiye'}
+                                          </span>
+                                        )}
+                                        {lesLock.locked && (
+                                          <span className="inline-flex items-center gap-1 text-xs font-medium text-[#B45309]">
+                                            <Clock className="w-3.5 h-3.5" />
+                                            <span>
+                                              {formatReleaseDateLabel(
+                                                lesLock.effectiveReleaseAt,
+                                                lesLock.effectiveReleaseAtMs,
+                                                lang
+                                              )}
+                                            </span>
+                                          </span>
+                                        )}
+                                        {!lesLock.locked && les.isSample && !hasFullAccess && (
+                                          <span className="text-xs font-medium text-[#0D7A5F]">
+                                            {lang === 'en' ? 'Free sample' : 'Ubuntu'}
+                                          </span>
+                                        )}
+                                        {!unlocked ? (
+                                          <Lock className="w-4 h-4 text-[#5D5D66]" />
+                                        ) : (
+                                          <ArrowRight className="w-4 h-4 text-[#0D0D0F]" />
+                                        )}
+                                      </div>
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                  </div>
+                </div>
+              ) : activeCourse.id === 'challenge-28' ? (
+                <div className="space-y-4">
+                  <div className="flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                      <h2 className="text-2xl font-display font-semibold text-[#0D0D0F]">
+                        {lang === 'en' ? 'Complete 28-Day Curriculum' : 'Gahunda yuzuye y’Iminsi 28'}
+                      </h2>
+                      <p className="text-sm text-[#5D5D66] mt-1">
+                        {lang === 'en'
+                          ? 'Days 1, 2, 8, 15, and 22 are unlocked as free sample lessons for all visitors.'
+                          : 'Iminsi ya 1, 2, 8, 15 na 22 irafunguye ku buntu kuri buri wese.'}
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <div className="relative">
+                        <Search className="w-3.5 h-3.5 text-[#5D5D66] absolute left-3 top-1/2 -translate-y-1/2" />
+                        <input
+                          type="search"
+                          value={syllabusSearch}
+                          onChange={(e) => setSyllabusSearch(e.target.value)}
+                          placeholder={lang === 'en' ? 'Search days or tools...' : 'Shakisha isomo...'}
+                          className="pl-8 pr-3 py-1.5 text-xs bg-white border border-black/15 rounded-lg"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setExpandAllSyllabus((v) => !v)}
+                        className="px-3 py-1.5 text-xs font-medium bg-white border border-black/15 rounded-lg hover:border-black/30"
+                      >
+                        {expandAllSyllabus
+                          ? lang === 'en'
+                            ? 'Collapse All'
+                            : 'Funga Yose'
+                          : lang === 'en'
+                            ? 'Expand All'
+                            : 'Fungura Yose'}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Week Filter Tabs */}
+                  <div className="flex flex-wrap gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setSyllabusWeekFilter('all')}
+                      className={`px-3 py-1.5 text-xs font-medium rounded-lg border ${
+                        syllabusWeekFilter === 'all'
+                          ? 'bg-[#0D0D0F] text-white border-[#0D0D0F]'
+                          : 'bg-white text-[#5D5D66] border-black/10'
+                      }`}
+                    >
+                      {lang === 'en' ? 'All 4 Weeks' : 'Ibyumweru 4'}
+                    </button>
+                    {weeks.map((wk) => (
+                      <button
+                        key={wk}
+                        type="button"
+                        onClick={() => {
+                          setSyllabusWeekFilter(wk);
+                          setOpenWeek(wk);
+                        }}
+                        className={`px-3 py-1.5 text-xs font-medium rounded-lg border ${
+                          syllabusWeekFilter === wk
+                            ? 'bg-[#0D0D0F] text-white border-[#0D0D0F]'
+                            : 'bg-white text-[#5D5D66] border-black/10'
+                        }`}
+                      >
+                        {lang === 'en' ? `Week ${wk}` : `Icyumweru ${wk}`}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="space-y-4">
+                    {weeks
+                      .filter((w) => syllabusWeekFilter === 'all' || syllabusWeekFilter === w)
+                      .map((weekNum) => {
+                        const weekLessons = LESSONS_28.filter((l) => {
+                          if (l.weekNumber !== weekNum) return false;
+                          if (!qSyll) return true;
+                          return (
+                            l.title.en.toLowerCase().includes(qSyll) ||
+                            l.title.rw.toLowerCase().includes(qSyll) ||
+                            (l.deliverable?.en || '').toLowerCase().includes(qSyll) ||
+                            l.tools.join(' ').toLowerCase().includes(qSyll) ||
+                            `day ${l.dayNumber}`.includes(qSyll)
+                          );
+                        });
+                        if (qSyll && weekLessons.length === 0) return null;
+                        const weekTitle =
+                          LESSONS_28.find((l) => l.weekNumber === weekNum)?.weekTitle[lang] ??
+                          `Week ${weekNum}`;
+                        const isOpen = expandAllSyllabus || Boolean(qSyll) || openWeek === weekNum;
+                        const weekMod =
+                          modules.find(
+                            (m) => m.courseId === activeCourse.id && m.orderIndex === weekNum - 1
+                          ) ?? null;
+
+                        return (
+                          <div
+                            key={weekNum}
+                            className="border border-black/[0.08] rounded-2xl overflow-hidden bg-white"
+                          >
+                            <button
+                              type="button"
+                              onClick={() => setOpenWeek(isOpen ? 0 : weekNum)}
+                              className="w-full px-6 py-4 flex items-center justify-between gap-4 text-left hover:bg-[#F9F9FB] transition-colors"
+                            >
+                              <div>
+                                <p className="text-xs font-mono text-[#0D7A5F] tabular-nums">
+                                  {lang === 'en' ? `Week 0${weekNum}` : `Icyumweru cya 0${weekNum}`}
+                                </p>
+                                <h3 className="text-base font-semibold text-[#0D0D0F]">{weekTitle}</h3>
+                              </div>
+                              {isOpen ? (
+                                <ChevronUp className="w-5 h-5 text-[#5D5D66]" />
+                              ) : (
+                                <ChevronDown className="w-5 h-5 text-[#5D5D66]" />
+                              )}
+                            </button>
+
+                            {isOpen && (
+                              <div className="border-t border-black/[0.06] divide-y divide-black/[0.06]">
+                                {weekLessons.map((lesson) => {
+                                  const sRec =
+                                    courseStructuredLessons.find(
+                                      (l) => l.dayNumber === lesson.dayNumber
+                                    ) ?? null;
+                                  const lesLock = resolveLessonReleaseLock({
+                                    courseModule: weekMod,
+                                    lesson: sRec,
+                                    isStaff: isAdmin
+                                  });
+                                  const unlocked =
+                                    !lesLock.locked && (lesson.isSample || hasFullAccess);
+                                  const done = activeEnrollment?.completedDays.includes(lesson.dayNumber);
+                                  return (
+                                    <button
+                                      key={lesson.dayNumber}
+                                      type="button"
+                                      onClick={() => onSelectDay(lesson.dayNumber)}
+                                      className="w-full px-6 py-4 flex items-center justify-between gap-4 text-left hover:bg-[#F9F9FB] transition-colors"
+                                    >
+                                      <div className="flex items-center gap-4 min-w-0">
+                                        <span className="text-xs font-mono tabular-nums text-[#5D5D66] w-14 shrink-0">
+                                          {lang === 'en' ? `Day ${lesson.dayNumber}` : `Umunsi ${lesson.dayNumber}`}
+                                        </span>
+                                        <div className="min-w-0">
+                                          <p className="text-sm font-medium text-[#0D0D0F] truncate">
+                                            {lesson.title[lang]}
+                                          </p>
+                                          <p className="text-xs text-[#5D5D66] truncate">
+                                            {lesson.deliverable
+                                              ? `${lesson.deliverable[lang]} · ${lesson.tools.join(' · ')}`
+                                              : lesson.tools.join(' · ')}
+                                          </p>
+                                        </div>
+                                      </div>
+
+                                      <div className="flex items-center gap-3 shrink-0">
+                                        {done && (
+                                          <span className="text-xs font-medium text-[#0D7A5F]">
+                                            {lang === 'en' ? 'Done' : 'Byarangiye'}
+                                          </span>
+                                        )}
+                                        {lesLock.locked && (
+                                          <span className="inline-flex items-center gap-1 text-xs font-medium text-[#B45309]">
+                                            <Clock className="w-3.5 h-3.5" />
+                                            <span>
+                                              {formatReleaseDateLabel(
+                                                lesLock.effectiveReleaseAt,
+                                                lesLock.effectiveReleaseAtMs,
+                                                lang
+                                              )}
+                                            </span>
+                                          </span>
+                                        )}
+                                        {!lesLock.locked && lesson.isSample && !hasFullAccess && (
+                                          <span className="text-xs font-medium text-[#0D7A5F]">
+                                            {lang === 'en' ? 'Free sample' : 'Ubuntu'}
+                                          </span>
+                                        )}
+                                        {!unlocked ? (
+                                          <Lock className="w-4 h-4 text-[#5D5D66]" />
+                                        ) : (
+                                          <ArrowRight className="w-4 h-4 text-[#0D0D0F]" />
+                                        )}
+                                      </div>
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6 text-sm text-[#5D5D66]">
+                  {lang === 'en'
+                    ? 'Curriculum modules for this upcoming track are currently being finalized by our academic team.'
+                    : 'Gahunda y’iri somo rishya iri gutegurwa n’ikipe y’uburezi.'}
+                </div>
+              )}
+            </section>
+          );
         })()}
 
         {/* Mobile Money Checkout Modal (with Coupon Engine) */}
@@ -1957,198 +2613,307 @@ export function CoursesView({
   const comparedCourses = catalog.filter((c) => compareIds.includes(c.id));
 
   return (
-    <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-12">
-      <header className="max-w-2xl mb-10">
-        <p className="text-xs font-medium text-[#0D7A5F] mb-2">
-          {lang === 'en' ? 'Courses & Learning Paths' : 'Amasomo n’Inzira zo Kwiga'}
-        </p>
-        <h1 className="text-3xl sm:text-4xl font-display font-semibold tracking-tight text-[#0D0D0F] mb-3">
-          {lang === 'en' ? 'Practical AI Curriculum' : 'Amasomo ya AI mu Bikorwa'}
-        </h1>
-        <p className="text-base text-[#5D5D66] leading-relaxed">
-          {lang === 'en'
-            ? 'Start with the 28-Day Practical AI Challenge (1,000 RWF) and progress toward advanced prompting, workflow automation, and AI agents.'
-            : 'Tangira n’icyiciro cy’iminsi 28 (1,000 RWF) ukomeze mu masomo yisumbuye y’imiyoboro na AI Agents.'}
-        </p>
-      </header>
-
-      {/* Search & Multi-Facet Filter Toolbar */}
-      <div className="space-y-4 pb-8 border-b border-black/[0.08] mb-10">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#F4F5F7] rounded-xl">
-            {[
-              { key: 'all', label: lang === 'en' ? 'All' : 'Yose' },
-              { key: 'foundations', label: lang === 'en' ? '28-Day Challenge' : 'Iminsi 28' },
-              { key: 'prompting', label: lang === 'en' ? 'Prompting' : 'Amabwiriza' },
-              { key: 'automation', label: lang === 'en' ? 'Automation' : 'Imiyoboro' },
-              { key: 'agents', label: lang === 'en' ? 'AI Agents' : 'Agents' },
-              { key: 'industry', label: lang === 'en' ? 'Industries' : 'Inzego' }
-            ].map((tab) => (
-              <button
-                key={tab.key}
-                type="button"
-                onClick={() => setCategoryFilter(tab.key)}
-                className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors whitespace-nowrap shrink-0 ${
-                  categoryFilter === tab.key
-                    ? 'bg-white text-[#0D0D0F] shadow-xs'
-                    : 'text-[#5D5D66] hover:text-[#0D0D0F]'
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-
-          <div className="relative w-full md:w-72">
-            <Search className="w-4 h-4 text-[#5D5D66] absolute left-3.5 top-1/2 -translate-y-1/2" />
-            <input
-              type="search"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={lang === 'en' ? 'Search courses...' : 'Shakisha isomo...'}
-              className="w-full pl-9 pr-4 py-2 text-sm bg-[#F9F9FB] border border-black/10 rounded-lg focus:outline-none focus:border-[#0D7A5F]"
-            />
-          </div>
-        </div>
-
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex flex-wrap items-center gap-2">
-            <select
-              value={levelFilter}
-              onChange={(e) => setLevelFilter(e.target.value)}
-              aria-label="Filter by level"
-              className="px-3 py-1.5 text-xs border border-black/15 rounded-lg bg-white"
-            >
-              <option value="all">{lang === 'en' ? 'All Levels' : 'Ibyiciro Byose'}</option>
-              <option value="1">Level 1+</option>
-              <option value="2">Level 2+</option>
-              <option value="4">Level 4+</option>
-              <option value="6">Level 6+</option>
-            </select>
-            <select
-              value={priceFilter}
-              onChange={(e) => setPriceFilter(e.target.value as typeof priceFilter)}
-              aria-label="Filter by price"
-              className="px-3 py-1.5 text-xs border border-black/15 rounded-lg bg-white"
-            >
-              <option value="all">{lang === 'en' ? 'All Prices' : 'Ibiciro Byose'}</option>
-              <option value="free">{lang === 'en' ? 'Free Courses' : 'Ubuntu'}</option>
-              <option value="paid">{lang === 'en' ? 'Paid Courses' : 'Zishyurwa'}</option>
-            </select>
-          </div>
-
-          {compareIds.length > 0 && (
+    <div className="max-w-[1220px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
+      {/* 1. OpenAI Academy Cyan-Teal Courses Hero Banner */}
+      <section className="rounded-2xl bg-gradient-to-r from-[#0284C7] via-[#0EA5E9] to-[#14B8A6] text-white p-8 sm:p-12 lg:p-14 shadow-xs">
+        <div className="max-w-3xl">
+          <h1 className="text-3xl sm:text-5xl lg:text-[54px] font-display font-bold tracking-[-0.03em] leading-[1.06] mb-3 text-balance">
+            {lang === 'en' ? 'AI Education Rwanda Courses' : 'Amasomo ya AI Education Rwanda'}
+          </h1>
+          <p className="text-xl sm:text-2xl font-display font-semibold text-white mb-3">
+            {lang === 'en'
+              ? 'Build the AI skills Rwanda needs'
+              : 'Wubake ubumenyi bwa AI bukenewe mu Rwanda'}
+          </p>
+          <p className="text-sm sm:text-base text-white/90 leading-relaxed max-w-2xl mb-7">
+            {lang === 'en'
+              ? 'Practical courses for individuals and organizations, from the 28-Day Practical AI Challenge (1,000 RWF) to structured prompting, workflow automation, and AI agents.'
+              : 'Amasomo afatika kuva ku minsi 28 (1,000 RWF) kugeza ku miyoboro yikoresha na AI Agents mu Cyongereza no mu Kinyarwanda.'}
+          </p>
+          <div className="flex flex-wrap items-center gap-3">
             <button
               type="button"
-              onClick={() => setCompareOpen(true)}
-              className="px-3.5 py-1.5 text-xs font-medium text-white bg-[#0D7A5F] rounded-lg"
+              onClick={() => onSelectCourse('challenge-28')}
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-[#0284C7] bg-white hover:bg-[#F0F9FF] rounded-lg transition-colors whitespace-nowrap"
             >
-              {lang === 'en'
-                ? `Compare Selected (${compareIds.length})`
-                : `Gereranya (${compareIds.length})`}
+              <span>{lang === 'en' ? 'Open 28-Day Challenge' : 'Fungura Iminsi 28'}</span>
+              <ArrowRight className="w-4 h-4" />
             </button>
-          )}
+            <button
+              type="button"
+              onClick={() => {
+                onSelectCourse('challenge-28');
+                onSelectDay(1);
+              }}
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-white/15 hover:bg-white/25 border border-white/25 rounded-lg transition-colors whitespace-nowrap"
+            >
+              <span>{lang === 'en' ? 'Read Day 1 Free' : 'Soma Umunsi wa 1'}</span>
+            </button>
+          </div>
         </div>
-      </div>
+      </section>
 
-      {filteredCatalog.length === 0 ? (
-        <div className="py-16 text-center border border-black/[0.08] rounded-2xl bg-[#F9F9FB]">
-          <p className="text-sm text-[#5D5D66]">
-            {lang === 'en' ? 'No courses match your search filter.' : 'Nta somo ribonetse.'}
-          </p>
+      {/* 2. White Courses Container Card ("ABOUT THE COURSES" — Exact Screenshot 8 Match) */}
+      <section className="bg-white border border-black/[0.08] rounded-2xl p-6 sm:p-10">
+        <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
+          <div>
+            <p className="text-xs font-semibold tracking-wider text-[#0284C7] uppercase mb-1.5">
+              {lang === 'en' ? 'About the courses' : 'Ibyerekeye amasomo'}
+            </p>
+            <h2 className="text-2xl sm:text-4xl font-display font-bold tracking-[-0.025em] text-[#0D0D0F] text-balance">
+              {lang === 'en' ? 'Learning is part of the work' : 'Kwiga ni igice cy’akazi'}
+            </h2>
+          </div>
         </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredCatalog.map((course) => {
-            const isEnrolled = enrollments.some(
-              (e) => e.courseId === course.id && e.status === 'active'
-            );
-            const isPending = enrollments.some(
-              (e) => e.courseId === course.id && e.status === 'pending'
-            );
-            const isCompared = compareIds.includes(course.id);
-            const isFreeCourse = Boolean(course.isFree || course.priceRwf === 0);
 
-            return (
-              <article
-                key={course.id}
-                onClick={() => onSelectCourse(course.id)}
-                className="group bg-white border border-black/[0.08] rounded-2xl overflow-hidden cursor-pointer hover:border-black/25 transition-colors flex flex-col"
+        {/* Fast Resume Strip */}
+        {resumeBanner && (
+          <div className="mb-8 bg-[#F0F9FF] border border-[#0284C7]/25 rounded-xl p-4 sm:p-5 flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <p className="text-xs font-mono text-[#0284C7]">
+                {lang === 'en' ? 'CONTINUE LEARNING' : 'KOMEZA KWIGA'}
+              </p>
+              <p className="text-base font-semibold text-[#0D0D0F]">
+                {resumeBanner.course.title[lang]} — Day {resumeBanner.day}
+                {resumeBanner.completedCount > 0 ? ` (${resumeBanner.completedCount} completed)` : ''}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                onSelectCourse(resumeBanner.course.id);
+                onSelectDay(resumeBanner.day);
+              }}
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 text-sm font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg"
+            >
+              <Play className="w-3.5 h-3.5" />
+              <span>{lang === 'en' ? `Resume Day ${resumeBanner.day}` : `Komeza Umunsi wa ${resumeBanner.day}`}</span>
+            </button>
+          </div>
+        )}
+
+        {/* Search & Filter Toolbar */}
+        <div className="space-y-4 pb-6 border-b border-black/[0.08] mb-8">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex flex-wrap items-center gap-1.5">
+              {[
+                { key: 'all', label: lang === 'en' ? 'All' : 'Yose' },
+                { key: 'foundations', label: lang === 'en' ? '28-Day Challenge' : 'Iminsi 28' },
+                { key: 'prompting', label: lang === 'en' ? 'Prompting' : 'Amabwiriza' },
+                { key: 'automation', label: lang === 'en' ? 'Automation' : 'Imiyoboro' },
+                { key: 'agents', label: lang === 'en' ? 'AI Agents' : 'Agents' },
+                { key: 'industry', label: lang === 'en' ? 'Industries' : 'Inzego' }
+              ].map((tab) => (
+                <button
+                  key={tab.key}
+                  type="button"
+                  onClick={() => setCategoryFilter(tab.key)}
+                  className={`px-3.5 py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors whitespace-nowrap shrink-0 ${
+                    categoryFilter === tab.key
+                      ? 'bg-[#0284C7] text-white'
+                      : 'bg-[#F4F5F7] text-[#4B4B55] hover:bg-[#EAECEF]'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            <div className="relative w-full md:w-72">
+              <Search className="w-4 h-4 text-[#5D5D66] absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={lang === 'en' ? 'Search courses...' : 'Shakisha isomo...'}
+                className="w-full pl-9 pr-4 py-2 text-sm bg-[#F7F8FA] border border-black/10 rounded-lg focus:outline-none focus:border-[#0284C7]"
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <select
+                value={levelFilter}
+                onChange={(e) => setLevelFilter(e.target.value)}
+                aria-label="Filter by level"
+                className="px-3 py-1.5 text-xs border border-black/15 rounded-lg bg-white"
               >
-                <CourseArtwork category={course.category} code={course.code} />
-                <div className="p-6 flex-1 flex flex-col justify-between">
+                <option value="all">{lang === 'en' ? 'All Levels' : 'Ibyiciro Byose'}</option>
+                <option value="1">Level 1+</option>
+                <option value="2">Level 2+</option>
+                <option value="4">Level 4+</option>
+                <option value="6">Level 6+</option>
+              </select>
+              <select
+                value={priceFilter}
+                onChange={(e) => setPriceFilter(e.target.value as typeof priceFilter)}
+                aria-label="Filter by price"
+                className="px-3 py-1.5 text-xs border border-black/15 rounded-lg bg-white"
+              >
+                <option value="all">{lang === 'en' ? 'All Prices' : 'Ibiciro Byose'}</option>
+                <option value="free">{lang === 'en' ? 'Free Courses' : 'Ubuntu'}</option>
+                <option value="paid">{lang === 'en' ? 'Paid Courses' : 'Zishyurwa'}</option>
+              </select>
+            </div>
+
+            {compareIds.length > 0 && (
+              <button
+                type="button"
+                onClick={() => setCompareOpen(true)}
+                className="px-3.5 py-1.5 text-xs font-semibold text-white bg-[#0284C7] rounded-lg"
+              >
+                {lang === 'en'
+                  ? `Compare Selected (${compareIds.length})`
+                  : `Gereranya (${compareIds.length})`}
+              </button>
+            )}
+          </div>
+        </div>
+
+        {filteredCatalog.length === 0 ? (
+          <div className="py-16 text-center border border-black/[0.08] rounded-2xl bg-[#FAFAFB]">
+            <p className="text-sm text-[#5D5D66]">
+              {lang === 'en' ? 'No courses match your search filter.' : 'Nta somo ribonetse.'}
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredCatalog.map((course) => {
+              const isEnrolled = enrollments.some(
+                (e) => e.courseId === course.id && e.status === 'active'
+              );
+              const isPending = enrollments.some(
+                (e) => e.courseId === course.id && e.status === 'pending'
+              );
+              const isCompared = compareIds.includes(course.id);
+              const isFreeCourse = Boolean(course.isFree || course.priceRwf === 0);
+              const coverGrad =
+                COURSE_CATALOG_COVERS[course.category] || COURSE_CATALOG_COVERS.foundations;
+              const outlineOpen = Boolean(cardOutlineOpen[course.id]);
+
+              return (
+                <article
+                  key={course.id}
+                  className="bg-white border border-black/[0.08] rounded-2xl overflow-hidden flex flex-col justify-between"
+                >
                   <div>
-                    <div className="flex items-center gap-2 text-xs text-[#5D5D66] mb-2">
-                      <span className="font-mono">{course.code}</span>
-                      <span aria-hidden="true">·</span>
-                      <span>{course.levelRange}</span>
-                      <span aria-hidden="true">·</span>
-                      <span className="tabular-nums">{course.durationDays}d</span>
-                      <span aria-hidden="true">·</span>
-                      <span className="font-mono">EN/RW</span>
+                    {course.coverImageUrl ? (
+                      <img
+                        src={course.coverImageUrl}
+                        alt={course.title[lang]}
+                        referrerPolicy="no-referrer"
+                        className="w-full h-32 object-cover"
+                      />
+                    ) : (
+                      <div className={`h-32 w-full ${coverGrad}`} />
+                    )}
+                    <div className="p-6">
+                      <p className="text-xs font-medium text-[#0284C7] mb-1.5">
+                        {course.code} · {course.levelRange} · {course.durationDays}d ·{' '}
+                        {isEnrolled
+                          ? lang === 'en'
+                            ? 'Enrolled'
+                            : 'Wariyandikishije'
+                          : isPending
+                            ? lang === 'en'
+                              ? 'Pending verification'
+                              : 'Bitegereje kwemezwa'
+                            : course.status === 'active'
+                              ? isFreeCourse
+                                ? lang === 'en'
+                                  ? 'Free'
+                                  : 'Ubuntu'
+                                : `${course.priceRwf.toLocaleString()} RWF`
+                              : lang === 'en'
+                                ? 'Upcoming'
+                                : 'Biri hafi'}
+                      </p>
+                      <h2 className="text-xl sm:text-2xl font-display font-bold tracking-[-0.02em] text-[#0D0D0F] mb-2.5">
+                        {course.title[lang]}
+                      </h2>
+                      <p className="text-sm text-[#5D5D66] leading-relaxed">
+                        {course.description[lang]}
+                      </p>
                     </div>
-                    <h2 className="text-lg font-display font-semibold text-[#0D0D0F] group-hover:text-[#0D7A5F] transition-colors mb-2">
-                      {course.title[lang]}
-                    </h2>
-                    <p className="text-sm text-[#5D5D66] leading-relaxed">
-                      {course.subtitle[lang]}
-                    </p>
                   </div>
 
-                  <div className="mt-6 pt-4 border-t border-black/[0.06] flex items-center justify-between text-xs gap-2">
-                    <span className="font-mono tabular-nums font-medium text-[#0D0D0F]">
-                      {isEnrolled
-                        ? lang === 'en'
-                          ? 'Enrolled'
-                          : 'Wariyandikishije'
-                        : isPending
-                          ? lang === 'en'
-                            ? 'Pending verification'
-                            : 'Bitegereje kwemezwa'
-                          : course.status === 'active'
-                            ? isFreeCourse
-                              ? lang === 'en'
-                                ? 'Free'
-                                : 'Ubuntu'
-                              : `${course.priceRwf.toLocaleString()} RWF`
-                            : lang === 'en'
-                              ? 'Upcoming'
-                              : 'Biri hafi'}
-                    </span>
-                    <div className="flex items-center gap-3">
+                  <div className="px-6 pb-6 space-y-4">
+                    <div className="border-t border-black/[0.08] pt-3">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setCardOutlineOpen((prev) => ({
+                            ...prev,
+                            [course.id]: !prev[course.id]
+                          }))
+                        }
+                        className="w-full flex items-center justify-between text-sm font-semibold text-[#0D0D0F] py-1"
+                      >
+                        <span>{lang === 'en' ? 'Course outline' : 'Incamake y’amasomo'}</span>
+                        {outlineOpen ? (
+                          <ChevronUp className="w-4 h-4 text-[#5D5D66]" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4 text-[#5D5D66]" />
+                        )}
+                      </button>
+                      {outlineOpen && (
+                        <ul className="mt-2 space-y-1.5 text-xs text-[#5D5D66]">
+                          {course.outcomes[lang].slice(0, 4).map((out) => (
+                            <li key={out} className="flex items-start gap-2">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-[#0284C7] shrink-0 mt-0.5" />
+                              <span>{out}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+
+                    <div className="flex items-center justify-between gap-3">
+                      <button
+                        type="button"
+                        onClick={() => onSelectCourse(course.id)}
+                        className="px-5 py-2.5 text-sm font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg transition-colors whitespace-nowrap"
+                      >
+                        {lang === 'en' ? 'Go to course' : 'Jya ku isomo'}
+                      </button>
                       <button
                         type="button"
                         onClick={(e) => handleToggleCompare(course.id, e)}
-                        className={`text-[11px] font-medium underline underline-offset-2 ${
-                          isCompared ? 'text-[#0D7A5F]' : 'text-[#5D5D66] hover:text-[#0D0D0F]'
+                        className={`text-xs font-medium underline underline-offset-2 ${
+                          isCompared ? 'text-[#0284C7]' : 'text-[#5D5D66] hover:text-[#0D0D0F]'
                         }`}
                       >
                         {isCompared ? 'Selected' : 'Compare'}
                       </button>
-                      <span className="inline-flex items-center gap-1 text-[#5D5D66] group-hover:text-[#0D0D0F]">
-                        <span>{lang === 'en' ? 'View' : 'Reba'}</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </span>
                     </div>
                   </div>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      )}
+                </article>
+              );
+            })}
+          </div>
+        )}
+      </section>
 
-      {/* Guided Learning Paths */}
-      {learningPaths.length > 0 && (
-        <section className="mt-16 pt-10 border-t border-black/[0.08]">
-          <div className="mb-6">
+      {/* Guided Learning Paths + Blueprint Industry Applications */}
+      <section className="mt-16 pt-10 border-t border-black/[0.08] space-y-6">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
             <p className="text-xs font-mono text-[#0D7A5F] mb-1">
-              {lang === 'en' ? 'GUIDED SEQUENCES' : 'INZIRA Z’AMASOMO'}
+              {lang === 'en' ? 'GUIDED SEQUENCES & INDUSTRY TRACKS' : 'INZIRA Z’AMASOMO N’INZEGO'}
             </p>
             <h2 className="text-2xl font-display font-semibold text-[#0D0D0F]">
-              {lang === 'en' ? 'Recommended Learning Paths' : 'Inzira Ziteguwe neza'}
+              {lang === 'en' ? 'Recommended & Industry Learning Paths' : 'Inzira Ziteguwe mu Nzego z’Akazi'}
             </h2>
           </div>
+          <p className="text-xs text-[#5D5D66]">
+            {lang === 'en'
+              ? 'Jump directly to recommended focus days inside Product 01.'
+              : 'Hitamo urwego rwawe uhite ubona iminsi y’ingenzi muri AER-P01.'}
+          </p>
+        </div>
+
+        {learningPaths.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {learningPaths.map((path) => (
               <div
@@ -2188,8 +2953,44 @@ export function CoursesView({
               </div>
             ))}
           </div>
-        </section>
-      )}
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {INDUSTRY_LEARNING_PATHS_PRESETS.map((ind) => (
+            <div
+              key={ind.id}
+              className="bg-white border border-black/[0.08] rounded-2xl p-5 flex flex-col justify-between gap-3"
+            >
+              <div>
+                <p className="text-[11px] font-mono text-[#0D7A5F] mb-1">
+                  {ind.sectorCode} · {lang === 'en' ? 'Industry Path' : 'Urwego'}
+                </p>
+                <h3 className="text-sm font-semibold text-[#0D0D0F] mb-1.5">
+                  {lang === 'en' ? ind.titleEn : ind.titleRw}
+                </h3>
+                <p className="text-xs text-[#5D5D66] leading-relaxed">
+                  {lang === 'en' ? ind.descriptionEn : ind.descriptionRw}
+                </p>
+              </div>
+              <div className="pt-2 border-t border-black/[0.06] flex flex-wrap items-center justify-between gap-2">
+                <span className="text-[11px] font-mono text-[#5D5D66]">
+                  Days: {ind.recommendedDays.join(', ')}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onSelectCourse('challenge-28');
+                    onSelectDay(ind.recommendedDays[0] || 1);
+                  }}
+                  className="text-xs font-medium text-[#0D7A5F] hover:underline"
+                >
+                  {lang === 'en' ? 'Start Track ->' : 'Tangira ->'}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
 
       {/* Course Comparison Modal */}
       {compareOpen && comparedCourses.length > 0 && (

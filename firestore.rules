@@ -120,7 +120,7 @@ service cloud.firestore {
 
     function isValidCourse(data) {
       return data.keys().hasAll(['id', 'slug', 'code', 'status', 'priceRwf', 'durationDays', 'titleEn', 'titleRw', 'updatedAt'])
-        && data.keys().hasOnly(['id', 'slug', 'code', 'status', 'category', 'visibility', 'isFree', 'priceRwf', 'durationDays', 'capacity', 'enrolledCount', 'certificateEligible', 'levelRange', 'ownerUid', 'startDate', 'endDate', 'coverImageUrl', 'promoVideoUrl', 'prerequisitesText', 'seoTitle', 'seoDescription', 'titleEn', 'titleRw', 'subtitleEn', 'subtitleRw', 'descriptionEn', 'descriptionRw', 'outcomesEn', 'outcomesRw', 'updatedAt'])
+        && data.keys().hasOnly(['id', 'slug', 'code', 'status', 'category', 'visibility', 'isFree', 'priceRwf', 'durationDays', 'capacity', 'enrolledCount', 'certificateEligible', 'levelRange', 'ownerUid', 'startDate', 'endDate', 'coverImageUrl', 'promoVideoUrl', 'prerequisitesText', 'seoTitle', 'seoDescription', 'titleEn', 'titleRw', 'subtitleEn', 'subtitleRw', 'descriptionEn', 'descriptionRw', 'outcomesEn', 'outcomesRw', 'audienceEn', 'audienceRw', 'deviceNoteEn', 'deviceNoteRw', 'updatedAt'])
         && isValidId(data.id)
         && data.slug is string && data.slug.size() >= 1 && data.slug.size() <= 128
         && data.code is string && data.code.size() >= 1 && data.code.size() <= 32
@@ -150,6 +150,10 @@ service cloud.firestore {
         && (!('descriptionRw' in data) || (data.descriptionRw is string && data.descriptionRw.size() <= 2000))
         && (!('outcomesEn' in data) || (data.outcomesEn is list && data.outcomesEn.size() <= 15 && (data.outcomesEn.size() == 0 || data.outcomesEn[0] is string)))
         && (!('outcomesRw' in data) || (data.outcomesRw is list && data.outcomesRw.size() <= 15 && (data.outcomesRw.size() == 0 || data.outcomesRw[0] is string)))
+        && (!('audienceEn' in data) || (data.audienceEn is list && data.audienceEn.size() <= 15 && (data.audienceEn.size() == 0 || data.audienceEn[0] is string)))
+        && (!('audienceRw' in data) || (data.audienceRw is list && data.audienceRw.size() <= 15 && (data.audienceRw.size() == 0 || data.audienceRw[0] is string)))
+        && (!('deviceNoteEn' in data) || (data.deviceNoteEn is string && data.deviceNoteEn.size() <= 1000))
+        && (!('deviceNoteRw' in data) || (data.deviceNoteRw is string && data.deviceNoteRw.size() <= 1000))
         && data.updatedAt is timestamp;
     }
 
@@ -171,7 +175,7 @@ service cloud.firestore {
 
     function isValidLesson(data) {
       return data.keys().hasAll(['id', 'courseId', 'dayNumber', 'weekNumber', 'isSample', 'titleEn', 'titleRw', 'updatedAt'])
-        && data.keys().hasOnly(['id', 'courseId', 'moduleId', 'orderIndex', 'dayNumber', 'weekNumber', 'isSample', 'isRequired', 'estimatedMinutes', 'enStatus', 'rwStatus', 'releaseAt', 'releaseAtMs', 'titleEn', 'titleRw', 'summaryEn', 'summaryRw', 'objectivesEn', 'objectivesRw', 'blocksEnJson', 'blocksRwJson', 'updatedAt'])
+        && data.keys().hasOnly(['id', 'courseId', 'moduleId', 'orderIndex', 'dayNumber', 'weekNumber', 'isSample', 'isRequired', 'estimatedMinutes', 'enStatus', 'rwStatus', 'releaseAt', 'releaseAtMs', 'titleEn', 'titleRw', 'summaryEn', 'summaryRw', 'objectivesEn', 'objectivesRw', 'blocksEnJson', 'blocksRwJson', 'deliverableEn', 'deliverableRw', 'levelTag', 'tools', 'updatedAt'])
         && isValidId(data.id)
         && isValidId(data.courseId)
         && (!('moduleId' in data) || (data.moduleId is string && data.moduleId.size() <= 128))
@@ -193,6 +197,10 @@ service cloud.firestore {
         && (!('objectivesRw' in data) || (data.objectivesRw is list && data.objectivesRw.size() <= 20 && (data.objectivesRw.size() == 0 || data.objectivesRw[0] is string)))
         && (!('blocksEnJson' in data) || (data.blocksEnJson is string && data.blocksEnJson.size() <= 200000))
         && (!('blocksRwJson' in data) || (data.blocksRwJson is string && data.blocksRwJson.size() <= 200000))
+        && (!('deliverableEn' in data) || (data.deliverableEn is string && data.deliverableEn.size() <= 300))
+        && (!('deliverableRw' in data) || (data.deliverableRw is string && data.deliverableRw.size() <= 300))
+        && (!('levelTag' in data) || (data.levelTag is string && data.levelTag.size() <= 40))
+        && (!('tools' in data) || (data.tools is list && data.tools.size() <= 15 && (data.tools.size() == 0 || data.tools[0] is string)))
         && data.updatedAt is timestamp;
     }
 
@@ -303,7 +311,7 @@ service cloud.firestore {
         && data.userName is string && data.userName.size() >= 1 && data.userName.size() <= 120
         && data.userEmail is string && data.userEmail.size() >= 3 && data.userEmail.size() <= 200
         && isValidId(data.courseId)
-        && data.projectKey in ['study_assistant', 'auto_registration', 'customer_inquiry', 'content_planning', 'research_assistant', 'custom']
+        && data.projectKey in ['study_assistant', 'auto_registration', 'customer_inquiry', 'content_planning', 'research_assistant', 'independent_final', 'custom']
         && data.title is string && data.title.size() >= 3 && data.title.size() <= 180
         && data.problemStatement is string && data.problemStatement.size() >= 10 && data.problemStatement.size() <= 2000
         && data.toolsUsed is list && data.toolsUsed.size() >= 1 && data.toolsUsed.size() <= 10 && data.toolsUsed[0] is string

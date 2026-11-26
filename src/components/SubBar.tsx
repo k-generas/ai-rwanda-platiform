@@ -34,8 +34,8 @@ export function SubBar({
           : 'UMUNYESHURI';
 
   return (
-    <div className="bg-[#F9F9FB] border-b border-black/[0.06]">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-4">
+    <div className="bg-[#FAFAFB] border-b border-black/[0.06]">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-8 py-2 flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div
             className="inline-flex items-center p-0.5 bg-[#ECEEF2] rounded-lg"
@@ -71,7 +71,7 @@ export function SubBar({
             onClick={() => onNavigate('verify')}
             className={`text-xs font-medium transition-colors whitespace-nowrap shrink-0 ${
               currentRoute === 'verify'
-                ? 'text-[#0D0D0F] underline underline-offset-4'
+                ? 'text-[#0284C7] underline underline-offset-4'
                 : 'text-[#5D5D66] hover:text-[#0D0D0F]'
             }`}
           >

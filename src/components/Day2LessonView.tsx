@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ArrowLeft, ArrowRight, CheckCircle2, PlayCircle, Sparkles } from 'lucide-react';
 import type { Language } from '../types';
 import { DAY2_CLASSIFIER_EXERCISE, DAY2_QUIZ_QUESTIONS } from '../data/day2Lesson';
@@ -29,6 +29,26 @@ export function Day2LessonView({
   const [checklist, setChecklist] = useState<Record<number, boolean>>({});
   const [showVideoScript, setShowVideoScript] = useState(false);
   const [reflectionNotes, setReflectionNotes] = useState('');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (!e.altKey) return;
+      const targetTag = (e.target as HTMLElement | null)?.tagName;
+      if (targetTag === 'INPUT' || targetTag === 'TEXTAREA' || targetTag === 'SELECT') return;
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        onPrevDay();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        onNextDay();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [onPrevDay, onNextDay]);
 
   const answeredCount = Object.keys(quizAnswers).length;
   const correctCount = DAY2_QUIZ_QUESTIONS.filter(

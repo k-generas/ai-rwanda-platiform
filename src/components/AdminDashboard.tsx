@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Menu, RefreshCw, Search, X } from 'lucide-react';
+import { ChevronDown, Menu, Plus, RefreshCw, Search, X } from 'lucide-react';
 import type { User } from 'firebase/auth';
 import {
   collection,
@@ -76,7 +76,7 @@ const NAV_ITEMS: ControlNavItem[] = [
   { id: 'alerts', group: 'OVERVIEW', label: 'Activity & Alerts', requiresPermission: 'view_founder_overview' },
   { id: 'analytics', group: 'OVERVIEW', label: 'Analytics & Reports', requiresPermission: 'view_founder_overview' },
   { id: 'courses', group: 'EDUCATION', label: 'Course Builder', requiresPermission: 'manage_courses' },
-  { id: 'lessons', group: 'EDUCATION', label: '14-Block Lesson Editor', requiresPermission: 'manage_lessons' },
+  { id: 'lessons', group: 'EDUCATION', label: 'Lesson & 16-Part Editor', requiresPermission: 'manage_lessons' },
   { id: 'paths', group: 'EDUCATION', label: 'Guided Learning Paths', requiresPermission: 'manage_courses' },
   { id: 'programmes', group: 'EDUCATION', label: 'Programmes & Events', requiresPermission: 'manage_courses' },
   { id: 'resources', group: 'EDUCATION', label: 'Resource Library', requiresPermission: 'manage_lessons' },
@@ -124,6 +124,14 @@ export function AdminDashboard({ lang, user, access, onRefreshPublic }: AdminDas
   const [editorTarget, setEditorTarget] = useState<{ courseId: string; lessonId: string } | null>(null);
   const [navSearch, setNavSearch] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [createMenuOpen, setCreateMenuOpen] = useState(false);
+  const createMenuRef = useRef<HTMLDivElement | null>(null);
+  const [courseTabTrigger, setCourseTabTrigger] = useState<{
+    tab: 'overview' | 'curriculum' | 'checklist' | 'paths' | 'preview' | 'blueprint';
+    nonce: number;
+  } | null>(null);
+  const [newCourseModalNonce, setNewCourseModalNonce] = useState(0);
+  const [newLessonTriggerNonce, setNewLessonTriggerNonce] = useState(0);
   const [loading, setLoading] = useState(true);
 
   const PAGE_SIZE = 100;
@@ -179,6 +187,115 @@ export function AdminDashboard({ lang, user, access, onRefreshPublic }: AdminDas
       setActiveSection(permittedNav[0].id);
     }
   }, [permittedNav, activeSection]);
+
+  useEffect(() => {
+    const handleDocClick = (e: MouseEvent) => {
+      if (createMenuRef.current && !createMenuRef.current.contains(e.target as Node)) {
+        setCreateMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleDocClick);
+    return () => document.removeEventListener('mousedown', handleDocClick);
+  }, []);
+
+  const quickCreateActions = useMemo(
+    () =>
+      [
+        {
+          id: 'new_course',
+          label: 'New Course (+ Auto-Scaffold)',
+          hint: 'Full course, weeks & 16-part lessons',
+          section: 'courses' as ControlSectionId,
+          onRun: () => {
+            setActiveSection('courses');
+            setNewCourseModalNonce((n) => n + 1);
+          }
+        },
+        {
+          id: 'scaffold_curriculum',
+          label: 'Bulk Modules & Curriculum Scaffold',
+          hint: 'Generate weeks, days & bulk actions',
+          section: 'courses' as ControlSectionId,
+          onRun: () => {
+            setActiveSection('courses');
+            setCourseTabTrigger((prev) => ({ tab: 'curriculum', nonce: (prev?.nonce ?? 0) + 1 }));
+          }
+        },
+        {
+          id: 'new_lesson',
+          label: 'New 16-Part Structured Lesson',
+          hint: 'Create bilingual lesson blocks immediately',
+          section: 'lessons' as ControlSectionId,
+          onRun: () => {
+            setActiveSection('lessons');
+            setNewLessonTriggerNonce((n) => n + 1);
+          }
+        },
+        {
+          id: 'new_quiz',
+          label: 'New Quiz / Assessment',
+          hint: 'Weekly quiz or graded check',
+          section: 'quizzes' as ControlSectionId,
+          onRun: () => setActiveSection('quizzes')
+        },
+        {
+          id: 'new_cohort',
+          label: 'New Cohort Group',
+          hint: 'Scheduled intake & roster limits',
+          section: 'cohorts' as ControlSectionId,
+          onRun: () => setActiveSection('cohorts')
+        },
+        {
+          id: 'new_programme',
+          label: 'New Programme / Workshop Event',
+          hint: 'Bootcamp, webinar, or Kigali meetup',
+          section: 'programmes' as ControlSectionId,
+          onRun: () => setActiveSection('programmes')
+        },
+        {
+          id: 'new_path',
+          label: 'New Guided Learning Path',
+          hint: 'Role track or 8-sector preset import',
+          section: 'paths' as ControlSectionId,
+          onRun: () => {
+            setActiveSection('paths');
+            setCourseTabTrigger((prev) => ({ tab: 'paths', nonce: (prev?.nonce ?? 0) + 1 }));
+          }
+        },
+        {
+          id: 'new_resource',
+          label: 'New Toolkit Resource Template',
+          hint: 'Downloadable worksheet or prompt pack',
+          section: 'resources' as ControlSectionId,
+          onRun: () => setActiveSection('resources')
+        },
+        {
+          id: 'new_coupon',
+          label: 'New Promo Coupon',
+          hint: 'Discount code & usage caps',
+          section: 'coupons' as ControlSectionId,
+          onRun: () => setActiveSection('coupons')
+        },
+        {
+          id: 'new_announcement',
+          label: 'New Announcement / Notice',
+          hint: 'Broadcast to enrolled cohorts',
+          section: 'communication' as ControlSectionId,
+          onRun: () => setActiveSection('communication')
+        },
+        {
+          id: 'blueprint_inventory',
+          label: 'Blueprint PDF & 62-Item Inventory',
+          hint: 'Master academic checklist & weights',
+          section: 'courses' as ControlSectionId,
+          onRun: () => {
+            setActiveSection('courses');
+            setCourseTabTrigger((prev) => ({ tab: 'blueprint', nonce: (prev?.nonce ?? 0) + 1 }));
+          }
+        }
+      ].filter((a) => permittedNav.some((nav) => nav.id === a.section)),
+    [permittedNav]
+  );
 
   const writeAudit = useCallback(
     async (params: AuditWriteParams) => {
@@ -350,6 +467,14 @@ export function AdminDashboard({ lang, user, access, onRefreshPublic }: AdminDas
               outcomes: {
                 en: Array.isArray(raw.outcomesEn) ? (raw.outcomesEn as string[]) : fallback.outcomes.en,
                 rw: Array.isArray(raw.outcomesRw) ? (raw.outcomesRw as string[]) : fallback.outcomes.rw
+              },
+              audience: {
+                en: Array.isArray(raw.audienceEn) ? (raw.audienceEn as string[]) : fallback.audience.en,
+                rw: Array.isArray(raw.audienceRw) ? (raw.audienceRw as string[]) : fallback.audience.rw
+              },
+              deviceNote: {
+                en: typeof raw.deviceNoteEn === 'string' && raw.deviceNoteEn.trim() ? raw.deviceNoteEn : fallback.deviceNote.en,
+                rw: typeof raw.deviceNoteRw === 'string' && raw.deviceNoteRw.trim() ? raw.deviceNoteRw : fallback.deviceNote.rw
               }
             };
           });
@@ -550,15 +675,57 @@ export function AdminDashboard({ lang, user, access, onRefreshPublic }: AdminDas
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={loadControlData}
-          disabled={loading}
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium border border-black/15 rounded-lg hover:border-black/35 bg-white whitespace-nowrap shrink-0"
-        >
-          <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-          <span>{loading ? 'Refreshing...' : 'Refresh Records'}</span>
-        </button>
+        <div className="flex flex-wrap items-center gap-2.5">
+          {quickCreateActions.length > 0 && (
+            <div className="relative" ref={createMenuRef}>
+              <button
+                type="button"
+                onClick={() => setCreateMenuOpen((v) => !v)}
+                aria-expanded={createMenuOpen}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-white bg-[#0D7A5F] hover:bg-[#0B664F] rounded-lg whitespace-nowrap shrink-0"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Create Everything</span>
+                <ChevronDown className="w-3.5 h-3.5 opacity-80" />
+              </button>
+
+              {createMenuOpen && (
+                <div className="absolute right-0 mt-2 w-72 bg-white border border-black/15 rounded-xl shadow-lg p-1.5 z-40">
+                  <p className="px-2.5 py-1.5 text-[10px] font-mono uppercase tracking-wider text-[#5D5D66] border-b border-black/[0.06] mb-1">
+                    Founder Quick-Create Studio
+                  </p>
+                  <div className="max-h-80 overflow-y-auto divide-y divide-black/[0.04]">
+                    {quickCreateActions.map((act) => (
+                      <button
+                        key={act.id}
+                        type="button"
+                        onClick={() => {
+                          act.onRun();
+                          setCreateMenuOpen(false);
+                          setMobileMenuOpen(false);
+                        }}
+                        className="w-full text-left px-2.5 py-2 rounded-lg hover:bg-[#F9F9FB] transition-colors"
+                      >
+                        <p className="text-xs font-medium text-[#0D0D0F]">{act.label}</p>
+                        <p className="text-[11px] text-[#5D5D66]">{act.hint}</p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          <button
+            type="button"
+            onClick={loadControlData}
+            disabled={loading}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium border border-black/15 rounded-lg hover:border-black/35 bg-white whitespace-nowrap shrink-0"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+            <span>{loading ? 'Refreshing...' : 'Refresh Records'}</span>
+          </button>
+        </div>
       </div>
 
       {/* Workspace Split Layout */}
@@ -610,6 +777,8 @@ export function AdminDashboard({ lang, user, access, onRefreshPublic }: AdminDas
           ) : activeSection === 'courses' || activeSection === 'paths' ? (
             <CourseBuilderPanel
               initialTab={activeSection === 'paths' ? 'paths' : 'overview'}
+              quickTabRequest={courseTabTrigger}
+              quickNewCourseNonce={newCourseModalNonce}
               user={user}
               data={enrichedData}
               onWriteAudit={writeAudit}
@@ -628,6 +797,7 @@ export function AdminDashboard({ lang, user, access, onRefreshPublic }: AdminDas
               lessons={enrichedData.lessons}
               initialCourseId={editorTarget?.courseId}
               initialLessonId={editorTarget?.lessonId}
+              quickCreateNonce={newLessonTriggerNonce}
               onWriteAudit={writeAudit}
               onRefreshData={loadControlData}
               onRefreshPublic={onRefreshPublic}

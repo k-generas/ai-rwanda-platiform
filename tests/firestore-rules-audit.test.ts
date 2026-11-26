@@ -46,3 +46,20 @@ test('firestore.rules supports verified learner, staffRoles, admins, and superad
   assert.ok(rules.includes("incoming().diff(existing()).affectedKeys().hasOnly(['uid', 'displayName', 'email', 'preferredLanguage', 'role', 'accountStatus', 'marketingOptIn', 'privacyConsentAcceptedAt', 'createdAt', 'updatedAt'])"));
 });
 
+test('firestore.rules and firebase-blueprint.json synchronize Blueprint v1.0 course, lesson, and 6th project fields', () => {
+  assert.ok(rules.includes('audienceEn'));
+  assert.ok(rules.includes('deviceNoteEn'));
+  assert.ok(rules.includes('deliverableEn'));
+  assert.ok(rules.includes('levelTag'));
+  assert.ok(rules.includes('independent_final'));
+
+  assert.equal(blueprint.entities.Course?.properties?.audienceEn?.type, 'array');
+  assert.equal(blueprint.entities.Course?.properties?.deviceNoteEn?.type, 'string');
+  assert.equal(blueprint.entities.Lesson?.properties?.deliverableEn?.type, 'string');
+  assert.equal(blueprint.entities.Lesson?.properties?.levelTag?.type, 'string');
+  const projectKeySchema = blueprint.entities.ProjectSubmission?.properties?.projectKey as
+    | { type: string; enum?: string[] }
+    | undefined;
+  assert.ok(projectKeySchema?.enum?.includes('independent_final'));
+});
+

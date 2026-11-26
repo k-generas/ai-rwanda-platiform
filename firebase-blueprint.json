@@ -71,6 +71,10 @@
         "descriptionRw": { "type": "string", "maxLength": 2000 },
         "outcomesEn": { "type": "array" },
         "outcomesRw": { "type": "array" },
+        "audienceEn": { "type": "array" },
+        "audienceRw": { "type": "array" },
+        "deviceNoteEn": { "type": "string", "maxLength": 1000 },
+        "deviceNoteRw": { "type": "string", "maxLength": 1000 },
         "updatedAt": { "type": "string", "format": "date-time" }
       },
       "required": ["id", "slug", "code", "status", "priceRwf", "durationDays", "titleEn", "titleRw", "updatedAt"]
@@ -120,6 +124,10 @@
         "objectivesRw": { "type": "array" },
         "blocksEnJson": { "type": "string", "maxLength": 200000 },
         "blocksRwJson": { "type": "string", "maxLength": 200000 },
+        "deliverableEn": { "type": "string", "maxLength": 300 },
+        "deliverableRw": { "type": "string", "maxLength": 300 },
+        "levelTag": { "type": "string", "maxLength": 40 },
+        "tools": { "type": "array" },
         "updatedAt": { "type": "string", "format": "date-time" }
       },
       "required": ["id", "courseId", "dayNumber", "weekNumber", "isSample", "titleEn", "titleRw", "updatedAt"]
@@ -250,7 +258,7 @@
         "userName": { "type": "string", "minLength": 1, "maxLength": 120 },
         "userEmail": { "type": "string", "format": "email", "maxLength": 200 },
         "courseId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
-        "projectKey": { "type": "string", "enum": ["study_assistant", "auto_registration", "customer_inquiry", "content_planning", "research_assistant", "custom"] },
+        "projectKey": { "type": "string", "enum": ["study_assistant", "auto_registration", "customer_inquiry", "content_planning", "research_assistant", "independent_final", "custom"] },
         "title": { "type": "string", "minLength": 3, "maxLength": 180 },
         "problemStatement": { "type": "string", "minLength": 10, "maxLength": 2000 },
         "toolsUsed": { "type": "array" },

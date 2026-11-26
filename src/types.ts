@@ -45,9 +45,11 @@ export interface BilingualText {
 
 export interface LearningLevel {
   level: number;
+  codeRange?: string;
   title: BilingualText;
   summary: BilingualText;
   topics: { en: string[]; rw: string[] };
+  evidence?: { en: string[]; rw: string[] };
   outcome: BilingualText;
 }
 
@@ -66,6 +68,9 @@ export interface LessonContent {
   durationMinutes: number;
   levelTag: string;
   title: BilingualText;
+  deliverable?: BilingualText;
+  downloadableResourceTitle?: BilingualText;
+  lowBandwidthTip?: BilingualText;
   objectives: { en: string[]; rw: string[] };
   introduction: BilingualText;
   simpleExplanation: BilingualText;
@@ -157,6 +162,10 @@ export interface StructuredLessonRecord {
   objectivesRw?: string[];
   blocksEnJson?: string;
   blocksRwJson?: string;
+  deliverableEn?: string;
+  deliverableRw?: string;
+  levelTag?: string;
+  tools?: string[];
   updatedAt?: unknown;
 }
 
@@ -219,13 +228,50 @@ export interface WeeklyAssessment {
 }
 
 export interface PracticalProject {
-  key: 'study_assistant' | 'auto_registration' | 'customer_inquiry' | 'content_planning' | 'research_assistant';
+  key:
+    | 'study_assistant'
+    | 'auto_registration'
+    | 'customer_inquiry'
+    | 'content_planning'
+    | 'research_assistant'
+    | 'independent_final';
   number: string;
   title: BilingualText;
   summary: BilingualText;
   workflowSteps: { en: string[]; rw: string[] };
   tools: string[];
   deliverable: BilingualText;
+}
+
+export interface AssessmentWeightItem {
+  id: string;
+  label: BilingualText;
+  weightPct: number;
+  requirement: BilingualText;
+}
+
+export interface RubricCriterion {
+  id: string;
+  criterion: BilingualText;
+  weightPct: number;
+  description: BilingualText;
+}
+
+export interface IndustryPathPreset {
+  id: string;
+  sectorCode: string;
+  titleEn: string;
+  titleRw: string;
+  descriptionEn: string;
+  descriptionRw: string;
+  recommendedDays: number[];
+  courseIds: string[];
+}
+
+export interface BlueprintInventorySection {
+  id: string;
+  title: BilingualText;
+  items: { id: string; label: BilingualText }[];
 }
 
 export interface LearningTool {
@@ -507,7 +553,14 @@ export interface ProjectSubmission {
   userName: string;
   userEmail: string;
   courseId: string;
-  projectKey: 'study_assistant' | 'auto_registration' | 'customer_inquiry' | 'content_planning' | 'research_assistant' | 'custom';
+  projectKey:
+    | 'study_assistant'
+    | 'auto_registration'
+    | 'customer_inquiry'
+    | 'content_planning'
+    | 'research_assistant'
+    | 'independent_final'
+    | 'custom';
   title: string;
   problemStatement: string;
   toolsUsed: string[];

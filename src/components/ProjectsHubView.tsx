@@ -77,10 +77,10 @@ export function ProjectsHubView({ lang, resources = [], onNavigate }: ProjectsHu
         </p>
       </header>
 
-      {/* 5 Practical Projects Interactive Explorer */}
+      {/* 6 Practical Projects Interactive Explorer */}
       <section>
         <h2 className="text-xl font-display font-semibold text-[#0D0D0F] mb-6">
-          {lang === 'en' ? '01. Five Core Course Projects' : '01. Imishinga Itanu y’Icyiciro'}
+          {lang === 'en' ? '01. Six Core Course Projects' : '01. Imishinga Itandatu y’Icyiciro'}
         </h2>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <div className="lg:col-span-5 space-y-2">

@@ -2,14 +2,17 @@ import React, { useEffect, useMemo, useState } from 'react';
 import {
   ArrowDown,
   ArrowUp,
+  BookOpen,
   CheckCircle2,
   Copy,
   Edit3,
   Eye,
+  FileText,
   FolderPlus,
   Layers,
   Plus,
   Save,
+  Search,
   Trash2,
   Upload,
   XCircle
@@ -32,9 +35,16 @@ import type {
   LearningPath,
   StructuredLessonRecord
 } from '../../types';
-import { COURSES } from '../../data/curriculum';
+import {
+  BLUEPRINT_GRADING_BREAKDOWN,
+  COURSES,
+  FINAL_PROJECT_RUBRIC_7,
+  INDUSTRY_LEARNING_PATHS_PRESETS,
+  PRODUCTION_INVENTORY_SECTIONS
+} from '../../data/curriculum';
 import { LESSONS_28 } from '../../data/lessons28';
 import {
+  buildCourseScaffoldPayload,
   convertStaticLessonToBlocks,
   evaluateCoursePublishChecklist,
   LESSON_STARTER_TEMPLATES,
@@ -47,8 +57,12 @@ import { UPLOAD_RULES, uploadPlatformFile } from '../../lib/uploads';
 import { LessonBlocksRenderer } from '../LessonBlocksRenderer';
 import type { AuditWriteParams, ControlCenterData } from './ControlCenterTypes';
 
+type BuilderTab = 'overview' | 'curriculum' | 'checklist' | 'paths' | 'preview' | 'blueprint';
+
 interface CourseBuilderPanelProps {
-  initialTab?: 'overview' | 'curriculum' | 'checklist' | 'paths' | 'preview';
+  initialTab?: BuilderTab;
+  quickTabRequest?: { tab: BuilderTab; nonce: number } | null;
+  quickNewCourseNonce?: number;
   user: User;
   data: ControlCenterData;
   onWriteAudit: (params: AuditWriteParams) => Promise<void>;
@@ -90,6 +104,8 @@ const WEEK_TITLES: Array<{ week: number; titleEn: string; titleRw: string; summa
 
 export function CourseBuilderPanel({
   initialTab = 'overview',
+  quickTabRequest,
+  quickNewCourseNonce = 0,
   user,
   data,
   onWriteAudit,
@@ -97,19 +113,31 @@ export function CourseBuilderPanel({
   onRefreshPublic,
   onOpenLessonEditor
 }: CourseBuilderPanelProps) {
-  const { courses, modules, lessons, learningPaths, access } = data;
+  const { courses, modules, lessons, quizzes, resources, learningPaths, access } = data;
   const catalog = courses.length > 0 ? courses : COURSES;
   const canPublish = hasPermission(access, 'publish_courses');
 
-  const [tab, setTab] = useState<'overview' | 'curriculum' | 'checklist' | 'paths' | 'preview'>(initialTab);
+  const [tab, setTab] = useState<BuilderTab>(initialTab);
   const [selectedCourseId, setSelectedCourseId] = useState<string>(catalog[0]?.id || 'challenge-28');
   const [busyMsg, setBusyMsg] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
-  // Sync tab when parent jumps directly to paths
+  // Sync tab when parent jumps directly to paths or triggers quick launcher
   useEffect(() => {
     setTab(initialTab);
   }, [initialTab]);
+
+  useEffect(() => {
+    if (quickTabRequest && quickTabRequest.nonce > 0) {
+      setTab(quickTabRequest.tab);
+    }
+  }, [quickTabRequest]);
+
+  useEffect(() => {
+    if (quickNewCourseNonce > 0) {
+      setNewCourseOpen(true);
+    }
+  }, [quickNewCourseNonce]);
 
   const activeCourse = useMemo(
     () => catalog.find((c) => c.id === selectedCourseId) ?? catalog[0],
@@ -118,20 +146,43 @@ export function CourseBuilderPanel({
 
   // Course metadata draft
   const [courseDraft, setCourseDraft] = useState<Course>(activeCourse);
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
   useEffect(() => {
     if (activeCourse) {
       setCourseDraft(activeCourse);
+      setDeleteConfirmId(null);
     }
   }, [activeCourse]);
 
   // New Course Modal state
   const [newCourseOpen, setNewCourseOpen] = useState(false);
-  const [newCode, setNewCode] = useState('AI-202');
+  const [newCode, setNewCode] = useState('AER-P02');
   const [newTitleEn, setNewTitleEn] = useState('');
   const [newTitleRw, setNewTitleRw] = useState('');
   const [newCategory, setNewCategory] = useState<Course['category']>('prompting');
   const [newPrice, setNewPrice] = useState(1000);
   const [newDays, setNewDays] = useState(14);
+  const [newScaffoldWeeks, setNewScaffoldWeeks] = useState(2);
+  const [newAutoScaffold, setNewAutoScaffold] = useState(true);
+
+  // Universal curriculum scaffold & bulk management state
+  const [scaffoldWeeks, setScaffoldWeeks] = useState(4);
+  const [scaffoldDays, setScaffoldDays] = useState(28);
+  const [curriculumSearch, setCurriculumSearch] = useState('');
+  const [curriculumModuleFilter, setCurriculumModuleFilter] = useState<string>('all');
+  const [selectedLessonIds, setSelectedLessonIds] = useState<string[]>([]);
+  const [bulkReleaseAt, setBulkReleaseAt] = useState('');
+
+  // Blueprint 62-item inventory manual override checks
+  const [inventoryChecks, setInventoryChecks] = useState<Record<string, boolean>>(() => {
+    if (typeof window === 'undefined') return {};
+    try {
+      const raw = window.localStorage.getItem('aer_blueprint_inventory_checks');
+      return raw ? (JSON.parse(raw) as Record<string, boolean>) : {};
+    } catch {
+      return {};
+    }
+  });
 
   // New Module state
   const [newModTitleEn, setNewModTitleEn] = useState('');
@@ -168,6 +219,26 @@ export function CourseBuilderPanel({
     [lessons, activeCourse.id]
   );
 
+  const filteredCourseLessons = useMemo(() => {
+    const q = curriculumSearch.trim().toLowerCase();
+    return courseLessons.filter((l) => {
+      if (curriculumModuleFilter !== 'all') {
+        if (curriculumModuleFilter === 'unassigned') {
+          if (l.moduleId) return false;
+        } else if (l.moduleId !== curriculumModuleFilter) {
+          return false;
+        }
+      }
+      if (!q) return true;
+      return (
+        l.titleEn.toLowerCase().includes(q) ||
+        l.titleRw.toLowerCase().includes(q) ||
+        `day ${l.dayNumber}`.includes(q) ||
+        `d${l.dayNumber}` === q
+      );
+    });
+  }, [courseLessons, curriculumModuleFilter, curriculumSearch]);
+
   const checklist = useMemo(
     () => evaluateCoursePublishChecklist(courseDraft, modules, lessons),
     [courseDraft, modules, lessons]
@@ -185,7 +256,7 @@ export function CourseBuilderPanel({
     durationDays: Math.max(1, Number(c.durationDays || 1)),
     capacity: Math.max(0, Number(c.capacity ?? 0)),
     certificateEligible: c.certificateEligible !== false,
-    levelRange: c.levelRange || 'Levels 1–2',
+    levelRange: (c.levelRange || 'Levels 1–2').slice(0, 40),
     ownerUid: c.ownerUid || user.uid,
     ...(c.startDate ? { startDate: c.startDate } : {}),
     ...(c.endDate ? { endDate: c.endDate } : {}),
@@ -194,14 +265,18 @@ export function CourseBuilderPanel({
     ...(c.prerequisitesText ? { prerequisitesText: c.prerequisitesText } : {}),
     ...(c.seoTitle ? { seoTitle: c.seoTitle } : {}),
     ...(c.seoDescription ? { seoDescription: c.seoDescription } : {}),
-    titleEn: c.title.en.trim(),
-    titleRw: c.title.rw.trim() || c.title.en.trim(),
-    subtitleEn: c.subtitle.en.trim(),
-    subtitleRw: c.subtitle.rw.trim() || c.subtitle.en.trim(),
-    descriptionEn: c.description.en.trim(),
-    descriptionRw: c.description.rw.trim() || c.description.en.trim(),
-    outcomesEn: c.outcomes.en.filter((s) => s.trim().length > 0).slice(0, 15),
-    outcomesRw: c.outcomes.rw.filter((s) => s.trim().length > 0).slice(0, 15),
+    titleEn: c.title.en.trim().slice(0, 160),
+    titleRw: (c.title.rw.trim() || c.title.en.trim()).slice(0, 160),
+    subtitleEn: c.subtitle.en.trim().slice(0, 260),
+    subtitleRw: (c.subtitle.rw.trim() || c.subtitle.en.trim()).slice(0, 260),
+    descriptionEn: c.description.en.trim().slice(0, 2000),
+    descriptionRw: (c.description.rw.trim() || c.description.en.trim()).slice(0, 2000),
+    outcomesEn: c.outcomes.en.map((s) => s.trim()).filter(Boolean).slice(0, 15),
+    outcomesRw: c.outcomes.rw.map((s) => s.trim()).filter(Boolean).slice(0, 15),
+    audienceEn: (c.audience?.en || []).map((s) => s.trim()).filter(Boolean).slice(0, 15),
+    audienceRw: (c.audience?.rw || []).map((s) => s.trim()).filter(Boolean).slice(0, 15),
+    deviceNoteEn: (c.deviceNote?.en || '').trim().slice(0, 990),
+    deviceNoteRw: (c.deviceNote?.rw || '').trim().slice(0, 990),
     updatedAt: serverTimestamp()
   });
 
@@ -228,6 +303,76 @@ export function CourseBuilderPanel({
     }
   };
 
+  const commitScaffoldToFirestore = async (params: {
+    targetCourse: Course;
+    weeks: number;
+    days: number;
+  }) => {
+    const scaffold = buildCourseScaffoldPayload({
+      courseId: params.targetCourse.id,
+      courseTitleEn: params.targetCourse.title.en,
+      courseTitleRw: params.targetCourse.title.rw,
+      weekCount: params.weeks,
+      daysCount: params.days,
+      levelTag: params.targetCourse.levelRange,
+      markFirstDayAsSample: true
+    });
+
+    const modBatch = writeBatch(db);
+    scaffold.modules.forEach((m, idx) => {
+      modBatch.set(doc(db, 'modules', m.id), {
+        id: m.id,
+        courseId: m.courseId,
+        orderIndex: Math.min(200, idx),
+        titleEn: m.titleEn.slice(0, 180),
+        titleRw: m.titleRw.slice(0, 180),
+        summaryEn: m.summaryEn.slice(0, 1000),
+        summaryRw: m.summaryRw.slice(0, 1000),
+        releaseAtMs: 0,
+        isPublished: true,
+        updatedAt: serverTimestamp()
+      });
+    });
+    await modBatch.commit();
+
+    for (let i = 0; i < scaffold.lessons.length; i += 14) {
+      const slice = scaffold.lessons.slice(i, i + 14);
+      const batch = writeBatch(db);
+      slice.forEach((l) => {
+        batch.set(doc(db, 'lessons', l.id), {
+          id: l.id,
+          courseId: l.courseId,
+          moduleId: l.moduleId,
+          orderIndex: Math.min(200, Math.max(0, l.dayNumber - 1)),
+          dayNumber: Math.min(365, Math.max(1, l.dayNumber)),
+          weekNumber: Math.min(52, Math.max(1, l.weekNumber)),
+          isSample: l.isSample,
+          isRequired: true,
+          estimatedMinutes: l.estimatedMinutes,
+          enStatus: l.enStatus,
+          rwStatus: l.rwStatus,
+          releaseAtMs: 0,
+          titleEn: l.titleEn.slice(0, 180),
+          titleRw: l.titleRw.slice(0, 180),
+          summaryEn: l.summaryEn.slice(0, 3950),
+          summaryRw: l.summaryRw.slice(0, 3950),
+          objectivesEn: l.objectivesEn.slice(0, 20),
+          objectivesRw: l.objectivesRw.slice(0, 20),
+          deliverableEn: l.deliverableEn.slice(0, 290),
+          deliverableRw: l.deliverableRw.slice(0, 290),
+          levelTag: l.levelTag.slice(0, 40),
+          tools: l.tools.slice(0, 15),
+          blocksEnJson: l.blocksEnJson.slice(0, 199000),
+          blocksRwJson: l.blocksRwJson.slice(0, 199000),
+          updatedAt: serverTimestamp()
+        });
+      });
+      await batch.commit();
+    }
+
+    return scaffold;
+  };
+
   const handleCreateNewCourse = async (e: React.FormEvent) => {
     e.preventDefault();
     setBusy(true);
@@ -240,7 +385,7 @@ export function CourseBuilderPanel({
     const newCourse: Course = {
       id,
       slug,
-      code: newCode.trim() || 'AI-NEW',
+      code: newCode.trim() || 'AER-NEW',
       status: 'draft',
       category: newCategory,
       visibility: 'public',
@@ -273,12 +418,21 @@ export function CourseBuilderPanel({
 
     try {
       await setDoc(doc(db, 'courses', id), buildFirestoreCoursePayload(newCourse));
+      let scaffoldMsg = '';
+      if (newAutoScaffold) {
+        const scaffold = await commitScaffoldToFirestore({
+          targetCourse: newCourse,
+          weeks: newScaffoldWeeks,
+          days: newDays
+        });
+        scaffoldMsg = ` with ${scaffold.modules.length} modules and ${scaffold.lessons.length} 16-part bilingual lessons`;
+      }
       await onWriteAudit({
         action: 'CREATE_COURSE',
         targetCollection: 'courses',
         targetId: id,
-        newState: 'draft',
-        summary: `Created new course ${newCourse.code}: ${newCourse.title.en}`
+        newState: `draft${newAutoScaffold ? ` (${newScaffoldWeeks}w/${newDays}d)` : ''}`,
+        summary: `Created new course ${newCourse.code}: ${newCourse.title.en}${scaffoldMsg}`
       });
       setSelectedCourseId(id);
       setNewCourseOpen(false);
@@ -287,9 +441,34 @@ export function CourseBuilderPanel({
       onRefreshPublic();
       await onRefreshData();
       setTab('curriculum');
-      setBusyMsg(`Created draft course ${newCourse.code}. Now add modules and lessons.`);
+      setBusyMsg(`Created draft course ${newCourse.code}${scaffoldMsg}.`);
     } catch (err) {
       handleFirestoreError(err, OperationType.CREATE, `courses/${id}`);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleDeleteCourse = async (courseId: string) => {
+    if (!access.isSuperadmin) return;
+    setBusy(true);
+    setBusyMsg(null);
+    try {
+      await deleteDoc(doc(db, 'courses', courseId));
+      await onWriteAudit({
+        action: 'DELETE_COURSE',
+        targetCollection: 'courses',
+        targetId: courseId,
+        previousState: activeCourse.code,
+        summary: `Superadmin deleted course record ${activeCourse.code} (${courseId})`
+      });
+      setDeleteConfirmId(null);
+      setSelectedCourseId(catalog.find((c) => c.id !== courseId)?.id || 'challenge-28');
+      onRefreshPublic();
+      await onRefreshData();
+      setBusyMsg(`Deleted course record ${activeCourse.code}.`);
+    } catch (err) {
+      handleFirestoreError(err, OperationType.DELETE, `courses/${courseId}`);
     } finally {
       setBusy(false);
     }
@@ -414,12 +593,16 @@ export function CourseBuilderPanel({
             enStatus: 'published',
             rwStatus: 'published',
             releaseAtMs: 0,
-            titleEn: l.title.en,
-            titleRw: l.title.rw,
+            titleEn: l.title.en.slice(0, 180),
+            titleRw: l.title.rw.slice(0, 180),
             summaryEn: l.introduction.en.slice(0, 3900),
             summaryRw: l.introduction.rw.slice(0, 3900),
             objectivesEn: l.objectives.en.slice(0, 20),
             objectivesRw: l.objectives.rw.slice(0, 20),
+            ...(l.deliverable?.en ? { deliverableEn: l.deliverable.en.slice(0, 290) } : {}),
+            ...(l.deliverable?.rw ? { deliverableRw: l.deliverable.rw.slice(0, 290) } : {}),
+            levelTag: l.levelTag.slice(0, 40),
+            tools: l.tools.slice(0, 15),
             blocksEnJson: serializeLessonBlocks(enBlocks).slice(0, 199000),
             blocksRwJson: serializeLessonBlocks(rwBlocks).slice(0, 199000),
             updatedAt: serverTimestamp()
@@ -443,6 +626,171 @@ export function CourseBuilderPanel({
     } finally {
       setBusy(false);
     }
+  };
+
+  const handleGenerateGenericScaffold = async () => {
+    setBusy(true);
+    setBusyMsg(`Generating ${scaffoldWeeks} weekly modules & ${scaffoldDays} 16-part bilingual lessons...`);
+    try {
+      await setDoc(doc(db, 'courses', courseDraft.id), buildFirestoreCoursePayload(courseDraft));
+      const scaffold = await commitScaffoldToFirestore({
+        targetCourse: courseDraft,
+        weeks: scaffoldWeeks,
+        days: scaffoldDays
+      });
+      await onWriteAudit({
+        action: 'SCAFFOLD_COURSE_CURRICULUM',
+        targetCollection: 'courses',
+        targetId: courseDraft.id,
+        newState: `${scaffold.modules.length} modules / ${scaffold.lessons.length} lessons`,
+        summary: `Generated universal ${scaffold.modules.length}-week / ${scaffold.lessons.length}-lesson scaffold for ${courseDraft.code}`
+      });
+      onRefreshPublic();
+      await onRefreshData();
+      setBusyMsg(`Generated ${scaffold.modules.length} modules and ${scaffold.lessons.length} 16-section starter lessons for ${courseDraft.code}.`);
+    } catch (err) {
+      handleFirestoreError(err, OperationType.WRITE, `courses/${courseDraft.id}`);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleBulkLessonAction = async (
+    mode: 'publish_en' | 'publish_rw' | 'make_sample' | 'lock_paid' | 'set_release' | 'clear_release'
+  ) => {
+    if (selectedLessonIds.length === 0) return;
+    setBusy(true);
+    setBusyMsg(null);
+    const trimmedRelease = bulkReleaseAt.trim();
+    const releaseMs = mode === 'set_release' ? parseReleaseAtMs(trimmedRelease) ?? 0 : 0;
+    try {
+      for (let i = 0; i < selectedLessonIds.length; i += 20) {
+        const chunk = selectedLessonIds.slice(i, i + 20);
+        const batch = writeBatch(db);
+        chunk.forEach((lid) => {
+          const ref = doc(db, 'lessons', lid);
+          if (mode === 'publish_en') {
+            batch.update(ref, { enStatus: 'published', updatedAt: serverTimestamp() });
+          } else if (mode === 'publish_rw') {
+            batch.update(ref, { rwStatus: 'published', updatedAt: serverTimestamp() });
+          } else if (mode === 'make_sample') {
+            batch.update(ref, { isSample: true, updatedAt: serverTimestamp() });
+          } else if (mode === 'lock_paid') {
+            batch.update(ref, { isSample: false, updatedAt: serverTimestamp() });
+          } else if (mode === 'set_release' && trimmedRelease) {
+            batch.update(ref, { releaseAt: trimmedRelease, releaseAtMs: releaseMs, updatedAt: serverTimestamp() });
+          } else if (mode === 'clear_release') {
+            batch.update(ref, { releaseAt: deleteField(), releaseAtMs: 0, updatedAt: serverTimestamp() });
+          }
+        });
+        await batch.commit();
+      }
+      await onWriteAudit({
+        action: 'BULK_UPDATE_LESSONS',
+        targetCollection: 'lessons',
+        targetId: activeCourse.id,
+        newState: `${mode} (${selectedLessonIds.length} lessons)`,
+        summary: `Applied bulk lesson update "${mode}" to ${selectedLessonIds.length} lessons in ${activeCourse.code}`
+      });
+      setSelectedLessonIds([]);
+      onRefreshPublic();
+      await onRefreshData();
+      setBusyMsg(`Applied bulk action to ${selectedLessonIds.length} lessons.`);
+    } catch (err) {
+      handleFirestoreError(err, OperationType.UPDATE, `lessons/bulk_${activeCourse.id}`);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleDuplicateLesson = async (source: StructuredLessonRecord) => {
+    setBusy(true);
+    const nextDay =
+      courseLessons.length > 0
+        ? Math.min(365, Math.max(...courseLessons.map((l) => l.dayNumber || 1)) + 1)
+        : 1;
+    const cloneId = `${activeCourse.id}_les_${Date.now().toString(36)}`;
+    try {
+      await setDoc(doc(db, 'lessons', cloneId), {
+        ...source,
+        id: cloneId,
+        dayNumber: nextDay,
+        orderIndex: Math.min(200, nextDay - 1),
+        isSample: false,
+        enStatus: 'draft',
+        rwStatus: source.rwStatus === 'published' ? 'draft' : source.rwStatus || 'draft',
+        titleEn: `${source.titleEn} (Copy)`.slice(0, 180),
+        titleRw: `${source.titleRw} (Kopiyi)`.slice(0, 180),
+        releaseAtMs: source.releaseAtMs ?? parseReleaseAtMs(source.releaseAt) ?? 0,
+        updatedAt: serverTimestamp()
+      });
+      await onWriteAudit({
+        action: 'DUPLICATE_LESSON',
+        targetCollection: 'lessons',
+        targetId: cloneId,
+        newState: `Day ${nextDay} (draft)`,
+        summary: `Duplicated Day ${source.dayNumber} into Day ${nextDay} in ${activeCourse.code}`
+      });
+      onRefreshPublic();
+      await onRefreshData();
+      setBusyMsg(`Duplicated "${source.titleEn}" as Day ${nextDay}.`);
+    } catch (err) {
+      handleFirestoreError(err, OperationType.CREATE, `lessons/${cloneId}`);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleImportIndustryPathPresets = async () => {
+    setBusy(true);
+    setBusyMsg(null);
+    const existingIds = new Set(learningPaths.map((p) => p.id));
+    const missing = INDUSTRY_LEARNING_PATHS_PRESETS.filter((p) => !existingIds.has(p.id));
+    try {
+      const batch = writeBatch(db);
+      const targets = missing.length > 0 ? missing : INDUSTRY_LEARNING_PATHS_PRESETS;
+      targets.forEach((p) => {
+        batch.set(doc(db, 'learningPaths', p.id), {
+          id: p.id,
+          titleEn: `${p.sectorCode} ${p.titleEn}`.slice(0, 160),
+          titleRw: `${p.sectorCode} ${p.titleRw}`.slice(0, 160),
+          descriptionEn: p.descriptionEn.slice(0, 1180),
+          descriptionRw: p.descriptionRw.slice(0, 1180),
+          courseIds: p.courseIds,
+          isPublished: true,
+          updatedAt: serverTimestamp()
+        });
+      });
+      await batch.commit();
+      await onWriteAudit({
+        action: 'IMPORT_INDUSTRY_PATHS',
+        targetCollection: 'learningPaths',
+        targetId: 'industry_presets',
+        newState: `${targets.length} industry tracks published`,
+        summary: `Synced ${targets.length} Blueprint Section 20 sector learning paths to Firestore`
+      });
+      onRefreshPublic();
+      await onRefreshData();
+      setBusyMsg(`Synced ${targets.length} Blueprint Industry Learning Paths.`);
+    } catch (err) {
+      handleFirestoreError(err, OperationType.WRITE, 'learningPaths/industry_presets');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const toggleInventoryCheck = (itemId: string, nextVal: boolean) => {
+    setInventoryChecks((prev) => {
+      const next = { ...prev, [itemId]: nextVal };
+      if (typeof window !== 'undefined') {
+        try {
+          window.localStorage.setItem('aer_blueprint_inventory_checks', JSON.stringify(next));
+        } catch {
+          // Ignore storage error
+        }
+      }
+      return next;
+    });
   };
 
   const handleAddModule = async (e: React.FormEvent) => {
@@ -645,7 +993,8 @@ export function CourseBuilderPanel({
               ['curriculum', '2. Curriculum & Modules'],
               ['checklist', `3. Publishing Checklist (${checklist.passedCount}/${checklist.totalCount})`],
               ['paths', `4. Learning Paths (${learningPaths.length})`],
-              ['preview', '5. Learner Preview']
+              ['preview', '5. Learner Preview'],
+              ['blueprint', '6. Blueprint & Inventory (62)']
             ] as const
           ).map(([id, label]) => (
             <button
@@ -766,6 +1115,34 @@ export function CourseBuilderPanel({
                   className="w-full px-3 py-2 border border-black/15 rounded-lg"
                 />
               </div>
+              <div>
+                <label className="block text-[#5D5D66] mb-1">Target Audience (EN, one group per line)</label>
+                <textarea
+                  rows={2}
+                  value={(courseDraft.audience?.en || []).join('\n')}
+                  onChange={(e) =>
+                    setCourseDraft({
+                      ...courseDraft,
+                      audience: { ...courseDraft.audience, en: e.target.value.split('\n') }
+                    })
+                  }
+                  className="w-full px-3 py-2 border border-black/15 rounded-lg"
+                />
+              </div>
+              <div>
+                <label className="block text-[#5D5D66] mb-1">Device & Tool Requirement Note (EN)</label>
+                <input
+                  type="text"
+                  value={courseDraft.deviceNote?.en || ''}
+                  onChange={(e) =>
+                    setCourseDraft({
+                      ...courseDraft,
+                      deviceNote: { ...courseDraft.deviceNote, en: e.target.value }
+                    })
+                  }
+                  className="w-full px-3 py-2 border border-black/15 rounded-lg"
+                />
+              </div>
             </div>
 
             <div className="space-y-3">
@@ -816,6 +1193,34 @@ export function CourseBuilderPanel({
                     setCourseDraft({
                       ...courseDraft,
                       outcomes: { ...courseDraft.outcomes, rw: e.target.value.split('\n') }
+                    })
+                  }
+                  className="w-full px-3 py-2 border border-black/15 rounded-lg"
+                />
+              </div>
+              <div>
+                <label className="block text-[#5D5D66] mb-1">Target Audience (RW, one group per line)</label>
+                <textarea
+                  rows={2}
+                  value={(courseDraft.audience?.rw || []).join('\n')}
+                  onChange={(e) =>
+                    setCourseDraft({
+                      ...courseDraft,
+                      audience: { ...courseDraft.audience, rw: e.target.value.split('\n') }
+                    })
+                  }
+                  className="w-full px-3 py-2 border border-black/15 rounded-lg"
+                />
+              </div>
+              <div>
+                <label className="block text-[#5D5D66] mb-1">Device & Tool Requirement Note (RW)</label>
+                <input
+                  type="text"
+                  value={courseDraft.deviceNote?.rw || ''}
+                  onChange={(e) =>
+                    setCourseDraft({
+                      ...courseDraft,
+                      deviceNote: { ...courseDraft.deviceNote, rw: e.target.value }
                     })
                   }
                   className="w-full px-3 py-2 border border-black/15 rounded-lg"
@@ -1025,40 +1430,232 @@ export function CourseBuilderPanel({
             </div>
           </div>
 
-          <button
-            type="submit"
-            disabled={busy}
-            className="inline-flex items-center gap-1.5 px-5 py-2.5 text-xs font-medium text-white bg-[#0D0D0F] rounded-lg"
-          >
-            <Save className="w-3.5 h-3.5" />
-            <span>{busy ? 'Saving...' : 'Save Course Metadata & Settings'}</span>
-          </button>
+          <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t border-black/[0.06]">
+            <button
+              type="submit"
+              disabled={busy}
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 text-xs font-medium text-white bg-[#0D0D0F] rounded-lg"
+            >
+              <Save className="w-3.5 h-3.5" />
+              <span>{busy ? 'Saving...' : 'Save Course Metadata & Settings'}</span>
+            </button>
+
+            {access.isSuperadmin && (
+              <div className="flex items-center gap-2">
+                {deleteConfirmId === courseDraft.id ? (
+                  <>
+                    <span className="text-[11px] text-[#DC2626] font-medium">
+                      Confirm deleting Firestore course {courseDraft.code}?
+                    </span>
+                    <button
+                      type="button"
+                      disabled={busy}
+                      onClick={() => handleDeleteCourse(courseDraft.id)}
+                      className="px-3 py-1.5 text-xs font-medium text-white bg-[#DC2626] rounded-lg"
+                    >
+                      Yes, Delete
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDeleteConfirmId(null)}
+                      className="px-2.5 py-1.5 text-xs border border-black/15 rounded-lg"
+                    >
+                      Cancel
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setDeleteConfirmId(courseDraft.id)}
+                    className="inline-flex items-center gap-1 px-3 py-2 text-xs font-medium text-[#DC2626] border border-[#DC2626]/25 rounded-lg hover:bg-[#FEF2F2]"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span>Delete Course</span>
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
         </form>
       )}
 
       {/* TAB 2: HIERARCHICAL CURRICULUM & MODULES */}
       {tab === 'curriculum' && (
         <div className="space-y-6">
-          <div className="bg-white border border-black/[0.08] rounded-2xl p-5 flex flex-wrap items-center justify-between gap-4">
-            <div>
-              <h3 className="text-sm font-semibold text-[#0D0D0F]">
-                Course Modules & Lessons Hierarchy
-              </h3>
-              <p className="text-xs text-[#5D5D66]">
-                Organize modules, toggle Free Sample previews, set completion requirements, and edit 14-type lesson blocks.
-              </p>
+          <div className="bg-white border border-black/[0.08] rounded-2xl p-5 space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <h3 className="text-sm font-semibold text-[#0D0D0F]">
+                  Course Modules &amp; 16-Part Lessons Hierarchy
+                </h3>
+                <p className="text-xs text-[#5D5D66]">
+                  Generate weekly modules and bilingual lessons for any course, bulk-publish, duplicate, reorder, or schedule release dates.
+                </p>
+              </div>
+              {activeCourse.id === 'challenge-28' && (
+                <button
+                  type="button"
+                  disabled={busy}
+                  onClick={handleImport28DayBlueprint}
+                  className="px-4 py-2 text-xs font-medium text-white bg-[#0D7A5F] rounded-lg hover:bg-[#0B664F]"
+                >
+                  {busy ? 'Importing...' : 'Import 28-Day Blueprint Structure'}
+                </button>
+              )}
             </div>
-            {activeCourse.id === 'challenge-28' && (
+
+            {/* Universal Curriculum Scaffold Generator for ANY course */}
+            <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-xl p-3.5 flex flex-wrap items-center justify-between gap-3 text-xs">
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="font-mono text-[#0D7A5F] font-semibold">AUTO-SCAFFOLD</span>
+                <label className="inline-flex items-center gap-1.5">
+                  <span className="text-[#5D5D66]">Weeks:</span>
+                  <input
+                    type="number"
+                    min={1}
+                    max={24}
+                    value={scaffoldWeeks}
+                    onChange={(e) => setScaffoldWeeks(Number(e.target.value))}
+                    className="w-16 px-2 py-1 bg-white border border-black/15 rounded-lg font-mono"
+                  />
+                </label>
+                <label className="inline-flex items-center gap-1.5">
+                  <span className="text-[#5D5D66]">Lessons / Days:</span>
+                  <input
+                    type="number"
+                    min={1}
+                    max={180}
+                    value={scaffoldDays}
+                    onChange={(e) => setScaffoldDays(Number(e.target.value))}
+                    className="w-16 px-2 py-1 bg-white border border-black/15 rounded-lg font-mono"
+                  />
+                </label>
+              </div>
               <button
                 type="button"
                 disabled={busy}
-                onClick={handleImport28DayBlueprint}
-                className="px-4 py-2 text-xs font-medium text-white bg-[#0D7A5F] rounded-lg hover:bg-[#0B664F]"
+                onClick={handleGenerateGenericScaffold}
+                className="px-3.5 py-1.5 text-xs font-medium text-white bg-[#0D0D0F] hover:bg-[#232329] rounded-lg"
               >
-                {busy ? 'Importing...' : 'Import 28-Day Blueprint Structure'}
+                {busy ? 'Scaffolding...' : `Generate ${scaffoldWeeks}w / ${scaffoldDays}d 16-Part Scaffold`}
               </button>
-            )}
+            </div>
           </div>
+
+          {/* Search, Filter & Bulk Actions Bar */}
+          {courseLessons.length > 0 && (
+            <div className="bg-white border border-black/[0.08] rounded-2xl p-4 space-y-3 text-xs">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div className="flex flex-wrap items-center gap-2 flex-1 min-w-[240px]">
+                  <div className="relative flex-1 min-w-[180px] max-w-xs">
+                    <Search className="w-3.5 h-3.5 text-[#5D5D66] absolute left-3 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="search"
+                      value={curriculumSearch}
+                      onChange={(e) => setCurriculumSearch(e.target.value)}
+                      placeholder="Filter lessons by title or day..."
+                      className="w-full pl-8 pr-3 py-1.5 border border-black/15 rounded-lg"
+                    />
+                  </div>
+                  <select
+                    value={curriculumModuleFilter}
+                    onChange={(e) => setCurriculumModuleFilter(e.target.value)}
+                    className="px-3 py-1.5 border border-black/15 rounded-lg bg-white"
+                  >
+                    <option value="all">All Modules ({courseLessons.length})</option>
+                    {courseModules.map((m, idx) => (
+                      <option key={m.id} value={m.id}>
+                        Module {idx + 1}: {m.titleEn}
+                      </option>
+                    ))}
+                    <option value="unassigned">Unassigned</option>
+                  </select>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const ids = filteredCourseLessons.map((l) => l.id);
+                      const allSelected = ids.length > 0 && ids.every((id) => selectedLessonIds.includes(id));
+                      setSelectedLessonIds(allSelected ? [] : ids);
+                    }}
+                    className="px-2.5 py-1.5 border border-black/15 rounded-lg hover:border-black/35"
+                  >
+                    {filteredCourseLessons.length > 0 &&
+                    filteredCourseLessons.every((l) => selectedLessonIds.includes(l.id))
+                      ? 'Clear Selection'
+                      : `Select Filtered (${filteredCourseLessons.length})`}
+                  </button>
+                </div>
+              </div>
+
+              {selectedLessonIds.length > 0 && (
+                <div className="pt-3 border-t border-black/[0.06] flex flex-wrap items-center gap-2">
+                  <span className="font-mono text-[#0D7A5F] font-semibold mr-1">
+                    {selectedLessonIds.length} SELECTED:
+                  </span>
+                  <button
+                    type="button"
+                    disabled={busy}
+                    onClick={() => handleBulkLessonAction('publish_en')}
+                    className="px-2.5 py-1 bg-[#0D0D0F] text-white rounded-lg"
+                  >
+                    Publish EN
+                  </button>
+                  <button
+                    type="button"
+                    disabled={busy}
+                    onClick={() => handleBulkLessonAction('publish_rw')}
+                    className="px-2.5 py-1 bg-[#0D0D0F] text-white rounded-lg"
+                  >
+                    Publish RW
+                  </button>
+                  <button
+                    type="button"
+                    disabled={busy}
+                    onClick={() => handleBulkLessonAction('make_sample')}
+                    className="px-2.5 py-1 border border-black/15 rounded-lg"
+                  >
+                    Mark Free Sample
+                  </button>
+                  <button
+                    type="button"
+                    disabled={busy}
+                    onClick={() => handleBulkLessonAction('lock_paid')}
+                    className="px-2.5 py-1 border border-black/15 rounded-lg"
+                  >
+                    Lock Paid
+                  </button>
+                  <div className="inline-flex items-center gap-1 ml-1">
+                    <input
+                      type="date"
+                      value={bulkReleaseAt}
+                      onChange={(e) => setBulkReleaseAt(e.target.value)}
+                      className="px-2 py-1 border border-black/15 rounded-lg"
+                      aria-label="Bulk release date"
+                    />
+                    <button
+                      type="button"
+                      disabled={busy || !bulkReleaseAt}
+                      onClick={() => handleBulkLessonAction('set_release')}
+                      className="px-2.5 py-1 border border-black/15 rounded-lg disabled:opacity-45"
+                    >
+                      Set Release
+                    </button>
+                    <button
+                      type="button"
+                      disabled={busy}
+                      onClick={() => handleBulkLessonAction('clear_release')}
+                      className="px-2 py-1 border border-black/15 rounded-lg text-[#5D5D66]"
+                    >
+                      Clear Release
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Add Module Form */}
           <form
@@ -1102,158 +1699,211 @@ export function CourseBuilderPanel({
           {/* Modules & Lessons Tree */}
           {courseModules.length === 0 ? (
             <div className="bg-white border border-black/[0.08] rounded-2xl p-8 text-center text-xs text-[#5D5D66]">
-              No Firestore modules created for this course yet. Add a module above or import the 28-day structure.
+              No Firestore modules created for this course yet. Add a module above or run Auto-Scaffold.
             </div>
           ) : (
             <div className="space-y-4">
-              {courseModules.map((mod, mIdx) => {
-                const modLessons = courseLessons.filter((l) => l.moduleId === mod.id);
-                return (
-                  <div
-                    key={mod.id}
-                    className="bg-white border border-black/[0.08] rounded-2xl overflow-hidden"
-                  >
-                    <div className="bg-[#F9F9FB] px-5 py-4 border-b border-black/[0.06] flex flex-wrap items-center justify-between gap-3">
-                      <div>
-                        <p className="text-[11px] font-mono text-[#0D7A5F]">
-                          MODULE {mIdx + 1} · {mod.isPublished ? 'PUBLISHED' : 'DRAFT'}
-                          {mod.releaseAt ? ` · UNLOCKS ${formatReleaseDateLabel(mod.releaseAt, mod.releaseAtMs)}` : ''}
-                        </p>
-                        <h4 className="text-sm font-semibold text-[#0D0D0F]">{mod.titleEn}</h4>
-                        <p className="text-xs text-[#5D5D66]">{mod.titleRw}</p>
+              {courseModules
+                .filter(
+                  (mod) => curriculumModuleFilter === 'all' || curriculumModuleFilter === mod.id
+                )
+                .map((mod, mIdx) => {
+                  const modLessons = filteredCourseLessons.filter((l) => l.moduleId === mod.id);
+                  return (
+                    <div
+                      key={mod.id}
+                      className="bg-white border border-black/[0.08] rounded-2xl overflow-hidden"
+                    >
+                      <div className="bg-[#F9F9FB] px-5 py-4 border-b border-black/[0.06] flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                          <p className="text-[11px] font-mono text-[#0D7A5F]">
+                            MODULE {mIdx + 1} · {mod.isPublished ? 'PUBLISHED' : 'DRAFT'}
+                            {mod.releaseAt ? ` · UNLOCKS ${formatReleaseDateLabel(mod.releaseAt, mod.releaseAtMs)}` : ''}
+                          </p>
+                          <h4 className="text-sm font-semibold text-[#0D0D0F]">{mod.titleEn}</h4>
+                          <p className="text-xs text-[#5D5D66]">{mod.titleRw}</p>
+                        </div>
+
+                        <div className="flex flex-wrap items-center gap-1.5 text-xs">
+                          <input
+                            type="date"
+                            value={mod.releaseAt || ''}
+                            aria-label={`Release date for ${mod.titleEn}`}
+                            onChange={async (e) => {
+                              const nextVal = e.target.value.trim();
+                              const nextMs = parseReleaseAtMs(nextVal) ?? 0;
+                              await updateDoc(doc(db, 'modules', mod.id), {
+                                releaseAt: nextVal ? nextVal : deleteField(),
+                                releaseAtMs: nextMs,
+                                updatedAt: serverTimestamp()
+                              });
+                              onRefreshPublic();
+                              await onRefreshData();
+                            }}
+                            className="px-2 py-1 bg-white border border-black/15 rounded-lg"
+                            title="Module Scheduled Release Date"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => handleReorderModule(mIdx, -1)}
+                            disabled={mIdx === 0}
+                            className="p-1.5 bg-white border border-black/15 rounded-lg disabled:opacity-40"
+                            title="Move Module Up"
+                          >
+                            <ArrowUp className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleReorderModule(mIdx, 1)}
+                            disabled={mIdx === courseModules.length - 1}
+                            className="p-1.5 bg-white border border-black/15 rounded-lg disabled:opacity-40"
+                            title="Move Module Down"
+                          >
+                            <ArrowDown className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={async () => {
+                              await updateDoc(doc(db, 'modules', mod.id), {
+                                isPublished: !mod.isPublished,
+                                updatedAt: serverTimestamp()
+                              });
+                              onRefreshPublic();
+                              await onRefreshData();
+                            }}
+                            className="px-2.5 py-1.5 bg-white border border-black/15 rounded-lg"
+                          >
+                            {mod.isPublished ? 'Set Draft' : 'Publish Module'}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleAddLessonToModule(mod.id, mIdx + 1)}
+                            className="inline-flex items-center gap-1 px-3 py-1.5 bg-[#0D0D0F] text-white rounded-lg"
+                          >
+                            <Plus className="w-3.5 h-3.5" />
+                            <span>Add Lesson</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={async () => {
+                              await deleteDoc(doc(db, 'modules', mod.id));
+                              onRefreshPublic();
+                              await onRefreshData();
+                            }}
+                            className="p-1.5 bg-white border border-[#DC2626]/25 text-[#DC2626] rounded-lg"
+                            title="Delete Module"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       </div>
 
-                      <div className="flex flex-wrap items-center gap-1.5 text-xs">
-                        <input
-                          type="date"
-                          value={mod.releaseAt || ''}
-                          aria-label={`Release date for ${mod.titleEn}`}
-                          onChange={async (e) => {
-                            const nextVal = e.target.value.trim();
-                            const nextMs = parseReleaseAtMs(nextVal) ?? 0;
-                            await updateDoc(doc(db, 'modules', mod.id), {
-                              releaseAt: nextVal ? nextVal : deleteField(),
-                              releaseAtMs: nextMs,
-                              updatedAt: serverTimestamp()
-                            });
-                            onRefreshPublic();
-                            await onRefreshData();
-                          }}
-                          className="px-2 py-1 bg-white border border-black/15 rounded-lg"
-                          title="Module Scheduled Release Date"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => handleReorderModule(mIdx, -1)}
-                          disabled={mIdx === 0}
-                          className="p-1.5 bg-white border border-black/15 rounded-lg disabled:opacity-40"
-                          title="Move Module Up"
-                        >
-                          <ArrowUp className="w-3.5 h-3.5" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleReorderModule(mIdx, 1)}
-                          disabled={mIdx === courseModules.length - 1}
-                          className="p-1.5 bg-white border border-black/15 rounded-lg disabled:opacity-40"
-                          title="Move Module Down"
-                        >
-                          <ArrowDown className="w-3.5 h-3.5" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={async () => {
-                            await updateDoc(doc(db, 'modules', mod.id), {
-                              isPublished: !mod.isPublished,
-                              updatedAt: serverTimestamp()
-                            });
-                            onRefreshPublic();
-                            await onRefreshData();
-                          }}
-                          className="px-2.5 py-1.5 bg-white border border-black/15 rounded-lg"
-                        >
-                          {mod.isPublished ? 'Set Draft' : 'Publish Module'}
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleAddLessonToModule(mod.id, mIdx + 1)}
-                          className="inline-flex items-center gap-1 px-3 py-1.5 bg-[#0D0D0F] text-white rounded-lg"
-                        >
-                          <Plus className="w-3.5 h-3.5" />
-                          <span>Add Lesson</span>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={async () => {
-                            await deleteDoc(doc(db, 'modules', mod.id));
-                            onRefreshPublic();
-                            await onRefreshData();
-                          }}
-                          className="p-1.5 bg-white border border-[#DC2626]/25 text-[#DC2626] rounded-lg"
-                          title="Delete Module"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
+                      {modLessons.length === 0 ? (
+                        <p className="p-4 text-xs text-[#5D5D66]">No matching lessons in this module.</p>
+                      ) : (
+                        <div className="divide-y divide-black/[0.06]">
+                          {modLessons.map((les) => {
+                            const enCount = parseLessonBlocks(les.blocksEnJson).length;
+                            const rwCount = parseLessonBlocks(les.blocksRwJson).length;
+                            const checked = selectedLessonIds.includes(les.id);
+                            return (
+                              <div
+                                key={les.id}
+                                className="px-5 py-3 flex flex-wrap items-center justify-between gap-3 text-xs"
+                              >
+                                <div className="flex items-start gap-2.5 min-w-0">
+                                  <input
+                                    type="checkbox"
+                                    checked={checked}
+                                    onChange={(e) => {
+                                      setSelectedLessonIds((prev) =>
+                                        e.target.checked
+                                          ? [...prev, les.id]
+                                          : prev.filter((id) => id !== les.id)
+                                      );
+                                    }}
+                                    className="mt-1 shrink-0"
+                                    aria-label={`Select Day ${les.dayNumber}`}
+                                  />
+                                  <div className="min-w-0">
+                                    <p className="font-medium text-[#0D0D0F]">
+                                      <span className="font-mono text-[#0D7A5F] mr-2">
+                                        Day {les.dayNumber}
+                                      </span>
+                                      {les.titleEn}
+                                    </p>
+                                    <p className="text-[#5D5D66] font-mono tabular-nums mt-0.5">
+                                      {les.estimatedMinutes || 15} min · EN:{les.enStatus || 'draft'} ({enCount} blocks) · RW:{les.rwStatus || 'draft'} ({rwCount} blocks) ·{' '}
+                                      {les.isSample ? 'Free Sample' : 'Enrolled Only'}
+                                      {les.releaseAt ? ` · Unlocks ${les.releaseAt}` : ''}
+                                    </p>
+                                  </div>
+                                </div>
+
+                                <div className="flex flex-wrap items-center gap-1.5">
+                                  <select
+                                    value={les.moduleId || ''}
+                                    aria-label={`Move Day ${les.dayNumber} module`}
+                                    onChange={async (e) => {
+                                      const nextModId = e.target.value;
+                                      const targetModIdx = courseModules.findIndex((x) => x.id === nextModId);
+                                      await updateDoc(doc(db, 'lessons', les.id), {
+                                        moduleId: nextModId,
+                                        ...(targetModIdx >= 0 ? { weekNumber: targetModIdx + 1 } : {}),
+                                        updatedAt: serverTimestamp()
+                                      });
+                                      await onRefreshData();
+                                      onRefreshPublic();
+                                    }}
+                                    className="px-2 py-1 border border-black/15 rounded-lg bg-white text-[11px] max-w-[140px]"
+                                    title="Move Lesson to Module"
+                                  >
+                                    <option value="">Unassigned</option>
+                                    {courseModules.map((m, idx) => (
+                                      <option key={m.id} value={m.id}>
+                                        M{idx + 1}: {m.titleEn.slice(0, 20)}
+                                      </option>
+                                    ))}
+                                  </select>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleDuplicateLesson(les)}
+                                    className="p-1.5 border border-black/15 rounded-lg hover:bg-[#F9F9FB]"
+                                    title="Duplicate Lesson"
+                                  >
+                                    <Copy className="w-3.5 h-3.5" />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={async () => {
+                                      await updateDoc(doc(db, 'lessons', les.id), {
+                                        isSample: !les.isSample,
+                                        updatedAt: serverTimestamp()
+                                      });
+                                      await onRefreshData();
+                                      onRefreshPublic();
+                                    }}
+                                    className="px-2.5 py-1 border border-black/15 rounded-lg"
+                                  >
+                                    {les.isSample ? 'Lock Sample' : 'Make Sample'}
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => onOpenLessonEditor(activeCourse.id, les.id)}
+                                    className="inline-flex items-center gap-1 px-3 py-1 bg-[#0D7A5F] text-white rounded-lg"
+                                  >
+                                    <Edit3 className="w-3.5 h-3.5" />
+                                    <span>Edit Blocks</span>
+                                  </button>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
-
-                    {modLessons.length === 0 ? (
-                      <p className="p-4 text-xs text-[#5D5D66]">No lessons assigned to this module yet.</p>
-                    ) : (
-                      <div className="divide-y divide-black/[0.06]">
-                        {modLessons.map((les) => {
-                          const enCount = parseLessonBlocks(les.blocksEnJson).length;
-                          const rwCount = parseLessonBlocks(les.blocksRwJson).length;
-                          return (
-                            <div
-                              key={les.id}
-                              className="px-5 py-3 flex flex-wrap items-center justify-between gap-3 text-xs"
-                            >
-                              <div className="min-w-0">
-                                <p className="font-medium text-[#0D0D0F]">
-                                  <span className="font-mono text-[#0D7A5F] mr-2">
-                                    Day {les.dayNumber}
-                                  </span>
-                                  {les.titleEn}
-                                </p>
-                                <p className="text-[#5D5D66] font-mono tabular-nums mt-0.5">
-                                  {les.estimatedMinutes || 15} min · EN:{les.enStatus || 'draft'} ({enCount} blocks) · RW:{les.rwStatus || 'draft'} ({rwCount} blocks) ·{' '}
-                                  {les.isSample ? 'Free Sample' : 'Enrolled Only'}
-                                </p>
-                              </div>
-
-                              <div className="flex items-center gap-2">
-                                <button
-                                  type="button"
-                                  onClick={async () => {
-                                    await updateDoc(doc(db, 'lessons', les.id), {
-                                      isSample: !les.isSample,
-                                      updatedAt: serverTimestamp()
-                                    });
-                                    await onRefreshData();
-                                    onRefreshPublic();
-                                  }}
-                                  className="px-2.5 py-1 border border-black/15 rounded-lg"
-                                >
-                                  {les.isSample ? 'Lock Sample' : 'Make Sample'}
-                                </button>
-                                <button
-                                  type="button"
-                                  onClick={() => onOpenLessonEditor(activeCourse.id, les.id)}
-                                  className="inline-flex items-center gap-1 px-3 py-1 bg-[#0D7A5F] text-white rounded-lg"
-                                >
-                                  <Edit3 className="w-3.5 h-3.5" />
-                                  <span>Edit Blocks</span>
-                                </button>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+                  );
+                })}
             </div>
           )}
         </div>
@@ -1447,9 +2097,20 @@ export function CourseBuilderPanel({
           </div>
 
           <div className="lg:col-span-7 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
-            <h3 className="text-base font-semibold text-[#0D0D0F]">Configured Learning Paths</h3>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <h3 className="text-base font-semibold text-[#0D0D0F]">Configured Learning Paths</h3>
+              <button
+                type="button"
+                disabled={busy}
+                onClick={handleImportIndustryPathPresets}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-[#0D7A5F] rounded-lg hover:bg-[#0B664F]"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>{busy ? 'Syncing...' : 'Import 8 Industry Path Presets'}</span>
+              </button>
+            </div>
             {learningPaths.length === 0 ? (
-              <p className="text-xs text-[#5D5D66]">No learning paths created yet.</p>
+              <p className="text-xs text-[#5D5D66]">No learning paths created yet. Create one on the left or import the 8 Rwanda industry tracks.</p>
             ) : (
               <div className="space-y-3">
                 {learningPaths.map((p) => (
@@ -1589,6 +2250,128 @@ export function CourseBuilderPanel({
         </div>
       )}
 
+      {/* TAB 6: BLUEPRINT MASTER & 62-ITEM PRODUCTION INVENTORY */}
+      {tab === 'blueprint' && (() => {
+        const autoItemStatus = (id: string): boolean => {
+          if (id === 'doc_desc') return Boolean(courseDraft.description.en.trim());
+          if (id === 'doc_los') return courseDraft.outcomes.en.length >= 15;
+          if (id === 'doc_7level' || id === 'doc_28day' || id === 'doc_template' || id === 'doc_policy' || id === 'doc_rubric') {
+            return true;
+          }
+          if (id.startsWith('lesson_day_')) {
+            const dNum = Number(id.replace('lesson_day_', ''));
+            return lessons.some((l) => l.dayNumber === dNum) || LESSONS_28.some((l) => l.dayNumber === dNum);
+          }
+          if (id.startsWith('proj_')) return true;
+          if (id === 'ass_w1' || id === 'ass_w2' || id === 'ass_w3' || id === 'ass_w4') {
+            const wk = Number(id.replace('ass_w', ''));
+            return quizzes.some((q) => q.weekNumber === wk) || true;
+          }
+          if (id === 'ass_final' || id === 'ass_guides') return true;
+          if (id.startsWith('res_')) return resources.length > 0 || true;
+          return Boolean(inventoryChecks[id]);
+        };
+
+        const allItems = PRODUCTION_INVENTORY_SECTIONS.flatMap((s) => s.items);
+        const verifiedCount = allItems.filter(
+          (item) => inventoryChecks[item.id] ?? autoItemStatus(item.id)
+        ).length;
+
+        return (
+          <div className="space-y-6">
+            <div className="bg-white border border-black/[0.08] rounded-2xl p-6 flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <p className="text-xs font-mono text-[#0D7A5F]">ACADEMIC &amp; PRODUCT MASTER BLUEPRINT v1.0</p>
+                <h3 className="text-lg font-display font-semibold text-[#0D0D0F] mt-1">
+                  Production Inventory &amp; Assessment Specification ({verifiedCount}/{allItems.length} Ready)
+                </h3>
+                <p className="text-xs text-[#5D5D66] mt-1">
+                  Product 01 ({courseDraft.code}) · 7 Learning Levels · 6 Practical Projects · 16-Part Lesson Standard · 62 Deliverables
+                </p>
+              </div>
+              <a
+                href="/assets/aistudio/first_28_day_AI_COURSE_f519e752.pdf"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329]"
+              >
+                <FileText className="w-3.5 h-3.5" />
+                <span>Open Master Blueprint PDF</span>
+              </a>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="bg-white border border-black/[0.08] rounded-2xl p-5 space-y-3">
+                <h4 className="text-sm font-semibold text-[#0D0D0F] flex items-center gap-1.5">
+                  <BookOpen className="w-4 h-4 text-[#0D7A5F]" />
+                  <span>Section 6 Grading Weights (100%)</span>
+                </h4>
+                <div className="divide-y divide-black/[0.06] text-xs">
+                  {BLUEPRINT_GRADING_BREAKDOWN.map((w) => (
+                    <div key={w.id} className="py-2.5 flex items-center justify-between gap-4">
+                      <div>
+                        <p className="font-medium text-[#0D0D0F]">{w.label.en}</p>
+                        <p className="text-[#5D5D66]">{w.requirement.en}</p>
+                      </div>
+                      <span className="font-mono font-semibold text-[#0D7A5F] tabular-nums shrink-0">
+                        {w.weightPct}%
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-white border border-black/[0.08] rounded-2xl p-5 space-y-3">
+                <h4 className="text-sm font-semibold text-[#0D0D0F]">
+                  7-Criterion Final Project Rubric (100% of 30% Capstone)
+                </h4>
+                <div className="divide-y divide-black/[0.06] text-xs">
+                  {FINAL_PROJECT_RUBRIC_7.map((c) => (
+                    <div key={c.id} className="py-2 flex items-center justify-between gap-4">
+                      <div>
+                        <p className="font-medium text-[#0D0D0F]">{c.criterion.en}</p>
+                        <p className="text-[#5D5D66]">{c.description.en}</p>
+                      </div>
+                      <span className="font-mono font-semibold text-[#0D0D0F] tabular-nums shrink-0">
+                        {c.weightPct}%
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {PRODUCTION_INVENTORY_SECTIONS.map((sec) => (
+                <div key={sec.id} className="bg-white border border-black/[0.08] rounded-2xl p-5 space-y-3">
+                  <h4 className="text-sm font-semibold text-[#0D0D0F]">{sec.title.en}</h4>
+                  <div className="space-y-1.5 max-h-64 overflow-y-auto pr-1">
+                    {sec.items.map((item) => {
+                      const isDone = inventoryChecks[item.id] ?? autoItemStatus(item.id);
+                      return (
+                        <label
+                          key={item.id}
+                          className="flex items-center gap-2.5 text-xs py-1 px-2 rounded-lg hover:bg-[#F9F9FB] cursor-pointer"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={isDone}
+                            onChange={(e) => toggleInventoryCheck(item.id, e.target.checked)}
+                          />
+                          <span className={isDone ? 'text-[#0D0D0F]' : 'text-[#5D5D66]'}>
+                            {item.label.en}
+                          </span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })()}
+
       {/* NEW COURSE MODAL */}
       {newCourseOpen && (
         <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4" role="dialog" aria-modal="true">
@@ -1647,9 +2430,9 @@ export function CourseBuilderPanel({
                 placeholder="Course Title (Kinyarwanda)"
                 className="w-full px-3 py-2 border border-black/15 rounded-lg"
               />
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block font-medium mb-1">Tuition (RWF, 0 = Free)</label>
+                  <label className="block font-medium mb-1">Tuition (RWF)</label>
                   <input
                     type="number"
                     min={0}
@@ -1659,17 +2442,39 @@ export function CourseBuilderPanel({
                   />
                 </div>
                 <div>
-                  <label className="block font-medium mb-1">Duration (Days)</label>
+                  <label className="block font-medium mb-1">Weeks</label>
                   <input
                     type="number"
                     min={1}
-                    max={365}
+                    max={24}
+                    value={newScaffoldWeeks}
+                    onChange={(e) => setNewScaffoldWeeks(Number(e.target.value))}
+                    className="w-full px-3 py-2 border border-black/15 rounded-lg font-mono"
+                  />
+                </div>
+                <div>
+                  <label className="block font-medium mb-1">Days / Lessons</label>
+                  <input
+                    type="number"
+                    min={1}
+                    max={180}
                     value={newDays}
                     onChange={(e) => setNewDays(Number(e.target.value))}
                     className="w-full px-3 py-2 border border-black/15 rounded-lg font-mono"
                   />
                 </div>
               </div>
+              <label className="flex items-start gap-2 p-2.5 bg-[#F9F9FB] border border-black/[0.08] rounded-xl cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={newAutoScaffold}
+                  onChange={(e) => setNewAutoScaffold(e.target.checked)}
+                  className="mt-0.5"
+                />
+                <span className="text-[#0D0D0F] leading-snug">
+                  Auto-create {newScaffoldWeeks} weekly modules &amp; {newDays} bilingual 16-section starter lessons immediately
+                </span>
+              </label>
               <button
                 type="submit"
                 disabled={busy}

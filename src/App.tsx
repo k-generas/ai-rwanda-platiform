@@ -59,6 +59,7 @@ import { COURSES } from './data/curriculum';
 import { resolveUserAccess, type ResolvedAccess } from './lib/permissions';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { Header } from './components/Header';
+import { SidebarNav } from './components/SidebarNav';
 import { SubBar } from './components/SubBar';
 import { Footer } from './components/Footer';
 import { HomeView } from './components/HomeView';
@@ -86,6 +87,8 @@ function PlatformShell() {
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [verifyCertId, setVerifyCertId] = useState<string>('RW-AI-2026-0042');
   const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [courseTrackFilter, setCourseTrackFilter] = useState<string>('all');
 
   const [user, setUser] = useState<User | null>(null);
   const [authReady, setAuthReady] = useState(false);
@@ -207,6 +210,14 @@ function PlatformShell() {
             outcomes: {
               en: Array.isArray(raw.outcomesEn) ? (raw.outcomesEn as string[]) : fallback.outcomes.en,
               rw: Array.isArray(raw.outcomesRw) ? (raw.outcomesRw as string[]) : fallback.outcomes.rw
+            },
+            audience: {
+              en: Array.isArray(raw.audienceEn) ? (raw.audienceEn as string[]) : fallback.audience.en,
+              rw: Array.isArray(raw.audienceRw) ? (raw.audienceRw as string[]) : fallback.audience.rw
+            },
+            deviceNote: {
+              en: typeof raw.deviceNoteEn === 'string' && raw.deviceNoteEn.trim() ? raw.deviceNoteEn : fallback.deviceNote.en,
+              rw: typeof raw.deviceNoteRw === 'string' && raw.deviceNoteRw.trim() ? raw.deviceNoteRw : fallback.deviceNote.rw
             }
           };
         });
@@ -790,147 +801,174 @@ function PlatformShell() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col bg-white text-[#0D0D0F]">
+    <div className="min-h-screen flex flex-col bg-[#F7F8FA] text-[#0D0D0F]">
       <Header
         currentRoute={route}
         lang={lang}
         user={user}
         staffRole={access.role}
+        mobileOpen={mobileNavOpen}
+        onToggleMobile={() => setMobileNavOpen((prev) => !prev)}
+        onChangeLang={setLang}
         onNavigate={handleNavigate}
         onSignIn={handleOpenSignIn}
-      />
-
-      <SubBar
-        lang={lang}
-        onChangeLang={setLang}
-        currentRoute={route}
-        onNavigate={handleNavigate}
-        user={user}
-        staffRole={access.role}
         onSignOut={handleSignOut}
       />
 
-      {platformSettings?.maintenanceMode && (
-        <div className="bg-[#FFFBEB] border-b border-[#D97706]/25 px-4 py-2 text-center text-xs text-[#92400E]">
-          {lang === 'en'
-            ? 'Scheduled platform maintenance is active. Existing lessons remain accessible.'
-            : 'Platform iri mu ivugurura ryoroheje. Amasomo asanzwe akomeje gukora.'}
-        </div>
-      )}
+      <div className="flex-1 flex min-w-0">
+        <SidebarNav
+          currentRoute={route}
+          lang={lang}
+          mobileOpen={mobileNavOpen}
+          onCloseMobile={() => setMobileNavOpen(false)}
+          onNavigate={handleNavigate}
+          onOpenChallenge={() => handleSelectCourse('challenge-28')}
+          onSelectTrack={(cat) => {
+            setCourseTrackFilter(cat);
+            setSelectedCourseId(null);
+            setSelectedDay(null);
+            setRoute('courses');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+        />
 
-      {user && !user.emailVerified && route !== 'dashboard' && route !== 'admin' && (
-        <div className="bg-[#F2FBF8] border-b border-[#0D7A5F]/20 px-4 py-2.5">
-          <div className="max-w-[1200px] mx-auto flex flex-wrap items-center justify-between gap-3 text-xs">
-            <span className="text-[#0D0D0F]">
+        <div className="flex-1 min-w-0 flex flex-col">
+          <SubBar
+            lang={lang}
+            onChangeLang={setLang}
+            currentRoute={route}
+            onNavigate={handleNavigate}
+            user={user}
+            staffRole={access.role}
+            onSignOut={handleSignOut}
+          />
+
+          {platformSettings?.maintenanceMode && (
+            <div className="bg-[#FFFBEB] border-b border-[#D97706]/25 px-4 py-2 text-center text-xs text-[#92400E]">
               {lang === 'en'
-                ? `Verification pending for ${user.email}. Verify your email to unlock your workspace.`
-                : `Imeli ${user.email} itegereje kwemezwa.`}
-              {verifyNotice ? ` — ${verifyNotice}` : ''}
-            </span>
-            <div className="flex flex-wrap items-center gap-2">
-              <button
-                type="button"
-                disabled={verifyBusy}
-                onClick={handleRefreshVerification}
-                className="px-3 py-1 bg-[#0D7A5F] text-white font-medium rounded-md"
-              >
-                {lang === 'en' ? "I've Verified — Refresh" : 'Nemeje — Genzura'}
-              </button>
-              <button
-                type="button"
-                disabled={verifyBusy}
-                onClick={handleVerifyViaGoogle}
-                className="px-3 py-1 bg-[#0D0D0F] text-white font-medium rounded-md"
-              >
-                Google
-              </button>
-              <button
-                type="button"
-                disabled={verifyBusy}
-                onClick={handleResendVerificationEmail}
-                className="px-3 py-1 bg-white border border-black/15 rounded-md"
-              >
-                {lang === 'en' ? 'Resend' : 'Ongera'}
-              </button>
+                ? 'Scheduled platform maintenance is active. Existing lessons remain accessible.'
+                : 'Platform iri mu ivugurura ryoroheje. Amasomo asanzwe akomeje gukora.'}
             </div>
-          </div>
-        </div>
-      )}
+          )}
 
-      <main className="flex-1">
-        {!authReady ? (
-          <div className="max-w-[1200px] mx-auto px-6 py-20 text-sm text-[#5D5D66]">
-            Loading AI Education Rwanda...
-          </div>
-        ) : route === 'home' ? (
-          <HomeView
-            lang={lang}
-            courses={visibleCourses}
-            programmes={programmes}
-            platformSettings={platformSettings}
-            onNavigate={handleNavigate}
-            onSelectCourse={(id) => handleSelectCourse(id)}
-            onOpenSampleDay={handleOpenSampleDay}
-            onQuickVerifyCert={(certId) => {
-              setVerifyCertId(certId);
-              setRoute('verify');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-          />
-        ) : route === 'courses' || route === 'course-detail' ? (
-          <CoursesView
-            lang={lang}
-            courses={visibleCourses}
-            modules={modules}
-            learningPaths={learningPaths}
-            structuredLessons={structuredLessons}
-            cohorts={cohorts}
-            learnerNotes={learnerNotes}
-            platformSettings={platformSettings}
-            selectedCourseId={selectedCourseId}
-            selectedDay={selectedDay}
-            user={user}
-            enrollments={enrollments}
-            isAdmin={access.isStaff}
-            customLessonsMap={customLessonsMap}
-            onSelectCourse={handleSelectCourse}
-            onSelectDay={setSelectedDay}
-            onSignIn={handleOpenSignIn}
-            onNavigate={handleNavigate}
-            onEnrollmentSuccess={() => {
-              if (user) {
-                const isEduStaff =
-                  access.isAdmin ||
-                  access.role === 'course_manager' ||
-                  access.role === 'instructor';
-                loadLearnerData(user, isEduStaff);
-              }
-            }}
-            onNotesUpdated={() => user && loadLearnerData(user)}
-            onSubmitWaitlist={handleSubmitWaitlist}
-          />
-        ) : route === 'events' ? (
-          <EventsView
-            lang={lang}
-            user={user}
-            programmes={programmes}
-            registrations={eventRegistrations}
-            onSignIn={handleOpenSignIn}
-            onRegistrationUpdated={() => user && loadLearnerData(user)}
-          />
-        ) : route === 'projects' ? (
-          <ProjectsHubView
-            lang={lang}
-            resources={resources}
-            onNavigate={handleNavigate}
-          />
-        ) : route === 'about' || route === 'verify' ? (
-          <AboutVerifyView
-            lang={lang}
-            mode={route === 'verify' ? 'verify' : 'about'}
-            initialCertId={verifyCertId}
-            enablePublicVerify={platformSettings?.enablePublicVerify ?? true}
-          />
+          {user && !user.emailVerified && route !== 'dashboard' && route !== 'admin' && (
+            <div className="bg-[#F0F9FF] border-b border-[#0284C7]/20 px-4 py-2.5">
+              <div className="max-w-[1220px] mx-auto flex flex-wrap items-center justify-between gap-3 text-xs">
+                <span className="text-[#0D0D0F]">
+                  {lang === 'en'
+                    ? `Verification pending for ${user.email}. Verify your email to unlock your workspace.`
+                    : `Imeli ${user.email} itegereje kwemezwa.`}
+                  {verifyNotice ? ` — ${verifyNotice}` : ''}
+                </span>
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    disabled={verifyBusy}
+                    onClick={handleRefreshVerification}
+                    className="px-3 py-1 bg-[#0284C7] text-white font-medium rounded-md"
+                  >
+                    {lang === 'en' ? "I've Verified — Refresh" : 'Nemeje — Genzura'}
+                  </button>
+                  <button
+                    type="button"
+                    disabled={verifyBusy}
+                    onClick={handleVerifyViaGoogle}
+                    className="px-3 py-1 bg-[#0D0D0F] text-white font-medium rounded-md"
+                  >
+                    Google
+                  </button>
+                  <button
+                    type="button"
+                    disabled={verifyBusy}
+                    onClick={handleResendVerificationEmail}
+                    className="px-3 py-1 bg-white border border-black/15 rounded-md"
+                  >
+                    {lang === 'en' ? 'Resend' : 'Ongera'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <main className="flex-1">
+            {!authReady ? (
+              <div className="max-w-[1220px] mx-auto px-6 py-20 text-sm text-[#5D5D66]">
+                Loading AI Education Rwanda...
+              </div>
+            ) : route === 'home' ? (
+              <HomeView
+                lang={lang}
+                courses={visibleCourses}
+                programmes={programmes}
+                platformSettings={platformSettings}
+                onNavigate={handleNavigate}
+                onSelectCourse={(id) => handleSelectCourse(id)}
+                onOpenSampleDay={handleOpenSampleDay}
+                onQuickVerifyCert={(certId) => {
+                  setVerifyCertId(certId);
+                  setRoute('verify');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+              />
+            ) : route === 'courses' || route === 'course-detail' ? (
+              <CoursesView
+                lang={lang}
+                courses={visibleCourses}
+                modules={modules}
+                learningPaths={learningPaths}
+                structuredLessons={structuredLessons}
+                cohorts={cohorts}
+                learnerNotes={learnerNotes}
+                platformSettings={platformSettings}
+                selectedCourseId={selectedCourseId}
+                selectedDay={selectedDay}
+                initialCategoryFilter={courseTrackFilter}
+                user={user}
+                enrollments={enrollments}
+                isAdmin={access.isStaff}
+                customLessonsMap={customLessonsMap}
+                onSelectCourse={handleSelectCourse}
+                onSelectDay={setSelectedDay}
+                onSignIn={handleOpenSignIn}
+                onNavigate={handleNavigate}
+                onEnrollmentSuccess={() => {
+                  if (user) {
+                    const isEduStaff =
+                      access.isAdmin ||
+                      access.role === 'course_manager' ||
+                      access.role === 'instructor';
+                    loadLearnerData(user, isEduStaff);
+                  }
+                }}
+                onNotesUpdated={() => user && loadLearnerData(user)}
+                onSubmitWaitlist={handleSubmitWaitlist}
+              />
+            ) : route === 'events' ? (
+              <EventsView
+                lang={lang}
+                user={user}
+                programmes={programmes}
+                registrations={eventRegistrations}
+                onSignIn={handleOpenSignIn}
+                onRegistrationUpdated={() => user && loadLearnerData(user)}
+              />
+            ) : route === 'projects' ? (
+              <ProjectsHubView
+                lang={lang}
+                resources={resources}
+                onNavigate={handleNavigate}
+              />
+            ) : route === 'about' || route === 'verify' ? (
+              <AboutVerifyView
+                lang={lang}
+                mode={route === 'verify' ? 'verify' : 'about'}
+                initialCertId={verifyCertId}
+                enablePublicVerify={platformSettings?.enablePublicVerify ?? true}
+                user={user}
+                certificates={certificates}
+                onSignIn={handleOpenSignIn}
+                onNavigate={handleNavigate}
+              />
         ) : route === 'dashboard' ? (
           !user ? (
             <div className="max-w-md mx-auto px-6 py-20 text-center space-y-4">
@@ -1069,9 +1107,11 @@ function PlatformShell() {
             }}
           />
         )}
-      </main>
+          </main>
 
-      <Footer lang={lang} onChangeLang={setLang} onNavigate={handleNavigate} />
+          <Footer lang={lang} onChangeLang={setLang} onNavigate={handleNavigate} />
+        </div>
+      </div>
 
       <AuthModal
         open={authModalOpen}

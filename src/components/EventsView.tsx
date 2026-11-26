@@ -1,5 +1,16 @@
 import React, { useState } from 'react';
-import { Calendar, CheckCircle2, ExternalLink, MapPin } from 'lucide-react';
+import {
+  Calendar,
+  CheckCircle2,
+  Clock,
+  ExternalLink,
+  LayoutGrid,
+  List as ListIcon,
+  MapPin,
+  Radio,
+  RotateCcw,
+  Video
+} from 'lucide-react';
 import type { User } from 'firebase/auth';
 import { doc, runTransaction, serverTimestamp } from 'firebase/firestore';
 import { db, handleFirestoreError, OperationType } from '../firebase';
@@ -40,6 +51,14 @@ interface UnifiedProgrammeItem {
   speaker: string;
 }
 
+const EVENT_BANNER_GRADIENTS = [
+  'bg-gradient-to-br from-[#0284C7] via-[#06B6D4] to-[#EC4899]',
+  'bg-gradient-to-br from-[#3B82F6] via-[#6366F1] to-[#A855F7]',
+  'bg-gradient-to-br from-[#2563EB] via-[#38BDF8] to-[#FACC15]',
+  'bg-gradient-to-br from-[#F59E0B] via-[#FB7185] to-[#8B5CF6]',
+  'bg-gradient-to-br from-[#0EA5E9] via-[#6366F1] to-[#10B981]'
+];
+
 export function EventsView({
   lang,
   user,
@@ -48,11 +67,16 @@ export function EventsView({
   onSignIn,
   onRegistrationUpdated
 }: EventsViewProps) {
-  const [filter, setFilter] = useState<'all' | 'upcoming' | 'kigali' | 'online' | 'past'>('all');
+  const [filter, setFilter] = useState<'all' | 'upcoming' | 'now' | 'past'>('all');
+  const [formatFilter, setFormatFilter] = useState<'all' | 'kigali' | 'online'>('all');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [rsvpEvent, setRsvpEvent] = useState<UnifiedProgrammeItem | null>(null);
+  const [replayEvent, setReplayEvent] = useState<UnifiedProgrammeItem | null>(null);
   const [attendanceMode, setAttendanceMode] = useState<'online' | 'kigali_in_person'>('online');
   const [saving, setSaving] = useState(false);
   const [doneMessage, setDoneMessage] = useState<string | null>(null);
+  const [rsvpError, setRsvpError] = useState<string | null>(null);
+  const [cancellingId, setCancellingId] = useState<string | null>(null);
 
   const unifiedList: UnifiedProgrammeItem[] =
     programmes.length > 0
@@ -103,21 +127,26 @@ export function EventsView({
           speaker: w.speaker
         }));
 
-  const featured = unifiedList.find((e) => e.featured) ?? unifiedList[0];
-
   const isPastStatus = (s: UnifiedProgrammeItem['status']) =>
     s === 'past' || s === 'completed' || s === 'cancelled';
 
   const filteredEvents = unifiedList.filter((evt) => {
-    if (filter === 'upcoming') return !isPastStatus(evt.status);
-    if (filter === 'past') return evt.status === 'past' || evt.status === 'completed';
-    if (filter === 'kigali') return evt.format === 'kigali_in_person' || evt.format === 'hybrid';
-    if (filter === 'online') return evt.format === 'online' || evt.format === 'hybrid';
-    return true;
+    const matchesTime =
+      filter === 'all'
+        ? true
+        : filter === 'upcoming'
+          ? !isPastStatus(evt.status)
+          : filter === 'now'
+            ? evt.status === 'in_progress'
+            : evt.status === 'past' || evt.status === 'completed';
+    const matchesFormat =
+      formatFilter === 'all'
+        ? true
+        : formatFilter === 'kigali'
+          ? evt.format === 'kigali_in_person' || evt.format === 'hybrid'
+          : evt.format === 'online' || evt.format === 'hybrid';
+    return matchesTime && matchesFormat;
   });
-
-  const [rsvpError, setRsvpError] = useState<string | null>(null);
-  const [cancellingId, setCancellingId] = useState<string | null>(null);
 
   const isRegistered = (eventId: string) =>
     registrations.some((r) => r.eventId === eventId && r.status === 'registered');
@@ -241,130 +270,37 @@ export function EventsView({
   };
 
   return (
-    <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-12">
-      <header className="max-w-2xl mb-10">
-        <p className="text-xs font-medium text-[#0D7A5F] mb-2">
-          {lang === 'en' ? 'Live Workshops, Bootcamps & Programmes' : 'Amahugurwa, Bootcamps n’Ihuriro'}
-        </p>
-        <h1 className="text-3xl sm:text-4xl font-display font-semibold tracking-tight text-[#0D0D0F] mb-3">
-          {lang === 'en' ? 'Events & Practical Clinics' : 'Ibiganiro n’Amahugurwa Ngiro'}
+    <div className="max-w-[1220px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
+      {/* 1. OpenAI Academy Indigo-Purple Gradient Events Banner */}
+      <section className="rounded-2xl bg-gradient-to-r from-[#2563EB] via-[#4F46E5] to-[#7C3AED] text-white p-8 sm:p-12 shadow-xs">
+        <Radio className="w-7 h-7 text-white mb-4" aria-hidden="true" />
+        <h1 className="text-3xl sm:text-4xl lg:text-[48px] font-display font-bold tracking-[-0.03em] leading-tight mb-2">
+          {lang === 'en' ? 'Events' : 'Ibiganiro n’Amahugurwa'}
         </h1>
-        <p className="text-base text-[#5D5D66] leading-relaxed">
+        <p className="text-sm sm:text-lg text-white/90 max-w-2xl leading-relaxed">
           {lang === 'en'
-            ? 'Join live bilingual prompt clinics, hands-on automation labs in Kigali, and cohort project demonstrations.'
-            : 'Kwitabira amahugurwa mu Kinyarwanda n’Icyongereza i Kigali cyangwa kuri interineti.'}
+            ? 'Hands-on learning brought to you by AI Education Rwanda and our community partners.'
+            : 'Kwitabira amahugurwa imbonankubone i Kigali cyangwa kuri interineti mu Kinyarwanda n’Icyongereza.'}
         </p>
-      </header>
+      </section>
 
-      {/* Featured Event Spotlight */}
-      {featured && (
-        <section className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6 sm:p-10 mb-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          <div className="lg:col-span-8">
-            <p className="text-xs font-mono text-[#0D7A5F] mb-2 uppercase">
-              {featured.typeLabel} · {featured.dateLabel} · {featured.timeLabel} ({featured.timezone})
-            </p>
-            <h2 className="text-2xl sm:text-3xl font-display font-semibold text-[#0D0D0F] text-balance mb-3">
-              {lang === 'en' ? featured.titleEn : featured.titleRw}
-            </h2>
-            <p className="text-sm sm:text-base text-[#5D5D66] leading-relaxed mb-5 max-w-2xl">
-              {lang === 'en' ? featured.descriptionEn : featured.descriptionRw}
-            </p>
-            <div className="flex flex-wrap items-center gap-4 text-xs text-[#5D5D66]">
-              <span className="inline-flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5 text-[#0D0D0F]" />
-                {lang === 'en' ? featured.locationEn : featured.locationRw}
-              </span>
-              <span aria-hidden="true">·</span>
-              <span>{featured.languageLabel}</span>
-              <span aria-hidden="true">·</span>
-              <span>{featured.speaker}</span>
-              <span aria-hidden="true">·</span>
-              <span className="font-mono text-[#0D0D0F]">
-                {featured.priceRwf === 0
-                  ? lang === 'en'
-                    ? 'Free Admission'
-                    : 'Kwinjira ku buntu'
-                  : `${featured.priceRwf.toLocaleString()} RWF`}
-              </span>
-            </div>
-            {(featured.eligibilityEn || featured.eligibilityRw) && (
-              <p className="text-xs text-[#0D7A5F] mt-3">
-                {lang === 'en' ? featured.eligibilityEn : featured.eligibilityRw || featured.eligibilityEn}
-              </p>
-            )}
-          </div>
-
-          <div className="lg:col-span-4 flex flex-col items-start lg:items-end justify-center gap-3">
-            {isRegistered(featured.id) ? (
-              <div className="space-y-2 lg:text-right">
-                <span className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-[#0D7A5F] bg-[#ECFDF5] border border-[#0D7A5F]/25 rounded-lg">
-                  <CheckCircle2 className="w-4 h-4" />
-                  <span>{lang === 'en' ? 'Registered' : 'Wariyandikishije'}</span>
-                </span>
-                {featured.meetingUrl && (
-                  <a
-                    href={featured.meetingUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs font-medium text-[#0D0D0F] underline"
-                  >
-                    <span>{lang === 'en' ? 'Join Stream Link' : 'Fungura Link y’Ikiganiro'}</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
-                )}
-              </div>
-            ) : featured.status === 'fully_booked' ? (
-              <span className="px-4 py-2 text-xs font-mono uppercase border border-black/15 rounded-lg text-[#5D5D66]">
-                {lang === 'en' ? 'Fully Booked' : 'Imyanya Yaruzuye'}
-              </span>
-            ) : featured.status === 'cancelled' ? (
-              <span className="px-4 py-2 text-xs font-mono uppercase border border-[#DC2626]/25 rounded-lg text-[#DC2626]">
-                {lang === 'en' ? 'Cancelled' : 'Byahagaritswe'}
-              </span>
-            ) : (
-              <button
-                type="button"
-                onClick={() => {
-                  if (!user) {
-                    onSignIn();
-                  } else {
-                    setRsvpEvent(featured);
-                    setDoneMessage(null);
-                  }
-                }}
-                className="px-5 py-3 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329] transition-colors whitespace-nowrap"
-              >
-                {user
-                  ? lang === 'en'
-                    ? 'Register for event'
-                    : 'Iyandikishe kuri iki kiganiro'
-                  : lang === 'en'
-                    ? 'Sign in to RSVP'
-                    : 'Injira kugira ngo wiyandikishe'}
-              </button>
-            )}
-          </div>
-        </section>
-      )}
-
-      {/* Filter Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-black/[0.08] mb-8">
-        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#F4F5F7] rounded-xl">
+      {/* 2. Filter & View Controls (Exact OpenAI Academy Bar) */}
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="flex flex-wrap items-center gap-2">
           {[
-            { key: 'all', label: lang === 'en' ? 'All Events' : 'Byose' },
+            { key: 'all', label: lang === 'en' ? 'All' : 'Byose' },
             { key: 'upcoming', label: lang === 'en' ? 'Upcoming' : 'Biri imbere' },
-            { key: 'kigali', label: lang === 'en' ? 'Kigali In-Person' : 'I Kigali' },
-            { key: 'online', label: lang === 'en' ? 'Online Live' : 'Kuri Interineti' },
-            { key: 'past', label: lang === 'en' ? 'Past Recordings' : 'Ibyabaye' }
+            { key: 'now', label: lang === 'en' ? 'Now' : 'Ubu' },
+            { key: 'past', label: lang === 'en' ? 'Past' : 'Ibyabaye' }
           ].map((tab) => (
             <button
               key={tab.key}
               type="button"
               onClick={() => setFilter(tab.key as typeof filter)}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors whitespace-nowrap shrink-0 ${
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap shrink-0 ${
                 filter === tab.key
-                  ? 'bg-white text-[#0D0D0F] shadow-xs'
-                  : 'text-[#5D5D66] hover:text-[#0D0D0F]'
+                  ? 'bg-[#0284C7] text-white'
+                  : 'bg-[#F4F5F7] text-[#4B4B55] hover:bg-[#EAECEF]'
               }`}
             >
               {tab.label}
@@ -372,115 +308,254 @@ export function EventsView({
           ))}
         </div>
 
-        <span className="text-xs font-mono text-[#5D5D66] tabular-nums">
-          {filteredEvents.length} {lang === 'en' ? 'sessions' : 'ibiganiro'}
-        </span>
-      </div>
+        <div className="flex items-center gap-3">
+          <select
+            value={formatFilter}
+            onChange={(e) => setFormatFilter(e.target.value as typeof formatFilter)}
+            aria-label={lang === 'en' ? 'Filter by event format' : 'Hitamo uburyo'}
+            className="px-3.5 py-2 text-sm bg-white border border-black/15 rounded-lg text-[#0D0D0F]"
+          >
+            <option value="all">{lang === 'en' ? 'All formats' : 'Uburyo bwose'}</option>
+            <option value="kigali">{lang === 'en' ? 'In-Person (Kigali)' : 'I Kigali'}</option>
+            <option value="online">{lang === 'en' ? 'Livestream' : 'Kuri Interineti'}</option>
+          </select>
 
-      {/* Events List */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {filteredEvents.map((evt) => {
-          const registered = isRegistered(evt.id);
-          return (
-            <article
-              key={evt.id}
-              className="bg-white border border-black/[0.08] rounded-2xl p-6 flex flex-col justify-between"
+          <div className="inline-flex items-center border border-black/15 rounded-lg p-0.5 bg-white">
+            <button
+              type="button"
+              onClick={() => setViewMode('list')}
+              aria-label="List view"
+              className={`p-1.5 rounded-md ${
+                viewMode === 'list' ? 'bg-[#F0F9FF] text-[#0284C7]' : 'text-[#5D5D66]'
+              }`}
             >
-              <div>
-                <div className="flex flex-wrap items-center gap-2 text-xs text-[#5D5D66] mb-3">
-                  <span className="font-mono uppercase text-[#0D7A5F]">{evt.typeLabel}</span>
-                  <span aria-hidden="true">·</span>
-                  <span className="inline-flex items-center gap-1 font-medium text-[#0D0D0F] tabular-nums">
-                    <Calendar className="w-3.5 h-3.5 text-[#0D7A5F]" />
-                    {evt.dateLabel}
-                  </span>
-                  <span aria-hidden="true">·</span>
-                  <span className="tabular-nums">{evt.timeLabel}</span>
-                  <span aria-hidden="true">·</span>
-                  <span>{evt.languageLabel}</span>
-                </div>
-                <h3 className="text-lg font-display font-semibold text-[#0D0D0F] mb-2">
-                  {lang === 'en' ? evt.titleEn : evt.titleRw}
-                </h3>
-                <p className="text-sm text-[#5D5D66] leading-relaxed mb-3">
-                  {lang === 'en' ? evt.descriptionEn : evt.descriptionRw}
-                </p>
-                <div className="flex flex-wrap items-center gap-3 text-[11px] font-mono text-[#5D5D66] mb-4">
-                  <span>
-                    {evt.capacity > 0
-                      ? `${evt.registeredCount ?? 0}/${evt.capacity} seats`
-                      : 'Open capacity'}
-                  </span>
-                  <span>·</span>
-                  <span>{evt.priceRwf === 0 ? 'Free' : `${evt.priceRwf.toLocaleString()} RWF`}</span>
-                  <span>·</span>
-                  <span>{evt.speaker}</span>
-                </div>
-              </div>
-
-              <div className="pt-4 border-t border-black/[0.06] flex items-center justify-between gap-4">
-                <span className="text-xs text-[#5D5D66] truncate">
-                  {lang === 'en' ? evt.locationEn : evt.locationRw}
-                </span>
-                {evt.status === 'past' || evt.status === 'completed' ? (
-                  <span className="text-xs font-mono text-[#5D5D66] shrink-0">
-                    {lang === 'en' ? 'Completed' : 'Byararangiye'}
-                  </span>
-                ) : evt.status === 'cancelled' ? (
-                  <span className="text-xs font-mono text-[#DC2626] shrink-0">
-                    {lang === 'en' ? 'Cancelled' : 'Byahagaritswe'}
-                  </span>
-                ) : evt.status === 'fully_booked' ||
-                  (evt.capacity > 0 && (evt.registeredCount ?? 0) >= evt.capacity) ? (
-                  <span className="text-xs font-mono text-[#D97706] shrink-0">
-                    {lang === 'en' ? 'Fully Booked' : 'Byuzuye'}
-                  </span>
-                ) : registered ? (
-                  <div className="flex items-center gap-2 shrink-0">
-                    <span className="text-xs font-medium text-[#0D7A5F]">
-                      {lang === 'en' ? 'Confirmed' : 'Byemejwe'}
-                    </span>
-                    {evt.meetingUrl && (
-                      <a
-                        href={evt.meetingUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-xs underline text-[#0D0D0F]"
-                      >
-                        {lang === 'en' ? 'Join' : 'Injira'}
-                      </a>
-                    )}
-                    <button
-                      type="button"
-                      disabled={cancellingId === evt.id}
-                      onClick={() => handleCancelRsvp(evt)}
-                      className="text-[11px] text-[#5D5D66] hover:text-[#DC2626] underline"
-                    >
-                      {cancellingId === evt.id ? '...' : lang === 'en' ? 'Cancel' : 'Hagarika'}
-                    </button>
-                  </div>
-                ) : canRsvp(evt) ? (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (!user) {
-                        onSignIn();
-                      } else {
-                        setRsvpEvent(evt);
-                        setRsvpError(null);
-                        setDoneMessage(null);
-                      }
-                    }}
-                    className="px-3.5 py-1.5 text-xs font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329] transition-colors whitespace-nowrap shrink-0"
-                  >
-                    {lang === 'en' ? 'Reserve seat' : 'Fata umwanya'}
-                  </button>
-                ) : null}
-              </div>
-            </article>
-          );
-        })}
+              <ListIcon className="w-4 h-4" />
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('grid')}
+              aria-label="Grid view"
+              className={`p-1.5 rounded-md ${
+                viewMode === 'grid' ? 'bg-[#F0F9FF] text-[#0284C7]' : 'text-[#5D5D66]'
+              }`}
+            >
+              <LayoutGrid className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
       </div>
+
+      {/* 3. Events Cards Grid / List */}
+      {filteredEvents.length === 0 ? (
+        <div className="bg-white border border-black/[0.08] rounded-2xl p-12 text-center text-sm text-[#5D5D66]">
+          {lang === 'en'
+            ? 'No sessions match the selected filter right now.'
+            : 'Nta kiganiro kibonetse muri iki cyiciro.'}
+        </div>
+      ) : (
+        <div
+          className={
+            viewMode === 'grid'
+              ? 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6'
+              : 'space-y-4'
+          }
+        >
+          {filteredEvents.map((evt, index) => {
+            const registered = isRegistered(evt.id);
+            const isPast = evt.status === 'past' || evt.status === 'completed';
+            const grad = EVENT_BANNER_GRADIENTS[index % EVENT_BANNER_GRADIENTS.length];
+            const formatLabel =
+              evt.format === 'kigali_in_person'
+                ? lang === 'en'
+                  ? 'In-Person'
+                  : 'I Kigali'
+                : evt.format === 'hybrid'
+                  ? lang === 'en'
+                    ? 'Hybrid'
+                    : 'Imbonankubone & Online'
+                  : lang === 'en'
+                    ? 'Livestream'
+                    : 'Kuri Interineti';
+
+            return (
+              <article
+                key={evt.id}
+                className={`bg-white border border-black/[0.08] rounded-2xl overflow-hidden flex ${
+                  viewMode === 'list' ? 'flex-col md:flex-row' : 'flex-col justify-between'
+                }`}
+              >
+                {/* Colorful Gradient Visual Banner */}
+                <div
+                  className={`relative ${grad} p-5 flex flex-col justify-between text-white ${
+                    viewMode === 'list' ? 'md:w-72 shrink-0 min-h-[160px]' : 'aspect-[16/9]'
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-2 text-[11px] font-medium text-white/90">
+                    <span>AI Education Rwanda</span>
+                    <span className="tabular-nums">{evt.dateLabel}</span>
+                  </div>
+                  <div>
+                    <p className="text-lg sm:text-xl font-display font-bold leading-snug text-balance">
+                      {lang === 'en' ? evt.titleEn : evt.titleRw}
+                    </p>
+                    <p className="text-xs text-white/85 mt-1">{evt.speaker}</p>
+                  </div>
+                </div>
+
+                {/* Card Body */}
+                <div className="p-5 flex-1 flex flex-col justify-between gap-4">
+                  <div>
+                    <p className="text-xs font-semibold text-[#0284C7] mb-1">
+                      {formatLabel} · {evt.typeLabel} · {evt.languageLabel}
+                    </p>
+                    <h2 className="text-lg font-display font-bold text-[#0D0D0F] leading-snug mb-1.5">
+                      {lang === 'en' ? evt.titleEn : evt.titleRw}
+                    </h2>
+                    <p className="text-xs text-[#5D5D66] leading-relaxed line-clamp-2">
+                      {lang === 'en' ? evt.descriptionEn : evt.descriptionRw}
+                    </p>
+                  </div>
+
+                  <div className="pt-3 border-t border-black/[0.06] flex items-end justify-between gap-3">
+                    <div className="space-y-1 text-xs text-[#5D5D66] min-w-0">
+                      <p className="inline-flex items-center gap-1.5 tabular-nums truncate w-full">
+                        <Clock className="w-3.5 h-3.5 shrink-0" />
+                        <span className="truncate">{evt.timeLabel} ({evt.timezone})</span>
+                      </p>
+                      <p className="inline-flex items-center gap-1.5 tabular-nums truncate w-full">
+                        <Calendar className="w-3.5 h-3.5 shrink-0" />
+                        <span className="truncate">{evt.dateLabel}</span>
+                      </p>
+                      <p className="inline-flex items-center gap-1.5 truncate w-full">
+                        {evt.format === 'online' ? (
+                          <Video className="w-3.5 h-3.5 shrink-0" />
+                        ) : (
+                          <MapPin className="w-3.5 h-3.5 shrink-0" />
+                        )}
+                        <span className="truncate">
+                          {lang === 'en' ? evt.locationEn : evt.locationRw}
+                        </span>
+                      </p>
+                    </div>
+
+                    <div className="shrink-0">
+                      {isPast ? (
+                        <button
+                          type="button"
+                          onClick={() => setReplayEvent(evt)}
+                          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-[#0284C7] border border-[#0284C7]/40 hover:bg-[#F0F9FF] rounded-lg transition-colors whitespace-nowrap"
+                        >
+                          <RotateCcw className="w-3.5 h-3.5" />
+                          <span>{lang === 'en' ? 'Replay' : 'Subiramo'}</span>
+                        </button>
+                      ) : evt.status === 'cancelled' ? (
+                        <span className="text-xs font-mono text-[#DC2626]">
+                          {lang === 'en' ? 'Cancelled' : 'Byahagaritswe'}
+                        </span>
+                      ) : evt.status === 'fully_booked' ||
+                        (evt.capacity > 0 && (evt.registeredCount ?? 0) >= evt.capacity) ? (
+                        <span className="text-xs font-mono text-[#D97706]">
+                          {lang === 'en' ? 'Fully Booked' : 'Byuzuye'}
+                        </span>
+                      ) : registered ? (
+                        <div className="flex flex-col items-end gap-1">
+                          <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#0D7A5F]">
+                            <CheckCircle2 className="w-3.5 h-3.5" />
+                            <span>{lang === 'en' ? 'Registered' : 'Byemejwe'}</span>
+                          </span>
+                          <div className="flex items-center gap-2">
+                            {evt.meetingUrl && (
+                              <a
+                                href={evt.meetingUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-[11px] font-medium text-[#0284C7] underline"
+                              >
+                                {lang === 'en' ? 'Join' : 'Injira'}
+                              </a>
+                            )}
+                            <button
+                              type="button"
+                              disabled={cancellingId === evt.id}
+                              onClick={() => handleCancelRsvp(evt)}
+                              className="text-[11px] text-[#5D5D66] hover:text-[#DC2626] underline"
+                            >
+                              {cancellingId === evt.id ? '...' : lang === 'en' ? 'Cancel' : 'Hagarika'}
+                            </button>
+                          </div>
+                        </div>
+                      ) : canRsvp(evt) ? (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (!user) {
+                              onSignIn();
+                            } else {
+                              setRsvpEvent(evt);
+                              setRsvpError(null);
+                              setDoneMessage(null);
+                            }
+                          }}
+                          className="px-4 py-2 text-xs sm:text-sm font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg transition-colors whitespace-nowrap"
+                        >
+                          {lang === 'en' ? 'Register' : 'Iyandikishe'}
+                        </button>
+                      ) : null}
+                    </div>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Replay / Summary Modal for Past Sessions */}
+      {replayEvent && (
+        <div
+          className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4"
+          role="dialog"
+          aria-modal="true"
+        >
+          <div className="bg-white border border-black/10 rounded-2xl max-w-md w-full p-6 sm:p-8 space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-display font-bold text-[#0D0D0F]">
+                {lang === 'en' ? 'Session Recording & Notes' : 'Inyandiko n’Amashusho y’Ikiganiro'}
+              </h2>
+              <button
+                type="button"
+                onClick={() => setReplayEvent(null)}
+                className="text-xs font-medium text-[#5D5D66]"
+              >
+                {lang === 'en' ? 'Close' : 'Funga'}
+              </button>
+            </div>
+            <p className="text-base font-semibold text-[#0D0D0F]">
+              {lang === 'en' ? replayEvent.titleEn : replayEvent.titleRw}
+            </p>
+            <p className="text-xs text-[#5D5D66] leading-relaxed">
+              {lang === 'en' ? replayEvent.descriptionEn : replayEvent.descriptionRw}
+            </p>
+            {replayEvent.meetingUrl ? (
+              <a
+                href={replayEvent.meetingUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-white bg-[#0284C7] rounded-lg"
+              >
+                <span>{lang === 'en' ? 'Watch Replay' : 'Reba Ikiganiro'}</span>
+                <ExternalLink className="w-4 h-4" />
+              </a>
+            ) : (
+              <p className="text-xs text-[#5D5D66] bg-[#F7F8FA] border border-black/[0.08] rounded-xl p-3">
+                {lang === 'en'
+                  ? 'Slide deck and prompt templates from this clinic are archived inside the Projects & Free Tools library.'
+                  : 'Imfashanyigisho z’iki kiganiro ziboneka mu gice cy’Imishinga n’Ibikoresho.'}
+              </p>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* RSVP Modal */}
       {rsvpEvent && (
@@ -491,7 +566,7 @@ export function EventsView({
         >
           <div className="bg-white border border-black/10 rounded-2xl max-w-md w-full p-6 sm:p-8">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+              <h2 className="text-lg font-display font-bold text-[#0D0D0F]">
                 {lang === 'en' ? 'Confirm Event Registration' : 'Emeza Kwiyandikisha'}
               </h2>
               <button
@@ -511,7 +586,7 @@ export function EventsView({
                     href={rsvpEvent.meetingUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs font-medium text-[#0D0D0F] underline"
+                    className="inline-flex items-center gap-1.5 text-xs font-medium text-[#0284C7] underline"
                   >
                     <span>{lang === 'en' ? 'Save Session Link' : 'Bika Link y’Ikiganiro'}</span>
                     <ExternalLink className="w-3.5 h-3.5" />
@@ -520,14 +595,14 @@ export function EventsView({
                 <button
                   type="button"
                   onClick={() => setRsvpEvent(null)}
-                  className="w-full px-4 py-2 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg"
+                  className="w-full px-4 py-2 text-sm font-semibold text-white bg-[#0284C7] rounded-lg"
                 >
                   {lang === 'en' ? 'Done' : 'Byarangiye'}
                 </button>
               </div>
             ) : (
               <form onSubmit={handleConfirmRsvp} className="space-y-4">
-                <p className="text-sm font-medium text-[#0D0D0F]">
+                <p className="text-sm font-semibold text-[#0D0D0F]">
                   {lang === 'en' ? rsvpEvent.titleEn : rsvpEvent.titleRw}
                 </p>
                 <p className="text-xs text-[#5D5D66]">
@@ -544,7 +619,7 @@ export function EventsView({
                       onClick={() => setAttendanceMode('online')}
                       className={`px-3 py-2 text-xs font-medium rounded-lg border ${
                         attendanceMode === 'online'
-                          ? 'bg-[#0D0D0F] text-white border-[#0D0D0F]'
+                          ? 'bg-[#0284C7] text-white border-[#0284C7]'
                           : 'bg-white text-[#0D0D0F] border-black/15'
                       }`}
                     >
@@ -555,7 +630,7 @@ export function EventsView({
                       onClick={() => setAttendanceMode('kigali_in_person')}
                       className={`px-3 py-2 text-xs font-medium rounded-lg border ${
                         attendanceMode === 'kigali_in_person'
-                          ? 'bg-[#0D0D0F] text-white border-[#0D0D0F]'
+                          ? 'bg-[#0284C7] text-white border-[#0284C7]'
                           : 'bg-white text-[#0D0D0F] border-black/15'
                       }`}
                     >
@@ -573,7 +648,7 @@ export function EventsView({
                 <button
                   type="submit"
                   disabled={saving}
-                  className="w-full px-4 py-2.5 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg"
+                  className="w-full px-4 py-2.5 text-sm font-semibold text-white bg-[#0284C7] hover:bg-[#0369A1] rounded-lg"
                 >
                   {saving
                     ? lang === 'en'

@@ -38,7 +38,12 @@ import type {
   TicketMessage,
   UserProfile
 } from '../types';
-import { COURSES, PRACTICAL_PROJECTS } from '../data/curriculum';
+import {
+  BLUEPRINT_GRADING_BREAKDOWN,
+  COURSES,
+  FINAL_PROJECT_RUBRIC_7,
+  PRACTICAL_PROJECTS
+} from '../data/curriculum';
 import { WEEKLY_ASSESSMENTS } from '../data/lessons28';
 import {
   evaluateCertificateEligibility,
@@ -992,43 +997,58 @@ export function LearnerDashboard({
       {/* TAB 2: ASSESSMENTS & DYNAMIC QUIZZES */}
       {tab === 'quizzes' && (
         <div className="space-y-8">
-          <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6">
-            <h2 className="text-base font-semibold text-[#0D0D0F] mb-3">
-              {lang === 'en'
-                ? `Course Assessment Structure (${platformSettings?.certificateMinQuizAvg ?? 70}% Quiz Pass Threshold)`
-                : `Imiterere y’Amasuzuma (${platformSettings?.certificateMinQuizAvg ?? 70}% Fatizo)`}
-            </h2>
-            {activeRubric ? (
-              <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-xs">
-                {[
-                  ['Problem Framing', `${activeRubric.problemWeight}%`],
-                  ['AI Workflow Approach', `${activeRubric.approachWeight}%`],
-                  ['Implementation', `${activeRubric.implementationWeight}%`],
-                  ['Testing & Verification', `${activeRubric.testingWeight}%`],
-                  ['Documentation', `${activeRubric.docsWeight}%`]
-                ].map(([name, w]) => (
-                  <div key={name} className="bg-white border border-black/[0.06] rounded-xl p-3">
-                    <p className="text-[#5D5D66]">{name}</p>
-                    <p className="font-mono font-semibold text-[#0D0D0F] tabular-nums mt-1">{w}</p>
+          <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6 space-y-5">
+            <div>
+              <h2 className="text-base font-semibold text-[#0D0D0F] mb-1">
+                {lang === 'en'
+                  ? `Course Assessment Weighting (${platformSettings?.certificateMinQuizAvg ?? 70}% Minimum Pass Threshold)`
+                  : `Imiterere y’Amasuzuma (${platformSettings?.certificateMinQuizAvg ?? 70}% Fatizo)`}
+              </h2>
+              <p className="text-xs text-[#5D5D66]">
+                {lang === 'en'
+                  ? 'Passing requires completing all weekly assessments, submitting & demonstrating your final project, and earning >=70% overall.'
+                  : 'Impamyabumenyi itangwa ku warangije amasuzuma yose, akamurika umushinga wa nyuma afite nibura 70%.'}
+              </p>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-xs">
+              {BLUEPRINT_GRADING_BREAKDOWN.map((w) => (
+                <div key={w.id} className="bg-white border border-black/[0.06] rounded-xl p-3">
+                  <p className="text-[#5D5D66] leading-snug">{w.label[lang]}</p>
+                  <p className="font-mono font-semibold text-[#0D7A5F] tabular-nums mt-1.5">
+                    {w.weightPct}%
+                  </p>
+                </div>
+              ))}
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-[#0D0D0F] mb-2">
+                {lang === 'en'
+                  ? 'Final Project 7-Criterion Rubric (30% Weight)'
+                  : 'Ibipimo 7 by’Umushinga wa Nyuma (30%)'}
+              </p>
+              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 text-[11px]">
+                {(activeRubric
+                  ? [
+                      { name: 'Problem', weight: `${activeRubric.problemWeight}%` },
+                      { name: 'Workflow Design', weight: `${activeRubric.approachWeight}%` },
+                      { name: 'Implementation', weight: `${activeRubric.implementationWeight}%` },
+                      { name: 'Testing & Safety', weight: `${activeRubric.testingWeight}%` },
+                      { name: 'Documentation', weight: `${activeRubric.docsWeight}%` }
+                    ]
+                  : FINAL_PROJECT_RUBRIC_7.map((c) => ({
+                      name: c.criterion[lang],
+                      weight: `${c.weightPct}%`
+                    }))
+                ).map((item) => (
+                  <div key={item.name} className="bg-white border border-black/[0.06] rounded-lg p-2.5">
+                    <p className="text-[#5D5D66] leading-tight">{item.name}</p>
+                    <p className="font-mono font-semibold text-[#0D0D0F] tabular-nums mt-1">
+                      {item.weight}
+                    </p>
                   </div>
                 ))}
               </div>
-            ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-xs">
-                {[
-                  ['Weekly Quizzes', '20%'],
-                  ['Prompt Assignment', '15%'],
-                  ['Workflow Design', '15%'],
-                  ['Basic Automation', '20%'],
-                  ['Final AI Project', '30%']
-                ].map(([name, w]) => (
-                  <div key={name} className="bg-white border border-black/[0.06] rounded-xl p-3">
-                    <p className="text-[#5D5D66]">{name}</p>
-                    <p className="font-mono font-semibold text-[#0D0D0F] tabular-nums mt-1">{w}</p>
-                  </div>
-                ))}
-              </div>
-            )}
+            </div>
           </div>
 
           {lastQuizReview && (
@@ -1289,8 +1309,8 @@ export function LearnerDashboard({
             </h2>
             <p className="text-xs text-[#5D5D66] mb-5">
               {lang === 'en'
-                ? 'Choose one of the 5 blueprint projects or submit a custom AI workflow addressing a problem you understand.'
-                : 'Hitamo umwe mu mishinga 5 cyangwa utange umushinga wawe ukemura ikibazo uzi neza.'}
+                ? 'Choose one of the 6 blueprint projects (including Project 06: Independent Final Project) or submit a custom AI workflow addressing a problem you understand.'
+                : 'Hitamo umwe mu mishinga 6 irimo umushinga wa nyuma wigenga cyangwa utange uwawe.'}
             </p>
 
             <form onSubmit={handleSubmitProject} className="space-y-4">

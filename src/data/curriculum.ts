@@ -1,9 +1,13 @@
 import type {
+  AssessmentWeightItem,
+  BlueprintInventorySection,
   Certificate,
   Course,
+  IndustryPathPreset,
   LearningLevel,
   LearningTool,
   PracticalProject,
+  RubricCriterion,
   TemplateResource,
   WorkshopEvent
 } from '../types';
@@ -11,6 +15,7 @@ import type {
 export const LEARNING_LEVELS: LearningLevel[] = [
   {
     level: 1,
+    codeRange: '3.1 – 3.10',
     title: { en: 'AI Foundations', rw: 'Ibanze kuri AI' },
     summary: {
       en: 'Understand what artificial intelligence is, how Large Language Models generate text, and how to detect hallucinations and bias.',
@@ -30,6 +35,10 @@ export const LEARNING_LEVELS: LearningLevel[] = [
         'Umurongo ngenderwaho, ibanga n’ubushishozi bw’umuntu'
       ]
     },
+    evidence: {
+      en: ['Knowledge assessment', 'AI concept explanation', 'Hallucination identification exercise'],
+      rw: ['Isuzuma ry’ubumenyi', 'Ibisobanuro by’ibanze kuri AI', 'Umwitozo wo gutahura amakosa ya AI']
+    },
     outcome: {
       en: 'Explain core AI concepts clearly, identify AI limitations, and verify outputs before using them.',
       rw: 'Gusobanura iby’ibanze kuri AI, kumenya aho ifite intege nke, no kugenzura ibisubizo byayo mbere yo kubikoresha.'
@@ -37,6 +46,7 @@ export const LEARNING_LEVELS: LearningLevel[] = [
   },
   {
     level: 2,
+    codeRange: '4.1 – 4.12',
     title: { en: 'Prompt Engineering', rw: 'Kwandika Amabwiriza (Prompts)' },
     summary: {
       en: 'Design structured prompts with context, roles, constraints, examples, and reusable templates that produce reliable results.',
@@ -56,6 +66,10 @@ export const LEARNING_LEVELS: LearningLevel[] = [
         'Gusuzuma no kunononsora ibisubizo bidafite ireme'
       ]
     },
+    evidence: {
+      en: ['Prompt improvement assignment', 'Personal prompt library', 'Research and document analysis exercise'],
+      rw: ['Umwitozo wo kunoza ibwiriza', 'Ububiko bw’amabwiriza yizewe', 'Isesengura ry’inyandiko z’ubushakashatsi']
+    },
     outcome: {
       en: 'Design, test, refine, and reuse prompt templates for study, research, and business tasks.',
       rw: 'Gukora, kugerageza no gukoresha kenshi amabwiriza afasha mu masomo, ubushakashatsi n’akazi ka buri munsi.'
@@ -63,6 +77,7 @@ export const LEARNING_LEVELS: LearningLevel[] = [
   },
   {
     level: 3,
+    codeRange: '5.1 – 5.9',
     title: { en: 'Workflow Thinking', rw: 'Imitekerereze y’Imikorere (Workflows)' },
     summary: {
       en: 'Map real processes—inputs, triggers, actions, decision points, and human checks—before touching any software tool.',
@@ -82,6 +97,10 @@ export const LEARNING_LEVELS: LearningLevel[] = [
         'Gushyiraho aho umuntu agenzura igikorwa'
       ]
     },
+    evidence: {
+      en: ['Workflow mapping assignment', 'Automation opportunity worksheet'],
+      rw: ['Igishushanyo cy’inzira y’akazi', 'Urupapuro rw’ibikorwa byoroshwa']
+    },
     outcome: {
       en: 'Break down any business or school process into a clear step-by-step workflow blueprint.',
       rw: 'Gusesengura buri gikorwa cy’ubucuruzi cyangwa cy’ishuri ukagishyira mu nyandiko y’imikorere isobanutse.'
@@ -89,6 +108,7 @@ export const LEARNING_LEVELS: LearningLevel[] = [
   },
   {
     level: 4,
+    codeRange: '6.1 – 6.12',
     title: { en: 'No-Code Automation', rw: 'Ikoranabuhanga ryikoresha (No-Code)' },
     summary: {
       en: 'Connect everyday tools such as Google Forms, Google Sheets, Email, Make, and Zapier without advanced coding.',
@@ -108,6 +128,10 @@ export const LEARNING_LEVELS: LearningLevel[] = [
         'Kugerageza no gukurikirana imikorere'
       ]
     },
+    evidence: {
+      en: ['Working registration automation', 'Practical automation assessment'],
+      rw: ['Umuyoboro ukora wo kwiyandikisha', 'Isuzuma ngiro ry’imiyoboro']
+    },
     outcome: {
       en: 'Build, test, and maintain practical no-code automations that eliminate manual copy-paste work.',
       rw: 'Kubaka no kugerageza imiyoboro yikoresha ikura imirimo yo kwimura amakuru n’intoki.'
@@ -115,6 +139,7 @@ export const LEARNING_LEVELS: LearningLevel[] = [
   },
   {
     level: 5,
+    codeRange: '7.1 – 7.10',
     title: { en: 'AI-Powered Automation', rw: 'Imiyoboro Ikoresha AI' },
     summary: {
       en: 'Embed AI classification, extraction, summarization, and response drafting inside automated workflows with human approval.',
@@ -134,6 +159,10 @@ export const LEARNING_LEVELS: LearningLevel[] = [
         'Uruhare rw’umuntu mu kwemeza ibyakozwe'
       ]
     },
+    evidence: {
+      en: ['AI-powered information processing demonstration'],
+      rw: ['Imurika ry’umuyoboro wa AI usesengura amakuru']
+    },
     outcome: {
       en: 'Design automated pipelines where AI handles language processing while humans retain final approval.',
       rw: 'Gutegura inzira aho AI itunganya inyandiko naho umuntu agasuzuma akemeza mbere yo kubyohereza.'
@@ -141,6 +170,7 @@ export const LEARNING_LEVELS: LearningLevel[] = [
   },
   {
     level: 6,
+    codeRange: '8.1 – 8.12',
     title: { en: 'AI Agents', rw: 'Abakozi ba AI (AI Agents)' },
     summary: {
       en: 'Understand how goal-driven AI agents differ from chatbots by using tools, memory, permissions, and human boundaries.',
@@ -160,6 +190,10 @@ export const LEARNING_LEVELS: LearningLevel[] = [
         'Gupima ubuziranenge n’umutekano wa Agent'
       ]
     },
+    evidence: {
+      en: ['Agent design canvas', 'Agent architecture exercise'],
+      rw: ['Igishushanyo cy’imikorere ya AI Agent', 'Umwitozo w’imiterere ya Agent']
+    },
     outcome: {
       en: 'Design a controlled AI agent blueprint with clear tool boundaries, safety checks, and human escalation.',
       rw: 'Gutegura igishushanyo cya AI Agent ifite imipaka isobanutse n’uburyo umuntu ayigenzura.'
@@ -167,24 +201,29 @@ export const LEARNING_LEVELS: LearningLevel[] = [
   },
   {
     level: 7,
-    title: { en: 'AI Systems & Problem Solving', rw: 'Kubaka Sisitemu za AI' },
+    codeRange: '9.1 – 9.10',
+    title: { en: 'Applied AI and Innovation', rw: 'Gukoresha AI n’Udushya' },
     summary: {
-      en: 'Combine AI, automation, and software architecture to prototype and demonstrate real solutions for Rwanda-focused problems.',
-      rw: 'Huza AI, imiyoboro yikoresha n’ubumenyi bwa sisitemu kugira ngo wubake igisubizo gikemura ikibazo nyacyo mu Rwanda.'
+      en: 'Combine AI, automation, and software design to prototype, test, document, and demonstrate real solutions for Rwanda-focused problems.',
+      rw: 'Huza AI, imiyoboro yikoresha n’ubumenyi bwo gukemura ibibazo kugira ngo wubake, ugerageze kandi umurike igisubizo cy’ukuri mu Rwanda.'
     },
     topics: {
       en: [
-        'Problem discovery and solution selection',
-        'System architecture, cost, and performance',
-        'Security, privacy, and Rwanda Law No. 058/2021',
-        'Prototyping, testing, and live demonstration'
+        'Identifying real-world problems & requirements',
+        'Solution design & prototype development',
+        'Testing, user feedback & evaluation',
+        'Documentation, impact measurement & Rwanda Law No. 058/2021'
       ],
       rw: [
-        'Gusesengura ibibazo no guhitamo igisubizo',
-        'Imiterere ya sisitemu, ikiguzi n’umuvuduko',
-        'Umutekano w’amakuru n’itegeko N° 058/2021',
-        'Kugerageza no kumurika umushinga wa nyuma'
+        'Gutahura ibibazo nyabyo n’ibikenewe',
+        'Gutegura igisubizo no kubaka icyitegererezo',
+        'Kugerageza, kwakira ibitekerezo n’isuzuma',
+        'Inyandiko, gupima umusaruro n’Itegeko N° 058/2021'
       ]
+    },
+    evidence: {
+      en: ['Final project', 'Project documentation', 'Demonstration and evaluation'],
+      rw: ['Umushinga wa nyuma', 'Inyandiko y’umushinga', 'Imurikabikorwa n’isuzuma']
     },
     outcome: {
       en: 'Plan, build, document, and present a working AI-powered prototype addressing a real community or business need.',
@@ -197,7 +236,7 @@ export const COURSES: Course[] = [
   {
     id: 'challenge-28',
     slug: '28-day-practical-ai-challenge',
-    code: 'PRODUCT 01',
+    code: 'AER-P01',
     status: 'active',
     category: 'foundations',
     priceRwf: 1000,
@@ -208,44 +247,68 @@ export const COURSES: Course[] = [
       rw: 'Icyiciro cy’iminsi 28 cyo kwiga AI mu bikorwa'
     },
     subtitle: {
-      en: 'From AI foundations and structured prompting to automated workflows and your first AI-powered project.',
-      rw: 'Kuva ku ntangiriro za AI no kwandika amabwiriza meza kugeza ku miyoboro yikoresha n’umushinga wawe wa mbere.'
+      en: 'From AI foundations and structured prompting to automated workflows and AI agents.',
+      rw: 'Kuva ku ntangiriro za AI no kwandika amabwiriza meza kugeza ku miyoboro yikoresha na AI Agents.'
     },
     description: {
-      en: 'Our flagship 4-week introductory program designed for Rwandan students, TVET and university graduates, entrepreneurs, and educators. Each daily lesson takes 5–12 minutes of reading plus a guided practical exercise using free-tier tools.',
-      rw: 'Gahunda yacu y’ibanze y’ibyumweru 4 yateguriwe abanyeshuri, abarangije kaminuza na TVET, ba rwiyemezamirimo n’abarimu mu Rwanda. Buri somo rifata iminota 5–12 yo gusoma rikagira n’imyitozo ngiro ikoresha porogaramu z’ubuntu.'
+      en: 'Product 01 (AER-P01) guides Rwandan students, TVET and university graduates, educators, and small businesses from foundational AI understanding to prompting, workflow automation, and an independent final project (45–90 min/day using free-tier tools; no paid subscription required).',
+      rw: 'Gahunda ya mbere (AER-P01) iyobora abanyeshuri, abarangije TVET na kaminuza, abarimu na ba rwiyemezamirimo mu Rwanda kuva ku ntangiriro za AI kugeza ku miyoboro yikoresha n’umushinga wa nyuma (iminota 45–90 ku munsi ukoresha porogaramu z’ubuntu).'
     },
     outcomes: {
       en: [
-        'Understand how LLMs work, spot hallucinations, and apply responsible AI verification.',
-        'Build a personal prompt library for research, writing, and study assistance.',
-        'Design and deploy a working Form -> Google Sheets -> Email automation workflow.',
-        'Create an AI-powered inquiry processor with human approval gates and present a capstone project.'
+        'LO1. Explain artificial intelligence and distinguish AI, machine learning, deep learning and generative AI.',
+        'LO2. Explain the basic operating principles and limitations of large language models.',
+        'LO3. Identify AI hallucinations, bias, privacy risks and unreliable outputs.',
+        'LO4. Apply responsible AI practices when using AI tools.',
+        'LO5. Construct structured prompts using roles, context, tasks, requirements and output formats.',
+        'LO6. Improve prompts through testing, evaluation and refinement.',
+        'LO7. Use AI tools for research, document analysis, writing and productivity while verifying facts.',
+        'LO8. Identify repetitive tasks suitable for automation.',
+        'LO9. Design workflows using triggers, inputs, actions, conditions and outputs.',
+        'LO10. Build and test a basic no-code automation.',
+        'LO11. Explain how AI can be integrated into automated workflows.',
+        'LO12. Build or demonstrate an introductory AI-powered workflow with human review.',
+        'LO13. Explain the differences between chatbots, AI assistants, automation workflows and AI agents.',
+        'LO14. Describe the components, limitations and risks of AI agents.',
+        'LO15. Design and demonstrate a practical AI-related solution to a clearly defined problem.'
       ],
       rw: [
-        'Gusobanukirwa imikorere ya AI, gutahura amakosa yayo no kugenzura amakuru mbere yo kuyakoresha.',
-        'Kubaka ububiko bwawe bw’amabwiriza afasha mu bushakashatsi, kwandika no kwiga.',
-        'Gukora umuyoboro w’ikoranabuhanga uhuza Google Form, Google Sheets na Email.',
-        'Kubaka uburyo bufasha gusesengura ibibazo by’abakiriya bwemejwe n’umuntu no kumurika umushinga.'
+        'LO1. Gusobanura AI no gutandukanya AI, machine learning, deep learning na generative AI.',
+        'LO2. Gusobanura imikorere y’ibanze n’imipaka ya Large Language Models.',
+        'LO3. Gutahura amakosa ya AI (hallucinations), kubogama n’ibibazo by’umutekano w’amakuru.',
+        'LO4. Gukoresha AI mu buryo burimo ubushishozi n’inshingano.',
+        'LO5. Kwandika amabwiriza arimo uruhare, imiterere, igikorwa, amategeko n’imiterere y’igisubizo.',
+        'LO6. Kunoza amabwiriza binyuze mu kugerageza no kugenzura ibisubizo.',
+        'LO7. Gukoresha AI mu bushakashatsi, kwandika no kongera umusaruro hamwe n’igenzura.',
+        'LO8. Kumenya imirimo isubirwamo ikwiye gukorwa n’imiyoboro yikoresha.',
+        'LO9. Gushushanya imiyoboro ukoresheje triggers, inputs, actions, conditions na outputs.',
+        'LO10. Kubaka no kugerageza umuyoboro w’ibanze utagombera kode.',
+        'LO11. Gusobanura uko AI yinjira mu miyoboro yikoresha.',
+        'LO12. Kubaka cyangwa kwerekana umuyoboro wa AI ufite ubugenzuzi bw’umuntu.',
+        'LO13. Gutandukanya chatbots, AI assistants, automation workflows na AI agents.',
+        'LO14. Gusobanura ibice, imipaka n’ibyago bya AI agents.',
+        'LO15. Gutegura no kumurika igisubizo ngiro cya AI gikemura ikibazo gisobanutse.'
       ]
     },
     audience: {
       en: [
-        'Secondary school & TVET graduates',
-        'University students & recent graduates',
-        'Small business owners & freelancers',
-        'Teachers, educators & NGO staff'
+        'Secondary school students & recent graduates',
+        'University & TVET students',
+        'Beginners exploring AI & digital productivity',
+        'Entrepreneurs & small business operators',
+        'Content creators & administrative professionals'
       ],
       rw: [
-        'Abanyeshuri barangije ayisumbuye na TVET',
-        'Abanyeshuri ba kaminuza n’abarangije kwiga',
-        'Ba nyiri ibigo bito n’abikorera',
-        'Abarimu, abarezi n’abakozi b’imiryango itegamiye kuri Leta'
+        'Abanyeshuri bo mu mashuri yisumbuye n’abarangije vuba',
+        'Abanyeshuri ba kaminuza n’aba TVET',
+        'Abatangira kwiga AI no kongera umusaruro mu ikoranabuhanga',
+        'Ba rwiyemezamirimo n’abacuruzi bato',
+        'Abahanzi b’inyandiko n’abakozi b’ibiro'
       ]
     },
     deviceNote: {
-      en: 'Reading lessons and prompt exercises work on a smartphone. Week 3–4 workflow automation builds require access to a laptop or desktop computer.',
-      rw: 'Gusoma amasomo n’imyitozo y’amabwiriza bikorera kuri telefoni. Ibikorwa by’ibyumweru bya 3–4 byo kubaka imiyoboro bisaba mudasobwa.'
+      en: 'Foundational lessons & prompt exercises run on smartphones. A laptop is strongly recommended for Week 3–4 automation exercises. No paid AI subscription is mandatory.',
+      rw: 'Amasomo y’ibanze n’imyitozo y’amabwiriza bikorera kuri telefoni. Mudasobwa irakenewe cyane mu myitozo y’imiyoboro yo mu cyumweru cya 3–4. Nta kwishyura porogaramu z’inyongera bisabwa.'
     }
   },
   {
@@ -556,6 +619,315 @@ export const PRACTICAL_PROJECTS: PracticalProject[] = [
       en: 'Structured research brief + verification log from an approved document.',
       rw: 'Inshamake y’ubushakashatsi n’inyandiko y’igenzura ry’ukuri.'
     }
+  },
+  {
+    key: 'independent_final',
+    number: '06',
+    title: { en: 'Independent Final Project', rw: 'Umushinga wa Nyuma Wigenga' },
+    summary: {
+      en: 'Choose a real problem in Education, Small Business, Productivity, Content Creation, Community Organizations, or Agriculture and build a tested, documented prototype.',
+      rw: 'Hitamo ikibazo nyacyo mu Burezi, Ubucuruzi Buto, Umusaruro, Inyandiko, Imiryango cyangwa Ubuhinzi wubake igisubizo cyageragejwe kandi gisobanutse.'
+    },
+    workflowSteps: {
+      en: [
+        'Define a clear problem and target requirements (Days 27)',
+        'Design the prompt chain, no-code workflow, or safe AI prototype',
+        'Run real test scenarios, capture limitations, and add human approval checks',
+        'Prepare clear documentation and demonstrate the solution (Day 28)'
+      ],
+      rw: [
+        'Sobanura ikibazo nyacyo n’ibisabwa (Umunsi wa 27)',
+        'Tegura imiterere y’amabwiriza cyangwa umuyoboro wa AI ufite umutekano',
+        'Gerageza mu bikorwa, garagaza imipaka n’aho umuntu agenzura',
+        'Tegura inyandiko isobanutse umurike igisubizo (Umunsi wa 28)'
+      ]
+    },
+    tools: ['ChatGPT', 'Google Gemini', 'Make / Zapier', 'Google Workspace'],
+    deliverable: {
+      en: 'Defined problem, proposed solution, demonstrable prototype, testing evidence, limitations & documentation (30% course weight).',
+      rw: 'Ikibazo gisobanutse, igisubizo, icyitegererezo gikora, ibimenyetso by’igerageza n’inyandiko (30% by’amanota).'
+    }
+  }
+];
+
+export const BLUEPRINT_GRADING_BREAKDOWN: AssessmentWeightItem[] = [
+  {
+    id: 'w1_quiz',
+    label: { en: 'Week 1 Knowledge Assessment', rw: 'Isuzuma ry’Icyumweru cya 1 (Ubumenyi)' },
+    weightPct: 5,
+    requirement: {
+      en: 'Covers AI foundations, hallucinations, bias & responsible use (Day 7).',
+      rw: 'Rikubiyemo intangiriro za AI, amakosa ya AI, kubogama n’inshingano (Umunsi wa 7).'
+    }
+  },
+  {
+    id: 'w2_prompt',
+    label: { en: 'Week 2 Knowledge & Prompt Assignment', rw: 'Icyumweru cya 2 — Amabwiriza & Ububiko' },
+    weightPct: 15,
+    requirement: {
+      en: 'Prompt quality quiz + personal prompt library of 10+ tested prompts (Day 14).',
+      rw: 'Ikizamini n’ububiko bw’amabwiriza nibura 10 yageragejwe (Umunsi wa 14).'
+    }
+  },
+  {
+    id: 'w3_automation',
+    label: { en: 'Week 3 Workflow & Automation Assessment', rw: 'Icyumweru cya 3 — Imiyoboro Yikoresha' },
+    weightPct: 20,
+    requirement: {
+      en: 'Workflow mapping, data mapping, and Form → Sheets → Email build (Day 21).',
+      rw: 'Igishushanyo cy’inzira, guhuza amakuru n’umuyoboro wa Form → Sheets → Email (Umunsi wa 21).'
+    }
+  },
+  {
+    id: 'w4_ai_auto',
+    label: { en: 'Week 4 Knowledge & Practical Assessment', rw: 'Icyumweru cya 4 — AI Automation & Agents' },
+    weightPct: 15,
+    requirement: {
+      en: 'AI inquiry workflow evaluation, agent design risks, and final quiz (Day 28).',
+      rw: 'Umuyoboro wa AI, imipaka ya AI Agent n’ikizamini gisoza (Umunsi wa 28).'
+    }
+  },
+  {
+    id: 'final_project',
+    label: { en: 'Independent Final Project', rw: 'Umushinga wa Nyuma Wigenga' },
+    weightPct: 30,
+    requirement: {
+      en: 'Strongest evidence of practical mastery, graded via the 7-criterion rubric.',
+      rw: 'Ikigaragaza ubushobozi bwo gushyira mu bikorwa, gisuzumwa hakoreshejwe ibipimo 7.'
+    }
+  },
+  {
+    id: 'practical_exercises',
+    label: { en: 'Practical Exercises & Participation Evidence', rw: 'Imyitozo Ngiro n’Ibimenyetso bya Buri Munsi' },
+    weightPct: 15,
+    requirement: {
+      en: 'Daily deliverable worksheets completed across the 28-day curriculum.',
+      rw: 'Impapuro n’ibimenyetso by’imyitozo ya buri munsi mu minsi 28.'
+    }
+  }
+];
+
+export const FINAL_PROJECT_RUBRIC_7: RubricCriterion[] = [
+  {
+    id: 'problem_identification',
+    criterion: { en: 'Problem Identification', rw: 'Gusobanura Ikibazo' },
+    weightPct: 15,
+    description: {
+      en: 'Clear, realistic Rwandan community, study, or business bottleneck with target users.',
+      rw: 'Ikibazo nyacyo mu Rwanda mu masomo cyangwa mu bucuruzi hamwe n’abo kigenewe.'
+    }
+  },
+  {
+    id: 'solution_workflow_design',
+    criterion: { en: 'Solution & Workflow Design', rw: 'Imiterere y’Igisubizo n’Umuyoboro' },
+    weightPct: 15,
+    description: {
+      en: 'Logical triggers, inputs, prompts, conditions, and outputs mapped cleanly.',
+      rw: 'Ibitangira, ibyinjira, amabwiriza, amategeko n’ibisohoka biteguye neza.'
+    }
+  },
+  {
+    id: 'appropriate_ai_use',
+    criterion: { en: 'Appropriate AI Use', rw: 'Gukoresha AI Mu Buryo Bukwiye' },
+    weightPct: 15,
+    description: {
+      en: 'AI applied only where language reasoning helps; deterministic rules used where reliable.',
+      rw: 'AI ikoreshwa aho ikenewe koko; amategeko asanzwe agakoreshwa aho bikwiye.'
+    }
+  },
+  {
+    id: 'functionality_demo',
+    criterion: { en: 'Functionality & Demonstration', rw: 'Imikorere n’Imurikabikorwa' },
+    weightPct: 20,
+    description: {
+      en: 'Working prototype, prompt library, or scenario demonstrated with real inputs.',
+      rw: 'Igisubizo cyubatswe gikora neza cyerekanwe hakoreshejwe ingero z’ukuri.'
+    }
+  },
+  {
+    id: 'testing_error_handling',
+    criterion: { en: 'Testing & Error Handling', rw: 'Igerageza no Gukemura Amakosa' },
+    weightPct: 15,
+    description: {
+      en: 'Evidence of testing happy-path and edge-case/missing-input scenarios.',
+      rw: 'Ibimenyetso ko wagerageje ibisubizo byiza n’igihe hari ibibura.'
+    }
+  },
+  {
+    id: 'safety_human_oversight',
+    criterion: { en: 'Safety & Human Oversight', rw: 'Umutekano n’Ubugenzuzi bw’Umuntu' },
+    weightPct: 10,
+    description: {
+      en: 'Privacy protection (Law No. 058/2021) and explicit human approval gates.',
+      rw: 'Kurinda amakuru bwite (Itegeko N° 058/2021) n’aho umuntu abanza kwemeza.'
+    }
+  },
+  {
+    id: 'documentation_explanation',
+    criterion: { en: 'Documentation & Explanation', rw: 'Inyandiko n’Ibisobanuro' },
+    weightPct: 10,
+    description: {
+      en: 'Honest limitations, reproducible steps, and clear learner reflection.',
+      rw: 'Imipaka igaragazwa mu kuri, intambwe zisobanutse n’inyandiko zuzuye.'
+    }
+  }
+];
+
+export const INDUSTRY_LEARNING_PATHS_PRESETS: IndustryPathPreset[] = [
+  {
+    id: 'path_education',
+    sectorCode: '20.1',
+    titleEn: 'AI in Education',
+    titleRw: 'AI mu Burezi n’Amashuri',
+    descriptionEn: 'Study assistants, bilingual lesson summaries, NotebookLM revision guides, and safe academic integrity workflows for students and teachers.',
+    descriptionRw: 'Abafasha bo kwiga, guhinira amasomo mu ndimi zombi, NotebookLM n’uburezi bwubahiriza ubunyangamugayo.',
+    recommendedDays: [1, 5, 6, 8, 11, 12, 28],
+    courseIds: ['challenge-28']
+  },
+  {
+    id: 'path_small_business',
+    sectorCode: '20.2',
+    titleEn: 'AI in Small Businesses',
+    titleRw: 'AI mu Bucuruzi Buto n’Ibigo Bito',
+    descriptionEn: 'WhatsApp & email customer response drafting, Google Form registration automation, and daily operations organization for Rwandan SMEs.',
+    descriptionRw: 'Gutegura ubutumwa bw’abakiriya, kwiyandikisha mu buryo bwikoresha no gutunganya imirimo ya buri munsi mu bigo bito.',
+    recommendedDays: [8, 9, 15, 16, 19, 22, 24],
+    courseIds: ['challenge-28']
+  },
+  {
+    id: 'path_marketing_content',
+    sectorCode: '20.3',
+    titleEn: 'AI in Marketing and Content Creation',
+    titleRw: 'AI mu Kwamamaza no Gutegura Inyandiko',
+    descriptionEn: 'Structured audience prompts, prompt chaining for bilingual campaigns, and 4-week editorial calendars with human tone review.',
+    descriptionRw: 'Amabwiriza ategura inyandiko z’Icyongereza n’Ikinyarwanda hamwe na gahunda yo gutangaza igenzuwe n’umuntu.',
+    recommendedDays: [8, 9, 10, 12, 13, 23, 27],
+    courseIds: ['challenge-28']
+  },
+  {
+    id: 'path_agriculture',
+    sectorCode: '20.4',
+    titleEn: 'AI in Agriculture & Cooperatives',
+    titleRw: 'AI mu Buhinzi n’Amakoperative',
+    descriptionEn: 'Cooperative member intake via Forms/Sheets, bilingual extension summaries, and inquiry classification with human coordinator sign-off.',
+    descriptionRw: 'Kwakira ibibazo by’abanyamuryango b’amakoperative, guhinira amakuru no gusubiza binyuze mu bugenzuzi bw’umuntu.',
+    recommendedDays: [1, 6, 11, 16, 19, 22, 24],
+    courseIds: ['challenge-28']
+  },
+  {
+    id: 'path_finance_admin',
+    sectorCode: '20.5',
+    titleEn: 'AI in Finance and Administration',
+    titleRw: 'AI mu Butegetsi n’Imari',
+    descriptionEn: 'Structured data extraction, audit-ready record tracking in Google Sheets, error-handling conditions, and strict data privacy boundaries.',
+    descriptionRw: 'Gukura amakuru mu nyandiko, gutondeka imbonerahamwe z’ububiko n’amategeko arinda amakuru y’imari.',
+    recommendedDays: [5, 6, 10, 18, 20, 23, 26],
+    courseIds: ['challenge-28']
+  },
+  {
+    id: 'path_customer_service',
+    sectorCode: '20.6',
+    titleEn: 'AI in Customer Service',
+    titleRw: 'AI mu Gufasha Abakiriya',
+    descriptionEn: 'Automated ticket triage, topic extraction, bilingual response drafting, and mandatory human-approval queues.',
+    descriptionRw: 'Gushyira ibibazo by’abakiriya mu byiciro no gutegura ibisubizo bihabwa umukozi ngo abyemeze.',
+    recommendedDays: [8, 17, 19, 22, 23, 24, 26],
+    courseIds: ['challenge-28']
+  },
+  {
+    id: 'path_software_dev',
+    sectorCode: '20.7',
+    titleEn: 'AI in Software Development',
+    titleRw: 'AI mu Kubaka Porogaramu',
+    descriptionEn: 'JSON & structured outputs, API/webhook concepts, Google Apps Script extensions, and agent architecture safety.',
+    descriptionRw: 'Imiterere ya JSON, APIs na webhooks, Google Apps Script n’umutekano w’imikorere ya AI Agents.',
+    recommendedDays: [4, 10, 17, 18, 20, 25, 26],
+    courseIds: ['challenge-28']
+  },
+  {
+    id: 'path_ngos_community',
+    sectorCode: '20.8',
+    titleEn: 'AI in NGOs and Community Organizations',
+    titleRw: 'AI mu Miryango Itegamiye kuri Leta',
+    descriptionEn: 'Participant registration workflows, donor/impact document synthesis, privacy compliance (Law No. 058/2021), and low-bandwidth delivery.',
+    descriptionRw: 'Kwandika abitabiriye gahunda, gusesengura raporo n’uburinzi bw’amakuru bwite mu miryango.',
+    recommendedDays: [1, 6, 11, 15, 19, 24, 28],
+    courseIds: ['challenge-28']
+  }
+];
+
+export const PRODUCTION_INVENTORY_SECTIONS: BlueprintInventorySection[] = [
+  {
+    id: 'academic_docs',
+    title: { en: 'Academic Documents (7)', rw: 'Inyandiko z’Amasomo (7)' },
+    items: [
+      { id: 'doc_desc', label: { en: 'Final course description', rw: 'Ibisobanuro byuzuye by’isomo' } },
+      { id: 'doc_los', label: { en: 'Course learning outcomes (LO1–LO15)', rw: 'Intego 15 z’isomo (LO1–LO15)' } },
+      { id: 'doc_7level', label: { en: 'Seven-level competency mapping', rw: 'Ihuza n’ibyiciro 7 by’ubumenyi' } },
+      { id: 'doc_28day', label: { en: '28-day curriculum schedule', rw: 'Gahunda y’iminsi 28' } },
+      { id: 'doc_template', label: { en: '16-part lesson production template', rw: 'Imiterere y’amasomo y’ibice 16' } },
+      { id: 'doc_policy', label: { en: 'Assessment policy', rw: 'Amabwiriza y’isuzuma' } },
+      { id: 'doc_rubric', label: { en: 'Final project grading rubrics (7 criteria)', rw: 'Ibipimo 7 byo gutanga amanota' } }
+    ]
+  },
+  {
+    id: 'daily_lessons',
+    title: { en: '28 Daily Lessons (28)', rw: 'Amasomo ya Buri Munsi (28)' },
+    items: Array.from({ length: 28 }, (_, idx) => ({
+      id: `lesson_day_${idx + 1}`,
+      label: { en: `Day ${idx + 1} lesson content`, rw: `Isomo ry’Umunsi wa ${idx + 1}` }
+    }))
+  },
+  {
+    id: 'projects',
+    title: { en: 'Practical Projects (6)', rw: 'Imishinga Ngiro (6)' },
+    items: [
+      { id: 'proj_1', label: { en: 'Project 1: Personal AI Study Assistant', rw: 'Umushinga 1: Umufasha mu Kwiga' } },
+      { id: 'proj_2', label: { en: 'Project 2: Automated Registration System', rw: 'Umushinga 2: Sisitemu yo Kwiyandikisha' } },
+      { id: 'proj_3', label: { en: 'Project 3: AI Customer Inquiry Assistant', rw: 'Umushinga 3: Umufasha mu Gusubiza Abakiriya' } },
+      { id: 'proj_4', label: { en: 'Project 4: Content Planning Workflow', rw: 'Umushinga 4: Umuyoboro wo Gutegura Inyandiko' } },
+      { id: 'proj_5', label: { en: 'Project 5: Research Document Assistant', rw: 'Umushinga 5: Umufasha mu Bushakashatsi' } },
+      { id: 'proj_6', label: { en: 'Project 6: Independent Final Project', rw: 'Umushinga 6: Umushinga wa Nyuma Wigenga' } }
+    ]
+  },
+  {
+    id: 'assessments',
+    title: { en: 'Assessments & Guides (6)', rw: 'Amasuzuma n’Ibisobanuro (6)' },
+    items: [
+      { id: 'ass_w1', label: { en: 'Week 1 assessment', rw: 'Isuzuma ry’Icyumweru cya 1' } },
+      { id: 'ass_w2', label: { en: 'Week 2 assessment', rw: 'Isuzuma ry’Icyumweru cya 2' } },
+      { id: 'ass_w3', label: { en: 'Week 3 assessment', rw: 'Isuzuma ry’Icyumweru cya 3' } },
+      { id: 'ass_w4', label: { en: 'Week 4 assessment', rw: 'Isuzuma ry’Icyumweru cya 4' } },
+      { id: 'ass_final', label: { en: 'Final assessment & project evaluation', rw: 'Isuzuma rya nyuma' } },
+      { id: 'ass_guides', label: { en: 'Answer explanations and marking guides', rw: 'Ibisobanuro by’ibisubizo n’amabwiriza yo gukosora' } }
+    ]
+  },
+  {
+    id: 'learner_resources',
+    title: { en: 'Learner Toolkit Resources (8)', rw: 'Ibikoresho by’Umunyeshuri (8)' },
+    items: [
+      { id: 'res_prompt_tpl', label: { en: 'Prompt template collection', rw: 'Urutonde rw’amabwiriza fatizo' } },
+      { id: 'res_prompt_lib', label: { en: 'Prompt library worksheet', rw: 'Urupapuro rw’ububiko bw’amabwiriza' } },
+      { id: 'res_workflow', label: { en: 'Workflow mapping template', rw: 'Igishushanyo cy’imikorere' } },
+      { id: 'res_datamap', label: { en: 'Data mapping worksheet', rw: 'Urupapuro rwo guhuza amakuru' } },
+      { id: 'res_testing', label: { en: 'Automation testing checklist', rw: 'Urutonde rwo kugerageza imiyoboro' } },
+      { id: 'res_eval', label: { en: 'AI output evaluation checklist', rw: 'Urutonde rwo kugenzura ibisubizo bya AI' } },
+      { id: 'res_agent', label: { en: 'Agent design canvas', rw: 'Igishushanyo cya AI Agent' } },
+      { id: 'res_projdoc', label: { en: 'Project documentation template', rw: 'Urupapuro rw’inyandiko y’umushinga' } }
+    ]
+  },
+  {
+    id: 'media_delivery',
+    title: { en: 'Media & Delivery Formats (7)', rw: 'Amashusho n’Uburyo bw’Imitangire (7)' },
+    items: [
+      { id: 'med_slides', label: { en: 'Lesson slides & visual diagrams', rw: 'Imbonerahamwe n’amashusho y’isomo' } },
+      { id: 'med_demos', label: { en: 'Demonstration recordings', rw: 'Amashusho y’imyitozo ngiro' } },
+      { id: 'med_notes', label: { en: 'Downloadable lesson notes', rw: 'Inyandiko z’isomo zikurwa kuri murandasi' } },
+      { id: 'med_datasets', label: { en: 'Sample datasets', rw: 'Amakuru y’icyitegererezo yo kwitorezaho' } },
+      { id: 'med_en', label: { en: 'English versions verified', rw: 'Inyandiko z’Icyongereza zagenzuwe' } },
+      { id: 'med_rw', label: { en: 'Kinyarwanda versions reviewed', rw: 'Inyandiko z’Ikinyarwanda zagenzuwe' } },
+      { id: 'med_lowbw', label: { en: 'Low-bandwidth text alternatives', rw: 'Uburyo bworoshye budatwara interineti nyinshi' } }
+    ]
   }
 ];
 
@@ -790,11 +1162,61 @@ export const TEMPLATE_RESOURCES: TemplateResource[] = [
     contentRw: `# AI Education Rwanda — Isuzuma ry'Umushinga wa Nyuma (30%)
 
 ## Ibishingirwaho mu Gutanga Amanota (100)
-1. **Ikibazo gisobanutse (20)**: Ikibazo nyacyo n'abo kigenewe.
-2. **Imiterere y'umuyoboro (25)**: Ibitangira, ibyinjira n'ibisohoka bikora neza.
-3. **Ibikorwa n'igerageza (25)**: Umushinga ukora kandi wagaragajwe mu myitozo.
-4. **Umutekano n'igenzura (15)**: Uburyo bwo kurinda amakuru no kugenzura amakosa ya AI.
-5. **Inyandiko isobanutse (15)**: Ibisobanuro byuzuye kandi byumvikana.
+1. **Ikibazo gisobanutse (15%)**: Ikibazo nyacyo n'abo kigenewe.
+2. **Imiterere y'igisubizo n'umuyoboro (15%)**: Ibitangira, ibyinjira n'ibisohoka biteguye neza.
+3. **Gukoresha AI mu buryo bukwiye (15%)**: Guhitamo neza aho AI ikenewe n'aho amategeko asanzwe ahagije.
+4. **Imikorere n'imurikabikorwa (20%)**: Umushinga ukora kandi wagaragajwe mu myitozo.
+5. **Igerageza no gukemura amakosa (15%)**: Kugaragaza ko umuyoboro wagenzuwe ku makuru atandukanye.
+6. **Umutekano n'igenzura ry'umuntu (10%)**: Kurinda amakuru bwite n'aho umuntu abanza kwemeza.
+7. **Inyandiko n'ibisobanuro (10%)**: Inyandiko zuzuye zigaragaza imipaka n'intambwe.
+`
+  },
+  {
+    id: 'tpl-factcheck-log',
+    category: 'prompting',
+    title: { en: 'Fact-Checking & AI Output Evaluation Log', rw: 'Inyandiko yo Kugenzura Ukuri kwa AI' },
+    description: {
+      en: 'Verify factual claims, dates, citations, and privacy boundaries before using any AI-generated output.',
+      rw: 'Genzura ukuri kw’amakuru, amatariki n’umutekano mbere yo kwemeza ibyo AI yakoze.'
+    },
+    filename: 'ai-rwanda-factcheck-evaluation-log.md',
+    contentEn: `# AI Education Rwanda — AI Output Verification Log
+
+| Claim / Output Statement | Tool Used | Primary Source Checked | Status (Verified / Corrected / Removed) |
+| --- | --- | --- | --- |
+| Example: Cooperative policy limit | Gemini | Ministry / Cooperative doc p.4 | Verified |
+| Example: Unverified statistic | ChatGPT | Not found in trusted source | Removed |
+`,
+    contentRw: `# AI Education Rwanda — Igenzura ry'Ukuri kw'Ibisubizo
+
+| Icyo AI Yavuze | Porogaramu | Isoko Yagenzuwe | Umwanzuro (Byemejwe / Byakosowe / Byakuwemo) |
+| --- | --- | --- | --- |
+| Urugero: Amabwiriza ya koperative | Gemini | Inyandiko y'umwimerere urup. 4 | Byemejwe |
+`
+  },
+  {
+    id: 'tpl-agent-canvas',
+    category: 'ai_automation',
+    title: { en: 'AI Agent Design Canvas & Risk Matrix', rw: 'Igishushanyo cya AI Agent n’Igenzura ry’Ibyago' },
+    description: {
+      en: 'Define an agent role, allowed tools, knowledge boundary, prompt-injection safeguards, and human escalation rules.',
+      rw: 'Garagaza inshingano za AI Agent, ibikoresho yemerewe, imipaka y’amakuru n’uko umuntu ayihagarika.'
+    },
+    filename: 'ai-rwanda-agent-design-canvas.md',
+    contentEn: `# AI Education Rwanda — Agent Design Canvas
+
+- **Agent Goal**: (Single focused objective)
+- **Allowed Tools**: (e.g., Read Google Sheet row, Draft email reply)
+- **Forbidden Actions**: (e.g., Never delete records, never send payments, never share PII)
+- **Untrusted Input Protection**: Treat external customer emails as untrusted text, not instructions.
+- **Human Escalation Rule**: Route uncertain or sensitive cases to human staff.
+`,
+    contentRw: `# AI Education Rwanda — Igishushanyo cya AI Agent
+
+- **Intego ya Agent**: (Igikorwa kimwe gisobanutse)
+- **Ibikoresho yemerewe**: (Gusoma Sheet, gutegura ubutumwa)
+- **Ibyo ibujijwe**: (Gusiba amakuru, kwishyura, gusohora amakuru bwite)
+- **Ubugenzuzi bw'umuntu**: Ibibazo bitizewe byoherezwa ku mukozi ubisuzuma.
 `
   }
 ];

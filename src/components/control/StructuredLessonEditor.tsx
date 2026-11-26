@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   ArrowDown,
   ArrowUp,
+  BookOpen,
   Copy,
   Eye,
   History,
@@ -9,6 +10,7 @@ import {
   Plus,
   RotateCcw,
   Save,
+  Search,
   Trash2,
   Upload
 } from 'lucide-react';
@@ -59,6 +61,7 @@ interface StructuredLessonEditorProps {
   lessons: StructuredLessonRecord[];
   initialCourseId?: string | null;
   initialLessonId?: string | null;
+  quickCreateNonce?: number;
   onWriteAudit: (params: AuditWriteParams) => Promise<void>;
   onRefreshData: () => Promise<void>;
   onRefreshPublic: () => void;
@@ -71,6 +74,7 @@ export function StructuredLessonEditor({
   lessons,
   initialCourseId,
   initialLessonId,
+  quickCreateNonce = 0,
   onWriteAudit,
   onRefreshData,
   onRefreshPublic
@@ -89,6 +93,7 @@ export function StructuredLessonEditor({
   const [versions, setVersions] = useState<LessonVersion[]>([]);
   const [versionNote, setVersionNote] = useState('');
   const [loadingVersions, setLoadingVersions] = useState(false);
+  const [railSearch, setRailSearch] = useState('');
 
   const [saveState, setSaveState] = useState<'idle' | 'dirty' | 'saving' | 'saved'>('idle');
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
@@ -100,6 +105,7 @@ export function StructuredLessonEditor({
   const [blocksEn, setBlocksEn] = useState<LessonBlock[]>([]);
   const [blocksRw, setBlocksRw] = useState<LessonBlock[]>([]);
   const skipNextAutosave = useRef(true);
+  const lastCreateNonceRef = useRef(0);
 
   useEffect(() => {
     if (initialLessonId) {
@@ -126,6 +132,18 @@ export function StructuredLessonEditor({
         .sort((a, b) => (a.dayNumber ?? 0) - (b.dayNumber ?? 0) || (a.orderIndex ?? 0) - (b.orderIndex ?? 0)),
     [lessons, selectedCourseId]
   );
+
+  const filteredRailLessons = useMemo(() => {
+    const q = railSearch.trim().toLowerCase();
+    if (!q) return courseLessons;
+    return courseLessons.filter(
+      (l) =>
+        l.titleEn.toLowerCase().includes(q) ||
+        l.titleRw.toLowerCase().includes(q) ||
+        `day ${l.dayNumber}`.includes(q) ||
+        `d${l.dayNumber}` === q
+    );
+  }, [courseLessons, railSearch]);
 
   const loadDraftFromLesson = useCallback((rec: StructuredLessonRecord) => {
     skipNextAutosave.current = true;
@@ -194,9 +212,9 @@ export function StructuredLessonEditor({
         id: rec.id,
         courseId: rec.courseId,
         moduleId: rec.moduleId || '',
-        orderIndex: Number(rec.orderIndex ?? 0),
-        dayNumber: Math.max(1, Number(rec.dayNumber || 1)),
-        weekNumber: Math.max(1, Number(rec.weekNumber || 1)),
+        orderIndex: Math.min(200, Math.max(0, Number(rec.orderIndex ?? 0))),
+        dayNumber: Math.min(365, Math.max(1, Number(rec.dayNumber || 1))),
+        weekNumber: Math.min(52, Math.max(1, Number(rec.weekNumber || 1))),
         isSample: Boolean(rec.isSample),
         isRequired: rec.isRequired !== false,
         estimatedMinutes: Math.max(1, Number(rec.estimatedMinutes || 15)),
@@ -204,12 +222,16 @@ export function StructuredLessonEditor({
         rwStatus: rec.rwStatus || 'draft',
         ...(rec.releaseAt ? { releaseAt: rec.releaseAt } : {}),
         releaseAtMs: parseReleaseAtMs(rec.releaseAt) ?? 0,
-        titleEn: rec.titleEn.trim() || 'Untitled Lesson',
-        titleRw: rec.titleRw.trim() || rec.titleEn.trim() || 'Isomo ritarahabwa izina',
+        titleEn: (rec.titleEn.trim() || 'Untitled Lesson').slice(0, 180),
+        titleRw: (rec.titleRw.trim() || rec.titleEn.trim() || 'Isomo ritarahabwa izina').slice(0, 180),
         summaryEn: (rec.summaryEn || '').slice(0, 3950),
         summaryRw: (rec.summaryRw || '').slice(0, 3950),
         objectivesEn: (rec.objectivesEn || []).slice(0, 20),
         objectivesRw: (rec.objectivesRw || []).slice(0, 20),
+        ...(rec.deliverableEn?.trim() ? { deliverableEn: rec.deliverableEn.trim().slice(0, 290) } : {}),
+        ...(rec.deliverableRw?.trim() ? { deliverableRw: rec.deliverableRw.trim().slice(0, 290) } : {}),
+        ...(rec.levelTag?.trim() ? { levelTag: rec.levelTag.trim().slice(0, 40) } : {}),
+        ...(rec.tools && rec.tools.length > 0 ? { tools: rec.tools.slice(0, 15) } : {}),
         blocksEnJson: serializeLessonBlocks(nextEn).slice(0, 199000),
         blocksRwJson: serializeLessonBlocks(nextRw).slice(0, 199000),
         updatedAt: serverTimestamp()
@@ -256,30 +278,36 @@ export function StructuredLessonEditor({
     return () => clearTimeout(timer);
   }, [draft, blocksEn, blocksRw, lessons, persistLesson]);
 
-  const handleCreateLesson = async () => {
+  const handleCreateLesson = useCallback(async () => {
     const nextDay =
       courseLessons.length > 0
-        ? Math.max(...courseLessons.map((l) => l.dayNumber || 1)) + 1
+        ? Math.min(365, Math.max(...courseLessons.map((l) => l.dayNumber || 1)) + 1)
         : 1;
     const newId = `${selectedCourseId}_lesson_${Date.now().toString(36)}`;
-    const starterBlocks = LESSON_STARTER_TEMPLATES[0].buildBlocks();
+    const blueprintPreset =
+      LESSON_STARTER_TEMPLATES.find((t) => t.id === 'blueprint_16_part') ??
+      LESSON_STARTER_TEMPLATES[0];
+    const starterBlocks = blueprintPreset.buildBlocks();
     const newRec: StructuredLessonRecord = {
       id: newId,
       courseId: selectedCourseId,
       moduleId: courseModules[0]?.id || '',
-      orderIndex: courseLessons.length,
+      orderIndex: Math.min(200, courseLessons.length),
       dayNumber: nextDay,
-      weekNumber: Math.max(1, Math.ceil(nextDay / 7)),
+      weekNumber: Math.min(52, Math.max(1, Math.ceil(nextDay / 7))),
       isSample: nextDay === 1,
       isRequired: true,
       estimatedMinutes: 15,
       enStatus: 'draft',
       rwStatus: 'translation_needed',
       releaseAtMs: 0,
-      titleEn: `Lesson ${nextDay}: New Practical Topic`,
-      titleRw: `Isomo rya ${nextDay}: Inyigisho Nshya`,
+      titleEn: `Day ${nextDay}: New Practical Lesson`,
+      titleRw: `Umunsi wa ${nextDay}: Inyigisho Nshya`,
       summaryEn: 'Describe what the learner will achieve in this lesson.',
       summaryRw: 'Sobanura icyo umunyeshuri azungukira muri iri somo.',
+      deliverableEn: `Completed Day ${nextDay} practical worksheet`,
+      deliverableRw: `Umwitozo w’Umunsi wa ${nextDay} wuzuye`,
+      levelTag: 'Practical AI',
       objectivesEn: ['Understand core principle', 'Practice with a Rwanda example'],
       objectivesRw: ['Gusobanukirwa ihame shingiro', 'Kwimenyereza ukoresheje urugero rwo mu Rwanda'],
       blocksEnJson: serializeLessonBlocks(starterBlocks),
@@ -289,7 +317,14 @@ export function StructuredLessonEditor({
     await persistLesson(newRec, starterBlocks, [], true);
     setSelectedLessonId(newId);
     loadDraftFromLesson(newRec);
-  };
+  }, [courseLessons, courseModules, loadDraftFromLesson, persistLesson, selectedCourseId]);
+
+  useEffect(() => {
+    if (quickCreateNonce > 0 && quickCreateNonce !== lastCreateNonceRef.current) {
+      lastCreateNonceRef.current = quickCreateNonce;
+      handleCreateLesson();
+    }
+  }, [quickCreateNonce, handleCreateLesson]);
 
   const handleDeleteLesson = async () => {
     if (!draft) return;
@@ -413,6 +448,10 @@ export function StructuredLessonEditor({
       titleRw: base.title.rw,
       summaryEn: base.introduction.en,
       summaryRw: base.introduction.rw,
+      deliverableEn: base.deliverable?.en || draft.deliverableEn || '',
+      deliverableRw: base.deliverable?.rw || draft.deliverableRw || '',
+      levelTag: base.levelTag || draft.levelTag || '',
+      tools: base.tools,
       objectivesEn: base.objectives.en,
       objectivesRw: base.objectives.rw,
       estimatedMinutes: base.durationMinutes
@@ -586,21 +625,86 @@ export function StructuredLessonEditor({
         </div>
       </div>
 
-      {!draft ? (
-        <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-10 text-center space-y-3">
-          <p className="text-sm font-medium text-[#0D0D0F]">
-            This course does not have any structured lessons yet.
-          </p>
-          <button
-            type="button"
-            onClick={handleCreateLesson}
-            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-medium text-white bg-[#0D0D0F] rounded-lg"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            <span>Create First Structured Lesson</span>
-          </button>
-        </div>
-      ) : historyOpen ? (
+      {/* Workspace Split: Left Outline Rail + Right Lesson Editor */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <aside className="lg:col-span-4 xl:col-span-3 bg-white border border-black/[0.08] rounded-2xl p-4 space-y-3 lg:sticky lg:top-20">
+          <div className="flex items-center justify-between gap-2">
+            <h3 className="text-xs font-mono font-semibold uppercase tracking-wider text-[#0D0D0F]">
+              Outline ({courseLessons.length})
+            </h3>
+            <button
+              type="button"
+              onClick={handleCreateLesson}
+              className="inline-flex items-center gap-1 px-2 py-1 text-[11px] font-medium text-white bg-[#0D7A5F] rounded-md"
+            >
+              <Plus className="w-3 h-3" />
+              <span>New</span>
+            </button>
+          </div>
+          <div className="relative">
+            <Search className="w-3.5 h-3.5 text-[#5D5D66] absolute left-2.5 top-1/2 -translate-y-1/2" />
+            <input
+              type="search"
+              value={railSearch}
+              onChange={(e) => setRailSearch(e.target.value)}
+              placeholder="Jump to day or title..."
+              className="w-full pl-8 pr-2.5 py-1.5 text-xs bg-[#F9F9FB] border border-black/10 rounded-lg focus:outline-none focus:border-[#0D7A5F]"
+            />
+          </div>
+          <div className="space-y-1 max-h-[60vh] overflow-y-auto pr-1">
+            {filteredRailLessons.length === 0 ? (
+              <p className="text-xs text-[#5D5D66] py-4 text-center">No matching lessons.</p>
+            ) : (
+              filteredRailLessons.map((les) => {
+                const isSelected = (draft?.id || selectedLessonId) === les.id;
+                const enB = parseLessonBlocks(les.blocksEnJson).length;
+                const rwB = parseLessonBlocks(les.blocksRwJson).length;
+                return (
+                  <button
+                    key={les.id}
+                    type="button"
+                    onClick={() => {
+                      setSelectedLessonId(les.id);
+                      loadDraftFromLesson(les);
+                    }}
+                    className={`w-full text-left px-3 py-2 rounded-xl border transition-colors text-xs ${
+                      isSelected
+                        ? 'bg-[#0D0D0F] text-white border-[#0D0D0F]'
+                        : 'bg-white text-[#0D0D0F] border-black/[0.06] hover:border-black/25'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between gap-2 font-mono text-[10px]">
+                      <span className={isSelected ? 'text-[#34D399]' : 'text-[#0D7A5F]'}>
+                        DAY {les.dayNumber}
+                      </span>
+                      <span className={isSelected ? 'text-white/70' : 'text-[#5D5D66]'}>
+                        {enB}/{rwB} blk{les.isSample ? ' · Sample' : ''}
+                      </span>
+                    </div>
+                    <p className="font-medium truncate mt-0.5">{les.titleEn}</p>
+                  </button>
+                );
+              })
+            )}
+          </div>
+        </aside>
+
+        <div className="lg:col-span-8 xl:col-span-9 min-w-0">
+          {!draft ? (
+            <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-10 text-center space-y-3">
+              <p className="text-sm font-medium text-[#0D0D0F]">
+                This course does not have any structured lessons yet.
+              </p>
+              <button
+                type="button"
+                onClick={handleCreateLesson}
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-medium text-white bg-[#0D0D0F] rounded-lg"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Create First 16-Part Structured Lesson</span>
+              </button>
+            </div>
+          ) : historyOpen ? (
         /* VERSION HISTORY PANEL */
         <div className="bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -907,6 +1011,45 @@ export function StructuredLessonEditor({
                 />
               </div>
 
+              <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="md:col-span-2">
+                  <label className="block text-xs font-medium mb-1">
+                    Expected Lesson Deliverable ({activeLang.toUpperCase()})
+                  </label>
+                  <input
+                    type="text"
+                    value={
+                      activeLang === 'en' ? draft.deliverableEn || '' : draft.deliverableRw || ''
+                    }
+                    onChange={(e) =>
+                      setDraft(
+                        activeLang === 'en'
+                          ? { ...draft, deliverableEn: e.target.value }
+                          : { ...draft, deliverableRw: e.target.value }
+                      )
+                    }
+                    placeholder={
+                      activeLang === 'en'
+                        ? 'e.g. Prompt Quality Checklist & Tested Rewrite'
+                        : 'Urugero: Urutonde rwo gusuzuma amabwiriza'
+                    }
+                    className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium mb-1">
+                    Competency Level Tag
+                  </label>
+                  <input
+                    type="text"
+                    value={draft.levelTag || ''}
+                    onChange={(e) => setDraft({ ...draft, levelTag: e.target.value })}
+                    placeholder="e.g. Level 1 · 3.1"
+                    className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg font-mono"
+                  />
+                </div>
+              </div>
+
               <div className="md:col-span-2">
                 <label className="block text-xs font-medium mb-1">
                   Learning Objectives ({activeLang.toUpperCase()}, one per line)
@@ -955,26 +1098,43 @@ export function StructuredLessonEditor({
                 </button>
               </div>
 
-              <select
-                defaultValue=""
-                onChange={(e) => {
-                  const preset = LESSON_STARTER_TEMPLATES.find((p) => p.id === e.target.value);
-                  if (preset) {
-                    setActiveBlocks((prev) => [...prev, ...preset.buildBlocks()]);
-                    e.target.value = '';
-                  }
-                }}
-                className="px-3 py-2 text-xs border border-black/15 rounded-lg bg-white"
-              >
-                <option value="" disabled>
-                  + Insert Reusable Lesson Template...
-                </option>
-                {LESSON_STARTER_TEMPLATES.map((t) => (
-                  <option key={t.id} value={t.id}>
-                    {t.name}
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const std = LESSON_STARTER_TEMPLATES.find((p) => p.id === 'blueprint_16_part');
+                    if (std) {
+                      setActiveBlocks((prev) => [...prev, ...std.buildBlocks()]);
+                      setStatusMessage(`Inserted 16-Section Lesson Standard blocks into ${activeLang.toUpperCase()}.`);
+                    }
+                  }}
+                  className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-[#0D7A5F] bg-white border border-[#0D7A5F]/35 rounded-lg hover:bg-[#F2FBF8]"
+                >
+                  <BookOpen className="w-3.5 h-3.5" />
+                  <span>Apply Blueprint 16-Section Standard</span>
+                </button>
+
+                <select
+                  defaultValue=""
+                  onChange={(e) => {
+                    const preset = LESSON_STARTER_TEMPLATES.find((p) => p.id === e.target.value);
+                    if (preset) {
+                      setActiveBlocks((prev) => [...prev, ...preset.buildBlocks()]);
+                      e.target.value = '';
+                    }
+                  }}
+                  className="px-3 py-2 text-xs border border-black/15 rounded-lg bg-white"
+                >
+                  <option value="" disabled>
+                    + Insert Reusable Lesson Template...
                   </option>
-                ))}
-              </select>
+                  {LESSON_STARTER_TEMPLATES.map((t) => (
+                    <option key={t.id} value={t.id}>
+                      {t.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             {/* Blocks Stack */}
@@ -1355,6 +1515,8 @@ export function StructuredLessonEditor({
           </div>
         </div>
       )}
+        </div>
+      </div>
     </div>
   );
 }

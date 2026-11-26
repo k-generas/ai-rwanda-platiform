@@ -10,6 +10,14 @@ import {
   parseReleaseAtMs,
   resolveLessonReleaseLock
 } from '../src/lib/domain';
+import { buildCourseScaffoldPayload, parseLessonBlocks } from '../src/lib/lessonBlocks';
+import {
+  BLUEPRINT_GRADING_BREAKDOWN,
+  FINAL_PROJECT_RUBRIC_7,
+  INDUSTRY_LEARNING_PATHS_PRESETS,
+  PRACTICAL_PROJECTS,
+  PRODUCTION_INVENTORY_SECTIONS
+} from '../src/data/curriculum';
 import { isProtectedUploadUrl, UPLOAD_RULES, validateFileClient } from '../src/lib/uploads';
 import type {
   Certificate,
@@ -371,4 +379,36 @@ test('gradeDynamicQuiz, evaluateCertificateEligibility, and buildAnalyticsSummar
   assert.equal(summary.netRevenueRwf, 15000);
   assert.equal(summary.completedLearners, 1);
   assert.equal(summary.openTicketsCount, 1);
+});
+
+test('Blueprint v1.0 curriculum constants and universal buildCourseScaffoldPayload work consistently', () => {
+  assert.equal(PRACTICAL_PROJECTS.length, 6);
+  assert.ok(PRACTICAL_PROJECTS.some((p) => p.key === 'independent_final'));
+
+  const weightTotal = BLUEPRINT_GRADING_BREAKDOWN.reduce((acc, w) => acc + w.weightPct, 0);
+  assert.equal(weightTotal, 100);
+
+  const rubricTotal = FINAL_PROJECT_RUBRIC_7.reduce((acc, c) => acc + c.weightPct, 0);
+  assert.equal(rubricTotal, 100);
+
+  assert.equal(INDUSTRY_LEARNING_PATHS_PRESETS.length, 8);
+  const inventoryTotal = PRODUCTION_INVENTORY_SECTIONS.reduce((acc, s) => acc + s.items.length, 0);
+  assert.equal(inventoryTotal, 62);
+
+  const scaffold = buildCourseScaffoldPayload({
+    courseId: 'ai-sme-202',
+    courseTitleEn: 'AI for Rwandan SMEs',
+    courseTitleRw: 'AI ku Bigabanya Umurimo',
+    weekCount: 3,
+    daysCount: 15,
+    levelTag: 'Level 3'
+  });
+
+  assert.equal(scaffold.modules.length, 3);
+  assert.equal(scaffold.lessons.length, 15);
+  assert.equal(scaffold.lessons[0].isSample, true);
+  assert.equal(scaffold.lessons[0].moduleId, 'ai-sme-202_mod_w1');
+  assert.equal(scaffold.lessons[14].weekNumber, 3);
+  assert.ok(parseLessonBlocks(scaffold.lessons[0].blocksEnJson).length >= 12);
+  assert.ok(parseLessonBlocks(scaffold.lessons[0].blocksRwJson).length >= 12);
 });
