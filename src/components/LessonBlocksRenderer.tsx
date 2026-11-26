@@ -49,7 +49,7 @@ export function LessonBlocksRenderer({ lang, blocks }: LessonBlocksRendererProps
 
   if (blocks.length === 0) {
     return (
-      <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6 text-sm text-[#5D5D66]">
+      <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6 text-[15px] text-[#5D5D66]">
         {lang === 'en'
           ? 'No structured content blocks have been published in this language yet.'
           : 'Nta bice by’isomo biratangazwa muri uru rurimi.'}
@@ -67,11 +67,11 @@ export function LessonBlocksRenderer({ lang, blocks }: LessonBlocksRendererProps
               className="border border-black/[0.08] rounded-2xl p-6 bg-white space-y-2.5"
             >
               {block.title && (
-                <h2 className="text-base font-display font-semibold text-[#0D0D0F]">
+                <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
                   {block.title}
                 </h2>
               )}
-              <div className="text-sm text-[#3F3F46] leading-relaxed whitespace-pre-line">
+              <div className="text-[15px] text-[#3F3F46] leading-relaxed whitespace-pre-line">
                 {block.body}
               </div>
             </section>
@@ -91,12 +91,12 @@ export function LessonBlocksRenderer({ lang, blocks }: LessonBlocksRendererProps
           return (
             <section key={block.id} className={`border rounded-2xl p-6 space-y-2 ${variantStyles}`}>
               <div className="flex items-center justify-between gap-2">
-                <h2 className="text-sm font-semibold">{block.title || 'Callout'}</h2>
-                <span className="text-[11px] font-mono uppercase text-[#5D5D66]">
+                <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display">{block.title || 'Callout'}</h2>
+                <span className="text-[15px] font-mono uppercase text-[#5D5D66]">
                   {(block.variant || 'note').replace('_', ' ')}
                 </span>
               </div>
-              <p className="text-sm text-[#3F3F46] leading-relaxed whitespace-pre-line">
+              <p className="text-[15px] text-[#3F3F46] leading-relaxed whitespace-pre-line">
                 {block.body}
               </p>
             </section>
@@ -108,13 +108,13 @@ export function LessonBlocksRenderer({ lang, blocks }: LessonBlocksRendererProps
           return (
             <section key={block.id} className="bg-[#0D0D0F] text-white rounded-2xl p-5 space-y-3">
               <div className="flex items-center justify-between gap-3">
-                <span className="text-xs font-mono text-white/75">
+                <span className="text-sm font-mono text-white/75">
                   {block.title || 'Prompt / Code'} {block.language ? `· ${block.language}` : ''}
                 </span>
                 <button
                   type="button"
                   onClick={() => handleCopy(block.id, codeText)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium bg-white/10 hover:bg-white/20 rounded-md transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 text-sm font-medium bg-white/10 hover:bg-white/20 rounded-md transition-colors"
                 >
                   {copiedBlockId === block.id ? (
                     <>
@@ -129,7 +129,7 @@ export function LessonBlocksRenderer({ lang, blocks }: LessonBlocksRendererProps
                   )}
                 </button>
               </div>
-              <pre className="text-xs sm:text-sm font-mono whitespace-pre-wrap text-white/90 leading-relaxed overflow-x-auto">
+              <pre className="text-[15px] sm:text-[15px] font-mono whitespace-pre-wrap text-white/90 leading-relaxed overflow-x-auto">
                 {codeText}
               </pre>
             </section>
@@ -145,9 +145,9 @@ export function LessonBlocksRenderer({ lang, blocks }: LessonBlocksRendererProps
               className="border border-black/[0.08] rounded-2xl p-6 bg-white space-y-3 overflow-x-auto"
             >
               {block.title && (
-                <h2 className="text-sm font-semibold text-[#0D0D0F]">{block.title}</h2>
+                <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">{block.title}</h2>
               )}
-              <table className="w-full text-left text-xs border-collapse">
+              <table className="w-full text-left text-sm border-collapse">
                 {headers.length > 0 && (
                   <thead>
                     <tr className="border-b border-black/[0.08] text-[#5D5D66]">
@@ -182,7 +182,7 @@ export function LessonBlocksRenderer({ lang, blocks }: LessonBlocksRendererProps
               className="border border-black/[0.08] rounded-2xl p-5 bg-[#F9F9FB] space-y-3"
             >
               {block.title && (
-                <h2 className="text-sm font-semibold text-[#0D0D0F]">{block.title}</h2>
+                <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">{block.title}</h2>
               )}
               {block.url ? (
                 <img
@@ -191,12 +191,12 @@ export function LessonBlocksRenderer({ lang, blocks }: LessonBlocksRendererProps
                   className="w-full max-h-[420px] object-contain rounded-xl bg-white border border-black/[0.06]"
                 />
               ) : (
-                <div className="py-10 text-center text-xs text-[#5D5D66] border border-dashed border-black/15 rounded-xl bg-white">
+                <div className="py-10 text-center text-sm text-[#5D5D66] border border-dashed border-black/15 rounded-xl bg-white">
                   {lang === 'en' ? 'Image URL not attached yet' : 'Ishusho ntabwo irongerwaho'}
                 </div>
               )}
               {block.caption && (
-                <figcaption className="text-xs text-[#5D5D66]">{block.caption}</figcaption>
+                <figcaption className="text-sm text-[#5D5D66]">{block.caption}</figcaption>
               )}
             </figure>
           );
@@ -210,7 +210,7 @@ export function LessonBlocksRenderer({ lang, blocks }: LessonBlocksRendererProps
               className="border border-black/[0.08] rounded-2xl p-5 bg-white space-y-3"
             >
               {block.title && (
-                <h2 className="text-sm font-semibold text-[#0D0D0F]">{block.title}</h2>
+                <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">{block.title}</h2>
               )}
               {embedUrl ? (
                 <div className="aspect-video w-full rounded-xl overflow-hidden bg-black">
@@ -224,11 +224,11 @@ export function LessonBlocksRenderer({ lang, blocks }: LessonBlocksRendererProps
               ) : block.url ? (
                 <video src={block.url} controls className="w-full rounded-xl bg-black max-h-[420px]" />
               ) : (
-                <div className="py-10 text-center text-xs text-[#5D5D66] border border-dashed border-black/15 rounded-xl bg-[#F9F9FB]">
+                <div className="py-10 text-center text-sm text-[#5D5D66] border border-dashed border-black/15 rounded-xl bg-[#F9F9FB]">
                   {lang === 'en' ? 'Video URL not attached yet' : 'Amashusho ntabwo arashyirwaho'}
                 </div>
               )}
-              {block.caption && <p className="text-xs text-[#5D5D66]">{block.caption}</p>}
+              {block.caption && <p className="text-sm text-[#5D5D66]">{block.caption}</p>}
             </section>
           );
         }
@@ -239,17 +239,17 @@ export function LessonBlocksRenderer({ lang, blocks }: LessonBlocksRendererProps
               key={block.id}
               className="border border-black/[0.08] rounded-2xl p-5 bg-[#F9F9FB] space-y-2.5"
             >
-              <h2 className="text-sm font-semibold text-[#0D0D0F]">
+              <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
                 {block.title || (lang === 'en' ? 'Audio Walkthrough' : 'Isomo mu Majwi')}
               </h2>
               {block.url ? (
                 <audio controls src={block.url} className="w-full" />
               ) : (
-                <p className="text-xs text-[#5D5D66]">
+                <p className="text-sm text-[#5D5D66]">
                   {lang === 'en' ? 'Audio URL pending attachment.' : 'Amajwi ntarashyirwaho.'}
                 </p>
               )}
-              {block.caption && <p className="text-xs text-[#5D5D66]">{block.caption}</p>}
+              {block.caption && <p className="text-sm text-[#5D5D66]">{block.caption}</p>}
             </section>
           );
         }
@@ -262,10 +262,10 @@ export function LessonBlocksRenderer({ lang, blocks }: LessonBlocksRendererProps
               className="border border-black/[0.08] rounded-2xl p-5 bg-white flex flex-wrap items-center justify-between gap-4"
             >
               <div>
-                <h2 className="text-sm font-semibold text-[#0D0D0F]">
+                <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
                   {block.title || (isDownload ? 'Downloadable Worksheet' : 'External Resource')}
                 </h2>
-                {block.caption && <p className="text-xs text-[#5D5D66] mt-0.5">{block.caption}</p>}
+                {block.caption && <p className="text-sm text-[#5D5D66] mt-0.5">{block.caption}</p>}
               </div>
               {block.url ? (
                 <a
@@ -273,7 +273,7 @@ export function LessonBlocksRenderer({ lang, blocks }: LessonBlocksRendererProps
                   target="_blank"
                   rel="noreferrer"
                   download={isDownload ? true : undefined}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329]"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329]"
                 >
                   {isDownload ? (
                     <Download className="w-3.5 h-3.5" />
@@ -283,7 +283,7 @@ export function LessonBlocksRenderer({ lang, blocks }: LessonBlocksRendererProps
                   <span>{block.label || (isDownload ? 'Download' : 'Open Resource')}</span>
                 </a>
               ) : (
-                <span className="text-xs text-[#5D5D66] font-mono">Link pending</span>
+                <span className="text-sm text-[#5D5D66] font-mono">Link pending</span>
               )}
             </section>
           );
@@ -297,13 +297,13 @@ export function LessonBlocksRenderer({ lang, blocks }: LessonBlocksRendererProps
               className="border border-[#0D7A5F]/25 rounded-2xl p-6 bg-[#F2FBF8] space-y-3"
             >
               <div className="flex items-center justify-between gap-3">
-                <h2 className="text-sm font-semibold text-[#0D0D0F]">
+                <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
                   {block.title || 'Interactive Prompt Sandbox'}
                 </h2>
                 <button
                   type="button"
                   onClick={() => handleCopy(block.id, currentVal)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium bg-[#0D0D0F] text-white rounded-md"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 text-sm font-medium bg-[#0D0D0F] text-white rounded-md"
                 >
                   {copiedBlockId === block.id ? (
                     <>
@@ -318,14 +318,14 @@ export function LessonBlocksRenderer({ lang, blocks }: LessonBlocksRendererProps
                   )}
                 </button>
               </div>
-              {block.body && <p className="text-xs text-[#3F3F46]">{block.body}</p>}
+              {block.body && <p className="text-sm text-[#3F3F46]">{block.body}</p>}
               <textarea
                 rows={4}
                 value={currentVal}
                 onChange={(e) =>
                   setSandboxValues((prev) => ({ ...prev, [block.id]: e.target.value }))
                 }
-                className="w-full px-3.5 py-2.5 text-xs font-mono bg-white border border-black/15 rounded-xl focus:outline-none focus:border-[#0D7A5F]"
+                className="w-full px-3.5 py-2.5 text-sm font-mono bg-white border border-black/15 rounded-xl focus:outline-none focus:border-[#0D7A5F]"
               />
             </section>
           );
@@ -338,10 +338,10 @@ export function LessonBlocksRenderer({ lang, blocks }: LessonBlocksRendererProps
               key={block.id}
               className="border border-black/[0.08] rounded-2xl p-6 bg-white space-y-3"
             >
-              <h2 className="text-sm font-semibold text-[#0D0D0F]">
+              <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
                 {block.title || 'Action Checklist'}
               </h2>
-              {block.body && <p className="text-xs text-[#5D5D66]">{block.body}</p>}
+              {block.body && <p className="text-sm text-[#5D5D66]">{block.body}</p>}
               <div className="space-y-2 pt-1">
                 {items.map((item, idx) => {
                   const key = `${block.id}_${idx}`;
@@ -353,7 +353,7 @@ export function LessonBlocksRenderer({ lang, blocks }: LessonBlocksRendererProps
                       onClick={() =>
                         setCheckedItems((prev) => ({ ...prev, [key]: !prev[key] }))
                       }
-                      className="w-full flex items-start gap-2.5 text-left text-sm py-1.5 px-2 rounded-lg hover:bg-[#F9F9FB]"
+                      className="w-full flex items-start gap-2.5 text-left text-[15px] py-1.5 px-2 rounded-lg hover:bg-[#F9F9FB]"
                     >
                       {checked ? (
                         <CheckSquare className="w-4 h-4 text-[#0D7A5F] shrink-0 mt-0.5" />
@@ -379,7 +379,7 @@ export function LessonBlocksRenderer({ lang, blocks }: LessonBlocksRendererProps
               key={block.id}
               className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6 space-y-3"
             >
-              <h2 className="text-xs font-mono uppercase text-[#0D7A5F]">
+              <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display font-mono uppercase text-[#0D7A5F]">
                 {block.title || (lang === 'en' ? 'Knowledge Check' : 'Isuzuma')}
               </h2>
               <p className="text-base font-medium text-[#0D0D0F]">{block.question}</p>
@@ -392,7 +392,7 @@ export function LessonBlocksRenderer({ lang, blocks }: LessonBlocksRendererProps
                       key={idx}
                       type="button"
                       onClick={() => setQuizAnswers((prev) => ({ ...prev, [block.id]: idx }))}
-                      className={`w-full text-left px-4 py-2.5 rounded-xl border text-sm transition-colors ${
+                      className={`w-full text-left px-4 py-2.5 rounded-xl border text-[15px] transition-colors ${
                         isPicked
                           ? isCorrect
                             ? 'bg-[#ECFDF5] border-[#0D7A5F] text-[#0D0D0F]'
@@ -406,7 +406,7 @@ export function LessonBlocksRenderer({ lang, blocks }: LessonBlocksRendererProps
                 })}
               </div>
               {picked !== null && block.explanation && (
-                <p className="text-xs text-[#5D5D66] pt-1">
+                <p className="text-sm text-[#5D5D66] pt-1">
                   <strong className="text-[#0D0D0F]">
                     {picked === correctIndex
                       ? lang === 'en'
@@ -430,14 +430,14 @@ export function LessonBlocksRenderer({ lang, blocks }: LessonBlocksRendererProps
             className="border border-black/[0.08] rounded-2xl p-6 bg-[#F9F9FB] space-y-2"
           >
             <div className="flex items-center justify-between gap-2">
-              <h2 className="text-sm font-semibold text-[#0D0D0F]">
+              <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
                 {block.title || (block.type === 'assignment' ? 'Practical Assignment' : 'Reflection')}
               </h2>
-              <span className="text-[11px] font-mono uppercase text-[#0D7A5F]">
+              <span className="text-[15px] font-mono uppercase text-[#0D7A5F]">
                 {block.type}
               </span>
             </div>
-            <p className="text-sm text-[#3F3F46] leading-relaxed whitespace-pre-line">
+            <p className="text-[15px] text-[#3F3F46] leading-relaxed whitespace-pre-line">
               {block.body}
             </p>
           </section>

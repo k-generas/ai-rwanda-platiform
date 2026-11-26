@@ -128,13 +128,13 @@ export function AboutVerifyView({
     if (!enablePublicVerify) {
       return (
         <div className="max-w-[760px] mx-auto px-4 sm:px-6 py-16 text-center space-y-3">
-          <p className="text-xs font-mono text-[#0D7A5F] uppercase">Public Registry Paused</p>
-          <h1 className="text-2xl font-display font-semibold text-[#0D0D0F]">
+          <p className="text-sm font-mono font-semibold text-[#0D7A5F] uppercase">Public Registry Paused</p>
+          <h1 className="text-[30px] sm:text-[36px] font-display font-bold tracking-[-0.025em] leading-[1.12] text-[#0D0D0F]">
             {lang === 'en'
               ? 'Public Certificate Verification is Currently Unavailable'
               : 'Igenzura Rusange ry’Impamyabumenyi Rirafunze By’Agateganyo'}
           </h1>
-          <p className="text-sm text-[#5D5D66]">
+          <p className="text-base text-[#5D5D66] leading-relaxed">
             {lang === 'en'
               ? 'Platform administrators have temporarily disabled public certificate lookups.'
               : 'Ubuyobozi bwabaye buhagaritse igenzura rusange by’agateganyo.'}
@@ -192,9 +192,9 @@ export function AboutVerifyView({
                   className="bg-[#FAFAFB] border border-black/[0.08] rounded-xl p-5 flex items-center justify-between gap-4"
                 >
                   <div>
-                    <p className="text-sm font-mono text-[#0D7A5F] mb-1">{cert.id}</p>
-                    <h3 className="text-lg font-bold text-[#0D0D0F]">{cert.courseTitle}</h3>
-                    <p className="text-sm text-[#5D5D66] mt-1">
+                    <p className="text-[15px] font-mono text-[#0D7A5F] mb-1">{cert.id}</p>
+                    <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F]">{cert.courseTitle}</h3>
+                    <p className="text-[15px] text-[#5D5D66] mt-1">
                       {cert.learnerName} · {cert.finalScore}% · {cert.status.toUpperCase()}
                     </p>
                   </div>
@@ -229,7 +229,7 @@ export function AboutVerifyView({
         {/* Public Verifier Card */}
         <section className="bg-white border border-black/[0.08] rounded-2xl p-6 sm:p-10">
           <header className="mb-6">
-            <p className="text-[13px] sm:text-sm font-semibold text-[#0D7A5F] uppercase mb-1.5">
+            <p className="text-[13px] sm:text-[15px] font-semibold text-[#0D7A5F] uppercase mb-1.5">
               {lang === 'en' ? 'Public Credential Registry' : 'Igenzura ry’Impamyabumenyi'}
             </p>
             <h2 className="text-[28px] sm:text-[36px] font-display font-bold tracking-tight text-[#0D0D0F] mb-2">
@@ -278,7 +278,7 @@ export function AboutVerifyView({
             <div className="bg-[#FAFAFB] border border-black/10 rounded-2xl p-6 sm:p-8">
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6 pb-6 border-b border-black/[0.08]">
                 <div>
-                  <div className="inline-flex items-center gap-2 text-sm font-medium text-[#0D7A5F] mb-2">
+                  <div className="inline-flex items-center gap-2 text-[15px] font-medium text-[#0D7A5F] mb-2">
                     <ShieldCheck className="w-4 h-4" />
                     <span>
                       {certResult.status === 'valid'
@@ -300,7 +300,7 @@ export function AboutVerifyView({
                 />
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 text-sm">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 text-[15px]">
                 <div>
                   <p className="text-[#5D5D66] mb-1">Certificate ID</p>
                   <p className="font-mono font-medium text-[#0D0D0F]">{certResult.id}</p>
@@ -327,10 +327,10 @@ export function AboutVerifyView({
             <div className="bg-[#FEF2F2] border border-[#DC2626]/20 rounded-2xl p-6 flex items-start gap-3">
               <XCircle className="w-5 h-5 text-[#DC2626] shrink-0 mt-0.5" />
               <div>
-                <h3 className="text-base font-semibold text-[#0D0D0F]">
+                <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F]">
                   {lang === 'en' ? 'No matching certificate found' : 'Nta mpamyabumenyi ibonetse'}
                 </h3>
-                <p className="text-sm text-[#5D5D66] mt-1">
+                <p className="text-[15px] text-[#5D5D66] mt-1">
                   {lang === 'en'
                     ? 'Double-check the Certificate ID format (e.g. RW-AI-2026-0042).'
                     : 'Reba ko wanditse nimero neza (urugero: RW-AI-2026-0042).'}
@@ -348,7 +348,7 @@ export function AboutVerifyView({
       {/* Mission & Vision */}
       <header className="grid grid-cols-1 lg:grid-cols-12 gap-10 pb-12 border-b border-black/[0.08]">
         <div className="lg:col-span-7">
-          <p className="text-sm font-semibold text-[#0D7A5F] mb-2">
+          <p className="text-[15px] font-semibold text-[#0D7A5F] mb-2">
             {lang === 'en' ? 'About AI Education Rwanda' : 'Ibyerekeye AI Education Rwanda'}
           </p>
           <h1 className="text-[36px] sm:text-[48px] font-display font-bold tracking-[-0.03em] leading-[1.08] text-[#0D0D0F] text-balance mb-4">
@@ -364,10 +364,10 @@ export function AboutVerifyView({
         </div>
 
         <div className="lg:col-span-5 bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6 space-y-4">
-          <h2 className="text-sm font-semibold text-[#0D0D0F]">
+          <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
             {lang === 'en' ? 'Geographic Expansion Roadmap' : 'Icyerekezo cy’Imikoranire'}
           </h2>
-          <div className="space-y-2.5 text-sm">
+          <div className="space-y-2.5 text-[15px]">
             {[
               ['Stage 1', 'Rwanda (Pilot & Core Cohorts)'],
               ['Stage 2', 'East Africa Regional Expansion'],
@@ -378,8 +378,8 @@ export function AboutVerifyView({
                 key={stage}
                 className="flex items-center justify-between py-2 border-b border-black/[0.06] last:border-none"
               >
-                <span className="font-mono text-xs text-[#0D7A5F]">{stage}</span>
-                <span className="text-[#0D0D0F] font-medium text-xs sm:text-sm">{market}</span>
+                <span className="font-mono text-sm text-[#0D7A5F]">{stage}</span>
+                <span className="text-[#0D0D0F] font-medium text-[15px] sm:text-[15px]">{market}</span>
               </div>
             ))}
           </div>
@@ -388,7 +388,7 @@ export function AboutVerifyView({
 
       {/* Operating Principles */}
       <section>
-        <h2 className="text-2xl font-display font-semibold text-[#0D0D0F] mb-6">
+        <h2 className="text-[24px] sm:text-[28px] tracking-[-0.02em] leading-[1.2] font-display font-bold text-[#0D0D0F] mb-6">
           {lang === 'en' ? 'Core Operating Principles' : 'Amahame Tugenderaho'}
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -397,10 +397,10 @@ export function AboutVerifyView({
               key={p.en}
               className="bg-white border border-black/[0.08] rounded-xl p-4 flex items-start gap-3"
             >
-              <span className="font-mono text-xs text-[#0D7A5F] tabular-nums mt-0.5">
+              <span className="font-mono text-sm text-[#0D7A5F] tabular-nums mt-0.5">
                 {String(idx + 1).padStart(2, '0')}
               </span>
-              <p className="text-sm text-[#0D0D0F] leading-snug">{p[lang]}</p>
+              <p className="text-[15px] text-[#0D0D0F] leading-snug">{p[lang]}</p>
             </div>
           ))}
         </div>
@@ -409,7 +409,7 @@ export function AboutVerifyView({
       {/* FAQ + Contact Split */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-10 pt-6 border-t border-black/[0.08]">
         <div className="lg:col-span-6 space-y-5">
-          <h2 className="text-2xl font-display font-semibold text-[#0D0D0F]">
+          <h2 className="text-[24px] sm:text-[28px] tracking-[-0.02em] leading-[1.2] font-display font-bold text-[#0D0D0F]">
             {lang === 'en' ? 'Frequently Asked Questions' : 'Ibibazo Bikunze Kubazwa'}
           </h2>
           {[
@@ -445,18 +445,18 @@ export function AboutVerifyView({
             }
           ].map((faq) => (
             <div key={faq.q.en} className="bg-[#F9F9FB] border border-black/[0.08] rounded-xl p-5">
-              <h3 className="text-sm font-semibold text-[#0D0D0F] mb-1.5">{faq.q[lang]}</h3>
-              <p className="text-xs sm:text-sm text-[#5D5D66] leading-relaxed">{faq.a[lang]}</p>
+              <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F] mb-1.5">{faq.q[lang]}</h3>
+              <p className="text-[15px] sm:text-[15px] text-[#5D5D66] leading-relaxed">{faq.a[lang]}</p>
             </div>
           ))}
         </div>
 
         {/* Contact Form */}
         <div className="lg:col-span-6 bg-white border border-black/[0.08] rounded-2xl p-6 sm:p-8">
-          <h2 className="text-xl font-display font-semibold text-[#0D0D0F] mb-2">
+          <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F] mb-2">
             {lang === 'en' ? 'Contact & Institutional Inquiries' : 'Twandikire'}
           </h2>
-          <p className="text-xs text-[#5D5D66] mb-6">
+          <p className="text-sm text-[#5D5D66] mb-6">
             {lang === 'en'
               ? 'Questions about student cohorts, school partnerships, or corporate workshops? Send a message.'
               : 'Ufite ikibazo ku masomo, ubufatanye n’amashuri cyangwa amahugurwa y’ibigo? Twandikire.'}
@@ -466,10 +466,10 @@ export function AboutVerifyView({
             <div className="bg-[#ECFDF5] border border-[#0D7A5F]/25 rounded-xl p-5 flex items-start gap-3">
               <CheckCircle2 className="w-5 h-5 text-[#0D7A5F] shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-semibold text-[#0D0D0F]">
+                <p className="text-[15px] font-semibold text-[#0D0D0F]">
                   {lang === 'en' ? 'Inquiry received' : 'Ubutumwa bwakiriwe'}
                 </p>
-                <p className="text-xs text-[#5D5D66] mt-1">
+                <p className="text-sm text-[#5D5D66] mt-1">
                   {lang === 'en'
                     ? 'Thank you. Our team will respond to your email shortly.'
                     : 'Murakoze. Ikipe yacu izagusubiza vuba kuri imeri yawe.'}
@@ -479,7 +479,7 @@ export function AboutVerifyView({
           ) : (
             <form onSubmit={handleContactSubmit} className="space-y-4">
               <div>
-                <label htmlFor="c-name" className="block text-xs font-medium text-[#0D0D0F] mb-1">
+                <label htmlFor="c-name" className="block text-sm font-medium text-[#0D0D0F] mb-1">
                   {lang === 'en' ? 'Full name' : 'Amazina yose'}
                 </label>
                 <input
@@ -488,11 +488,11 @@ export function AboutVerifyView({
                   required
                   value={contactName}
                   onChange={(e) => setContactName(e.target.value)}
-                  className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg"
+                  className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg"
                 />
               </div>
               <div>
-                <label htmlFor="c-email" className="block text-xs font-medium text-[#0D0D0F] mb-1">
+                <label htmlFor="c-email" className="block text-sm font-medium text-[#0D0D0F] mb-1">
                   {lang === 'en' ? 'Email address' : 'Imeri'}
                 </label>
                 <input
@@ -501,18 +501,18 @@ export function AboutVerifyView({
                   required
                   value={contactEmail}
                   onChange={(e) => setContactEmail(e.target.value)}
-                  className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg"
+                  className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg"
                 />
               </div>
               <div>
-                <label htmlFor="c-topic" className="block text-xs font-medium text-[#0D0D0F] mb-1">
+                <label htmlFor="c-topic" className="block text-sm font-medium text-[#0D0D0F] mb-1">
                   {lang === 'en' ? 'Topic' : 'Ingingo'}
                 </label>
                 <select
                   id="c-topic"
                   value={contactTopic}
                   onChange={(e) => setContactTopic(e.target.value)}
-                  className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg bg-white"
+                  className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg bg-white"
                 >
                   <option>Student / Enrollment Question</option>
                   <option>TVET / University Partnership</option>
@@ -521,7 +521,7 @@ export function AboutVerifyView({
                 </select>
               </div>
               <div>
-                <label htmlFor="c-msg" className="block text-xs font-medium text-[#0D0D0F] mb-1">
+                <label htmlFor="c-msg" className="block text-sm font-medium text-[#0D0D0F] mb-1">
                   {lang === 'en' ? 'Message' : 'Ubutumwa'}
                 </label>
                 <textarea
@@ -530,18 +530,18 @@ export function AboutVerifyView({
                   required
                   value={contactMsg}
                   onChange={(e) => setContactMsg(e.target.value)}
-                  className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg"
+                  className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg"
                 />
               </div>
               {contactError && (
-                <p className="text-xs text-[#DC2626] bg-[#FEF2F2] border border-[#DC2626]/20 rounded-lg px-3 py-2">
+                <p className="text-sm text-[#DC2626] bg-[#FEF2F2] border border-[#DC2626]/20 rounded-lg px-3 py-2">
                   {contactError}
                 </p>
               )}
               <button
                 type="submit"
                 disabled={contactBusy}
-                className="px-5 py-2.5 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329]"
+                className="px-5 py-2.5 text-[15px] font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329]"
               >
                 {contactBusy
                   ? lang === 'en'

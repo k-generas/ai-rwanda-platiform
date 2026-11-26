@@ -468,28 +468,28 @@ export function StaffAndSecurityPanel({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         <div className="lg:col-span-6 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-5">
           <div>
-            <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+            <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
               Assign Staff Role & Granular Permissions
             </h2>
-            <p className="text-xs text-[#5D5D66] mt-1">
+            <p className="text-sm text-[#5D5D66] mt-1">
               Only Superadmin can grant, modify, or suspend staff roles. Learners cannot self-elevate.
             </p>
           </div>
 
           {!access.isSuperadmin ? (
-            <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-xl p-4 text-xs text-[#5D5D66]">
+            <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-xl p-4 text-sm text-[#5D5D66]">
               Role assignment requires Superadmin privileges. You have read-only access to the staff directory.
             </div>
           ) : (
             <form onSubmit={handleSaveStaffRole} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-[#0D0D0F] mb-1">
+                <label className="block text-sm font-medium text-[#0D0D0F] mb-1">
                   Select Registered User Account
                 </label>
                 <select
                   value={selectedUserUid}
                   onChange={(e) => handlePickExistingUser(e.target.value)}
-                  className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg bg-white"
+                  className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg bg-white"
                 >
                   <option value="">-- Choose user --</option>
                   {users.map((u) => (
@@ -502,7 +502,7 @@ export function StaffAndSecurityPanel({
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-[#0D0D0F] mb-1">Role</label>
+                  <label className="block text-sm font-medium text-[#0D0D0F] mb-1">Role</label>
                   <select
                     value={assignedRole}
                     onChange={(e) => {
@@ -510,7 +510,7 @@ export function StaffAndSecurityPanel({
                       setAssignedRole(next);
                       setSelectedPerms(DEFAULT_ROLE_PERMISSIONS[next]);
                     }}
-                    className="w-full px-3 py-2 text-sm border border-black/15 rounded-lg bg-white"
+                    className="w-full px-3 py-2 text-[15px] border border-black/15 rounded-lg bg-white"
                   >
                     {(
                       [
@@ -530,11 +530,11 @@ export function StaffAndSecurityPanel({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-[#0D0D0F] mb-1">Status</label>
+                  <label className="block text-sm font-medium text-[#0D0D0F] mb-1">Status</label>
                   <select
                     value={staffStatus}
                     onChange={(e) => setStaffStatus(e.target.value as 'active' | 'suspended')}
-                    className="w-full px-3 py-2 text-sm border border-black/15 rounded-lg bg-white"
+                    className="w-full px-3 py-2 text-[15px] border border-black/15 rounded-lg bg-white"
                   >
                     <option value="active">Active</option>
                     <option value="suspended">Suspended</option>
@@ -543,7 +543,7 @@ export function StaffAndSecurityPanel({
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-[#0D0D0F] mb-2">
+                <label className="block text-sm font-medium text-[#0D0D0F] mb-2">
                   Granular Permissions ({selectedPerms.length} selected)
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto p-3 border border-black/[0.08] rounded-xl bg-[#F9F9FB]">
@@ -553,7 +553,7 @@ export function StaffAndSecurityPanel({
                     return (
                       <label
                         key={perm}
-                        className="flex items-center gap-2 text-xs text-[#0D0D0F] cursor-pointer"
+                        className="flex items-center gap-2 text-sm text-[#0D0D0F] cursor-pointer"
                       >
                         <input
                           type="checkbox"
@@ -575,7 +575,7 @@ export function StaffAndSecurityPanel({
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-[#0D0D0F] mb-2">
+                <label className="block text-sm font-medium text-[#0D0D0F] mb-2">
                   Assigned Courses Scope
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -590,7 +590,7 @@ export function StaffAndSecurityPanel({
                             active ? prev.filter((id) => id !== c.id) : [...prev, c.id]
                           )
                         }
-                        className={`px-3 py-1.5 text-xs rounded-lg border ${
+                        className={`px-3 py-1.5 text-sm rounded-lg border ${
                           active
                             ? 'bg-[#0D0D0F] text-white border-[#0D0D0F]'
                             : 'bg-white text-[#5D5D66] border-black/15'
@@ -604,7 +604,7 @@ export function StaffAndSecurityPanel({
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-[#0D0D0F] mb-1">
+                <label className="block text-sm font-medium text-[#0D0D0F] mb-1">
                   Reason for Assignment (recorded in Audit Log)
                 </label>
                 <input
@@ -612,16 +612,16 @@ export function StaffAndSecurityPanel({
                   value={roleReason}
                   onChange={(e) => setRoleReason(e.target.value)}
                   placeholder="e.g. Onboarding instructor for Week 2 cohort"
-                  className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg"
+                  className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg"
                 />
               </div>
 
-              {staffMsg && <p className="text-xs text-[#0D7A5F] font-medium">{staffMsg}</p>}
+              {staffMsg && <p className="text-sm text-[#0D7A5F] font-medium">{staffMsg}</p>}
 
               <button
                 type="submit"
                 disabled={staffBusy}
-                className="w-full px-4 py-2.5 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg"
+                className="w-full px-4 py-2.5 text-[15px] font-medium text-white bg-[#0D0D0F] rounded-lg"
               >
                 {staffBusy ? 'Saving...' : 'Save Staff Role & Permissions'}
               </button>
@@ -630,10 +630,10 @@ export function StaffAndSecurityPanel({
         </div>
 
         <div className="lg:col-span-6 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
-          <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+          <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
             Active Staff & Role Matrix
           </h2>
-          <div className="bg-[#F2FBF8] border border-[#0D7A5F]/20 rounded-xl p-4 space-y-1.5 text-xs">
+          <div className="bg-[#F2FBF8] border border-[#0D7A5F]/20 rounded-xl p-4 space-y-1.5 text-sm">
             <p className="font-mono font-semibold text-[#0D7A5F] uppercase">
               Protected Founder Superadmins
             </p>
@@ -644,7 +644,7 @@ export function StaffAndSecurityPanel({
             ))}
           </div>
           {staffRoles.length === 0 ? (
-            <div className="bg-[#F9F9FB] border border-black/[0.06] rounded-xl p-5 text-xs text-[#5D5D66]">
+            <div className="bg-[#F9F9FB] border border-black/[0.06] rounded-xl p-5 text-sm text-[#5D5D66]">
               No delegated team members assigned yet. Assign team members using the form.
             </div>
           ) : (
@@ -652,14 +652,14 @@ export function StaffAndSecurityPanel({
               {staffRoles.map((sr) => (
                 <div key={sr.uid} className="py-3.5 first:pt-0 last:pb-0 space-y-1">
                   <div className="flex items-center justify-between gap-2">
-                    <p className="text-sm font-medium text-[#0D0D0F]">
-                      {sr.displayName} · <span className="font-mono text-xs">{sr.email}</span>
+                    <p className="text-[15px] font-medium text-[#0D0D0F]">
+                      {sr.displayName} · <span className="font-mono text-sm">{sr.email}</span>
                     </p>
-                    <span className="text-xs font-mono uppercase text-[#0D7A5F]">
+                    <span className="text-sm font-mono uppercase text-[#0D7A5F]">
                       {sr.role} ({sr.status})
                     </span>
                   </div>
-                  <p className="text-xs text-[#5D5D66]">
+                  <p className="text-sm text-[#5D5D66]">
                     {sr.permissions.length} permission(s) · Courses:{' '}
                     {sr.assignedCourseIds.length > 0 ? sr.assignedCourseIds.join(', ') : 'All'}
                   </p>
@@ -669,8 +669,8 @@ export function StaffAndSecurityPanel({
           )}
 
           <div className="pt-4 border-t border-black/[0.08]">
-            <h3 className="text-xs font-semibold text-[#0D0D0F] mb-2">7-Role Definitions</h3>
-            <div className="space-y-1.5 text-xs text-[#5D5D66]">
+            <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F] mb-2">7-Role Definitions</h3>
+            <div className="space-y-1.5 text-sm text-[#5D5D66]">
               {(Object.keys(ROLE_DISPLAY) as StaffRole[]).map((roleKey) => (
                 <p key={roleKey}>
                   <strong className="text-[#0D0D0F]">{ROLE_DISPLAY[roleKey].en}:</strong>{' '}
@@ -703,10 +703,10 @@ export function StaffAndSecurityPanel({
       <div className="bg-white border border-black/[0.08] rounded-2xl p-6 space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+            <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
               Immutable Audit Logs
             </h2>
-            <p className="text-xs text-[#5D5D66]">
+            <p className="text-sm text-[#5D5D66]">
               {access.isSuperadmin
                 ? 'Superadmin Global Oversight: all role assignments, suspensions, access grants, payment verifications, and refunds.'
                 : 'Row-Level Security Active: showing only actions performed by your account.'}
@@ -732,7 +732,7 @@ export function StaffAndSecurityPanel({
                 ])
               )
             }
-            className="px-3.5 py-2 text-xs font-medium border border-black/15 rounded-lg hover:border-black/30 whitespace-nowrap shrink-0"
+            className="px-3.5 py-2 text-sm font-medium border border-black/15 rounded-lg hover:border-black/30 whitespace-nowrap shrink-0"
           >
             Export Audit CSV
           </button>
@@ -744,12 +744,12 @@ export function StaffAndSecurityPanel({
             value={auditSearch}
             onChange={(e) => setAuditSearch(e.target.value)}
             placeholder="Filter by actor email, action, or reason..."
-            className="flex-1 px-3.5 py-2 text-sm border border-black/15 rounded-lg"
+            className="flex-1 px-3.5 py-2 text-[15px] border border-black/15 rounded-lg"
           />
           <select
             value={auditCollectionFilter}
             onChange={(e) => setAuditCollectionFilter(e.target.value)}
-            className="px-3.5 py-2 text-sm border border-black/15 rounded-lg bg-white"
+            className="px-3.5 py-2 text-[15px] border border-black/15 rounded-lg bg-white"
           >
             <option value="all">All Collections</option>
             {collections.map((c) => (
@@ -761,7 +761,7 @@ export function StaffAndSecurityPanel({
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
+          <table className="w-full text-left text-sm border-collapse">
             <thead>
               <tr className="border-b border-black/[0.08] text-[#5D5D66]">
                 <th className="py-2.5 pr-4 font-medium">Action</th>
@@ -787,7 +787,7 @@ export function StaffAndSecurityPanel({
                     <td className="py-3 pr-4 text-[#5D5D66]">
                       <div>{log.actorEmail}</div>
                       {log.actorRole && (
-                        <div className="font-mono text-[11px]">{log.actorRole}</div>
+                        <div className="font-mono text-sm">{log.actorRole}</div>
                       )}
                     </td>
                     <td className="py-3 pr-4 font-mono text-[#5D5D66]">
@@ -800,7 +800,7 @@ export function StaffAndSecurityPanel({
                     </td>
                     <td className="py-3 pr-4 text-[#5D5D66]">
                       <div className="text-[#0D0D0F]">{log.summary}</div>
-                      {log.reason && <div className="text-[11px] mt-0.5">Reason: {log.reason}</div>}
+                      {log.reason && <div className="text-sm mt-0.5">Reason: {log.reason}</div>}
                     </td>
                   </tr>
                 ))
@@ -810,7 +810,7 @@ export function StaffAndSecurityPanel({
         </div>
 
         {data.pagination?.auditLogs.hasMore && data.onLoadMore && (
-          <div className="pt-4 border-t border-black/[0.06] flex items-center justify-between text-xs">
+          <div className="pt-4 border-t border-black/[0.06] flex items-center justify-between text-sm">
             <span className="text-[#5D5D66] font-mono">
               Showing {auditLogs.length} audit events
             </span>
@@ -841,13 +841,13 @@ export function StaffAndSecurityPanel({
         <div className="bg-white border border-black/[0.08] rounded-2xl p-6 space-y-5">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <p className="text-[11px] font-mono text-[#0D7A5F] uppercase">
+              <p className="text-[15px] font-mono text-[#0D7A5F] uppercase">
                 Capacity & Infrastructure Telemetry
               </p>
-              <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+              <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
                 Live Performance Monitor & Firebase Upgrade Advisory
               </h2>
-              <p className="text-xs text-[#5D5D66] mt-0.5">
+              <p className="text-sm text-[#5D5D66] mt-0.5">
                 Real-time concurrency, response latency, rate-limit activity, and Blaze plan guidance so you decide when to upgrade.
               </p>
             </div>
@@ -855,50 +855,50 @@ export function StaffAndSecurityPanel({
               type="button"
               disabled={metricsLoading}
               onClick={() => loadSuperadminServerPanels()}
-              className="px-3.5 py-2 text-xs font-medium border border-black/15 rounded-lg hover:border-black/35"
+              className="px-3.5 py-2 text-sm font-medium border border-black/15 rounded-lg hover:border-black/35"
             >
               {metricsLoading ? 'Refreshing...' : 'Refresh Live Metrics'}
             </button>
           </div>
 
-          {metricsError && <p className="text-xs text-[#DC2626]">{metricsError}</p>}
+          {metricsError && <p className="text-sm text-[#DC2626]">{metricsError}</p>}
 
           {metrics && (
             <>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <div className="bg-[#F9F9FB] border border-black/[0.06] rounded-xl p-4">
-                  <p className="text-[11px] text-[#5D5D66]">Active / Peak Concurrent</p>
+                  <p className="text-[15px] text-[#5D5D66]">Active / Peak Concurrent</p>
                   <p className="text-xl font-display font-semibold tabular-nums text-[#0D0D0F] mt-1">
                     {metrics.concurrency.inFlight} / {metrics.concurrency.peakConcurrent}
                   </p>
-                  <p className="text-[11px] font-mono text-[#0D7A5F] mt-0.5">
+                  <p className="text-[15px] font-mono text-[#0D7A5F] mt-0.5">
                     Uptime {Math.floor(metrics.uptimeSeconds / 60)}m {metrics.uptimeSeconds % 60}s
                   </p>
                 </div>
                 <div className="bg-[#F9F9FB] border border-black/[0.06] rounded-xl p-4">
-                  <p className="text-[11px] text-[#5D5D66]">Latency (p50 / p95)</p>
+                  <p className="text-[15px] text-[#5D5D66]">Latency (p50 / p95)</p>
                   <p className="text-xl font-display font-semibold tabular-nums text-[#0D0D0F] mt-1">
                     {metrics.latencyMs.p50}ms / {metrics.latencyMs.p95}ms
                   </p>
-                  <p className="text-[11px] font-mono text-[#5D5D66] mt-0.5">
+                  <p className="text-[15px] font-mono text-[#5D5D66] mt-0.5">
                     Avg {metrics.latencyMs.avg}ms ({metrics.latencyMs.samples} samples)
                   </p>
                 </div>
                 <div className="bg-[#F9F9FB] border border-black/[0.06] rounded-xl p-4">
-                  <p className="text-[11px] text-[#5D5D66]">Requests & Rate Limits</p>
+                  <p className="text-[15px] text-[#5D5D66]">Requests & Rate Limits</p>
                   <p className="text-xl font-display font-semibold tabular-nums text-[#0D0D0F] mt-1">
                     {metrics.traffic.totalRequests.toLocaleString()}
                   </p>
-                  <p className="text-[11px] font-mono text-[#5D5D66] mt-0.5">
+                  <p className="text-[15px] font-mono text-[#5D5D66] mt-0.5">
                     5xx: {metrics.traffic.totalErrors5xx} · 429 blocked: {metrics.traffic.rateLimited429}
                   </p>
                 </div>
                 <div className="bg-[#F9F9FB] border border-black/[0.06] rounded-xl p-4">
-                  <p className="text-[11px] text-[#5D5D66]">Server Memory & Ledger</p>
+                  <p className="text-[15px] text-[#5D5D66]">Server Memory & Ledger</p>
                   <p className="text-xl font-display font-semibold tabular-nums text-[#0D0D0F] mt-1">
                     {metrics.memoryMb.heapUsed} / {metrics.memoryMb.rss} MB
                   </p>
-                  <p className="text-[11px] font-mono text-[#5D5D66] mt-0.5">
+                  <p className="text-[15px] font-mono text-[#5D5D66] mt-0.5">
                     Ledger: {metrics.ledger.paymentCount} tx ({metrics.ledger.pendingCount} pending)
                   </p>
                 </div>
@@ -906,7 +906,7 @@ export function StaffAndSecurityPanel({
 
               {advisory && (
                 <div
-                  className={`rounded-xl p-4 border text-xs space-y-1 ${
+                  className={`rounded-xl p-4 border text-sm space-y-1 ${
                     advisory.status === 'upgrade_recommended'
                       ? 'bg-[#FEF2F2] border-[#DC2626]/25 text-[#0D0D0F]'
                       : advisory.status === 'watch'
@@ -928,17 +928,17 @@ export function StaffAndSecurityPanel({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-5 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-5">
             <div>
-              <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+              <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
                 Platform Configuration
               </h2>
-              <p className="text-xs text-[#5D5D66] mt-1">
+              <p className="text-sm text-[#5D5D66] mt-1">
                 Controls registration policies, default language, and maintenance mode.
               </p>
             </div>
 
             <form onSubmit={handleSavePlatformSettings} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-[#0D0D0F] mb-1">
+                <label className="block text-sm font-medium text-[#0D0D0F] mb-1">
                   Platform Display Name
                 </label>
                 <input
@@ -947,19 +947,19 @@ export function StaffAndSecurityPanel({
                   disabled={!access.isSuperadmin}
                   value={platformName}
                   onChange={(e) => setPlatformName(e.target.value)}
-                  className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg"
+                  className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-[#0D0D0F] mb-1">
+                <label className="block text-sm font-medium text-[#0D0D0F] mb-1">
                   Default Public Language
                 </label>
                 <select
                   disabled={!access.isSuperadmin}
                   value={defaultLanguage}
                   onChange={(e) => setDefaultLanguage(e.target.value as 'en' | 'rw')}
-                  className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg bg-white"
+                  className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg bg-white"
                 >
                   <option value="en">English (en)</option>
                   <option value="rw">Kinyarwanda (rw)</option>
@@ -967,7 +967,7 @@ export function StaffAndSecurityPanel({
               </div>
 
               <div className="space-y-2.5 pt-1">
-                <label className="flex items-center gap-2.5 text-xs text-[#0D0D0F]">
+                <label className="flex items-center gap-2.5 text-sm text-[#0D0D0F]">
                   <input
                     type="checkbox"
                     disabled={!access.isSuperadmin}
@@ -977,7 +977,7 @@ export function StaffAndSecurityPanel({
                   <span>Allow new learner self-registration</span>
                 </label>
 
-                <label className="flex items-center gap-2.5 text-xs text-[#0D0D0F]">
+                <label className="flex items-center gap-2.5 text-sm text-[#0D0D0F]">
                   <input
                     type="checkbox"
                     disabled={!access.isSuperadmin}
@@ -987,7 +987,7 @@ export function StaffAndSecurityPanel({
                   <span>Enable public maintenance banner</span>
                 </label>
 
-                <label className="flex items-center gap-2.5 text-xs text-[#0D0D0F]">
+                <label className="flex items-center gap-2.5 text-sm text-[#0D0D0F]">
                   <input
                     type="checkbox"
                     disabled={!access.isSuperadmin}
@@ -997,7 +997,7 @@ export function StaffAndSecurityPanel({
                   <span>Enable public certificate verification portal</span>
                 </label>
 
-                <label className="flex items-center gap-2.5 text-xs text-[#0D0D0F]">
+                <label className="flex items-center gap-2.5 text-sm text-[#0D0D0F]">
                   <input
                     type="checkbox"
                     disabled={!access.isSuperadmin}
@@ -1007,7 +1007,7 @@ export function StaffAndSecurityPanel({
                   <span>Allow cohort waitlist signups for upcoming courses</span>
                 </label>
 
-                <label className="flex items-center gap-2.5 text-xs text-[#0D0D0F]">
+                <label className="flex items-center gap-2.5 text-sm text-[#0D0D0F]">
                   <input
                     type="checkbox"
                     disabled={!access.isSuperadmin}
@@ -1017,7 +1017,7 @@ export function StaffAndSecurityPanel({
                   <span>Enable Learner Support ticket system</span>
                 </label>
 
-                <label className="flex items-center gap-2.5 text-xs text-[#0D0D0F]">
+                <label className="flex items-center gap-2.5 text-sm text-[#0D0D0F]">
                   <input
                     type="checkbox"
                     disabled={!access.isSuperadmin}
@@ -1029,11 +1029,11 @@ export function StaffAndSecurityPanel({
               </div>
 
               <div className="pt-4 border-t border-black/[0.08] space-y-3">
-                <h3 className="text-xs font-semibold text-[#0D0D0F]">
+                <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F]">
                   Certificate Branding & Eligibility Rules
                 </h3>
                 <div>
-                  <label className="block text-xs font-medium text-[#0D0D0F] mb-1">
+                  <label className="block text-sm font-medium text-[#0D0D0F] mb-1">
                     Issuing Organization Name
                   </label>
                   <input
@@ -1041,12 +1041,12 @@ export function StaffAndSecurityPanel({
                     disabled={!access.isSuperadmin}
                     value={certOrgName}
                     onChange={(e) => setCertOrgName(e.target.value)}
-                    className="w-full px-3 py-1.5 text-xs border border-black/15 rounded-lg"
+                    className="w-full px-3 py-1.5 text-sm border border-black/15 rounded-lg"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-medium text-[#0D0D0F] mb-1">
+                    <label className="block text-sm font-medium text-[#0D0D0F] mb-1">
                       Signatory Name
                     </label>
                     <input
@@ -1054,11 +1054,11 @@ export function StaffAndSecurityPanel({
                       disabled={!access.isSuperadmin}
                       value={certSigName}
                       onChange={(e) => setCertSigName(e.target.value)}
-                      className="w-full px-3 py-1.5 text-xs border border-black/15 rounded-lg"
+                      className="w-full px-3 py-1.5 text-sm border border-black/15 rounded-lg"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-[#0D0D0F] mb-1">
+                    <label className="block text-sm font-medium text-[#0D0D0F] mb-1">
                       Signatory Title
                     </label>
                     <input
@@ -1066,13 +1066,13 @@ export function StaffAndSecurityPanel({
                       disabled={!access.isSuperadmin}
                       value={certSigTitle}
                       onChange={(e) => setCertSigTitle(e.target.value)}
-                      className="w-full px-3 py-1.5 text-xs border border-black/15 rounded-lg"
+                      className="w-full px-3 py-1.5 text-sm border border-black/15 rounded-lg"
                     />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-medium text-[#0D0D0F] mb-1">
+                    <label className="block text-sm font-medium text-[#0D0D0F] mb-1">
                       Min Quiz Average (%)
                     </label>
                     <input
@@ -1082,11 +1082,11 @@ export function StaffAndSecurityPanel({
                       disabled={!access.isSuperadmin}
                       value={certMinQuiz}
                       onChange={(e) => setCertMinQuiz(Number(e.target.value))}
-                      className="w-full px-3 py-1.5 text-xs font-mono border border-black/15 rounded-lg"
+                      className="w-full px-3 py-1.5 text-sm font-mono border border-black/15 rounded-lg"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-[#0D0D0F] mb-1">
+                    <label className="block text-sm font-medium text-[#0D0D0F] mb-1">
                       Min Approved Project (%)
                     </label>
                     <input
@@ -1096,14 +1096,14 @@ export function StaffAndSecurityPanel({
                       disabled={!access.isSuperadmin}
                       value={certMinProj}
                       onChange={(e) => setCertMinProj(Number(e.target.value))}
-                      className="w-full px-3 py-1.5 text-xs font-mono border border-black/15 rounded-lg"
+                      className="w-full px-3 py-1.5 text-sm font-mono border border-black/15 rounded-lg"
                     />
                   </div>
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-[#0D0D0F] mb-1">
+                <label className="block text-sm font-medium text-[#0D0D0F] mb-1">
                   Change Reason
                 </label>
                 <input
@@ -1112,17 +1112,17 @@ export function StaffAndSecurityPanel({
                   value={settingsReason}
                   onChange={(e) => setSettingsReason(e.target.value)}
                   placeholder="e.g. Opened cohort registration"
-                  className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg"
+                  className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg"
                 />
               </div>
 
-              {settingsMsg && <p className="text-xs text-[#0D7A5F] font-medium">{settingsMsg}</p>}
+              {settingsMsg && <p className="text-sm text-[#0D7A5F] font-medium">{settingsMsg}</p>}
 
               {access.isSuperadmin && (
                 <button
                   type="submit"
                   disabled={settingsBusy}
-                  className="px-5 py-2.5 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg"
+                  className="px-5 py-2.5 text-[15px] font-medium text-white bg-[#0D0D0F] rounded-lg"
                 >
                   {settingsBusy ? 'Saving...' : 'Save Platform Settings'}
                 </button>
@@ -1133,13 +1133,13 @@ export function StaffAndSecurityPanel({
           {/* SUPERADMIN ENCRYPTED GATEWAY CREDENTIALS VAULT */}
           <div className="lg:col-span-7 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-5">
             <div>
-              <p className="text-[11px] font-mono text-[#0D7A5F] uppercase">
+              <p className="text-[15px] font-mono text-[#0D7A5F] uppercase">
                 AES-256-GCM Server-Side Vault
               </p>
-              <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+              <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
                 MTN MoMo & Payment / Messaging Gateway Keys
               </h2>
-              <p className="text-xs text-[#5D5D66] mt-1">
+              <p className="text-sm text-[#5D5D66] mt-1">
                 Configure MTN Mobile Money Rwanda, Airtel Money, Email, and SMS credentials once obtained. Keys are encrypted on the server and never exposed to client browsers or Firestore.
               </p>
             </div>
@@ -1161,7 +1161,7 @@ export function StaffAndSecurityPanel({
                     setGatewayTestMsg(null);
                     setGatewaySaveMsg(null);
                   }}
-                  className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors flex items-center gap-1.5 ${
+                  className={`px-3 py-1.5 text-sm font-medium rounded-lg transition-colors flex items-center gap-1.5 ${
                     activeGatewayTab === item.id
                       ? 'bg-white text-[#0D0D0F] shadow-xs'
                       : 'text-[#5D5D66] hover:text-[#0D0D0F]'
@@ -1180,10 +1180,10 @@ export function StaffAndSecurityPanel({
             <form onSubmit={handleSaveGatewayConfig} className="space-y-4">
               {activeGatewayTab === 'momo' && (
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between bg-[#F9F9FB] border border-black/[0.06] rounded-xl p-3.5 text-xs">
+                  <div className="flex items-center justify-between bg-[#F9F9FB] border border-black/[0.06] rounded-xl p-3.5 text-sm">
                     <div>
                       <p className="font-semibold text-[#0D0D0F]">MTN MoMo Collection API Status</p>
-                      <p className="text-[#5D5D66] font-mono text-[11px]">
+                      <p className="text-[#5D5D66] font-mono text-[15px]">
                         Source: {gatewayMasked?.momo.source || 'none'} · Configured:{' '}
                         {gatewayMasked?.momo.configured ? 'Yes' : 'Pending keys'}
                       </p>
@@ -1200,42 +1200,42 @@ export function StaffAndSecurityPanel({
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div>
-                      <label className="block text-xs font-medium mb-1">Environment</label>
+                      <label className="block text-sm font-medium mb-1">Environment</label>
                       <select
                         value={momoEnv}
                         onChange={(e) => setMomoEnv(e.target.value as 'sandbox' | 'production')}
-                        className="w-full px-3 py-2 text-xs border border-black/15 rounded-lg bg-white"
+                        className="w-full px-3 py-2 text-sm border border-black/15 rounded-lg bg-white"
                       >
                         <option value="sandbox">Sandbox (Testing)</option>
                         <option value="production">Production (mtnrwanda)</option>
                       </select>
                     </div>
                     <div>
-                      <label className="block text-xs font-medium mb-1">Target Currency</label>
+                      <label className="block text-sm font-medium mb-1">Target Currency</label>
                       <select
                         value={momoCurrency}
                         onChange={(e) => setMomoCurrency(e.target.value as 'RWF' | 'EUR')}
-                        className="w-full px-3 py-2 text-xs border border-black/15 rounded-lg bg-white"
+                        className="w-full px-3 py-2 text-sm border border-black/15 rounded-lg bg-white"
                       >
                         <option value="RWF">RWF (Production)</option>
                         <option value="EUR">EUR (Sandbox)</option>
                       </select>
                     </div>
                     <div>
-                      <label className="block text-xs font-medium mb-1">Merchant MSISDN</label>
+                      <label className="block text-sm font-medium mb-1">Merchant MSISDN</label>
                       <input
                         type="text"
                         value={momoMerchantMsisdn}
                         onChange={(e) => setMomoMerchantMsisdn(e.target.value)}
                         placeholder="250788..."
-                        className="w-full px-3 py-2 text-xs font-mono border border-black/15 rounded-lg"
+                        className="w-full px-3 py-2 text-sm font-mono border border-black/15 rounded-lg"
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-medium mb-1">
+                      <label className="block text-sm font-medium mb-1">
                         MTN API User (UUID){' '}
                         {gatewayMasked?.momo.apiUserMasked && (
                           <span className="font-mono text-[#0D7A5F]">
@@ -1253,11 +1253,11 @@ export function StaffAndSecurityPanel({
                             ? 'Leave blank to keep saved value'
                             : 'Enter X-Reference-Id UUID'
                         }
-                        className="w-full px-3 py-2 text-xs font-mono border border-black/15 rounded-lg"
+                        className="w-full px-3 py-2 text-sm font-mono border border-black/15 rounded-lg"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium mb-1">
+                      <label className="block text-sm font-medium mb-1">
                         MTN API Key{' '}
                         {gatewayMasked?.momo.apiKeyMasked && (
                           <span className="font-mono text-[#0D7A5F]">
@@ -1275,14 +1275,14 @@ export function StaffAndSecurityPanel({
                             ? 'Leave blank to keep saved key'
                             : 'Enter MTN API Key'
                         }
-                        className="w-full px-3 py-2 text-xs font-mono border border-black/15 rounded-lg"
+                        className="w-full px-3 py-2 text-sm font-mono border border-black/15 rounded-lg"
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-medium mb-1">
+                      <label className="block text-sm font-medium mb-1">
                         Ocp-Apim-Subscription-Key{' '}
                         {gatewayMasked?.momo.subscriptionKeyMasked && (
                           <span className="font-mono text-[#0D7A5F]">
@@ -1300,11 +1300,11 @@ export function StaffAndSecurityPanel({
                             ? 'Leave blank to keep saved key'
                             : 'Primary Collection Subscription Key'
                         }
-                        className="w-full px-3 py-2 text-xs font-mono border border-black/15 rounded-lg"
+                        className="w-full px-3 py-2 text-sm font-mono border border-black/15 rounded-lg"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium mb-1">
+                      <label className="block text-sm font-medium mb-1">
                         Webhook Callback Secret{' '}
                         {gatewayMasked?.momo.callbackSecretMasked && (
                           <span className="font-mono text-[#0D7A5F]">
@@ -1318,12 +1318,12 @@ export function StaffAndSecurityPanel({
                         value={momoCallbackSecret}
                         onChange={(e) => setMomoCallbackSecret(e.target.value)}
                         placeholder="Optional webhook verification secret"
-                        className="w-full px-3 py-2 text-xs font-mono border border-black/15 rounded-lg"
+                        className="w-full px-3 py-2 text-sm font-mono border border-black/15 rounded-lg"
                       />
                     </div>
                   </div>
 
-                  <div className="bg-[#F9F9FB] border border-black/[0.06] rounded-xl p-3 text-[11px] text-[#5D5D66]">
+                  <div className="bg-[#F9F9FB] border border-black/[0.06] rounded-xl p-3 text-[15px] text-[#5D5D66]">
                     <strong className="text-[#0D0D0F]">Callback URL for MTN Developer Portal: </strong>
                     <span className="font-mono select-all text-[#0D0D0F]">{webhookUrl}</span>
                   </div>
@@ -1332,10 +1332,10 @@ export function StaffAndSecurityPanel({
 
               {activeGatewayTab === 'airtel' && (
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between bg-[#F9F9FB] border border-black/[0.06] rounded-xl p-3.5 text-xs">
+                  <div className="flex items-center justify-between bg-[#F9F9FB] border border-black/[0.06] rounded-xl p-3.5 text-sm">
                     <div>
                       <p className="font-semibold text-[#0D0D0F]">Airtel Money Rwanda API</p>
-                      <p className="text-[#5D5D66] font-mono text-[11px]">
+                      <p className="text-[#5D5D66] font-mono text-[15px]">
                         Configured: {gatewayMasked?.airtel.configured ? 'Yes' : 'Pending keys'}
                       </p>
                     </div>
@@ -1350,11 +1350,11 @@ export function StaffAndSecurityPanel({
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium mb-1">Environment</label>
+                    <label className="block text-sm font-medium mb-1">Environment</label>
                     <select
                       value={airtelEnv}
                       onChange={(e) => setAirtelEnv(e.target.value as 'sandbox' | 'production')}
-                      className="w-full px-3 py-2 text-xs border border-black/15 rounded-lg bg-white"
+                      className="w-full px-3 py-2 text-sm border border-black/15 rounded-lg bg-white"
                     >
                       <option value="sandbox">Sandbox</option>
                       <option value="production">Production</option>
@@ -1363,7 +1363,7 @@ export function StaffAndSecurityPanel({
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-medium mb-1">
+                      <label className="block text-sm font-medium mb-1">
                         Client ID{' '}
                         {gatewayMasked?.airtel.clientIdMasked && (
                           <span className="font-mono text-[#0D7A5F]">
@@ -1377,11 +1377,11 @@ export function StaffAndSecurityPanel({
                         value={airtelClientId}
                         onChange={(e) => setAirtelClientId(e.target.value)}
                         placeholder="Airtel Client ID"
-                        className="w-full px-3 py-2 text-xs font-mono border border-black/15 rounded-lg"
+                        className="w-full px-3 py-2 text-sm font-mono border border-black/15 rounded-lg"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium mb-1">
+                      <label className="block text-sm font-medium mb-1">
                         Client Secret{' '}
                         {gatewayMasked?.airtel.clientSecretMasked && (
                           <span className="font-mono text-[#0D7A5F]">
@@ -1395,13 +1395,13 @@ export function StaffAndSecurityPanel({
                         value={airtelClientSecret}
                         onChange={(e) => setAirtelClientSecret(e.target.value)}
                         placeholder="Airtel Client Secret"
-                        className="w-full px-3 py-2 text-xs font-mono border border-black/15 rounded-lg"
+                        className="w-full px-3 py-2 text-sm font-mono border border-black/15 rounded-lg"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium mb-1">
+                    <label className="block text-sm font-medium mb-1">
                       Callback Secret{' '}
                       {gatewayMasked?.airtel.callbackSecretMasked && (
                         <span className="font-mono text-[#0D7A5F]">
@@ -1415,7 +1415,7 @@ export function StaffAndSecurityPanel({
                       value={airtelCallbackSecret}
                       onChange={(e) => setAirtelCallbackSecret(e.target.value)}
                       placeholder="Optional callback signature secret"
-                      className="w-full px-3 py-2 text-xs font-mono border border-black/15 rounded-lg"
+                      className="w-full px-3 py-2 text-sm font-mono border border-black/15 rounded-lg"
                     />
                   </div>
                 </div>
@@ -1423,10 +1423,10 @@ export function StaffAndSecurityPanel({
 
               {activeGatewayTab === 'email' && (
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between bg-[#F9F9FB] border border-black/[0.06] rounded-xl p-3.5 text-xs">
+                  <div className="flex items-center justify-between bg-[#F9F9FB] border border-black/[0.06] rounded-xl p-3.5 text-sm">
                     <div>
                       <p className="font-semibold text-[#0D0D0F]">Transactional Email Provider</p>
-                      <p className="text-[#5D5D66] font-mono text-[11px]">
+                      <p className="text-[#5D5D66] font-mono text-[15px]">
                         Configured: {gatewayMasked?.email.configured ? 'Yes' : 'Pending keys'}
                       </p>
                     </div>
@@ -1442,30 +1442,30 @@ export function StaffAndSecurityPanel({
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-medium mb-1">Provider</label>
+                      <label className="block text-sm font-medium mb-1">Provider</label>
                       <select
                         value={emailProvider}
                         onChange={(e) => setEmailProvider(e.target.value as 'resend' | 'smtp')}
-                        className="w-full px-3 py-2 text-xs border border-black/15 rounded-lg bg-white"
+                        className="w-full px-3 py-2 text-sm border border-black/15 rounded-lg bg-white"
                       >
                         <option value="resend">Resend API</option>
                         <option value="smtp">Custom SMTP</option>
                       </select>
                     </div>
                     <div>
-                      <label className="block text-xs font-medium mb-1">From Email</label>
+                      <label className="block text-sm font-medium mb-1">From Email</label>
                       <input
                         type="email"
                         value={emailFrom}
                         onChange={(e) => setEmailFrom(e.target.value)}
-                        className="w-full px-3 py-2 text-xs font-mono border border-black/15 rounded-lg"
+                        className="w-full px-3 py-2 text-sm font-mono border border-black/15 rounded-lg"
                       />
                     </div>
                   </div>
 
                   {emailProvider === 'resend' ? (
                     <div>
-                      <label className="block text-xs font-medium mb-1">
+                      <label className="block text-sm font-medium mb-1">
                         Resend API Key{' '}
                         {gatewayMasked?.email.apiKeyMasked && (
                           <span className="font-mono text-[#0D7A5F]">
@@ -1479,7 +1479,7 @@ export function StaffAndSecurityPanel({
                         value={emailApiKey}
                         onChange={(e) => setEmailApiKey(e.target.value)}
                         placeholder="re_..."
-                        className="w-full px-3 py-2 text-xs font-mono border border-black/15 rounded-lg"
+                        className="w-full px-3 py-2 text-sm font-mono border border-black/15 rounded-lg"
                       />
                     </div>
                   ) : (
@@ -1489,21 +1489,21 @@ export function StaffAndSecurityPanel({
                         value={smtpHost}
                         onChange={(e) => setSmtpHost(e.target.value)}
                         placeholder="SMTP Host (e.g. smtp.mailgun.org)"
-                        className="px-3 py-2 text-xs font-mono border border-black/15 rounded-lg"
+                        className="px-3 py-2 text-sm font-mono border border-black/15 rounded-lg"
                       />
                       <input
                         type="number"
                         value={smtpPort}
                         onChange={(e) => setSmtpPort(Number(e.target.value))}
                         placeholder="587"
-                        className="px-3 py-2 text-xs font-mono border border-black/15 rounded-lg"
+                        className="px-3 py-2 text-sm font-mono border border-black/15 rounded-lg"
                       />
                       <input
                         type="text"
                         value={smtpUser}
                         onChange={(e) => setSmtpUser(e.target.value)}
                         placeholder="SMTP Username"
-                        className="px-3 py-2 text-xs font-mono border border-black/15 rounded-lg"
+                        className="px-3 py-2 text-sm font-mono border border-black/15 rounded-lg"
                       />
                       <input
                         type="password"
@@ -1511,7 +1511,7 @@ export function StaffAndSecurityPanel({
                         value={smtpPass}
                         onChange={(e) => setSmtpPass(e.target.value)}
                         placeholder="SMTP Password"
-                        className="px-3 py-2 text-xs font-mono border border-black/15 rounded-lg"
+                        className="px-3 py-2 text-sm font-mono border border-black/15 rounded-lg"
                       />
                     </div>
                   )}
@@ -1520,10 +1520,10 @@ export function StaffAndSecurityPanel({
 
               {activeGatewayTab === 'sms' && (
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between bg-[#F9F9FB] border border-black/[0.06] rounded-xl p-3.5 text-xs">
+                  <div className="flex items-center justify-between bg-[#F9F9FB] border border-black/[0.06] rounded-xl p-3.5 text-sm">
                     <div>
                       <p className="font-semibold text-[#0D0D0F]">SMS Notification Gateway</p>
-                      <p className="text-[#5D5D66] font-mono text-[11px]">
+                      <p className="text-[#5D5D66] font-mono text-[15px]">
                         Configured: {gatewayMasked?.sms.configured ? 'Yes' : 'Pending keys'}
                       </p>
                     </div>
@@ -1543,7 +1543,7 @@ export function StaffAndSecurityPanel({
                       onChange={(e) =>
                         setSmsProvider(e.target.value as 'africastalking' | 'twilio' | 'custom')
                       }
-                      className="px-3 py-2 text-xs border border-black/15 rounded-lg bg-white"
+                      className="px-3 py-2 text-sm border border-black/15 rounded-lg bg-white"
                     >
                       <option value="africastalking">Africa's Talking</option>
                       <option value="twilio">Twilio</option>
@@ -1554,14 +1554,14 @@ export function StaffAndSecurityPanel({
                       value={smsSenderId}
                       onChange={(e) => setSmsSenderId(e.target.value)}
                       placeholder="Sender ID (AIEDU_RW)"
-                      className="px-3 py-2 text-xs font-mono border border-black/15 rounded-lg"
+                      className="px-3 py-2 text-sm font-mono border border-black/15 rounded-lg"
                     />
                     <input
                       type="text"
                       value={smsUsername}
                       onChange={(e) => setSmsUsername(e.target.value)}
                       placeholder="API Username"
-                      className="px-3 py-2 text-xs font-mono border border-black/15 rounded-lg"
+                      className="px-3 py-2 text-sm font-mono border border-black/15 rounded-lg"
                     />
                   </div>
                   <input
@@ -1574,17 +1574,17 @@ export function StaffAndSecurityPanel({
                         ? `Saved [${gatewayMasked.sms.apiKeyMasked}] — enter new key to update`
                         : 'Enter SMS API Key'
                     }
-                    className="w-full px-3 py-2 text-xs font-mono border border-black/15 rounded-lg"
+                    className="w-full px-3 py-2 text-sm font-mono border border-black/15 rounded-lg"
                   />
                 </div>
               )}
 
               {gatewaySaveMsg && (
-                <p className="text-xs font-medium text-[#0D7A5F]">{gatewaySaveMsg}</p>
+                <p className="text-sm font-medium text-[#0D7A5F]">{gatewaySaveMsg}</p>
               )}
               {gatewayTestMsg && (
                 <p
-                  className={`text-xs font-medium ${
+                  className={`text-sm font-medium ${
                     gatewayTestMsg.ok ? 'text-[#0D7A5F]' : 'text-[#DC2626]'
                   }`}
                 >
@@ -1596,7 +1596,7 @@ export function StaffAndSecurityPanel({
                 <button
                   type="submit"
                   disabled={gatewayBusy}
-                  className="px-4 py-2 text-xs font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329]"
+                  className="px-4 py-2 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329]"
                 >
                   {gatewayBusy ? 'Saving...' : 'Save Encrypted Gateway Keys'}
                 </button>
@@ -1604,7 +1604,7 @@ export function StaffAndSecurityPanel({
                   type="button"
                   disabled={gatewayBusy}
                   onClick={() => handleTestGateway(activeGatewayTab)}
-                  className="px-4 py-2 text-xs font-medium border border-black/15 rounded-lg hover:border-black/35"
+                  className="px-4 py-2 text-sm font-medium border border-black/15 rounded-lg hover:border-black/35"
                 >
                   Test {activeGatewayTab.toUpperCase()} Connection
                 </button>
@@ -1620,10 +1620,10 @@ export function StaffAndSecurityPanel({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
       <div className="bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
-        <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+        <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
           Operational CSV Reports
         </h2>
-        <p className="text-xs text-[#5D5D66] leading-relaxed">
+        <p className="text-sm text-[#5D5D66] leading-relaxed">
           Download structured operational spreadsheets from live Firestore records for reconciliation and reporting.
         </p>
 
@@ -1644,7 +1644,7 @@ export function StaffAndSecurityPanel({
                 ])
               )
             }
-            className="px-4 py-2.5 text-xs font-medium border border-black/15 rounded-lg hover:border-black/35 text-left"
+            className="px-4 py-2.5 text-sm font-medium border border-black/15 rounded-lg hover:border-black/35 text-left"
           >
             Download Learners CSV ({users.length})
           </button>
@@ -1667,7 +1667,7 @@ export function StaffAndSecurityPanel({
                 ])
               )
             }
-            className="px-4 py-2.5 text-xs font-medium border border-black/15 rounded-lg hover:border-black/35 text-left"
+            className="px-4 py-2.5 text-sm font-medium border border-black/15 rounded-lg hover:border-black/35 text-left"
           >
             Download Enrollments CSV ({enrollments.length})
           </button>
@@ -1690,7 +1690,7 @@ export function StaffAndSecurityPanel({
                 ])
               )
             }
-            className="px-4 py-2.5 text-xs font-medium border border-black/15 rounded-lg hover:border-black/35 text-left"
+            className="px-4 py-2.5 text-sm font-medium border border-black/15 rounded-lg hover:border-black/35 text-left"
           >
             Download Payments CSV ({payments.length})
           </button>
@@ -1712,7 +1712,7 @@ export function StaffAndSecurityPanel({
                 ])
               )
             }
-            className="px-4 py-2.5 text-xs font-medium border border-black/15 rounded-lg hover:border-black/35 text-left"
+            className="px-4 py-2.5 text-sm font-medium border border-black/15 rounded-lg hover:border-black/35 text-left"
           >
             Download Audit Logs CSV ({auditLogs.length})
           </button>
@@ -1720,10 +1720,10 @@ export function StaffAndSecurityPanel({
       </div>
 
       <div className="bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
-        <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+        <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
           Business Data Backup Snapshot
         </h2>
-        <p className="text-xs text-[#5D5D66] leading-relaxed">
+        <p className="text-sm text-[#5D5D66] leading-relaxed">
           Export a complete portable JSON backup of courses, learners, enrollments, payments, refunds, certificates, support requests, and audit history.
         </p>
         <button
@@ -1744,7 +1744,7 @@ export function StaffAndSecurityPanel({
               auditLogs
             })
           }
-          className="px-5 py-2.5 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg"
+          className="px-5 py-2.5 text-[15px] font-medium text-white bg-[#0D0D0F] rounded-lg"
         >
           Export Portable JSON Backup
         </button>

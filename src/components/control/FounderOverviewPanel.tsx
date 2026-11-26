@@ -205,11 +205,11 @@ export function FounderOverviewPanel({
             onClick={() => onNavigateSection(kpi.target)}
             className="text-left bg-[#F9F9FB] hover:bg-[#F3F4F6] border border-black/[0.08] rounded-xl p-5 transition-colors"
           >
-            <p className="text-xs text-[#5D5D66] mb-1">{kpi.label}</p>
+            <p className="text-sm text-[#5D5D66] mb-1">{kpi.label}</p>
             <p className="text-2xl font-display font-semibold tabular-nums text-[#0D0D0F]">
               {kpi.value}
             </p>
-            <p className="text-xs text-[#5D5D66] font-mono tabular-nums mt-1.5">{kpi.context}</p>
+            <p className="text-sm text-[#5D5D66] font-mono tabular-nums mt-1.5">{kpi.context}</p>
           </button>
         ))}
       </div>
@@ -219,18 +219,18 @@ export function FounderOverviewPanel({
         <div className="lg:col-span-7 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <h2 className="text-base font-semibold text-[#0D0D0F]">Operational Alerts</h2>
-              <p className="text-xs text-[#5D5D66]">
+              <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">Operational Alerts</h2>
+              <p className="text-sm text-[#5D5D66]">
                 Conditions derived directly from live Firestore records and integration status.
               </p>
             </div>
-            <span className="text-xs font-mono tabular-nums text-[#5D5D66]">
+            <span className="text-sm font-mono tabular-nums text-[#5D5D66]">
               {alerts.length} active
             </span>
           </div>
 
           {alerts.length === 0 ? (
-            <div className="bg-[#F9F9FB] border border-black/[0.06] rounded-xl p-5 text-xs text-[#5D5D66]">
+            <div className="bg-[#F9F9FB] border border-black/[0.06] rounded-xl p-5 text-sm text-[#5D5D66]">
               All monitored queues are clear. No pending payments, open urgent tickets, or failed records.
             </div>
           ) : (
@@ -243,7 +243,7 @@ export function FounderOverviewPanel({
                   <div className="space-y-0.5">
                     <div className="flex items-center gap-2">
                       <span
-                        className={`text-[11px] font-mono uppercase ${
+                        className={`text-sm font-mono font-semibold uppercase ${
                           alert.severity === 'critical'
                             ? 'text-[#DC2626]'
                             : alert.severity === 'warning'
@@ -253,14 +253,14 @@ export function FounderOverviewPanel({
                       >
                         {alert.severity}
                       </span>
-                      <span className="text-sm font-medium text-[#0D0D0F]">{alert.title}</span>
+                      <span className="text-[15px] font-medium text-[#0D0D0F]">{alert.title}</span>
                     </div>
-                    <p className="text-xs text-[#5D5D66]">{alert.reason}</p>
+                    <p className="text-sm text-[#5D5D66]">{alert.reason}</p>
                   </div>
                   <button
                     type="button"
                     onClick={() => onNavigateSection(alert.target)}
-                    className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-[#0D0D0F] border border-black/15 rounded-lg hover:border-black/30 whitespace-nowrap shrink-0"
+                    className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-[#0D0D0F] border border-black/15 rounded-lg hover:border-black/30 whitespace-nowrap shrink-0"
                   >
                     <span>{alert.actionLabel}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -273,28 +273,28 @@ export function FounderOverviewPanel({
 
         <div className="lg:col-span-5 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
           <div className="flex items-center justify-between gap-4">
-            <h2 className="text-base font-semibold text-[#0D0D0F]">Recent Founder & Staff Activity</h2>
+            <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">Recent Founder & Staff Activity</h2>
             <button
               type="button"
               onClick={() => onNavigateSection('audit')}
-              className="text-xs font-medium text-[#0D7A5F] hover:underline whitespace-nowrap shrink-0"
+              className="text-sm font-medium text-[#0D7A5F] hover:underline whitespace-nowrap shrink-0"
             >
               All logs
             </button>
           </div>
 
           {auditLogs.length === 0 ? (
-            <p className="text-xs text-[#5D5D66]">No administrative actions recorded yet.</p>
+            <p className="text-sm text-[#5D5D66]">No administrative actions recorded yet.</p>
           ) : (
             <div className="divide-y divide-black/[0.06]">
               {auditLogs.slice(0, 6).map((log) => (
-                <div key={log.id} className="py-2.5 first:pt-0 last:pb-0 text-xs">
+                <div key={log.id} className="py-2.5 first:pt-0 last:pb-0 text-sm">
                   <div className="flex items-center justify-between gap-2">
                     <span className="font-mono font-medium text-[#0D0D0F]">{log.action}</span>
                     <span className="font-mono text-[#5D5D66]">{log.targetCollection}</span>
                   </div>
                   <p className="text-[#5D5D66] mt-0.5 line-clamp-2">{log.summary}</p>
-                  <p className="text-[11px] text-[#5D5D66]/80 mt-0.5">{log.actorEmail}</p>
+                  <p className="text-sm text-[#5D5D66]/80 mt-0.5">{log.actorEmail}</p>
                 </div>
               ))}
             </div>

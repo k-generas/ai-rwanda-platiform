@@ -18,12 +18,12 @@ export function Footer({ lang, onChangeLang, onNavigate }: FooterProps) {
             <p className="text-base font-display font-semibold text-[#0D0D0F] mb-2">
               AI Education Rwanda
             </p>
-            <p className="text-sm text-[#5D5D66] leading-relaxed max-w-sm mb-4">
+            <p className="text-[15px] text-[#5D5D66] leading-relaxed max-w-sm mb-4">
               {lang === 'en'
                 ? 'Learn AI. Apply AI. Build with AI. Practical bilingual AI education for students, professionals, and businesses.'
                 : 'Iga AI. Koresha AI. Wubake na AI. Uburezi bwa AI bufatika mu Cyongereza no mu Kinyarwanda.'}
             </p>
-            <div className="inline-flex items-center gap-2 text-xs text-[#5D5D66]">
+            <div className="inline-flex items-center gap-2 text-sm text-[#5D5D66]">
               <span>{lang === 'en' ? 'Language:' : 'Ururimi:'}</span>
               <button
                 type="button"
@@ -43,8 +43,8 @@ export function Footer({ lang, onChangeLang, onNavigate }: FooterProps) {
             </div>
           </div>
 
-          <div className="md:col-span-3 space-y-2 text-sm">
-            <p className="text-xs font-semibold text-[#0D0D0F] mb-3">
+          <div className="md:col-span-3 space-y-2 text-[15px]">
+            <p className="text-sm font-semibold text-[#0D0D0F] mb-3">
               {lang === 'en' ? 'Platform' : 'Isomero'}
             </p>
             <button type="button" onClick={() => onNavigate('courses')} className="block text-[#5D5D66] hover:text-[#0D0D0F]">
@@ -58,8 +58,8 @@ export function Footer({ lang, onChangeLang, onNavigate }: FooterProps) {
             </button>
           </div>
 
-          <div className="md:col-span-4 space-y-2 text-sm">
-            <p className="text-xs font-semibold text-[#0D0D0F] mb-3">
+          <div className="md:col-span-4 space-y-2 text-[15px]">
+            <p className="text-sm font-semibold text-[#0D0D0F] mb-3">
               {lang === 'en' ? 'Trust & Verification' : 'Icyizere & Igenzura'}
             </p>
             <button type="button" onClick={() => onNavigate('verify')} className="block text-[#5D5D66] hover:text-[#0D0D0F]">
@@ -69,17 +69,17 @@ export function Footer({ lang, onChangeLang, onNavigate }: FooterProps) {
               {lang === 'en' ? 'About, FAQ & Contact' : 'Ibyacu & Twandikire'}
             </button>
             <div className="flex items-center gap-4 pt-1">
-              <button type="button" onClick={() => setLegalDoc('terms')} className="text-xs text-[#5D5D66] hover:text-[#0D0D0F]">
+              <button type="button" onClick={() => setLegalDoc('terms')} className="text-sm text-[#5D5D66] hover:text-[#0D0D0F]">
                 {lang === 'en' ? 'Terms & Conditions' : 'Amategeko n’Amabwiriza'}
               </button>
-              <button type="button" onClick={() => setLegalDoc('privacy')} className="text-xs text-[#5D5D66] hover:text-[#0D0D0F]">
+              <button type="button" onClick={() => setLegalDoc('privacy')} className="text-sm text-[#5D5D66] hover:text-[#0D0D0F]">
                 {lang === 'en' ? 'Privacy Policy' : 'Uburenganzira ku Makuru'}
               </button>
             </div>
           </div>
         </div>
 
-        <div className="pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-[#5D5D66]">
+        <div className="pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-sm text-[#5D5D66]">
           <p>© 2026 AI Education Rwanda. Kigali, Rwanda.</p>
           <p>
             {lang === 'en'
@@ -97,7 +97,7 @@ export function Footer({ lang, onChangeLang, onNavigate }: FooterProps) {
         >
           <div className="bg-white border border-black/10 rounded-t-2xl sm:rounded-2xl max-w-lg w-full max-h-[90dvh] overflow-y-auto p-6 sm:p-8 space-y-4">
             <div className="flex items-center justify-between gap-4">
-              <h2 className="text-xl font-display font-bold text-[#0D0D0F]">
+              <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
                 {legalDoc === 'terms'
                   ? lang === 'en'
                     ? 'Terms & Conditions'
@@ -109,7 +109,7 @@ export function Footer({ lang, onChangeLang, onNavigate }: FooterProps) {
               <button
                 type="button"
                 onClick={() => setLegalDoc(null)}
-                className="px-3 py-1.5 text-sm font-medium text-[#5D5D66] hover:text-[#0D0D0F] rounded-lg hover:bg-[#F4F5F7]"
+                className="px-3 py-1.5 text-[15px] font-medium text-[#5D5D66] hover:text-[#0D0D0F] rounded-lg hover:bg-[#F4F5F7]"
               >
                 {lang === 'en' ? 'Close' : 'Funga'}
               </button>

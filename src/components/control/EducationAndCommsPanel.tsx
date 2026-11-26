@@ -596,20 +596,20 @@ export function EducationAndCommsPanel({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         <div className="lg:col-span-6 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+            <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
               {editingProgId ? 'Edit Programme / Event' : 'Create Programme or Live Event'}
             </h2>
             <button
               type="button"
               disabled={progBusy}
               onClick={handleImportDefaultWorkshops}
-              className="px-3 py-1.5 text-xs border border-black/15 rounded-lg"
+              className="px-3 py-1.5 text-sm border border-black/15 rounded-lg"
             >
               Import Default Workshops
             </button>
           </div>
 
-          <form onSubmit={handleSaveProgramme} className="space-y-3 text-xs">
+          <form onSubmit={handleSaveProgramme} className="space-y-3 text-sm">
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block font-medium mb-1">Type</label>
@@ -807,11 +807,11 @@ export function EducationAndCommsPanel({
 
         <div className="lg:col-span-6 space-y-6">
           <div className="bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
-            <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+            <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
               Live Programmes & Events ({programmes.length})
             </h2>
             {programmes.length === 0 ? (
-              <p className="text-xs text-[#5D5D66]">
+              <p className="text-sm text-[#5D5D66]">
                 No custom Firestore programmes saved yet (Events page displays built-in starter workshops until imported or created).
               </p>
             ) : (
@@ -821,7 +821,7 @@ export function EducationAndCommsPanel({
                     (r) => r.eventId === pr.id && r.status === 'registered'
                   ).length;
                   return (
-                    <div key={pr.id} className="py-3 first:pt-0 last:pb-0 text-xs space-y-1">
+                    <div key={pr.id} className="py-3 first:pt-0 last:pb-0 text-sm space-y-1">
                       <div className="flex items-center justify-between gap-2">
                         <span className="font-semibold text-[#0D0D0F]">{pr.titleEn}</span>
                         <span className="font-mono uppercase text-[#0D7A5F]">{pr.status}</span>
@@ -885,15 +885,15 @@ export function EducationAndCommsPanel({
           </div>
 
           <div className="bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
-            <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+            <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
               Event Registrations ({eventRegistrations.length})
             </h2>
             {eventRegistrations.length === 0 ? (
-              <p className="text-xs text-[#5D5D66]">No workshop RSVPs recorded yet.</p>
+              <p className="text-sm text-[#5D5D66]">No workshop RSVPs recorded yet.</p>
             ) : (
               <div className="divide-y divide-black/[0.06]">
                 {eventRegistrations.map((reg) => (
-                  <div key={reg.id} className="py-3 text-xs flex justify-between gap-2">
+                  <div key={reg.id} className="py-3 text-sm flex justify-between gap-2">
                     <div>
                       <p className="font-medium text-[#0D0D0F]">
                         {reg.attendeeName} ({reg.attendeeEmail})
@@ -929,13 +929,13 @@ export function EducationAndCommsPanel({
         <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-5 space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <h2 className="text-sm font-semibold text-[#0D0D0F]">
+              <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
                 Evaluation Rubric Criteria Weights
               </h2>
               <select
                 value={rubricCourseId}
                 onChange={(e) => setRubricCourseId(e.target.value)}
-                className="px-2.5 py-1 text-xs border border-black/15 rounded-lg bg-white"
+                className="px-2.5 py-1 text-sm border border-black/15 rounded-lg bg-white"
               >
                 {catalog.map((c) => (
                   <option key={c.id} value={c.id}>
@@ -946,7 +946,7 @@ export function EducationAndCommsPanel({
             </div>
             <div className="flex items-center gap-3">
               <span
-                className={`text-xs font-mono tabular-nums ${
+                className={`text-sm font-mono tabular-nums ${
                   totalWeight === 100 ? 'text-[#0D7A5F]' : 'text-[#DC2626]'
                 }`}
               >
@@ -956,14 +956,14 @@ export function EducationAndCommsPanel({
                 type="button"
                 disabled={rubricBusy}
                 onClick={handleSaveRubric}
-                className="px-3.5 py-1.5 text-xs font-medium text-white bg-[#0D0D0F] rounded-lg"
+                className="px-3.5 py-1.5 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg"
               >
                 {rubricBusy ? 'Saving...' : 'Save Rubric to Firestore'}
               </button>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-6 gap-3 text-xs">
+          <div className="grid grid-cols-2 sm:grid-cols-6 gap-3 text-sm">
             {(
               [
                 ['problem', 'Problem Framing'],
@@ -983,7 +983,7 @@ export function EducationAndCommsPanel({
                   onChange={(e) =>
                     setRubricWeights((prev) => ({ ...prev, [k]: Number(e.target.value) }))
                   }
-                  className="w-full px-2 py-1 text-xs font-mono border border-black/15 rounded"
+                  className="w-full px-2 py-1 text-sm font-mono border border-black/15 rounded"
                 />
               </div>
             ))}
@@ -995,15 +995,15 @@ export function EducationAndCommsPanel({
                 max={100}
                 value={rubricPassThreshold}
                 onChange={(e) => setRubricPassThreshold(Number(e.target.value))}
-                className="w-full px-2 py-1 text-xs font-mono border border-black/15 rounded"
+                className="w-full px-2 py-1 text-sm font-mono border border-black/15 rounded"
               />
             </div>
           </div>
-          {rubricMsg && <p className="text-xs text-[#0D7A5F] font-medium">{rubricMsg}</p>}
+          {rubricMsg && <p className="text-sm text-[#0D7A5F] font-medium">{rubricMsg}</p>}
         </div>
 
         {submissions.length === 0 ? (
-          <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6 text-sm text-[#5D5D66]">
+          <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6 text-[15px] text-[#5D5D66]">
             No learner project submissions yet.
           </div>
         ) : (
@@ -1014,15 +1014,15 @@ export function EducationAndCommsPanel({
             >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div>
-                  <h3 className="text-base font-semibold text-[#0D0D0F]">{sub.title}</h3>
-                  <p className="text-xs text-[#5D5D66]">
+                  <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F]">{sub.title}</h3>
+                  <p className="text-sm text-[#5D5D66]">
                     {sub.userName} ({sub.userEmail}) · {sub.courseId} · {sub.toolsUsed.join(', ')}
                   </p>
                 </div>
-                <span className="text-xs font-mono uppercase text-[#0D7A5F]">{sub.status}</span>
+                <span className="text-sm font-mono uppercase text-[#0D7A5F]">{sub.status}</span>
               </div>
-              <p className="text-sm text-[#5D5D66]">{sub.problemStatement}</p>
-              <p className="text-xs text-[#0D0D0F] bg-[#F9F9FB] p-3 rounded-lg">
+              <p className="text-[15px] text-[#5D5D66]">{sub.problemStatement}</p>
+              <p className="text-sm text-[#0D0D0F] bg-[#F9F9FB] p-3 rounded-lg">
                 {sub.documentationSummary}
               </p>
               {sub.artifactUrl && (
@@ -1030,7 +1030,7 @@ export function EducationAndCommsPanel({
                   <button
                     type="button"
                     onClick={() => openProtectedFile(sub.artifactUrl!, user)}
-                    className="inline-flex items-center gap-1.5 text-xs font-mono text-[#0D7A5F] underline hover:text-[#0B664F]"
+                    className="inline-flex items-center gap-1.5 text-sm font-mono text-[#0D7A5F] underline hover:text-[#0B664F]"
                   >
                     Download Attached Submission File ({sub.artifactUrl})
                   </button>
@@ -1039,7 +1039,7 @@ export function EducationAndCommsPanel({
                     href={sub.artifactUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-xs font-mono text-[#0D7A5F] underline"
+                    className="text-sm font-mono text-[#0D7A5F] underline"
                   >
                     {sub.artifactUrl}
                   </a>
@@ -1054,7 +1054,7 @@ export function EducationAndCommsPanel({
                   onChange={(e) =>
                     setReviewScores((prev) => ({ ...prev, [sub.id]: Number(e.target.value) }))
                   }
-                  className="sm:col-span-2 px-3 py-2 text-sm font-mono border border-black/15 rounded-lg"
+                  className="sm:col-span-2 px-3 py-2 text-[15px] font-mono border border-black/15 rounded-lg"
                 />
                 <input
                   type="text"
@@ -1063,19 +1063,19 @@ export function EducationAndCommsPanel({
                   onChange={(e) =>
                     setReviewNotes((prev) => ({ ...prev, [sub.id]: e.target.value }))
                   }
-                  className="sm:col-span-6 px-3 py-2 text-sm border border-black/15 rounded-lg"
+                  className="sm:col-span-6 px-3 py-2 text-[15px] border border-black/15 rounded-lg"
                 />
                 <button
                   type="button"
                   onClick={() => handleGradeSubmission(sub, 'approved')}
-                  className="sm:col-span-2 px-3 py-2 text-xs font-medium text-white bg-[#0D7A5F] rounded-lg"
+                  className="sm:col-span-2 px-3 py-2 text-sm font-medium text-white bg-[#0D7A5F] rounded-lg"
                 >
                   Approve
                 </button>
                 <button
                   type="button"
                   onClick={() => handleGradeSubmission(sub, 'needs_revision')}
-                  className="sm:col-span-2 px-3 py-2 text-xs font-medium text-[#0D0D0F] border border-black/15 rounded-lg"
+                  className="sm:col-span-2 px-3 py-2 text-sm font-medium text-[#0D0D0F] border border-black/15 rounded-lg"
                 >
                   Needs Revision
                 </button>
@@ -1085,7 +1085,7 @@ export function EducationAndCommsPanel({
         )}
 
         {pagination?.submissions?.hasMore && onLoadMore && (
-          <div className="pt-2 flex items-center justify-between text-xs">
+          <div className="pt-2 flex items-center justify-between text-sm">
             <span className="text-[#5D5D66]">Showing {submissions.length} submissions</span>
             <button
               type="button"
@@ -1132,17 +1132,17 @@ export function EducationAndCommsPanel({
         <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6 space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <h2 className="text-base font-semibold text-[#0D0D0F]">
+              <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
                 Live Certificate Eligibility Queue
               </h2>
-              <p className="text-xs text-[#5D5D66]">
+              <p className="text-sm text-[#5D5D66]">
                 Rules: 100% lessons completed · Quiz Avg ≥ {minQuizAvg}% · Approved Project ≥ {minProjScore}% (editable in Settings)
               </p>
             </div>
           </div>
 
           {eligibilityList.length === 0 ? (
-            <p className="text-xs text-[#5D5D66]">
+            <p className="text-sm text-[#5D5D66]">
               All active learners either already hold certificates or none are enrolled yet.
             </p>
           ) : (
@@ -1150,7 +1150,7 @@ export function EducationAndCommsPanel({
               {eligibilityList.slice(0, 8).map(({ enr, course, evalRes }) => (
                 <div
                   key={enr.id}
-                  className="bg-white border border-black/[0.08] rounded-xl p-4 flex items-center justify-between gap-3 text-xs"
+                  className="bg-white border border-black/[0.08] rounded-xl p-4 flex items-center justify-between gap-3 text-sm"
                 >
                   <div className="min-w-0">
                     <p className="font-semibold text-[#0D0D0F] truncate">{enr.userName}</p>
@@ -1159,7 +1159,7 @@ export function EducationAndCommsPanel({
                       {evalRes.quizAvg}% · Project {evalRes.projectScore}%
                     </p>
                     {!evalRes.eligible && (
-                      <p className="text-[11px] font-mono text-[#D97706] mt-0.5">
+                      <p className="text-[15px] font-mono text-[#D97706] mt-0.5">
                         Pending: {evalRes.reasons.join(' · ')}
                       </p>
                     )}
@@ -1176,7 +1176,7 @@ export function EducationAndCommsPanel({
                           score: evalRes.weightedFinalScore
                         })
                       }
-                      className="px-3 py-1.5 text-xs font-medium text-white bg-[#0D7A5F] rounded-lg shrink-0"
+                      className="px-3 py-1.5 text-sm font-medium text-white bg-[#0D7A5F] rounded-lg shrink-0"
                     >
                       Issue ({evalRes.weightedFinalScore}%)
                     </button>
@@ -1191,23 +1191,23 @@ export function EducationAndCommsPanel({
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-5 bg-white border border-black/[0.08] rounded-2xl p-6">
-            <h2 className="text-base font-semibold text-[#0D0D0F] mb-4">
+            <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F] mb-4">
               Issue Verified Certificate (Manual)
             </h2>
             <form onSubmit={handleIssueCertificate} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium mb-1">Learner Full Name</label>
+                <label className="block text-sm font-medium mb-1">Learner Full Name</label>
                 <input
                   type="text"
                   required
                   value={certLearnerName}
                   onChange={(e) => setCertLearnerName(e.target.value)}
                   placeholder="e.g. Patrick Nshimiyimana"
-                  className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg"
+                  className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg"
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium mb-1">Learner Account</label>
+                <label className="block text-sm font-medium mb-1">Learner Account</label>
                 <select
                   value={certUserId}
                   onChange={(e) => {
@@ -1216,7 +1216,7 @@ export function EducationAndCommsPanel({
                     const found = users.find((u) => u.uid === uid);
                     if (found && !certLearnerName) setCertLearnerName(found.displayName);
                   }}
-                  className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg bg-white"
+                  className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg bg-white"
                 >
                   <option value="">-- Current staff UID fallback --</option>
                   {users.map((u) => (
@@ -1227,11 +1227,11 @@ export function EducationAndCommsPanel({
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium mb-1">Course</label>
+                <label className="block text-sm font-medium mb-1">Course</label>
                 <select
                   value={certCourseId}
                   onChange={(e) => setCertCourseId(e.target.value)}
-                  className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg bg-white"
+                  className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg bg-white"
                 >
                   {catalog.map((c) => (
                     <option key={c.id} value={c.id}>
@@ -1241,7 +1241,7 @@ export function EducationAndCommsPanel({
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium mb-1">Final Weighted Score (%)</label>
+                <label className="block text-sm font-medium mb-1">Final Weighted Score (%)</label>
                 <input
                   type="number"
                   min={70}
@@ -1249,14 +1249,14 @@ export function EducationAndCommsPanel({
                   required
                   value={certScore}
                   onChange={(e) => setCertScore(Number(e.target.value))}
-                  className="w-full px-3.5 py-2 text-sm font-mono border border-black/15 rounded-lg"
+                  className="w-full px-3.5 py-2 text-[15px] font-mono border border-black/15 rounded-lg"
                 />
               </div>
-              {certMsg && <p className="text-xs text-[#0D7A5F] font-mono">{certMsg}</p>}
+              {certMsg && <p className="text-sm text-[#0D7A5F] font-mono">{certMsg}</p>}
               <button
                 type="submit"
                 disabled={certSaving}
-                className="w-full px-4 py-2.5 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg"
+                className="w-full px-4 py-2.5 text-[15px] font-medium text-white bg-[#0D0D0F] rounded-lg"
               >
                 {certSaving ? 'Issuing...' : 'Issue Certificate'}
               </button>
@@ -1264,14 +1264,14 @@ export function EducationAndCommsPanel({
           </div>
 
           <div className="lg:col-span-7 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-3">
-            <h2 className="text-base font-semibold text-[#0D0D0F]">Issued Registry ({certificates.length})</h2>
+            <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">Issued Registry ({certificates.length})</h2>
             {certificates.length === 0 ? (
-              <p className="text-xs text-[#5D5D66]">No certificates issued in Firestore yet.</p>
+              <p className="text-sm text-[#5D5D66]">No certificates issued in Firestore yet.</p>
             ) : (
               certificates.map((c) => (
                 <div
                   key={c.id}
-                  className="flex items-center justify-between gap-3 py-3 border-b border-black/[0.06] last:border-none text-xs"
+                  className="flex items-center justify-between gap-3 py-3 border-b border-black/[0.06] last:border-none text-sm"
                 >
                   <div>
                     <p className="font-semibold text-[#0D0D0F]">{c.learnerName}</p>
@@ -1302,7 +1302,7 @@ export function EducationAndCommsPanel({
               ))
             )}
             {pagination?.certificates?.hasMore && onLoadMore && (
-              <div className="pt-3 border-t border-black/[0.06] flex items-center justify-between text-xs">
+              <div className="pt-3 border-t border-black/[0.06] flex items-center justify-between text-sm">
                 <span className="text-[#5D5D66]">Showing {certificates.length} certificates</span>
                 <button
                   type="button"
@@ -1328,7 +1328,7 @@ export function EducationAndCommsPanel({
       <div className="space-y-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-6 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
-            <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+            <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
               Publish Platform Announcement (EN / RW)
             </h2>
             <form onSubmit={handlePublishAnnouncement} className="space-y-3">
@@ -1339,14 +1339,14 @@ export function EducationAndCommsPanel({
                   value={annTitleEn}
                   onChange={(e) => setAnnTitleEn(e.target.value)}
                   placeholder="Title (English)"
-                  className="px-3 py-2 text-xs border border-black/15 rounded-lg"
+                  className="px-3 py-2 text-sm border border-black/15 rounded-lg"
                 />
                 <input
                   type="text"
                   value={annTitleRw}
                   onChange={(e) => setAnnTitleRw(e.target.value)}
                   placeholder="Title (Kinyarwanda)"
-                  className="px-3 py-2 text-xs border border-black/15 rounded-lg"
+                  className="px-3 py-2 text-sm border border-black/15 rounded-lg"
                 />
               </div>
               <textarea
@@ -1355,20 +1355,20 @@ export function EducationAndCommsPanel({
                 value={annBodyEn}
                 onChange={(e) => setAnnBodyEn(e.target.value)}
                 placeholder="Announcement body (English)..."
-                className="w-full px-3 py-2 text-xs border border-black/15 rounded-lg"
+                className="w-full px-3 py-2 text-sm border border-black/15 rounded-lg"
               />
               <textarea
                 rows={2}
                 value={annBodyRw}
                 onChange={(e) => setAnnBodyRw(e.target.value)}
                 placeholder="Announcement body (Kinyarwanda)..."
-                className="w-full px-3 py-2 text-xs border border-black/15 rounded-lg"
+                className="w-full px-3 py-2 text-sm border border-black/15 rounded-lg"
               />
               <div className="flex items-center justify-between gap-3">
                 <select
                   value={annAudience}
                   onChange={(e) => setAnnAudience(e.target.value as 'all' | 'learners' | 'staff')}
-                  className="px-3 py-2 text-xs border border-black/15 rounded-lg bg-white"
+                  className="px-3 py-2 text-sm border border-black/15 rounded-lg bg-white"
                 >
                   <option value="all">Audience: Everyone</option>
                   <option value="learners">Audience: Learners Only</option>
@@ -1377,21 +1377,21 @@ export function EducationAndCommsPanel({
                 <button
                   type="submit"
                   disabled={annBusy}
-                  className="px-4 py-2 text-xs font-medium text-white bg-[#0D0D0F] rounded-lg"
+                  className="px-4 py-2 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg"
                 >
                   {annBusy ? 'Publishing...' : 'Publish Announcement'}
                 </button>
               </div>
             </form>
 
-            {annMsg && <p className="text-xs text-[#0D7A5F] font-medium">{annMsg}</p>}
+            {annMsg && <p className="text-sm text-[#0D7A5F] font-medium">{annMsg}</p>}
 
             <div className="pt-4 border-t border-black/[0.08] space-y-2">
-              <h3 className="text-xs font-semibold text-[#0D0D0F]">
+              <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F]">
                 Published Announcements ({announcements.length})
               </h3>
               {announcements.map((a) => (
-                <div key={a.id} className="bg-[#F9F9FB] rounded-xl p-3 text-xs">
+                <div key={a.id} className="bg-[#F9F9FB] rounded-xl p-3 text-sm">
                   <p className="font-semibold text-[#0D0D0F]">
                     {a.titleEn} ({a.audience})
                   </p>
@@ -1402,7 +1402,7 @@ export function EducationAndCommsPanel({
           </div>
 
           <div className="lg:col-span-6 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
-            <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+            <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
               Send Direct In-Platform Notification
             </h2>
             <form onSubmit={handleSendDirectNotification} className="space-y-3">
@@ -1410,7 +1410,7 @@ export function EducationAndCommsPanel({
                 required
                 value={notifUserId}
                 onChange={(e) => setNotifUserId(e.target.value)}
-                className="w-full px-3 py-2 text-xs border border-black/15 rounded-lg bg-white"
+                className="w-full px-3 py-2 text-sm border border-black/15 rounded-lg bg-white"
               >
                 <option value="">-- Select recipient --</option>
                 {users.map((u) => (
@@ -1431,7 +1431,7 @@ export function EducationAndCommsPanel({
                       | 'system'
                   )
                 }
-                className="w-full px-3 py-2 text-xs border border-black/15 rounded-lg bg-white"
+                className="w-full px-3 py-2 text-sm border border-black/15 rounded-lg bg-white"
               >
                 <option value="system">System Alert</option>
                 <option value="enrollment">Enrollment Confirmation</option>
@@ -1445,7 +1445,7 @@ export function EducationAndCommsPanel({
                 value={notifTitle}
                 onChange={(e) => setNotifTitle(e.target.value)}
                 placeholder="Notification title"
-                className="w-full px-3 py-2 text-xs border border-black/15 rounded-lg"
+                className="w-full px-3 py-2 text-sm border border-black/15 rounded-lg"
               />
               <textarea
                 rows={3}
@@ -1453,12 +1453,12 @@ export function EducationAndCommsPanel({
                 value={notifBody}
                 onChange={(e) => setNotifBody(e.target.value)}
                 placeholder="Notification message..."
-                className="w-full px-3 py-2 text-xs border border-black/15 rounded-lg"
+                className="w-full px-3 py-2 text-sm border border-black/15 rounded-lg"
               />
               <button
                 type="submit"
                 disabled={notifBusy}
-                className="px-4 py-2 text-xs font-medium text-white bg-[#0D0D0F] rounded-lg"
+                className="px-4 py-2 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg"
               >
                 {notifBusy ? 'Sending...' : 'Send Notification'}
               </button>
@@ -1470,10 +1470,10 @@ export function EducationAndCommsPanel({
         <div className="bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+              <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
                 Transactional Email Templates (EN / RW)
               </h2>
-              <p className="text-xs text-[#5D5D66]">
+              <p className="text-sm text-[#5D5D66]">
                 SMTP / Resend Gateway Status:{' '}
                 <strong className={integrations.emailActive ? 'text-[#0D7A5F]' : 'text-[#D97706]'}>
                   {integrations.emailActive ? 'Active' : 'Inactive (templates stored for launch readiness)'}
@@ -1483,7 +1483,7 @@ export function EducationAndCommsPanel({
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            <form onSubmit={handleSaveEmailTemplate} className="lg:col-span-7 space-y-3 text-xs">
+            <form onSubmit={handleSaveEmailTemplate} className="lg:col-span-7 space-y-3 text-sm">
               <div className="grid grid-cols-2 gap-3">
                 <select
                   value={tplKey}
@@ -1558,8 +1558,8 @@ export function EducationAndCommsPanel({
               </button>
             </form>
 
-            <div className="lg:col-span-5 space-y-2 text-xs">
-              <h3 className="font-semibold text-[#0D0D0F]">
+            <div className="lg:col-span-5 space-y-2 text-sm">
+              <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F]">
                 Saved Templates ({emailTemplates.length})
               </h3>
               {emailTemplates.length === 0 ? (
@@ -1590,7 +1590,7 @@ export function EducationAndCommsPanel({
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
       <div className="lg:col-span-8 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+          <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
             Learner Support Tickets ({filteredTickets.length})
           </h2>
           <div className="flex items-center gap-1 p-1 bg-[#F4F5F7] rounded-lg">
@@ -1599,7 +1599,7 @@ export function EducationAndCommsPanel({
                 key={s}
                 type="button"
                 onClick={() => setTicketFilter(s)}
-                className={`px-2.5 py-1 text-xs rounded-md capitalize ${
+                className={`px-2.5 py-1 text-sm rounded-md capitalize ${
                   ticketFilter === s ? 'bg-white text-[#0D0D0F] shadow-xs' : 'text-[#5D5D66]'
                 }`}
               >
@@ -1610,7 +1610,7 @@ export function EducationAndCommsPanel({
         </div>
 
         {filteredTickets.length === 0 ? (
-          <p className="text-xs text-[#5D5D66]">No support tickets in this view.</p>
+          <p className="text-sm text-[#5D5D66]">No support tickets in this view.</p>
         ) : (
           <div className="space-y-4">
             {filteredTickets.map((t) => {
@@ -1618,11 +1618,11 @@ export function EducationAndCommsPanel({
               return (
                 <div
                   key={t.id}
-                  className="border border-black/[0.08] rounded-xl p-4 space-y-3 text-xs"
+                  className="border border-black/[0.08] rounded-xl p-4 space-y-3 text-sm"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div>
-                      <span className="font-semibold text-sm text-[#0D0D0F]">{t.subject}</span>
+                      <span className="font-semibold text-[15px] text-[#0D0D0F]">{t.subject}</span>
                       <p className="text-[#5D5D66]">
                         {t.userName} ({t.userEmail}) · {t.category} · Priority: {t.priority}
                       </p>
@@ -1637,7 +1637,7 @@ export function EducationAndCommsPanel({
                   {msgs.length > 0 && (
                     <div className="bg-[#F9F9FB] border border-black/[0.06] rounded-lg p-3 space-y-2">
                       {msgs.map((m) => (
-                        <div key={m.id} className="text-xs">
+                        <div key={m.id} className="text-sm">
                           <span
                             className={`font-mono font-semibold ${
                               m.senderRole === 'staff' ? 'text-[#0D7A5F]' : 'text-[#0D0D0F]'
@@ -1712,7 +1712,7 @@ export function EducationAndCommsPanel({
         )}
 
         {pagination?.supportTickets?.hasMore && onLoadMore && (
-          <div className="pt-3 border-t border-black/[0.06] flex items-center justify-between text-xs">
+          <div className="pt-3 border-t border-black/[0.06] flex items-center justify-between text-sm">
             <span className="text-[#5D5D66]">Showing {supportTickets.length} tickets</span>
             <button
               type="button"
@@ -1727,15 +1727,15 @@ export function EducationAndCommsPanel({
       </div>
 
       <div className="lg:col-span-4 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-3">
-        <h2 className="text-base font-semibold text-[#0D0D0F]">
+        <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
           Public Inquiries & Waitlists ({inquiries.length})
         </h2>
         {inquiries.length === 0 ? (
-          <p className="text-xs text-[#5D5D66]">No public inquiries submitted yet.</p>
+          <p className="text-sm text-[#5D5D66]">No public inquiries submitted yet.</p>
         ) : (
           <div className="divide-y divide-black/[0.06]">
             {inquiries.map((inq) => (
-              <div key={inq.id} className="py-3 text-xs">
+              <div key={inq.id} className="py-3 text-sm">
                 <p className="font-semibold text-[#0D0D0F]">
                   {inq.name} · {inq.email}
                 </p>

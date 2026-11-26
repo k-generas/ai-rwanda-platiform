@@ -337,7 +337,7 @@ export function Header({
                             <span className="block text-[15px] font-semibold text-[#0D0D0F] truncate">
                               {hit.title}
                             </span>
-                            <span className="block text-xs text-[#5D5D66] truncate">{hit.meta}</span>
+                            <span className="block text-sm text-[#5D5D66] truncate">{hit.meta}</span>
                           </span>
                         </button>
                       ))}
@@ -402,13 +402,13 @@ export function Header({
                           <p className="text-sm font-semibold text-[#0D0D0F]">
                             {lang === 'en' ? ann.titleEn : ann.titleRw}
                           </p>
-                          <p className="text-xs text-[#5D5D66] mt-1 leading-relaxed">
+                          <p className="text-sm text-[#5D5D66] mt-1 leading-relaxed">
                             {lang === 'en' ? ann.bodyEn : ann.bodyRw}
                           </p>
                         </div>
                       ))}
                       <div className="p-3.5 rounded-xl bg-[#F4F9F7] border border-[#0D7A5F]/15 space-y-2.5">
-                        <p className="text-xs text-[#5D5D66]">
+                        <p className="text-sm text-[#5D5D66]">
                           {lang === 'en'
                             ? 'Sign in to view your enrollment confirmations, lesson unlocks, and mentor replies.'
                             : 'Injira urebe imenyesha z’amasomo yawe n’ibisubizo by’abarimu.'}
@@ -455,7 +455,7 @@ export function Header({
                               </button>
                             )}
                           </div>
-                          <p className="text-xs text-[#5D5D66] mt-1 leading-relaxed">{n.message}</p>
+                          <p className="text-sm text-[#5D5D66] mt-1 leading-relaxed">{n.message}</p>
                         </div>
                       ))}
 
@@ -467,10 +467,10 @@ export function Header({
                           <p className="text-xs font-mono text-[#0D7A5F] mb-0.5">
                             {lang === 'en' ? 'Announcement' : 'Itangazo'}
                           </p>
-                          <p className="text-sm font-semibold text-[#0D0D0F]">
+                          <p className="text-[15px] font-semibold text-[#0D0D0F]">
                             {lang === 'en' ? ann.titleEn : ann.titleRw}
                           </p>
-                          <p className="text-xs text-[#5D5D66] mt-1 leading-relaxed">
+                          <p className="text-sm text-[#5D5D66] mt-1 leading-relaxed">
                             {lang === 'en' ? ann.bodyEn : ann.bodyRw}
                           </p>
                         </div>
@@ -482,7 +482,7 @@ export function Header({
                           setNotifOpen(false);
                           onNavigate(workspaceRoute);
                         }}
-                        className="w-full py-2 text-xs font-semibold text-[#0D7A5F] hover:underline text-center"
+                        className="w-full py-2 text-sm font-semibold text-[#0D7A5F] hover:underline text-center"
                       >
                         {lang === 'en' ? `Open ${workspaceLabel}` : `Fungura ${workspaceLabel}`}
                       </button>
@@ -547,14 +547,14 @@ export function Header({
                           <p className="text-[15px] font-bold text-[#0D0D0F] truncate">
                             {user.displayName || 'Learner'}
                           </p>
-                          <p className="text-xs text-[#5D5D66] truncate">
+                          <p className="text-sm text-[#5D5D66] truncate">
                             {staffRole === 'superadmin'
                               ? 'Founder · Superadmin'
                               : isStaff
                                 ? `Staff · ${staffRole}`
                                 : 'Learner'}
                           </p>
-                          <p className="text-xs text-[#5D5D66] truncate">{user.email}</p>
+                          <p className="text-sm text-[#5D5D66] truncate">{user.email}</p>
                         </div>
                       </div>
 

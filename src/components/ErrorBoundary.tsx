@@ -36,11 +36,11 @@ export class ErrorBoundary extends React.Component<
       return (
         <div className="min-h-screen bg-[#F9F9FB] flex items-center justify-center p-6">
           <div className="max-w-lg w-full bg-white border border-black/10 rounded-2xl p-8">
-            <p className="text-xs font-medium text-[#5D5D66] mb-2">Application Recovery</p>
-            <h1 className="text-2xl font-semibold tracking-tight text-[#0D0D0F] mb-3">
+            <p className="text-sm font-medium text-[#5D5D66] mb-2">Application Recovery</p>
+            <h1 className="text-[30px] sm:text-[40px] font-display font-bold tracking-[-0.025em] leading-[1.1] tracking-tight text-[#0D0D0F] mb-3">
               Something interrupted this view
             </h1>
-            <p className="text-sm text-[#5D5D66] leading-relaxed mb-6 break-words">
+            <p className="text-[15px] text-[#5D5D66] leading-relaxed mb-6 break-words">
               {friendlyMessage}
             </p>
             <button
@@ -49,7 +49,7 @@ export class ErrorBoundary extends React.Component<
                 this.setState({ hasError: false, message: '' });
                 window.location.reload();
               }}
-              className="px-4 py-2 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-black/85 transition-colors"
+              className="px-4 py-2 text-[15px] font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-black/85 transition-colors"
             >
               Reload platform
             </button>

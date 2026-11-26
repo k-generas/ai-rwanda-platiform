@@ -102,7 +102,7 @@ export function ProjectsHubView({ lang, resources = [], onNavigate }: ProjectsHu
                   }`}
                 >
                   <p
-                    className={`text-xs font-mono tabular-nums mb-1 ${
+                    className={`text-sm font-mono tabular-nums mb-1 ${
                       active ? 'text-white/90' : 'text-[#0D7A5F]'
                     }`}
                   >
@@ -115,7 +115,7 @@ export function ProjectsHubView({ lang, resources = [], onNavigate }: ProjectsHu
           </div>
 
           <div className="lg:col-span-7 bg-[#F7F8F6] border border-black/[0.08] rounded-2xl p-6 sm:p-8">
-            <p className="text-sm font-mono text-[#0D7A5F] mb-2">
+            <p className="text-[15px] font-mono text-[#0D7A5F] mb-2">
               Project {activeProject.number} · {activeProject.tools.join(' · ')}
             </p>
             <h3 className="text-2xl sm:text-[28px] font-display font-bold text-[#0D0D0F] mb-3">
@@ -125,7 +125,7 @@ export function ProjectsHubView({ lang, resources = [], onNavigate }: ProjectsHu
               {activeProject.summary[lang]}
             </p>
 
-            <h4 className="text-sm font-semibold text-[#0D0D0F] mb-3">
+            <h4 className="text-[15px] font-semibold text-[#0D0D0F] mb-3">
               {lang === 'en' ? 'Architecture & Execution Steps' : 'Imiterere n’Intambwe z’Umushinga'}
             </h4>
             <ol className="space-y-2.5 mb-6">
@@ -134,7 +134,7 @@ export function ProjectsHubView({ lang, resources = [], onNavigate }: ProjectsHu
                   key={step}
                   className="bg-white border border-black/[0.06] rounded-xl px-4 py-3.5 text-[15px] text-[#0D0D0F] flex items-start gap-3"
                 >
-                  <span className="font-mono text-sm text-[#0D7A5F] tabular-nums mt-0.5">
+                  <span className="font-mono text-[15px] text-[#0D7A5F] tabular-nums mt-0.5">
                     {`0${i + 1}`}
                   </span>
                   <span>{step}</span>
@@ -144,7 +144,7 @@ export function ProjectsHubView({ lang, resources = [], onNavigate }: ProjectsHu
 
             <div className="pt-4 border-t border-black/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <p className="text-sm font-semibold text-[#0D0D0F]">
+                <p className="text-[15px] font-semibold text-[#0D0D0F]">
                   {lang === 'en' ? 'Expected Deliverable' : 'Ibisabwa Gutangwa'}
                 </p>
                 <p className="text-[14px] text-[#5D5D66] mt-0.5">{activeProject.deliverable[lang]}</p>
@@ -166,7 +166,7 @@ export function ProjectsHubView({ lang, resources = [], onNavigate }: ProjectsHu
         <h2 className="text-[28px] sm:text-[36px] font-display font-bold tracking-[-0.025em] text-[#0D0D0F] mb-2">
           {lang === 'en' ? '02. Downloadable Learning Templates' : '02. Impapuro z’Imyitozo zo Gukuramo'}
         </h2>
-        <p className="text-sm text-[#5D5D66] mb-6">
+        <p className="text-[15px] text-[#5D5D66] mb-6">
           {lang === 'en'
             ? 'Lightweight markdown worksheets for prompt design, workflow mapping, human approval, and capstone rubrics.'
             : 'Impapuro nto zorohera telefoni zigufasha gutegura amabwiriza, imiyoboro n’umushinga wa nyuma.'}
@@ -181,11 +181,11 @@ export function ProjectsHubView({ lang, resources = [], onNavigate }: ProjectsHu
                 className="bg-white border border-black/[0.08] rounded-2xl p-6 flex flex-col justify-between"
               >
                 <div>
-                  <p className="text-xs font-mono text-[#0D7A5F] mb-1">{res.filename}</p>
-                  <h3 className="text-base font-semibold text-[#0D0D0F] mb-2">
+                  <p className="text-sm font-mono text-[#0D7A5F] mb-1">{res.filename}</p>
+                  <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F] mb-2">
                     {res.title[lang]}
                   </h3>
-                  <p className="text-sm text-[#5D5D66] leading-relaxed mb-5">
+                  <p className="text-[15px] text-[#5D5D66] leading-relaxed mb-5">
                     {res.description[lang]}
                   </p>
                 </div>
@@ -194,7 +194,7 @@ export function ProjectsHubView({ lang, resources = [], onNavigate }: ProjectsHu
                   <button
                     type="button"
                     onClick={() => handleDownloadMarkdown(res.filename, content)}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329] transition-colors"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329] transition-colors"
                   >
                     <Download className="w-3.5 h-3.5" />
                     <span>{lang === 'en' ? 'Download .md' : 'Kuramo (.md)'}</span>
@@ -202,7 +202,7 @@ export function ProjectsHubView({ lang, resources = [], onNavigate }: ProjectsHu
                   <button
                     type="button"
                     onClick={() => handleCopy(res.id, content)}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-[#0D0D0F] border border-black/15 rounded-lg hover:border-black/30 transition-colors"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium text-[#0D0D0F] border border-black/15 rounded-lg hover:border-black/30 transition-colors"
                   >
                     {copiedId === res.id ? (
                       <>
@@ -221,7 +221,7 @@ export function ProjectsHubView({ lang, resources = [], onNavigate }: ProjectsHu
                       href={res.externalUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-[#0D7A5F] border border-[#0D7A5F]/25 rounded-lg hover:bg-[#F2FBF8]"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium text-[#0D7A5F] border border-[#0D7A5F]/25 rounded-lg hover:bg-[#F2FBF8]"
                     >
                       <span>{lang === 'en' ? 'Open Link' : 'Fungura Link'}</span>
                       <ExternalLink className="w-3.5 h-3.5" />
@@ -236,10 +236,10 @@ export function ProjectsHubView({ lang, resources = [], onNavigate }: ProjectsHu
 
       {/* 9 Tools Directory */}
       <section>
-        <h2 className="text-xl font-display font-semibold text-[#0D0D0F] mb-2">
+        <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F] mb-2">
           {lang === 'en' ? '03. Free-Tier Tools You Will Explore' : '03. Porogaramu Wiga Gukoresha'}
         </h2>
-        <p className="text-sm text-[#5D5D66] mb-6">
+        <p className="text-[15px] text-[#5D5D66] mb-6">
           {lang === 'en'
             ? 'No paid software subscription is required for the 28-Day Practical AI Challenge.'
             : 'Nta porogaramu igomba kwishyurwa isabwa mu cyiciro cy’iminsi 28.'}
@@ -253,7 +253,7 @@ export function ProjectsHubView({ lang, resources = [], onNavigate }: ProjectsHu
             >
               <div>
                 <div className="flex items-center justify-between gap-2 mb-1">
-                  <h3 className="text-base font-semibold text-[#0D0D0F]">{tool.name}</h3>
+                  <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F]">{tool.name}</h3>
                   <a
                     href={tool.url}
                     target="_blank"
@@ -264,10 +264,10 @@ export function ProjectsHubView({ lang, resources = [], onNavigate }: ProjectsHu
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
                 </div>
-                <p className="text-xs font-medium text-[#0D7A5F] mb-2">{tool.category[lang]}</p>
-                <p className="text-xs text-[#5D5D66] leading-relaxed mb-3">{tool.purpose[lang]}</p>
+                <p className="text-sm font-medium text-[#0D7A5F] mb-2">{tool.category[lang]}</p>
+                <p className="text-sm text-[#5D5D66] leading-relaxed mb-3">{tool.purpose[lang]}</p>
               </div>
-              <p className="text-[11px] font-mono text-[#0D0D0F]/75 pt-3 border-t border-black/[0.06]">
+              <p className="text-[15px] font-mono text-[#0D0D0F]/75 pt-3 border-t border-black/[0.06]">
                 {tool.freeTierNote[lang]}
               </p>
             </div>

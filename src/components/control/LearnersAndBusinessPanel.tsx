@@ -359,10 +359,10 @@ export function LearnersAndBusinessPanel({
         <div className="bg-white border border-black/[0.08] rounded-2xl p-6 space-y-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+              <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
                 Learners & Accounts Directory
               </h2>
-              <p className="text-xs text-[#5D5D66]">
+              <p className="text-sm text-[#5D5D66]">
                 Click any learner to inspect enrollments, payments, quiz attempts, submissions, and suspension controls.
               </p>
             </div>
@@ -371,12 +371,12 @@ export function LearnersAndBusinessPanel({
               value={learnerSearch}
               onChange={(e) => setLearnerSearch(e.target.value)}
               placeholder="Search name, email, or role..."
-              className="w-full sm:w-72 px-3.5 py-2 text-sm border border-black/15 rounded-lg"
+              className="w-full sm:w-72 px-3.5 py-2 text-[15px] border border-black/15 rounded-lg"
             />
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs border-collapse">
+            <table className="w-full text-left text-sm border-collapse">
               <thead>
                 <tr className="border-b border-black/[0.08] text-[#5D5D66]">
                   <th className="py-2.5 pr-4 font-medium">Name</th>
@@ -432,7 +432,7 @@ export function LearnersAndBusinessPanel({
           </div>
 
           {data.pagination?.users.hasMore && data.onLoadMore && (
-            <div className="pt-4 border-t border-black/[0.06] flex items-center justify-between text-xs">
+            <div className="pt-4 border-t border-black/[0.06] flex items-center justify-between text-sm">
               <span className="text-[#5D5D66] font-mono">
                 Showing {users.length} accounts (more available)
               </span>
@@ -458,11 +458,11 @@ export function LearnersAndBusinessPanel({
             <div className="bg-white w-full max-w-xl h-full overflow-y-auto p-6 sm:p-8 space-y-6 border-l border-black/10">
               <div className="flex items-start justify-between gap-4 pb-4 border-b border-black/[0.08]">
                 <div>
-                  <p className="text-xs font-mono text-[#0D7A5F]">LEARNER PROFILE</p>
-                  <h3 className="text-xl font-display font-semibold text-[#0D0D0F]">
+                  <p className="text-sm font-mono text-[#0D7A5F]">LEARNER PROFILE</p>
+                  <h3 className="text-xl font-display font-bold text-[#0D0D0F]">
                     {selectedLearner.displayName}
                   </h3>
-                  <p className="text-xs font-mono text-[#5D5D66]">{selectedLearner.email}</p>
+                  <p className="text-sm font-mono text-[#5D5D66]">{selectedLearner.email}</p>
                 </div>
                 <button
                   type="button"
@@ -473,7 +473,7 @@ export function LearnersAndBusinessPanel({
                 </button>
               </div>
 
-              <div className="grid grid-cols-3 gap-3 text-xs">
+              <div className="grid grid-cols-3 gap-3 text-sm">
                 <div className="bg-[#F9F9FB] rounded-xl p-3">
                   <p className="text-[#5D5D66]">Enrollments</p>
                   <p className="text-lg font-semibold tabular-nums">
@@ -494,7 +494,7 @@ export function LearnersAndBusinessPanel({
                 </div>
               </div>
 
-              <div className="space-y-2 text-xs">
+              <div className="space-y-2 text-sm">
                 <h4 className="font-semibold text-[#0D0D0F]">Course Enrollments</h4>
                 {enrollments.filter((e) => e.userId === selectedLearner.uid).length === 0 ? (
                   <p className="text-[#5D5D66]">No enrollments yet.</p>
@@ -518,7 +518,7 @@ export function LearnersAndBusinessPanel({
                 )}
               </div>
 
-              <div className="space-y-2 text-xs">
+              <div className="space-y-2 text-sm">
                 <h4 className="font-semibold text-[#0D0D0F]">Payments & Support Tickets</h4>
                 {payments
                   .filter((p) => p.userId === selectedLearner.uid)
@@ -549,12 +549,12 @@ export function LearnersAndBusinessPanel({
               </div>
 
               <div className="pt-4 border-t border-black/[0.08] space-y-3">
-                <h4 className="text-xs font-semibold text-[#0D0D0F]">
+                <h4 className="text-sm font-semibold text-[#0D0D0F]">
                   Account Suspension / Reactivation Control
                 </h4>
                 {selectedLearner.role === 'superadmin' ||
                 isBootstrappedSuperadminEmail(selectedLearner.email) ? (
-                  <p className="text-xs text-[#0D7A5F]">
+                  <p className="text-sm text-[#0D7A5F]">
                     Protected Superadmin account cannot be suspended.
                   </p>
                 ) : (
@@ -564,13 +564,13 @@ export function LearnersAndBusinessPanel({
                       value={suspendReason}
                       onChange={(e) => setSuspendReason(e.target.value)}
                       placeholder="Reason (recorded in Audit Log)..."
-                      className="w-full px-3 py-2 text-xs border border-black/15 rounded-lg"
+                      className="w-full px-3 py-2 text-sm border border-black/15 rounded-lg"
                     />
                     <button
                       type="button"
                       disabled={learnerBusy}
                       onClick={() => handleToggleSuspendUser(selectedLearner)}
-                      className={`w-full px-4 py-2 text-xs font-medium rounded-lg ${
+                      className={`w-full px-4 py-2 text-sm font-medium rounded-lg ${
                         selectedLearner.accountStatus === 'suspended'
                           ? 'bg-[#0D7A5F] text-white'
                           : 'bg-[#DC2626] text-white'
@@ -595,21 +595,21 @@ export function LearnersAndBusinessPanel({
     return (
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         <div className="lg:col-span-5 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
-          <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+          <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
             Manual Course Access Grant
           </h2>
-          <p className="text-xs text-[#5D5D66]">
+          <p className="text-sm text-[#5D5D66]">
             Grant manual, complimentary, or sponsored course access with an auditable reason and optional expiration date.
           </p>
 
           <form onSubmit={handleManualGrantAccess} className="space-y-4">
             <div>
-              <label className="block text-xs font-medium mb-1">Learner Account</label>
+              <label className="block text-sm font-medium mb-1">Learner Account</label>
               <select
                 required
                 value={grantUserId}
                 onChange={(e) => setGrantUserId(e.target.value)}
-                className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg bg-white"
+                className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg bg-white"
               >
                 <option value="">-- Select learner --</option>
                 {users.map((u) => (
@@ -621,11 +621,11 @@ export function LearnersAndBusinessPanel({
             </div>
 
             <div>
-              <label className="block text-xs font-medium mb-1">Course</label>
+              <label className="block text-sm font-medium mb-1">Course</label>
               <select
                 value={grantCourseId}
                 onChange={(e) => setGrantCourseId(e.target.value)}
-                className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg bg-white"
+                className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg bg-white"
               >
                 {courseCatalog.map((c) => (
                   <option key={c.id} value={c.id}>
@@ -637,7 +637,7 @@ export function LearnersAndBusinessPanel({
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium mb-1">Access Type</label>
+                <label className="block text-sm font-medium mb-1">Access Type</label>
                 <select
                   value={grantAccessType}
                   onChange={(e) =>
@@ -645,7 +645,7 @@ export function LearnersAndBusinessPanel({
                       e.target.value as 'manual_grant' | 'complimentary' | 'sponsored'
                     )
                   }
-                  className="w-full px-3 py-2 text-xs border border-black/15 rounded-lg bg-white"
+                  className="w-full px-3 py-2 text-sm border border-black/15 rounded-lg bg-white"
                 >
                   <option value="manual_grant">Manual Grant</option>
                   <option value="complimentary">Complimentary</option>
@@ -653,18 +653,18 @@ export function LearnersAndBusinessPanel({
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium mb-1">Expires At (optional)</label>
+                <label className="block text-sm font-medium mb-1">Expires At (optional)</label>
                 <input
                   type="date"
                   value={grantExpiresAt}
                   onChange={(e) => setGrantExpiresAt(e.target.value)}
-                  className="w-full px-3 py-2 text-xs border border-black/15 rounded-lg"
+                  className="w-full px-3 py-2 text-sm border border-black/15 rounded-lg"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-medium mb-1">Mandatory Audit Reason</label>
+              <label className="block text-sm font-medium mb-1">Mandatory Audit Reason</label>
               <input
                 type="text"
                 required
@@ -672,16 +672,16 @@ export function LearnersAndBusinessPanel({
                 value={grantReason}
                 onChange={(e) => setGrantReason(e.target.value)}
                 placeholder="e.g. Kigali youth scholarship cohort"
-                className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg"
+                className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg"
               />
             </div>
 
-            {grantMsg && <p className="text-xs text-[#0D7A5F] font-medium">{grantMsg}</p>}
+            {grantMsg && <p className="text-sm text-[#0D7A5F] font-medium">{grantMsg}</p>}
 
             <button
               type="submit"
               disabled={grantBusy}
-              className="w-full px-4 py-2.5 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg"
+              className="w-full px-4 py-2.5 text-[15px] font-medium text-white bg-[#0D0D0F] rounded-lg"
             >
               {grantBusy ? 'Granting...' : 'Grant Active Course Access'}
             </button>
@@ -690,7 +690,7 @@ export function LearnersAndBusinessPanel({
 
         <div className="lg:col-span-7 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
           <div className="flex items-center justify-between gap-4">
-            <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+            <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
               Enrollments ({enrollments.length})
             </h2>
             <button
@@ -710,21 +710,21 @@ export function LearnersAndBusinessPanel({
                   ])
                 )
               }
-              className="px-3 py-1.5 text-xs border border-black/15 rounded-lg"
+              className="px-3 py-1.5 text-sm border border-black/15 rounded-lg"
             >
               Export CSV
             </button>
           </div>
 
           {enrollments.length === 0 ? (
-            <p className="text-xs text-[#5D5D66]">No enrollments recorded yet.</p>
+            <p className="text-sm text-[#5D5D66]">No enrollments recorded yet.</p>
           ) : (
             <div className="divide-y divide-black/[0.06]">
               {enrollments.map((enr) => {
                 const courseDays =
                   courseCatalog.find((c) => c.id === enr.courseId)?.durationDays ?? 28;
                 return (
-                <div key={enr.id} className="py-3 flex items-center justify-between gap-3 text-xs">
+                <div key={enr.id} className="py-3 flex items-center justify-between gap-3 text-sm">
                   <div className="min-w-0">
                     <p className="font-medium text-[#0D0D0F] truncate">
                       {enr.userName} ({enr.userEmail})
@@ -745,7 +745,7 @@ export function LearnersAndBusinessPanel({
                       </span>
                     </p>
                     {enr.grantReason && (
-                      <p className="text-[11px] text-[#5D5D66]">Note: {enr.grantReason}</p>
+                      <p className="text-[15px] text-[#5D5D66]">Note: {enr.grantReason}</p>
                     )}
                   </div>
 
@@ -757,7 +757,7 @@ export function LearnersAndBusinessPanel({
                         setEnrollmentNoteMap((prev) => ({ ...prev, [enr.id]: e.target.value }))
                       }
                       placeholder="Audit note..."
-                      className="w-32 px-2.5 py-1.5 text-xs border border-black/15 rounded-lg"
+                      className="w-32 px-2.5 py-1.5 text-sm border border-black/15 rounded-lg"
                     />
                     <button
                       type="button"
@@ -776,7 +776,7 @@ export function LearnersAndBusinessPanel({
           )}
 
           {data.pagination?.enrollments.hasMore && data.onLoadMore && (
-            <div className="pt-4 border-t border-black/[0.06] flex items-center justify-between text-xs">
+            <div className="pt-4 border-t border-black/[0.06] flex items-center justify-between text-sm">
               <span className="text-[#5D5D66] font-mono">
                 Loaded {enrollments.length} enrollments
               </span>
@@ -812,19 +812,19 @@ export function LearnersAndBusinessPanel({
       <div className="space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-xl p-5">
-            <p className="text-xs text-[#5D5D66]">Verified Gross Revenue</p>
+            <p className="text-sm text-[#5D5D66]">Verified Gross Revenue</p>
             <p className="text-2xl font-display font-semibold tabular-nums text-[#0D7A5F]">
               {totalVerified.toLocaleString()} RWF
             </p>
           </div>
           <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-xl p-5">
-            <p className="text-xs text-[#5D5D66]">Pending Verification</p>
+            <p className="text-sm text-[#5D5D66]">Pending Verification</p>
             <p className="text-2xl font-display font-semibold tabular-nums text-[#D97706]">
               {totalPending.toLocaleString()} RWF
             </p>
           </div>
           <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-xl p-5">
-            <p className="text-xs text-[#5D5D66]">Refunded Total</p>
+            <p className="text-sm text-[#5D5D66]">Refunded Total</p>
             <p className="text-2xl font-display font-semibold tabular-nums text-[#DC2626]">
               {totalRefunded.toLocaleString()} RWF
             </p>
@@ -839,7 +839,7 @@ export function LearnersAndBusinessPanel({
                   key={statusKey}
                   type="button"
                   onClick={() => setPayFilter(statusKey)}
-                  className={`px-3 py-1.5 text-xs font-medium rounded-lg capitalize ${
+                  className={`px-3 py-1.5 text-sm font-medium rounded-lg capitalize ${
                     payFilter === statusKey
                       ? 'bg-white text-[#0D0D0F] shadow-xs'
                       : 'text-[#5D5D66]'
@@ -867,20 +867,20 @@ export function LearnersAndBusinessPanel({
                   ])
                 )
               }
-              className="px-3.5 py-2 text-xs font-medium border border-black/15 rounded-lg"
+              className="px-3.5 py-2 text-sm font-medium border border-black/15 rounded-lg"
             >
               Export Payments CSV
             </button>
           </div>
 
           {filteredPayments.length === 0 ? (
-            <p className="text-xs text-[#5D5D66] py-6">No transactions in this filter.</p>
+            <p className="text-sm text-[#5D5D66] py-6">No transactions in this filter.</p>
           ) : (
             <div className="divide-y divide-black/[0.06]">
               {filteredPayments.map((pay) => (
                 <div
                   key={pay.id}
-                  className="py-4 flex flex-col lg:flex-row lg:items-center justify-between gap-4 text-xs"
+                  className="py-4 flex flex-col lg:flex-row lg:items-center justify-between gap-4 text-sm"
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
@@ -906,7 +906,7 @@ export function LearnersAndBusinessPanel({
                       </strong>
                     </p>
                     {pay.verificationNote && (
-                      <p className="text-[11px] text-[#5D5D66]">
+                      <p className="text-[15px] text-[#5D5D66]">
                         Note: {pay.verificationNote} {pay.verifiedBy ? `(${pay.verifiedBy})` : ''}
                       </p>
                     )}
@@ -921,7 +921,7 @@ export function LearnersAndBusinessPanel({
                           setPayNoteMap((prev) => ({ ...prev, [pay.id]: e.target.value }))
                         }
                         placeholder="Verification note / MoMo ID..."
-                        className="px-3 py-1.5 border border-black/15 rounded-lg text-xs"
+                        className="px-3 py-1.5 border border-black/15 rounded-lg text-sm"
                       />
                       <button
                         type="button"
@@ -947,7 +947,7 @@ export function LearnersAndBusinessPanel({
           )}
 
           {data.pagination?.payments.hasMore && data.onLoadMore && (
-            <div className="pt-4 border-t border-black/[0.06] flex items-center justify-between text-xs">
+            <div className="pt-4 border-t border-black/[0.06] flex items-center justify-between text-sm">
               <span className="text-[#5D5D66] font-mono">
                 Loaded {payments.length} transactions
               </span>
@@ -972,19 +972,19 @@ export function LearnersAndBusinessPanel({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
       <div className="lg:col-span-5 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
-        <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">Process Refund Record</h2>
-        <p className="text-xs text-[#5D5D66]">
+        <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">Process Refund Record</h2>
+        <p className="text-sm text-[#5D5D66]">
           Records a refund entry, updates the transaction status to refunded, optionally revokes course access, and writes an audit trail.
         </p>
 
         <form onSubmit={handleProcessRefund} className="space-y-4">
           <div>
-            <label className="block text-xs font-medium mb-1">Verified Payment</label>
+            <label className="block text-sm font-medium mb-1">Verified Payment</label>
             <select
               required
               value={refundPaymentId}
               onChange={(e) => setRefundPaymentId(e.target.value)}
-              className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg bg-white"
+              className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg bg-white"
             >
               <option value="">-- Select payment --</option>
               {refundablePayments.map((p) => (
@@ -996,7 +996,7 @@ export function LearnersAndBusinessPanel({
           </div>
 
           <div>
-            <label className="block text-xs font-medium mb-1">Refund Reason</label>
+            <label className="block text-sm font-medium mb-1">Refund Reason</label>
             <textarea
               rows={3}
               required
@@ -1004,11 +1004,11 @@ export function LearnersAndBusinessPanel({
               value={refundReason}
               onChange={(e) => setRefundReason(e.target.value)}
               placeholder="e.g. Duplicate Mobile Money payment"
-              className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg"
+              className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg"
             />
           </div>
 
-          <label className="flex items-center gap-2 text-xs text-[#0D0D0F]">
+          <label className="flex items-center gap-2 text-sm text-[#0D0D0F]">
             <input
               type="checkbox"
               checked={revokeOnRefund}
@@ -1017,12 +1017,12 @@ export function LearnersAndBusinessPanel({
             <span>Automatically revoke learner course enrollment on refund</span>
           </label>
 
-          {refundMsg && <p className="text-xs text-[#0D7A5F] font-medium">{refundMsg}</p>}
+          {refundMsg && <p className="text-sm text-[#0D7A5F] font-medium">{refundMsg}</p>}
 
           <button
             type="submit"
             disabled={refundBusy}
-            className="w-full px-4 py-2.5 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg"
+            className="w-full px-4 py-2.5 text-[15px] font-medium text-white bg-[#0D0D0F] rounded-lg"
           >
             {refundBusy ? 'Recording...' : 'Record Refund'}
           </button>
@@ -1030,15 +1030,15 @@ export function LearnersAndBusinessPanel({
       </div>
 
       <div className="lg:col-span-7 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
-        <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+        <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
           Refund Ledger ({refunds.length})
         </h2>
         {refunds.length === 0 ? (
-          <p className="text-xs text-[#5D5D66]">No refunds have been processed.</p>
+          <p className="text-sm text-[#5D5D66]">No refunds have been processed.</p>
         ) : (
           <div className="divide-y divide-black/[0.06]">
             {refunds.map((ref) => (
-              <div key={ref.id} className="py-3 text-xs space-y-1">
+              <div key={ref.id} className="py-3 text-sm space-y-1">
                 <div className="flex items-center justify-between">
                   <span className="font-mono font-semibold text-[#0D0D0F]">{ref.id}</span>
                   <span className="font-mono font-semibold tabular-nums">

@@ -640,13 +640,13 @@ export function LearnerDashboard({
     return (
       <div className="max-w-xl mx-auto px-6 py-16">
         <div className="bg-[#FEF2F2] border border-[#DC2626]/25 rounded-2xl p-8 space-y-3">
-          <p className="text-xs font-mono text-[#DC2626] uppercase">Account Suspended</p>
-          <h1 className="text-2xl font-display font-semibold text-[#0D0D0F]">
+          <p className="text-sm font-mono text-[#DC2626] uppercase">Account Suspended</p>
+          <h1 className="text-[30px] sm:text-[40px] font-display font-bold tracking-[-0.025em] leading-[1.1] text-[#0D0D0F]">
             {lang === 'en'
               ? 'Your learner workspace access is currently paused'
               : 'Konti yawe yabaye ihagaritswe'}
           </h1>
-          <p className="text-sm text-[#5D5D66]">
+          <p className="text-[15px] text-[#5D5D66]">
             {profile.suspensionReason ||
               (lang === 'en'
                 ? 'Please contact AI Education Rwanda support for account reactivation review.'
@@ -661,15 +661,15 @@ export function LearnerDashboard({
     <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-10">
       <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 pb-8 border-b border-black/[0.08] mb-8">
         <div>
-          <p className="text-xs font-medium text-[#0D7A5F] mb-1">
+          <p className="text-sm font-medium text-[#0D7A5F] mb-1">
             {lang === 'en' ? 'Learner Portal' : 'Ibikorwa by’Umunyeshuri'}
           </p>
-          <h1 className="text-3xl font-display font-semibold tracking-tight text-[#0D0D0F]">
+          <h1 className="text-[32px] sm:text-[42px] font-display font-bold tracking-[-0.025em] leading-[1.1] text-[#0D0D0F]">
             {profile?.displayName || user.displayName || user.email}
           </h1>
         </div>
 
-        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#F4F5F7] rounded-xl">
+        <div className="flex flex-wrap items-center gap-1.5 p-1.5 bg-[#F4F5F7] rounded-xl">
           {[
             { key: 'courses', label: lang === 'en' ? 'My Courses' : 'Amasomo' },
             { key: 'quizzes', label: lang === 'en' ? 'Assessments' : 'Amasuzuma' },
@@ -691,9 +691,9 @@ export function LearnerDashboard({
               key={item.key}
               type="button"
               onClick={() => setTab(item.key as typeof tab)}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors whitespace-nowrap shrink-0 ${
+              className={`px-3.5 py-2 text-[15px] font-medium rounded-lg transition-colors whitespace-nowrap shrink-0 ${
                 tab === item.key
-                  ? 'bg-white text-[#0D0D0F] shadow-xs'
+                  ? 'bg-white text-[#0D0D0F] shadow-xs font-semibold'
                   : 'text-[#5D5D66] hover:text-[#0D0D0F]'
               }`}
             >
@@ -708,7 +708,7 @@ export function LearnerDashboard({
         <div className="space-y-8">
           {publishedAnnouncements.length > 0 && (
             <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div className="text-xs">
+              <div className="text-sm">
                 <span className="font-semibold text-[#0D7A5F]">
                   {publishedAnnouncements[0][lang === 'en' ? 'titleEn' : 'titleRw']}
                 </span>
@@ -719,7 +719,7 @@ export function LearnerDashboard({
               <button
                 type="button"
                 onClick={() => setTab('notifications')}
-                className="text-xs font-medium text-[#0D0D0F] underline underline-offset-4 whitespace-nowrap shrink-0"
+                className="text-sm font-medium text-[#0D0D0F] underline underline-offset-4 whitespace-nowrap shrink-0"
               >
                 {lang === 'en' ? 'View all updates' : 'Reba amakuru yose'}
               </button>
@@ -761,7 +761,7 @@ export function LearnerDashboard({
                     className="bg-white border border-black/[0.08] rounded-2xl p-6 sm:p-8 flex flex-col lg:flex-row lg:items-center justify-between gap-6"
                   >
                     <div className="max-w-xl flex-1">
-                      <p className="text-xs font-mono text-[#0D7A5F] mb-1">
+                      <p className="text-sm font-mono text-[#0D7A5F] mb-1">
                         {course.code} · {lang === 'en' ? 'Active Enrollment' : 'Wariyandikishije'}
                         {enr.accessType && enr.accessType !== 'paid'
                           ? ` · ${enr.accessType.replace('_', ' ')}`
@@ -770,16 +770,16 @@ export function LearnerDashboard({
                           ? ` · ${enr.cohortName || cohort?.name}`
                           : ''}
                       </p>
-                      <h2 className="text-2xl font-display font-semibold text-[#0D0D0F] mb-2">
+                      <h2 className="text-[24px] sm:text-[28px] tracking-[-0.02em] leading-[1.2] font-display font-bold text-[#0D0D0F] mb-2">
                         {course.title[lang]}
                       </h2>
-                      <p className="text-sm text-[#5D5D66] mb-3">
+                      <p className="text-[15px] text-[#5D5D66] mb-3">
                         {lang === 'en'
                           ? `Progress: ${doneDays} of ${totalDays} lessons completed (${pct}%). Next lesson: Day ${enr.currentDay}.`
                           : `Aho ugeze: Amasomo ${doneDays} kuri ${totalDays} (${pct}%). Isomo rikurikira: Umunsi wa ${enr.currentDay}.`}
                       </p>
                       {nextReleaseLock.locked && (
-                        <p className="text-xs text-[#B45309] font-medium mb-3 inline-flex items-center gap-1.5 bg-[#FFFBEB] border border-[#D97706]/30 rounded-lg px-2.5 py-1.5">
+                        <p className="text-sm text-[#B45309] font-medium mb-3 inline-flex items-center gap-1.5 bg-[#FFFBEB] border border-[#D97706]/30 rounded-lg px-2.5 py-1.5">
                           <Clock className="w-3.5 h-3.5 shrink-0" />
                           <span>
                             {lang === 'en'
@@ -795,7 +795,7 @@ export function LearnerDashboard({
                         />
                       </div>
                       {course.certificateEligible !== false && (
-                        <p className="text-xs text-[#5D5D66]">
+                        <p className="text-sm text-[#5D5D66]">
                           {elig.alreadyIssued ? (
                             <span className="text-[#0D7A5F] font-medium">
                               {lang === 'en'
@@ -822,7 +822,7 @@ export function LearnerDashboard({
                       <button
                         type="button"
                         onClick={() => onOpenLesson(enr.courseId, enr.currentDay)}
-                        className="inline-flex items-center gap-2 px-5 py-3 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329]"
+                        className="inline-flex items-center gap-2 px-5 py-3 text-[15px] font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329]"
                       >
                         <span>
                           {nextReleaseLock.locked
@@ -852,13 +852,13 @@ export function LearnerDashboard({
                     className="bg-[#FFFBEB] border border-[#D97706]/30 rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6"
                   >
                     <div>
-                      <p className="text-xs font-mono text-[#B45309] mb-1">
+                      <p className="text-sm font-mono text-[#B45309] mb-1">
                         {lang === 'en' ? 'Payment Pending Verification' : 'Ubwishyu Butegereje Kwemezwa'}
                       </p>
-                      <h2 className="text-xl font-display font-semibold text-[#0D0D0F] mb-2">
+                      <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F] mb-2">
                         {course.title[lang]}
                       </h2>
-                      <p className="text-sm text-[#5D5D66] max-w-xl">
+                      <p className="text-[15px] text-[#5D5D66] max-w-xl">
                         {lang === 'en'
                           ? `Reference ${enr.paymentRef} is awaiting staff confirmation. While verification completes, you can read all free sample lessons.`
                           : `Nimero yawe ${enr.paymentRef} itegereje kwemezwa. Ushobora gusoma amasomo y’ubuntu ubu.`}
@@ -867,7 +867,7 @@ export function LearnerDashboard({
                     <button
                       type="button"
                       onClick={() => onOpenLesson(enr.courseId, 1)}
-                      className="px-5 py-2.5 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg whitespace-nowrap shrink-0"
+                      className="px-5 py-2.5 text-[15px] font-medium text-white bg-[#0D0D0F] rounded-lg whitespace-nowrap shrink-0"
                     >
                       {lang === 'en' ? 'Open Day 1 Sample' : 'Soma Umunsi wa 1'}
                     </button>
@@ -880,12 +880,12 @@ export function LearnerDashboard({
           {activeEnrollments.length === 0 && pendingEnrollments.length === 0 && (
             <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
               <div>
-                <h2 className="text-xl font-display font-semibold text-[#0D0D0F] mb-2">
+                <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F] mb-2">
                   {lang === 'en'
                     ? 'You are not enrolled in an active course yet'
                     : 'Nturiyandikisha mu isomo na rimwe'}
                 </h2>
-                <p className="text-sm text-[#5D5D66] max-w-xl">
+                <p className="text-[15px] text-[#5D5D66] max-w-xl">
                   {lang === 'en'
                     ? 'Browse the course catalog to enroll in a free or paid course via MTN MoMo / Airtel Money, or start reading free sample lessons.'
                     : 'Reba amasomo ahari cyangwa usome amasomo y’igerageza ku buntu.'}
@@ -894,7 +894,7 @@ export function LearnerDashboard({
               <button
                 type="button"
                 onClick={() => onNavigate('courses')}
-                className="px-5 py-2.5 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg whitespace-nowrap shrink-0"
+                className="px-5 py-2.5 text-[15px] font-medium text-white bg-[#0D0D0F] rounded-lg whitespace-nowrap shrink-0"
               >
                 {lang === 'en' ? 'Browse Courses' : 'Reba Amasomo'}
               </button>
@@ -903,7 +903,7 @@ export function LearnerDashboard({
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-xl p-5">
-              <p className="text-xs text-[#5D5D66] mb-1">
+              <p className="text-sm text-[#5D5D66] mb-1">
                 {lang === 'en' ? 'Lessons Completed' : 'Amasomo Yarangiye'}
               </p>
               <p className="text-2xl font-display font-semibold tabular-nums text-[#0D0D0F]">
@@ -911,7 +911,7 @@ export function LearnerDashboard({
               </p>
             </div>
             <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-xl p-5">
-              <p className="text-xs text-[#5D5D66] mb-1">
+              <p className="text-sm text-[#5D5D66] mb-1">
                 {lang === 'en' ? 'Assessments Passed' : 'Amasuzuma Yatsinzwe'}
               </p>
               <p className="text-2xl font-display font-semibold tabular-nums text-[#0D0D0F]">
@@ -919,7 +919,7 @@ export function LearnerDashboard({
               </p>
             </div>
             <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-xl p-5">
-              <p className="text-xs text-[#5D5D66] mb-1">
+              <p className="text-sm text-[#5D5D66] mb-1">
                 {lang === 'en' ? 'Estimated Weighted Score' : 'Amanota Muri Rusange'}
               </p>
               <p className="text-2xl font-display font-semibold tabular-nums text-[#0D0D0F]">
@@ -933,17 +933,17 @@ export function LearnerDashboard({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Bookmark className="w-4 h-4 text-[#0D7A5F]" />
-                <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+                <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
                   {lang === 'en'
                     ? 'Bookmarked Lessons & Study Notes'
                     : 'Amasomo Wabitse & Inyandiko Zawe'}
                 </h2>
               </div>
-              <span className="text-xs font-mono text-[#5D5D66]">{savedNotes.length} saved</span>
+              <span className="text-sm font-mono text-[#5D5D66]">{savedNotes.length} saved</span>
             </div>
 
             {savedNotes.length === 0 ? (
-              <p className="text-xs text-[#5D5D66]">
+              <p className="text-sm text-[#5D5D66]">
                 {lang === 'en'
                   ? 'Bookmark any lesson or save personal study notes while reading to find them quickly here.'
                   : 'Bika isomo cyangwa wandike iby’ingenzi igihe usoma kugira ngo ubibone hano.'}
@@ -958,22 +958,22 @@ export function LearnerDashboard({
                       className="bg-[#F9F9FB] border border-black/[0.08] rounded-xl p-4 flex flex-col justify-between gap-3"
                     >
                       <div>
-                        <div className="flex items-center justify-between gap-2 text-xs mb-1">
+                        <div className="flex items-center justify-between gap-2 text-sm mb-1">
                           <span className="font-mono text-[#0D7A5F] font-semibold">
                             {noteCourse?.code || note.courseId} · Day {note.dayNumber}
                           </span>
                           {note.bookmarked && (
-                            <span className="text-[11px] font-mono text-[#0D0D0F]">
+                            <span className="text-[15px] font-mono text-[#0D0D0F]">
                               Bookmarked
                             </span>
                           )}
                         </div>
                         {note.noteText ? (
-                          <p className="text-xs text-[#0D0D0F] whitespace-pre-line line-clamp-3">
+                          <p className="text-sm text-[#0D0D0F] whitespace-pre-line line-clamp-3">
                             {note.noteText}
                           </p>
                         ) : (
-                          <p className="text-xs text-[#5D5D66] italic">
+                          <p className="text-sm text-[#5D5D66] italic">
                             {lang === 'en' ? 'Bookmarked lesson' : 'Isomo ryabitswe'}
                           </p>
                         )}
@@ -981,7 +981,7 @@ export function LearnerDashboard({
                       <button
                         type="button"
                         onClick={() => onOpenLesson(note.courseId, note.dayNumber)}
-                        className="self-start text-xs font-medium text-[#0D7A5F] hover:underline"
+                        className="self-start text-sm font-medium text-[#0D7A5F] hover:underline"
                       >
                         {lang === 'en' ? 'Open Lesson ->' : 'Fungura Isomo ->'}
                       </button>
@@ -999,18 +999,18 @@ export function LearnerDashboard({
         <div className="space-y-8">
           <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6 space-y-5">
             <div>
-              <h2 className="text-base font-semibold text-[#0D0D0F] mb-1">
+              <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F] mb-1">
                 {lang === 'en'
                   ? `Course Assessment Weighting (${platformSettings?.certificateMinQuizAvg ?? 70}% Minimum Pass Threshold)`
                   : `Imiterere y’Amasuzuma (${platformSettings?.certificateMinQuizAvg ?? 70}% Fatizo)`}
               </h2>
-              <p className="text-xs text-[#5D5D66]">
+              <p className="text-sm text-[#5D5D66]">
                 {lang === 'en'
                   ? 'Passing requires completing all weekly assessments, submitting & demonstrating your final project, and earning >=70% overall.'
                   : 'Impamyabumenyi itangwa ku warangije amasuzuma yose, akamurika umushinga wa nyuma afite nibura 70%.'}
               </p>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-xs">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-sm">
               {BLUEPRINT_GRADING_BREAKDOWN.map((w) => (
                 <div key={w.id} className="bg-white border border-black/[0.06] rounded-xl p-3">
                   <p className="text-[#5D5D66] leading-snug">{w.label[lang]}</p>
@@ -1021,12 +1021,12 @@ export function LearnerDashboard({
               ))}
             </div>
             <div>
-              <p className="text-xs font-semibold text-[#0D0D0F] mb-2">
+              <p className="text-sm font-semibold text-[#0D0D0F] mb-2">
                 {lang === 'en'
                   ? 'Final Project 7-Criterion Rubric (30% Weight)'
                   : 'Ibipimo 7 by’Umushinga wa Nyuma (30%)'}
               </p>
-              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 text-[11px]">
+              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 text-[15px]">
                 {(activeRubric
                   ? [
                       { name: 'Problem', weight: `${activeRubric.problemWeight}%` },
@@ -1056,7 +1056,7 @@ export function LearnerDashboard({
               <div className="flex flex-wrap items-center justify-between gap-4 border-b border-black/[0.08] pb-4">
                 <div>
                   <p
-                    className={`text-xs font-mono font-semibold uppercase ${
+                    className={`text-sm font-mono font-semibold uppercase ${
                       lastQuizReview.result.passed ? 'text-[#0D7A5F]' : 'text-[#DC2626]'
                     }`}
                   >
@@ -1068,7 +1068,7 @@ export function LearnerDashboard({
                         ? 'Review & Retry Recommended'
                         : 'Subiramo Witegure Neza'}
                   </p>
-                  <h3 className="text-xl font-display font-semibold text-[#0D0D0F]">
+                  <h3 className="text-xl font-display font-bold text-[#0D0D0F]">
                     {lang === 'en' ? lastQuizReview.quiz.titleEn : lastQuizReview.quiz.titleRw}
                   </h3>
                 </div>
@@ -1076,7 +1076,7 @@ export function LearnerDashboard({
                   <p className="text-2xl font-display font-semibold tabular-nums text-[#0D0D0F]">
                     {lastQuizReview.result.score}%
                   </p>
-                  <p className="text-xs font-mono text-[#5D5D66]">
+                  <p className="text-sm font-mono text-[#5D5D66]">
                     {lastQuizReview.result.correctCount}/{lastQuizReview.result.totalQuestions} correct (
                     {lastQuizReview.result.earnedMarks}/{lastQuizReview.result.totalMarks} pts)
                   </p>
@@ -1097,7 +1097,7 @@ export function LearnerDashboard({
                   return (
                     <div
                       key={q.id}
-                      className={`rounded-xl border p-4 text-xs space-y-1.5 ${
+                      className={`rounded-xl border p-4 text-sm space-y-1.5 ${
                         isCorrect
                           ? 'bg-[#F2FBF8] border-[#0D7A5F]/25'
                           : 'bg-[#FEF2F2] border-[#DC2626]/20'
@@ -1116,7 +1116,7 @@ export function LearnerDashboard({
               <button
                 type="button"
                 onClick={() => setLastQuizReview(null)}
-                className="px-4 py-2 text-xs font-medium text-white bg-[#0D0D0F] rounded-lg"
+                className="px-4 py-2 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg"
               >
                 {lang === 'en' ? 'Back to Assessments' : 'Subira ku Masuzuma'}
               </button>
@@ -1127,16 +1127,16 @@ export function LearnerDashboard({
             <div className="bg-white border border-black/[0.08] rounded-2xl p-6 sm:p-8 space-y-6">
               <div className="flex flex-wrap items-center justify-between gap-4 border-b border-black/[0.08] pb-4">
                 <div>
-                  <p className="text-xs font-mono text-[#0D7A5F]">
+                  <p className="text-sm font-mono text-[#0D7A5F]">
                     Week {activeQuiz.weekNumber} · Pass ≥{activeQuiz.passThreshold}%
                   </p>
-                  <h3 className="text-xl font-display font-semibold text-[#0D0D0F]">
+                  <h3 className="text-xl font-display font-bold text-[#0D0D0F]">
                     {lang === 'en' ? activeQuiz.titleEn : activeQuiz.titleRw || activeQuiz.titleEn}
                   </h3>
                 </div>
                 <div className="flex items-center gap-4">
                   {secondsLeft !== null && (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#F4F5F7] font-mono text-xs font-semibold text-[#0D0D0F]">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#F4F5F7] font-mono text-sm font-semibold text-[#0D0D0F]">
                       <Clock className="w-3.5 h-3.5 text-[#0D7A5F]" />
                       {String(Math.floor(secondsLeft / 60)).padStart(2, '0')}:
                       {String(secondsLeft % 60).padStart(2, '0')}
@@ -1156,7 +1156,7 @@ export function LearnerDashboard({
                       setSecondsLeft(null);
                       setAnswers({});
                     }}
-                    className="text-xs font-medium text-[#5D5D66]"
+                    className="text-sm font-medium text-[#5D5D66]"
                   >
                     {lang === 'en' ? 'Cancel' : 'Hagarika'}
                   </button>
@@ -1176,9 +1176,9 @@ export function LearnerDashboard({
 
                   return (
                     <div key={q.id} className="space-y-2.5">
-                      <p className="text-sm font-medium text-[#0D0D0F]">
+                      <p className="text-[15px] font-medium text-[#0D0D0F]">
                         {qIdx + 1}. {promptText}{' '}
-                        <span className="text-xs font-mono text-[#5D5D66]">
+                        <span className="text-sm font-mono text-[#5D5D66]">
                           ({q.marks} {q.marks === 1 ? 'pt' : 'pts'})
                         </span>
                       </p>
@@ -1192,7 +1192,7 @@ export function LearnerDashboard({
                           placeholder={
                             lang === 'en' ? 'Type your short answer...' : 'Andika igisubizo...'
                           }
-                          className="w-full px-4 py-2.5 text-sm border border-black/15 rounded-xl"
+                          className="w-full px-4 py-2.5 text-[15px] border border-black/15 rounded-xl"
                         />
                       ) : (
                         <div className="space-y-2">
@@ -1201,7 +1201,7 @@ export function LearnerDashboard({
                               key={`${q.id}_${oIdx}`}
                               type="button"
                               onClick={() => setAnswers((prev) => ({ ...prev, [q.id]: oIdx }))}
-                              className={`w-full text-left px-4 py-2.5 rounded-xl border text-xs sm:text-sm transition-colors ${
+                              className={`w-full text-left px-4 py-2.5 rounded-xl border text-[15px] sm:text-[15px] transition-colors ${
                                 answers[q.id] === oIdx
                                   ? 'bg-[#0D0D0F] text-white border-[#0D0D0F]'
                                   : 'bg-[#F9F9FB] text-[#0D0D0F] border-black/[0.08] hover:border-black/25'
@@ -1221,7 +1221,7 @@ export function LearnerDashboard({
                 type="button"
                 disabled={quizSaving}
                 onClick={submitActiveQuiz}
-                className="px-5 py-2.5 text-sm font-medium text-white bg-[#0D7A5F] rounded-lg hover:bg-[#0B664F]"
+                className="px-5 py-2.5 text-[15px] font-medium text-white bg-[#0D7A5F] rounded-lg hover:bg-[#0B664F]"
               >
                 {quizSaving
                   ? lang === 'en'
@@ -1255,14 +1255,14 @@ export function LearnerDashboard({
                     className="bg-white border border-black/[0.08] rounded-2xl p-6 flex flex-col justify-between gap-4"
                   >
                     <div>
-                      <p className="text-xs font-mono text-[#0D7A5F] mb-1">
+                      <p className="text-sm font-mono text-[#0D7A5F] mb-1">
                         {course?.code || quiz.courseId} · Week {quiz.weekNumber} · {qList.length} Qs
                         {quiz.timeLimitMinutes > 0 ? ` · ${quiz.timeLimitMinutes} min` : ''}
                       </p>
-                      <h3 className="text-base font-semibold text-[#0D0D0F] mb-1">
+                      <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F] mb-1">
                         {lang === 'en' ? quiz.titleEn : quiz.titleRw || quiz.titleEn}
                       </h3>
-                      <p className="text-xs text-[#5D5D66]">
+                      <p className="text-sm text-[#5D5D66]">
                         {best !== null
                           ? lang === 'en'
                             ? `Best score: ${best}% (${matchingAttempts.length}${
@@ -1278,7 +1278,7 @@ export function LearnerDashboard({
                       type="button"
                       disabled={limitReached || qList.length === 0}
                       onClick={() => startQuiz(quiz)}
-                      className="self-start px-4 py-2 text-xs font-medium text-white bg-[#0D0D0F] rounded-lg disabled:opacity-50"
+                      className="self-start px-4 py-2 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg disabled:opacity-50"
                     >
                       {limitReached
                         ? lang === 'en'
@@ -1304,10 +1304,10 @@ export function LearnerDashboard({
       {tab === 'projects' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-6 bg-white border border-black/[0.08] rounded-2xl p-6">
-            <h2 className="text-lg font-display font-semibold text-[#0D0D0F] mb-2">
+            <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F] mb-2">
               {lang === 'en' ? 'Submit Practical Project' : 'Tanga Umushinga Ngiro'}
             </h2>
-            <p className="text-xs text-[#5D5D66] mb-5">
+            <p className="text-sm text-[#5D5D66] mb-5">
               {lang === 'en'
                 ? 'Choose one of the 6 blueprint projects (including Project 06: Independent Final Project) or submit a custom AI workflow addressing a problem you understand.'
                 : 'Hitamo umwe mu mishinga 6 irimo umushinga wa nyuma wigenga cyangwa utange uwawe.'}
@@ -1315,13 +1315,13 @@ export function LearnerDashboard({
 
             <form onSubmit={handleSubmitProject} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-[#0D0D0F] mb-1">
+                <label className="block text-sm font-medium text-[#0D0D0F] mb-1">
                   {lang === 'en' ? 'Course' : 'Isomo'}
                 </label>
                 <select
                   value={projCourseId}
                   onChange={(e) => setProjCourseId(e.target.value)}
-                  className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg bg-white"
+                  className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg bg-white"
                 >
                   {catalog.map((c) => (
                     <option key={c.id} value={c.id}>
@@ -1332,13 +1332,13 @@ export function LearnerDashboard({
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-[#0D0D0F] mb-1">
+                <label className="block text-sm font-medium text-[#0D0D0F] mb-1">
                   {lang === 'en' ? 'Project Track' : 'Icyiciro cy’umushinga'}
                 </label>
                 <select
                   value={projKey}
                   onChange={(e) => setProjKey(e.target.value as ProjectSubmission['projectKey'])}
-                  className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg bg-white"
+                  className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg bg-white"
                 >
                   {PRACTICAL_PROJECTS.map((p) => (
                     <option key={p.key} value={p.key}>
@@ -1352,7 +1352,7 @@ export function LearnerDashboard({
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-[#0D0D0F] mb-1">
+                <label className="block text-sm font-medium text-[#0D0D0F] mb-1">
                   {lang === 'en' ? 'Project Title' : 'Izina ry’umushinga'}
                 </label>
                 <input
@@ -1362,12 +1362,12 @@ export function LearnerDashboard({
                   value={projTitle}
                   onChange={(e) => setProjTitle(e.target.value)}
                   placeholder="e.g. Kigali Bakery Inquiry Triage Assistant"
-                  className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg"
+                  className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-[#0D0D0F] mb-1">
+                <label className="block text-sm font-medium text-[#0D0D0F] mb-1">
                   {lang === 'en' ? 'Problem Statement' : 'Ikibazo ukemura'}
                 </label>
                 <textarea
@@ -1376,12 +1376,12 @@ export function LearnerDashboard({
                   minLength={10}
                   value={projProblem}
                   onChange={(e) => setProjProblem(e.target.value)}
-                  className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg"
+                  className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-[#0D0D0F] mb-1">
+                <label className="block text-sm font-medium text-[#0D0D0F] mb-1">
                   {lang === 'en' ? 'Tools Used (comma-separated)' : 'Porogaramu zakoreshejwe'}
                 </label>
                 <input
@@ -1389,12 +1389,12 @@ export function LearnerDashboard({
                   required
                   value={projTools}
                   onChange={(e) => setProjTools(e.target.value)}
-                  className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg"
+                  className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-[#0D0D0F] mb-1">
+                <label className="block text-sm font-medium text-[#0D0D0F] mb-1">
                   {lang === 'en'
                     ? 'Documentation & Human Oversight Summary'
                     : 'Ibisobanuro n’uko umuntu agenzura'}
@@ -1405,12 +1405,12 @@ export function LearnerDashboard({
                   minLength={10}
                   value={projSummary}
                   onChange={(e) => setProjSummary(e.target.value)}
-                  className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg"
+                  className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="block text-xs font-medium text-[#0D0D0F]">
+                <label className="block text-sm font-medium text-[#0D0D0F]">
                   {lang === 'en'
                     ? 'Demo Link or Uploaded File (PDF, DOCX, ZIP, PNG/JPG, MD — max 10 MB)'
                     : 'Link cyangwa Dosiye y’umushinga (PDF, DOCX, ZIP, PNG/JPG — max 10 MB)'}
@@ -1421,9 +1421,9 @@ export function LearnerDashboard({
                     value={projUrl}
                     onChange={(e) => setProjUrl(e.target.value)}
                     placeholder="https://docs.google.com/... or /api/files/..."
-                    className="flex-1 min-w-0 px-3.5 py-2 text-sm border border-black/15 rounded-lg"
+                    className="flex-1 min-w-0 px-3.5 py-2 text-[15px] border border-black/15 rounded-lg"
                   />
-                  <label className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium bg-[#F4F5F7] border border-black/15 rounded-lg cursor-pointer hover:bg-[#ECEEF2] shrink-0">
+                  <label className="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium bg-[#F4F5F7] border border-black/15 rounded-lg cursor-pointer hover:bg-[#ECEEF2] shrink-0">
                     <Upload className="w-3.5 h-3.5 text-[#0D7A5F]" />
                     <span>{projUploading ? 'Uploading...' : 'Upload File'}</span>
                     <input
@@ -1453,7 +1453,7 @@ export function LearnerDashboard({
               </div>
 
               {projMsg && (
-                <p className="text-xs text-[#0D7A5F] bg-[#ECFDF5] border border-[#0D7A5F]/20 rounded-lg px-3 py-2">
+                <p className="text-sm text-[#0D7A5F] bg-[#ECFDF5] border border-[#0D7A5F]/20 rounded-lg px-3 py-2">
                   {projMsg}
                 </p>
               )}
@@ -1461,7 +1461,7 @@ export function LearnerDashboard({
               <button
                 type="submit"
                 disabled={projSaving}
-                className="px-5 py-2.5 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg"
+                className="px-5 py-2.5 text-[15px] font-medium text-white bg-[#0D0D0F] rounded-lg"
               >
                 {projSaving
                   ? lang === 'en'
@@ -1475,11 +1475,11 @@ export function LearnerDashboard({
           </div>
 
           <div className="lg:col-span-6 space-y-4">
-            <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+            <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
               {lang === 'en' ? 'Your Submissions & Feedback' : 'Imishinga Watanze'}
             </h2>
             {submissions.length === 0 ? (
-              <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6 text-sm text-[#5D5D66]">
+              <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6 text-[15px] text-[#5D5D66]">
                 {lang === 'en'
                   ? 'No project submissions yet. Download the rubric in Projects & Tools before submitting.'
                   : 'Nta mushinga uratanga.'}
@@ -1495,9 +1495,9 @@ export function LearnerDashboard({
                     className="bg-white border border-black/[0.08] rounded-2xl p-5 space-y-3"
                   >
                     <div className="flex items-center justify-between gap-2">
-                      <h3 className="text-sm font-semibold text-[#0D0D0F]">{sub.title}</h3>
+                      <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F]">{sub.title}</h3>
                       <span
-                        className={`text-xs font-mono uppercase ${
+                        className={`text-sm font-mono uppercase ${
                           sub.status === 'needs_revision'
                             ? 'text-[#B45309]'
                             : sub.status === 'approved'
@@ -1508,13 +1508,13 @@ export function LearnerDashboard({
                         {sub.status.replace('_', ' ')}
                       </span>
                     </div>
-                    <p className="text-xs text-[#5D5D66]">{sub.problemStatement}</p>
+                    <p className="text-sm text-[#5D5D66]">{sub.problemStatement}</p>
                     {sub.artifactUrl && (
                       isProtectedUploadUrl(sub.artifactUrl) ? (
                         <button
                           type="button"
                           onClick={() => openProtectedFile(sub.artifactUrl!, user)}
-                          className="text-xs font-mono text-[#0D7A5F] underline hover:text-[#0B664F]"
+                          className="text-sm font-mono text-[#0D7A5F] underline hover:text-[#0B664F]"
                         >
                           {lang === 'en' ? 'Open Attached File' : 'Fungura Dosiye'} ({sub.artifactUrl})
                         </button>
@@ -1523,19 +1523,19 @@ export function LearnerDashboard({
                           href={sub.artifactUrl}
                           target="_blank"
                           rel="noreferrer"
-                          className="block text-xs font-mono text-[#0D7A5F] underline truncate"
+                          className="block text-sm font-mono text-[#0D7A5F] underline truncate"
                         >
                           {sub.artifactUrl}
                         </a>
                       )
                     )}
                     {typeof sub.score === 'number' && (
-                      <p className="text-xs font-mono font-semibold text-[#0D0D0F] tabular-nums">
+                      <p className="text-sm font-mono font-semibold text-[#0D0D0F] tabular-nums">
                         Score: {sub.score}/100
                       </p>
                     )}
                     {sub.reviewerFeedback && (
-                      <p className="text-xs bg-[#F9F9FB] border border-black/[0.06] rounded-lg p-3 text-[#0D0D0F]">
+                      <p className="text-sm bg-[#F9F9FB] border border-black/[0.06] rounded-lg p-3 text-[#0D0D0F]">
                         <strong>Feedback:</strong> {sub.reviewerFeedback}
                       </p>
                     )}
@@ -1551,7 +1551,7 @@ export function LearnerDashboard({
                           setEditUrl(sub.artifactUrl || '');
                           setEditSummary(sub.documentationSummary);
                         }}
-                        className="inline-flex items-center gap-1.5 text-xs font-medium text-[#0D0D0F] border border-black/15 rounded-lg px-3 py-1.5 hover:border-black/35"
+                        className="inline-flex items-center gap-1.5 text-sm font-medium text-[#0D0D0F] border border-black/15 rounded-lg px-3 py-1.5 hover:border-black/35"
                       >
                         <Edit3 className="w-3.5 h-3.5" />
                         <span>
@@ -1567,7 +1567,7 @@ export function LearnerDashboard({
                     )}
 
                     {isEditing && (
-                      <div className="pt-3 border-t border-black/[0.08] space-y-2.5 text-xs">
+                      <div className="pt-3 border-t border-black/[0.08] space-y-2.5 text-sm">
                         <input
                           type="text"
                           required
@@ -1671,18 +1671,18 @@ export function LearnerDashboard({
       {tab === 'certificates' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-7 space-y-4">
-            <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+            <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
               {lang === 'en' ? 'Earned Certificates' : 'Impamyabumenyi Zawe'}
             </h2>
             {certificates.length === 0 ? (
               <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6 space-y-3">
                 <FileText className="w-6 h-6 text-[#5D5D66]" />
-                <p className="text-sm font-medium text-[#0D0D0F]">
+                <p className="text-[15px] font-medium text-[#0D0D0F]">
                   {lang === 'en'
                     ? 'Certificate issued upon completion'
                     : 'Impamyabumenyi itangwa iyo urangije'}
                 </p>
-                <p className="text-xs text-[#5D5D66] leading-relaxed">
+                <p className="text-sm text-[#5D5D66] leading-relaxed">
                   {lang === 'en'
                     ? `Complete your course lessons, achieve at least ${
                         platformSettings?.certificateMinQuizAvg ?? 70
@@ -1697,7 +1697,7 @@ export function LearnerDashboard({
                   <button
                     type="button"
                     onClick={() => onNavigate('verify')}
-                    className="text-xs font-medium text-[#0D7A5F] hover:underline"
+                    className="text-sm font-medium text-[#0D7A5F] hover:underline"
                   >
                     {lang === 'en'
                       ? 'Preview public verifier (RW-AI-2026-0042) ->'
@@ -1712,22 +1712,22 @@ export function LearnerDashboard({
                   className="bg-white border border-black/15 rounded-2xl p-6 flex flex-col sm:flex-row sm:items-start justify-between gap-4"
                 >
                   <div className="space-y-2">
-                    <div className="inline-flex items-center gap-1.5 text-xs font-medium text-[#0D7A5F]">
+                    <div className="inline-flex items-center gap-1.5 text-sm font-medium text-[#0D7A5F]">
                       <ShieldCheck className="w-4 h-4" />
                       <span>{cert.status.toUpperCase()}</span>
                     </div>
-                    <h3 className="text-base font-semibold text-[#0D0D0F]">{cert.courseTitle}</h3>
-                    <p className="text-xs text-[#5D5D66]">
+                    <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F]">{cert.courseTitle}</h3>
+                    <p className="text-sm text-[#5D5D66]">
                       {platformSettings?.certificateOrgName || 'AI Education Rwanda'} ·{' '}
                       {platformSettings?.certificateSignatoryName || 'Academic Director'}
                     </p>
-                    <p className="text-xs text-[#5D5D66] font-mono">
+                    <p className="text-sm text-[#5D5D66] font-mono">
                       ID: {cert.id} · Score: {cert.finalScore}%
                     </p>
                     <button
                       type="button"
                       onClick={() => setPrintCert(cert)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border border-black/15 rounded-lg hover:border-black/35"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium border border-black/15 rounded-lg hover:border-black/35"
                     >
                       <Printer className="w-3.5 h-3.5" />
                       <span>{lang === 'en' ? 'Print / Save PDF' : 'Sohora PDF'}</span>
@@ -1740,11 +1740,11 @@ export function LearnerDashboard({
           </div>
 
           <div className="lg:col-span-5 space-y-4">
-            <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+            <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
               {lang === 'en' ? 'Your Event Registrations' : 'Ibiganiro Wiyandikishijemo'}
             </h2>
             {eventRegistrations.length === 0 ? (
-              <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6 text-xs text-[#5D5D66]">
+              <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6 text-sm text-[#5D5D66]">
                 {lang === 'en' ? 'No workshop RSVPs yet.' : 'Nta kiganiro uriyandikishamo.'}
               </div>
             ) : (
@@ -1754,8 +1754,8 @@ export function LearnerDashboard({
                   className="bg-white border border-black/[0.08] rounded-xl p-4 flex items-center justify-between gap-3"
                 >
                   <div>
-                    <p className="text-sm font-medium text-[#0D0D0F]">{reg.eventTitle}</p>
-                    <p className="text-xs text-[#5D5D66] font-mono">
+                    <p className="text-[15px] font-medium text-[#0D0D0F]">{reg.eventTitle}</p>
+                    <p className="text-sm text-[#5D5D66] font-mono">
                       {reg.attendanceMode === 'kigali_in_person' ? 'Kigali In-Person' : 'Online'}
                     </p>
                   </div>
@@ -1771,11 +1771,11 @@ export function LearnerDashboard({
       {tab === 'notifications' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-7 space-y-4">
-            <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+            <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
               {lang === 'en' ? 'Your Notifications' : 'Ubutumwa Bwawe'}
             </h2>
             {notifications.length === 0 ? (
-              <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6 text-sm text-[#5D5D66]">
+              <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6 text-[15px] text-[#5D5D66]">
                 {lang === 'en'
                   ? 'No account notifications yet. Enrollment confirmations, payment approvals, and project feedback will appear here.'
                   : 'Nta butumwa bwa konti buraboneka.'}
@@ -1791,17 +1791,17 @@ export function LearnerDashboard({
                   }`}
                 >
                   <div>
-                    <p className="text-xs font-mono text-[#0D7A5F] uppercase mb-1">
+                    <p className="text-sm font-mono text-[#0D7A5F] uppercase mb-1">
                       {notif.category} {notif.isRead ? '· Read' : '· Unread'}
                     </p>
-                    <h3 className="text-sm font-semibold text-[#0D0D0F]">{notif.title}</h3>
-                    <p className="text-xs text-[#5D5D66] mt-1 leading-relaxed">{notif.message}</p>
+                    <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F]">{notif.title}</h3>
+                    <p className="text-sm text-[#5D5D66] mt-1 leading-relaxed">{notif.message}</p>
                   </div>
                   {!notif.isRead && (
                     <button
                       type="button"
                       onClick={() => handleMarkNotificationRead(notif.id)}
-                      className="px-3 py-1.5 text-xs font-medium border border-black/15 rounded-lg bg-white shrink-0"
+                      className="px-3 py-1.5 text-sm font-medium border border-black/15 rounded-lg bg-white shrink-0"
                     >
                       {lang === 'en' ? 'Mark read' : 'Byasomwe'}
                     </button>
@@ -1812,20 +1812,20 @@ export function LearnerDashboard({
           </div>
 
           <div className="lg:col-span-5 space-y-4">
-            <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+            <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
               {lang === 'en' ? 'Platform Announcements' : 'Amatangazo Rusange'}
             </h2>
             {publishedAnnouncements.length === 0 ? (
-              <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6 text-xs text-[#5D5D66]">
+              <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6 text-sm text-[#5D5D66]">
                 {lang === 'en' ? 'No active announcements.' : 'Nta matangazo ahari ubu.'}
               </div>
             ) : (
               publishedAnnouncements.map((ann) => (
                 <div key={ann.id} className="bg-white border border-black/[0.08] rounded-2xl p-5">
-                  <h3 className="text-sm font-semibold text-[#0D0D0F]">
+                  <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F]">
                     {lang === 'en' ? ann.titleEn : ann.titleRw}
                   </h3>
-                  <p className="text-xs text-[#5D5D66] mt-1.5 leading-relaxed">
+                  <p className="text-sm text-[#5D5D66] mt-1.5 leading-relaxed">
                     {lang === 'en' ? ann.bodyEn : ann.bodyRw}
                   </p>
                 </div>
@@ -1839,18 +1839,18 @@ export function LearnerDashboard({
       {tab === 'support' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-5 bg-white border border-black/[0.08] rounded-2xl p-6">
-            <h2 className="text-lg font-display font-semibold text-[#0D0D0F] mb-2">
+            <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F] mb-2">
               {lang === 'en' ? 'Request Learner Support' : 'Saba Ubufasha'}
             </h2>
             {platformSettings?.enableSupportTickets === false ? (
-              <p className="text-xs text-[#5D5D66] bg-[#F9F9FB] border border-black/[0.08] rounded-xl p-4">
+              <p className="text-sm text-[#5D5D66] bg-[#F9F9FB] border border-black/[0.08] rounded-xl p-4">
                 {lang === 'en'
                   ? 'New support ticket submissions are temporarily paused by administrators. You can still review and reply to existing tickets on the right.'
                   : 'Gufungura ibibazo bishya byahagaritswe by’agateganyo. Ushobora gukomeza kureba ibibazo bisanzwe iburyo.'}
               </p>
             ) : (
               <>
-                <p className="text-xs text-[#5D5D66] mb-4">
+                <p className="text-sm text-[#5D5D66] mb-4">
                   {lang === 'en'
                     ? 'Need help with Mobile Money verification, course access, or a lesson question? Open a ticket.'
                     : 'Ukeneye ubufasha ku bwishyu, amasomo, cyangwa impamyabumenyi? Tanga ikibazo hano.'}
@@ -1858,7 +1858,7 @@ export function LearnerDashboard({
                 <form onSubmit={handleSubmitSupportTicket} className="space-y-4">
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-medium mb-1">
+                      <label className="block text-sm font-medium mb-1">
                         {lang === 'en' ? 'Category' : 'Icyiciro'}
                       </label>
                       <select
@@ -1866,7 +1866,7 @@ export function LearnerDashboard({
                         onChange={(e) =>
                           setTicketCategory(e.target.value as SupportTicket['category'])
                         }
-                        className="w-full px-3 py-2 text-xs border border-black/15 rounded-lg bg-white"
+                        className="w-full px-3 py-2 text-sm border border-black/15 rounded-lg bg-white"
                       >
                         <option value="access">Course Access</option>
                         <option value="payment">Payment / MoMo</option>
@@ -1877,7 +1877,7 @@ export function LearnerDashboard({
                       </select>
                     </div>
                     <div>
-                      <label className="block text-xs font-medium mb-1">
+                      <label className="block text-sm font-medium mb-1">
                         {lang === 'en' ? 'Priority' : 'Uburemere'}
                       </label>
                       <select
@@ -1885,7 +1885,7 @@ export function LearnerDashboard({
                         onChange={(e) =>
                           setTicketPriority(e.target.value as SupportTicket['priority'])
                         }
-                        className="w-full px-3 py-2 text-xs border border-black/15 rounded-lg bg-white"
+                        className="w-full px-3 py-2 text-sm border border-black/15 rounded-lg bg-white"
                       >
                         <option value="low">Low</option>
                         <option value="normal">Normal</option>
@@ -1896,7 +1896,7 @@ export function LearnerDashboard({
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium mb-1">
+                    <label className="block text-sm font-medium mb-1">
                       {lang === 'en' ? 'Subject' : 'Umutwe w’ikibazo'}
                     </label>
                     <input
@@ -1906,12 +1906,12 @@ export function LearnerDashboard({
                       value={ticketSubject}
                       onChange={(e) => setTicketSubject(e.target.value)}
                       placeholder="e.g. Confirm MoMo reference MOMO-..."
-                      className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg"
+                      className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium mb-1">
+                    <label className="block text-sm font-medium mb-1">
                       {lang === 'en' ? 'Details' : 'Ibisobanuro'}
                     </label>
                     <textarea
@@ -1920,12 +1920,12 @@ export function LearnerDashboard({
                       minLength={5}
                       value={ticketDesc}
                       onChange={(e) => setTicketDesc(e.target.value)}
-                      className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg"
+                      className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg"
                     />
                   </div>
 
                   {ticketMsg && (
-                    <p className="text-xs text-[#0D7A5F] bg-[#ECFDF5] border border-[#0D7A5F]/20 rounded-lg px-3 py-2">
+                    <p className="text-sm text-[#0D7A5F] bg-[#ECFDF5] border border-[#0D7A5F]/20 rounded-lg px-3 py-2">
                       {ticketMsg}
                     </p>
                   )}
@@ -1933,7 +1933,7 @@ export function LearnerDashboard({
                   <button
                     type="submit"
                     disabled={ticketSaving}
-                    className="w-full px-4 py-2.5 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg"
+                    className="w-full px-4 py-2.5 text-[15px] font-medium text-white bg-[#0D0D0F] rounded-lg"
                   >
                     {ticketSaving
                       ? lang === 'en'
@@ -1949,11 +1949,11 @@ export function LearnerDashboard({
           </div>
 
           <div className="lg:col-span-7 space-y-4">
-            <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+            <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
               {lang === 'en' ? 'Your Support Requests' : 'Ibibazo Watanze'}
             </h2>
             {supportTickets.length === 0 ? (
-              <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6 text-sm text-[#5D5D66]">
+              <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6 text-[15px] text-[#5D5D66]">
                 {lang === 'en' ? 'No support tickets opened yet.' : 'Nta kibazo uratanga.'}
               </div>
             ) : (
@@ -1968,14 +1968,14 @@ export function LearnerDashboard({
                     className="bg-white border border-black/[0.08] rounded-2xl p-5 space-y-3"
                   >
                     <div className="flex flex-wrap items-center justify-between gap-2">
-                      <h3 className="text-sm font-semibold text-[#0D0D0F]">{tkt.subject}</h3>
-                      <span className="text-xs font-mono uppercase text-[#0D7A5F]">
+                      <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F]">{tkt.subject}</h3>
+                      <span className="text-sm font-mono uppercase text-[#0D7A5F]">
                         {tkt.status.replace('_', ' ')} · {tkt.priority}
                       </span>
                     </div>
-                    <p className="text-xs text-[#5D5D66]">{tkt.description}</p>
+                    <p className="text-sm text-[#5D5D66]">{tkt.description}</p>
                     {tkt.resolutionNote && (
-                      <div className="bg-[#F9F9FB] border border-black/[0.06] rounded-lg p-3 text-xs text-[#0D0D0F]">
+                      <div className="bg-[#F9F9FB] border border-black/[0.06] rounded-lg p-3 text-sm text-[#0D0D0F]">
                         <strong>Staff Resolution:</strong> {tkt.resolutionNote}
                       </div>
                     )}
@@ -1983,20 +1983,20 @@ export function LearnerDashboard({
                     {/* Conversation Thread */}
                     {thread.length > 0 && (
                       <div className="pt-2 border-t border-black/[0.06] space-y-2">
-                        <p className="text-[11px] font-mono text-[#5D5D66] flex items-center gap-1">
+                        <p className="text-[15px] font-mono text-[#5D5D66] flex items-center gap-1">
                           <MessageSquare className="w-3 h-3" />
                           <span>Conversation ({thread.length})</span>
                         </p>
                         {thread.map((msg) => (
                           <div
                             key={msg.id}
-                            className={`rounded-xl px-3.5 py-2.5 text-xs ${
+                            className={`rounded-xl px-3.5 py-2.5 text-sm ${
                               msg.senderRole === 'staff'
                                 ? 'bg-[#F2FBF8] border border-[#0D7A5F]/20 text-[#0D0D0F]'
                                 : 'bg-[#F9F9FB] border border-black/[0.06] text-[#0D0D0F]'
                             }`}
                           >
-                            <p className="font-semibold text-[11px] text-[#5D5D66] mb-0.5">
+                            <p className="font-semibold text-[15px] text-[#5D5D66] mb-0.5">
                               {msg.senderName} ({msg.senderRole === 'staff' ? 'Support Staff' : 'You'})
                             </p>
                             <p className="whitespace-pre-line">{msg.message}</p>
@@ -2016,14 +2016,14 @@ export function LearnerDashboard({
                           placeholder={
                             lang === 'en' ? 'Write a reply to support...' : 'Andika igisubizo...'
                           }
-                          className="flex-1 px-3 py-1.5 text-xs border border-black/15 rounded-lg"
+                          className="flex-1 px-3 py-1.5 text-sm border border-black/15 rounded-lg"
                         />
                         <div className="flex items-center gap-2 shrink-0">
                           <button
                             type="button"
                             disabled={replyBusyId === tkt.id || !(replyDrafts[tkt.id] || '').trim()}
                             onClick={() => handleSendTicketReply(tkt)}
-                            className="px-3 py-1.5 text-xs font-medium text-white bg-[#0D0D0F] rounded-lg disabled:opacity-50"
+                            className="px-3 py-1.5 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg disabled:opacity-50"
                           >
                             {lang === 'en' ? 'Send Reply' : 'Ohereza'}
                           </button>
@@ -2031,7 +2031,7 @@ export function LearnerDashboard({
                             type="button"
                             disabled={replyBusyId === tkt.id}
                             onClick={() => handleCloseTicket(tkt)}
-                            className="px-3 py-1.5 text-xs font-medium border border-black/15 rounded-lg text-[#5D5D66] hover:text-[#0D0D0F]"
+                            className="px-3 py-1.5 text-sm font-medium border border-black/15 rounded-lg text-[#5D5D66] hover:text-[#0D0D0F]"
                           >
                             {lang === 'en' ? 'Close Ticket' : 'Funga Ikibazo'}
                           </button>
@@ -2049,12 +2049,12 @@ export function LearnerDashboard({
       {/* TAB 7: ACCOUNT SETTINGS */}
       {tab === 'settings' && (
         <div className="max-w-lg bg-white border border-black/[0.08] rounded-2xl p-6 sm:p-8">
-          <h2 className="text-lg font-display font-semibold text-[#0D0D0F] mb-4">
+          <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F] mb-4">
             {lang === 'en' ? 'Profile, Language & Privacy Settings' : 'Amakuru ya Konti n’Ururimi'}
           </h2>
           <form onSubmit={handleSaveSettings} className="space-y-4">
             <div>
-              <label className="block text-xs font-medium text-[#0D0D0F] mb-1">
+              <label className="block text-sm font-medium text-[#0D0D0F] mb-1">
                 {lang === 'en' ? 'Display Name (appears on Certificate)' : 'Amazina yawe'}
               </label>
               <input
@@ -2062,19 +2062,19 @@ export function LearnerDashboard({
                 required
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
-                className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg"
+                className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-[#0D0D0F] mb-1">
+              <label className="block text-sm font-medium text-[#0D0D0F] mb-1">
                 {lang === 'en' ? 'Preferred Course Language' : 'Ururimi uhisemo'}
               </label>
               <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
                   onClick={() => onChangeLang('en')}
-                  className={`px-3 py-2 text-xs font-medium rounded-lg border ${
+                  className={`px-3 py-2 text-sm font-medium rounded-lg border ${
                     lang === 'en'
                       ? 'bg-[#0D0D0F] text-white border-[#0D0D0F]'
                       : 'bg-white text-[#0D0D0F] border-black/15'
@@ -2085,7 +2085,7 @@ export function LearnerDashboard({
                 <button
                   type="button"
                   onClick={() => onChangeLang('rw')}
-                  className={`px-3 py-2 text-xs font-medium rounded-lg border ${
+                  className={`px-3 py-2 text-sm font-medium rounded-lg border ${
                     lang === 'rw'
                       ? 'bg-[#0D0D0F] text-white border-[#0D0D0F]'
                       : 'bg-white text-[#0D0D0F] border-black/15'
@@ -2097,7 +2097,7 @@ export function LearnerDashboard({
             </div>
 
             <div className="pt-2 border-t border-black/[0.08] space-y-2.5">
-              <label className="flex items-start gap-2.5 text-xs text-[#0D0D0F]">
+              <label className="flex items-start gap-2.5 text-sm text-[#0D0D0F]">
                 <input
                   type="checkbox"
                   checked={privacyAccepted}
@@ -2109,14 +2109,14 @@ export function LearnerDashboard({
                     ? 'I accept the AI Education Rwanda privacy and learner record verification policy.'
                     : 'Nemeye amabwiriza y’ibanga n’ububiko bw’amakuru bya AI Education Rwanda.'}
                   {profile?.privacyConsentAcceptedAt && (
-                    <span className="block text-[11px] font-mono text-[#0D7A5F] mt-0.5">
+                    <span className="block text-[15px] font-mono text-[#0D7A5F] mt-0.5">
                       Accepted: {profile.privacyConsentAcceptedAt.slice(0, 10)}
                     </span>
                   )}
                 </span>
               </label>
 
-              <label className="flex items-start gap-2.5 text-xs text-[#0D0D0F]">
+              <label className="flex items-start gap-2.5 text-sm text-[#0D0D0F]">
                 <input
                   type="checkbox"
                   checked={marketingOptIn}
@@ -2132,7 +2132,7 @@ export function LearnerDashboard({
             </div>
 
             {settingsSaved && (
-              <p className="text-xs text-[#0D7A5F]">
+              <p className="text-sm text-[#0D7A5F]">
                 {lang === 'en' ? 'Preferences saved.' : 'Byabitswe neza.'}
               </p>
             )}
@@ -2140,7 +2140,7 @@ export function LearnerDashboard({
             <button
               type="submit"
               disabled={savingSettings}
-              className="px-5 py-2.5 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg"
+              className="px-5 py-2.5 text-[15px] font-medium text-white bg-[#0D0D0F] rounded-lg"
             >
               {savingSettings
                 ? lang === 'en'
@@ -2163,12 +2163,12 @@ export function LearnerDashboard({
         >
           <div className="bg-white border border-black/15 rounded-t-2xl sm:rounded-2xl max-w-2xl w-full max-h-[92dvh] overflow-y-auto p-5 sm:p-8 space-y-6">
             <div className="flex items-center justify-between print:hidden">
-              <span className="text-xs font-mono text-[#5D5D66]">Certificate Preview</span>
+              <span className="text-sm font-mono text-[#5D5D66]">Certificate Preview</span>
               <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={() => window.print()}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-medium text-white bg-[#0D7A5F] rounded-lg"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-sm font-medium text-white bg-[#0D7A5F] rounded-lg"
                 >
                   <Printer className="w-3.5 h-3.5" />
                   <span>Print / Save PDF</span>
@@ -2187,10 +2187,10 @@ export function LearnerDashboard({
             <div className="border-2 border-[#0D0D0F] rounded-xl p-8 space-y-6 bg-[#FAFAFC]">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="text-xs font-mono tracking-widest uppercase text-[#0D7A5F]">
+                  <p className="text-sm font-mono tracking-widest uppercase text-[#0D7A5F]">
                     {platformSettings?.certificateOrgName || 'AI Education Rwanda'}
                   </p>
-                  <h2 className="text-2xl font-display font-semibold text-[#0D0D0F] mt-1">
+                  <h2 className="text-[24px] sm:text-[28px] tracking-[-0.02em] leading-[1.2] font-display font-bold text-[#0D0D0F] mt-1">
                     Certificate of Practical Completion
                   </h2>
                 </div>
@@ -2198,11 +2198,11 @@ export function LearnerDashboard({
               </div>
 
               <div className="py-4 border-y border-black/10 space-y-2">
-                <p className="text-xs text-[#5D5D66]">This certifies that</p>
+                <p className="text-sm text-[#5D5D66]">This certifies that</p>
                 <p className="text-3xl font-display font-semibold text-[#0D0D0F]">
                   {printCert.learnerName}
                 </p>
-                <p className="text-sm text-[#5D5D66]">
+                <p className="text-[15px] text-[#5D5D66]">
                   successfully completed{' '}
                   <strong className="text-[#0D0D0F]">{printCert.courseTitle}</strong> with a final
                   rubric-verified score of{' '}
@@ -2210,7 +2210,7 @@ export function LearnerDashboard({
                 </p>
               </div>
 
-              <div className="flex items-end justify-between gap-4 text-xs">
+              <div className="flex items-end justify-between gap-4 text-sm">
                 <div>
                   <p className="font-semibold text-[#0D0D0F]">
                     {platformSettings?.certificateSignatoryName || 'Founder & Academic Director'}

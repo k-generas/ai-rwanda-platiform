@@ -799,10 +799,10 @@ export function CoursesView({
       <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-4 space-y-3">
         <div className="flex items-center justify-between gap-2">
           <div>
-            <p className="text-[11px] font-mono text-[#0D7A5F] uppercase">
+            <p className="text-[15px] font-mono text-[#0D7A5F] uppercase">
               {activeCourse.code} · {lang === 'en' ? 'Navigator' : 'Amasomo'}
             </p>
-            <p className="text-xs font-semibold text-[#0D0D0F] tabular-nums">
+            <p className="text-sm font-semibold text-[#0D0D0F] tabular-nums">
               {activeEnrollment
                 ? `${activeEnrollment.completedDays.length}/${totalCourseDays} ${lang === 'en' ? 'completed' : 'byarangiye'}`
                 : `${totalCourseDays} ${lang === 'en' ? 'days' : 'iminsi'}`}
@@ -811,7 +811,7 @@ export function CoursesView({
           <button
             type="button"
             onClick={() => onSelectDay(null)}
-            className="text-xs font-medium text-[#5D5D66] hover:text-[#0D0D0F]"
+            className="text-sm font-medium text-[#5D5D66] hover:text-[#0D0D0F]"
           >
             {lang === 'en' ? 'Syllabus' : 'Urutonde'}
           </button>
@@ -824,7 +824,7 @@ export function CoursesView({
             value={railSearch}
             onChange={(e) => setRailSearch(e.target.value)}
             placeholder={lang === 'en' ? 'Find day or topic...' : 'Shakisha umunsi...'}
-            className="w-full pl-8 pr-2.5 py-1.5 text-xs bg-white border border-black/10 rounded-lg"
+            className="w-full pl-8 pr-2.5 py-1.5 text-sm bg-white border border-black/10 rounded-lg"
           />
         </div>
 
@@ -832,7 +832,7 @@ export function CoursesView({
           <button
             type="button"
             onClick={() => setRailWeekFilter('all')}
-            className={`px-2 py-1 text-[11px] font-mono rounded-md border ${
+            className={`px-2 py-1 text-[15px] font-mono rounded-md border ${
               railWeekFilter === 'all'
                 ? 'bg-[#0D0D0F] text-white border-[#0D0D0F]'
                 : 'bg-white text-[#5D5D66] border-black/10'
@@ -845,7 +845,7 @@ export function CoursesView({
               key={wk}
               type="button"
               onClick={() => setRailWeekFilter(wk)}
-              className={`px-2 py-1 text-[11px] font-mono rounded-md border ${
+              className={`px-2 py-1 text-[15px] font-mono rounded-md border ${
                 railWeekFilter === wk
                   ? 'bg-[#0D0D0F] text-white border-[#0D0D0F]'
                   : 'bg-white text-[#5D5D66] border-black/10'
@@ -876,7 +876,7 @@ export function CoursesView({
                 }`}
               >
                 <div className="min-w-0">
-                  <div className="flex items-center gap-1.5 text-[10px] font-mono tabular-nums">
+                  <div className="flex items-center gap-1.5 text-[15px] font-mono tabular-nums">
                     <span className={isCurrent ? 'text-[#34D399]' : 'text-[#0D7A5F]'}>
                       D{item.dayNum}
                     </span>
@@ -886,7 +886,7 @@ export function CoursesView({
                       </span>
                     )}
                   </div>
-                  <p className="text-xs font-medium truncate">{item.dayTitle}</p>
+                  <p className="text-sm font-medium truncate">{item.dayTitle}</p>
                 </div>
                 <span className="shrink-0 mt-0.5">
                   {item.dayDone ? (
@@ -902,7 +902,7 @@ export function CoursesView({
           })}
         </div>
 
-        <p className="text-[10px] text-[#5D5D66] font-mono pt-1 border-t border-black/[0.06]">
+        <p className="text-[15px] text-[#5D5D66] font-mono pt-1 border-t border-black/[0.06]">
           {lang === 'en' ? 'Tip: Alt + ← / → switches day' : 'Alt + ← / → guhindura umunsi'}
         </p>
       </div>
@@ -915,7 +915,7 @@ export function CoursesView({
             <button
               type="button"
               onClick={() => onSelectDay(null)}
-              className="inline-flex items-center gap-2 text-sm font-medium text-[#5D5D66] hover:text-[#0D0D0F] transition-colors"
+              className="inline-flex items-center gap-2 text-[15px] font-medium text-[#5D5D66] hover:text-[#0D0D0F] transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>{lang === 'en' ? 'Syllabus' : 'Urutonde'}</span>
@@ -923,14 +923,14 @@ export function CoursesView({
             <button
               type="button"
               onClick={() => setDrawerOpen((prev) => !prev)}
-              className="lg:hidden inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border border-black/15 rounded-lg hover:border-black/30"
+              className="lg:hidden inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium border border-black/15 rounded-lg hover:border-black/30"
             >
               <List className="w-3.5 h-3.5" />
               <span>{lang === 'en' ? 'Course Navigator' : 'Hitamo Isomo'}</span>
             </button>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 text-xs text-[#5D5D66] font-mono tabular-nums">
+          <div className="flex flex-wrap items-center gap-3 text-sm text-[#5D5D66] font-mono tabular-nums">
             <span>{`Day ${displayDay} / ${totalCourseDays}`}</span>
             <span aria-hidden="true">·</span>
             <span>{`${structuredRec?.estimatedMinutes ?? lesson.durationMinutes} min`}</span>
@@ -955,15 +955,15 @@ export function CoursesView({
         {releaseLock.locked ? (
           <div className="bg-[#FFFBEB] border border-[#D97706]/30 rounded-2xl p-8 sm:p-12 text-center max-w-2xl mx-auto">
             <Clock className="w-8 h-8 text-[#B45309] mx-auto mb-4" />
-            <p className="text-xs font-mono uppercase text-[#B45309] mb-2">
+            <p className="text-sm font-mono uppercase text-[#B45309] mb-2">
               {lang === 'en' ? 'Scheduled Release' : 'Isomo Rifungiwe Igihe'}
             </p>
-            <h2 className="text-2xl font-display font-semibold text-[#0D0D0F] mb-3">
+            <h2 className="text-[24px] sm:text-[28px] tracking-[-0.02em] leading-[1.2] font-display font-bold text-[#0D0D0F] mb-3">
               {lang === 'en'
                 ? `Day ${displayDay}: ${displayTitle}`
                 : `Umunsi wa ${displayDay}: ${displayTitle}`}
             </h2>
-            <p className="text-sm text-[#5D5D66] leading-relaxed mb-6">
+            <p className="text-[15px] text-[#5D5D66] leading-relaxed mb-6">
               {lang === 'en'
                 ? `This ${releaseLock.scope === 'module' ? 'module' : 'lesson'} is scheduled to unlock on ${releaseDateFormatted} (Africa/Kigali). Your enrollment and existing progress remain saved.`
                 : `Iri somo rizafungurwa ku itariki ya ${releaseDateFormatted}. Ibyo wamaze gukora birabitswe neza.`}
@@ -972,7 +972,7 @@ export function CoursesView({
               <button
                 type="button"
                 onClick={() => onSelectDay(null)}
-                className="px-5 py-2.5 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329] transition-colors"
+                className="px-5 py-2.5 text-[15px] font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329] transition-colors"
               >
                 {lang === 'en' ? 'Return to Course Syllabus' : 'Subira ku Rutonde rw’Amasomo'}
               </button>
@@ -980,7 +980,7 @@ export function CoursesView({
                 <button
                   type="button"
                   onClick={() => onSelectDay(1)}
-                  className="px-4 py-2.5 text-sm font-medium text-[#0D0D0F] bg-white border border-black/15 rounded-lg hover:border-black/30"
+                  className="px-4 py-2.5 text-[15px] font-medium text-[#0D0D0F] bg-white border border-black/15 rounded-lg hover:border-black/30"
                 >
                   {lang === 'en' ? 'Open Day 1' : 'Soma Umunsi wa 1'}
                 </button>
@@ -990,12 +990,12 @@ export function CoursesView({
         ) : !unlocked ? (
           <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-8 sm:p-12 text-center max-w-2xl mx-auto">
             <Lock className="w-8 h-8 text-[#0D0D0F] mx-auto mb-4" />
-            <h2 className="text-2xl font-display font-semibold text-[#0D0D0F] mb-3">
+            <h2 className="text-[24px] sm:text-[28px] tracking-[-0.02em] leading-[1.2] font-display font-bold text-[#0D0D0F] mb-3">
               {lang === 'en'
                 ? `Day ${displayDay}: ${displayTitle}`
                 : `Umunsi wa ${displayDay}: ${displayTitle}`}
             </h2>
-            <p className="text-sm text-[#5D5D66] leading-relaxed mb-6">
+            <p className="text-[15px] text-[#5D5D66] leading-relaxed mb-6">
               {lang === 'en'
                 ? `Sample lessons are open for free preview. Enroll in ${activeCourse.title.en} (${activeCourse.priceRwf.toLocaleString()} RWF) to unlock all lessons and assessments.`
                 : `Amasomo y’igerageza arafunguye ku buntu. Iyandikishe kugira ngo ufungure amasomo yose.`}
@@ -1011,7 +1011,7 @@ export function CoursesView({
                     onSelectDay(null);
                   }
                 }}
-                className="px-5 py-2.5 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329] transition-colors"
+                className="px-5 py-2.5 text-[15px] font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329] transition-colors"
               >
                 {user
                   ? lang === 'en'
@@ -1024,7 +1024,7 @@ export function CoursesView({
               <button
                 type="button"
                 onClick={() => onSelectDay(1)}
-                className="px-4 py-2.5 text-sm font-medium text-[#0D0D0F] border border-black/15 rounded-lg hover:border-black/30"
+                className="px-4 py-2.5 text-[15px] font-medium text-[#0D0D0F] border border-black/15 rounded-lg hover:border-black/30"
               >
                 {lang === 'en' ? 'Read Day 1 Sample' : 'Soma Umunsi wa 1 ku buntu'}
               </button>
@@ -1034,7 +1034,7 @@ export function CoursesView({
           <article className="space-y-8">
             <header className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
               <div>
-                <p className="text-xs font-medium text-[#0D7A5F] mb-2">
+                <p className="text-sm font-medium text-[#0D7A5F] mb-2">
                   {activeCourse.title[lang]}
                   {structuredRec?.isSample || (activeCourse.id === 'challenge-28' && lesson.isSample)
                     ? lang === 'en'
@@ -1042,7 +1042,7 @@ export function CoursesView({
                       : ' · Isomo ry’igerageza'
                     : ''}
                 </p>
-                <h1 className="text-3xl sm:text-4xl font-display font-semibold tracking-tight text-[#0D0D0F] text-balance mb-4">
+                <h1 className="text-3xl sm:text-4xl font-display font-bold tracking-tight text-[#0D0D0F] text-balance mb-4">
                   {lang === 'en'
                     ? `Day ${displayDay}: ${displayTitle}`
                     : `Umunsi wa ${displayDay}: ${displayTitle}`}
@@ -1057,7 +1057,7 @@ export function CoursesView({
                   type="button"
                   disabled={savingNote}
                   onClick={() => handleSaveStudyNote(!noteBookmarked)}
-                  className={`inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg border shrink-0 transition-colors ${
+                  className={`inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg border shrink-0 transition-colors ${
                     noteBookmarked
                       ? 'bg-[#ECFDF5] border-[#0D7A5F]/40 text-[#0D7A5F]'
                       : 'bg-white border-black/15 text-[#0D0D0F] hover:border-black/30'
@@ -1080,7 +1080,7 @@ export function CoursesView({
             {/* In-Lesson Quick Jump Strip & Low-Bandwidth / Deliverable Summary */}
             <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-4 space-y-3">
               {(displayDeliverable || displayWorksheet) && (
-                <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
+                <div className="flex flex-wrap items-center justify-between gap-3 text-sm">
                   <div className="space-y-0.5">
                     {displayDeliverable && (
                       <p className="text-[#0D0D0F]">
@@ -1101,7 +1101,7 @@ export function CoursesView({
                     <button
                       type="button"
                       onClick={() => onNavigate('projects')}
-                      className="px-3 py-1.5 text-xs font-medium bg-white border border-black/15 rounded-lg hover:border-black/35 shrink-0"
+                      className="px-3 py-1.5 text-sm font-medium bg-white border border-black/15 rounded-lg hover:border-black/35 shrink-0"
                     >
                       {lang === 'en' ? 'Open Toolkit & Templates' : 'Ibikoresho & Impapuro'}
                     </button>
@@ -1110,7 +1110,7 @@ export function CoursesView({
               )}
 
               {!useStructuredReader && (
-                <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-black/[0.06] text-xs">
+                <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-black/[0.06] text-sm">
                   <span className="text-[#5D5D66] font-mono">
                     {lang === 'en' ? 'Jump:' : 'Jya kuri:'}
                   </span>
@@ -1135,12 +1135,12 @@ export function CoursesView({
 
             {displayObjectives.length > 0 && (
               <section id="sec-objectives" className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6">
-                <h2 className="text-sm font-semibold text-[#0D0D0F] mb-3">
+                <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F] mb-3">
                   {lang === 'en' ? '01. Learning Objectives' : '01. Intego z’Isomo'}
                 </h2>
                 <ul className="space-y-2">
                   {displayObjectives.map((obj) => (
-                    <li key={obj} className="text-sm text-[#5D5D66] flex items-start gap-2.5">
+                    <li key={obj} className="text-[15px] text-[#5D5D66] flex items-start gap-2.5">
                       <CheckCircle2 className="w-4 h-4 text-[#0D7A5F] shrink-0 mt-0.5" />
                       <span>{obj}</span>
                     </li>
@@ -1156,18 +1156,18 @@ export function CoursesView({
                 {/* Simple vs Technical Explanation */}
                 <section id="sec-explanations" className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="border border-black/[0.08] rounded-2xl p-6">
-                    <h2 className="text-sm font-semibold text-[#0D0D0F] mb-2">
+                    <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F] mb-2">
                       {lang === 'en' ? '02. Simple Explanation' : '02. Ibisobanuro Byoroshye'}
                     </h2>
-                    <p className="text-sm text-[#5D5D66] leading-relaxed">
+                    <p className="text-[15px] text-[#5D5D66] leading-relaxed">
                       {lesson.simpleExplanation[lang]}
                     </p>
                   </div>
                   <div className="border border-black/[0.08] rounded-2xl p-6">
-                    <h2 className="text-sm font-semibold text-[#0D0D0F] mb-2">
+                    <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F] mb-2">
                       {lang === 'en' ? '03. Technical Explanation' : '03. Ibisobanuro by’Ubuhanga'}
                     </h2>
-                    <p className="text-sm text-[#5D5D66] leading-relaxed">
+                    <p className="text-[15px] text-[#5D5D66] leading-relaxed">
                       {lesson.technicalExplanation[lang]}
                     </p>
                   </div>
@@ -1176,18 +1176,18 @@ export function CoursesView({
                 {/* Real-World & Rwanda Examples */}
                 <section id="sec-examples" className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6">
-                    <h2 className="text-sm font-semibold text-[#0D0D0F] mb-2">
+                    <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F] mb-2">
                       {lang === 'en' ? '04. Global Real-World Example' : '04. Urugero Rusanzwe ku Isi'}
                     </h2>
-                    <p className="text-sm text-[#5D5D66] leading-relaxed">
+                    <p className="text-[15px] text-[#5D5D66] leading-relaxed">
                       {lesson.realWorldExample[lang]}
                     </p>
                   </div>
                   <div className="bg-[#F2FBF8] border border-[#0D7A5F]/20 rounded-2xl p-6">
-                    <h2 className="text-sm font-semibold text-[#0D0D0F] mb-2">
+                    <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F] mb-2">
                       {lang === 'en' ? '05. Rwanda-Relevant Example' : '05. Urugero rwo mu Rwanda'}
                     </h2>
-                    <p className="text-sm text-[#0D0D0F]/85 leading-relaxed">
+                    <p className="text-[15px] text-[#0D0D0F]/85 leading-relaxed">
                       {lesson.rwandaExample[lang]}
                     </p>
                   </div>
@@ -1196,22 +1196,22 @@ export function CoursesView({
                 {/* Practical Demonstration & Tools */}
                 <section id="sec-exercise" className="border border-black/[0.08] rounded-2xl p-6 space-y-5">
                   <div className="flex flex-wrap items-center justify-between gap-3">
-                    <h2 className="text-base font-semibold text-[#0D0D0F]">
+                    <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
                       {lang === 'en'
                         ? '06. Practical Demonstration & Step-by-Step Exercise'
                         : '06. Umwitozo Ngiro n’Intambwe'}
                     </h2>
-                    <span className="text-xs font-mono text-[#5D5D66]">
+                    <span className="text-sm font-mono text-[#5D5D66]">
                       {lesson.tools.join(' · ')}
                     </span>
                   </div>
-                  <p className="text-sm text-[#5D5D66] leading-relaxed">
+                  <p className="text-[15px] text-[#5D5D66] leading-relaxed">
                     {lesson.practicalDemo[lang]}
                   </p>
                   <ol className="space-y-2.5 pt-2">
                     {lesson.exerciseSteps[lang].map((step, idx) => (
-                      <li key={step} className="text-sm text-[#0D0D0F] flex items-start gap-3">
-                        <span className="font-mono text-xs text-[#0D7A5F] tabular-nums mt-0.5">
+                      <li key={step} className="text-[15px] text-[#0D0D0F] flex items-start gap-3">
+                        <span className="font-mono text-sm text-[#0D7A5F] tabular-nums mt-0.5">
                           {`0${idx + 1}.`}
                         </span>
                         <span>{step}</span>
@@ -1221,7 +1221,7 @@ export function CoursesView({
 
                   <div className="bg-[#0D0D0F] text-white rounded-xl p-5 mt-4">
                     <div className="flex items-center justify-between gap-4 mb-3">
-                      <span className="text-xs font-mono text-white/70">
+                      <span className="text-sm font-mono text-white/70">
                         {lang === 'en'
                           ? 'Reusable Prompt / Workflow Template'
                           : 'Ibwiriza Rikoreshwa Kenshi'}
@@ -1229,7 +1229,7 @@ export function CoursesView({
                       <button
                         type="button"
                         onClick={() => handleCopyTemplate(lesson.dayNumber, lesson.reusableTemplate[lang])}
-                        className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium bg-white/10 hover:bg-white/20 rounded-md transition-colors"
+                        className="inline-flex items-center gap-1.5 px-3 py-1 text-sm font-medium bg-white/10 hover:bg-white/20 rounded-md transition-colors"
                       >
                         {copiedDay === lesson.dayNumber ? (
                           <>
@@ -1244,7 +1244,7 @@ export function CoursesView({
                         )}
                       </button>
                     </div>
-                    <pre className="text-xs sm:text-sm font-mono whitespace-pre-wrap text-white/90 leading-relaxed">
+                    <pre className="text-[15px] sm:text-[15px] font-mono whitespace-pre-wrap text-white/90 leading-relaxed">
                       {lesson.reusableTemplate[lang]}
                     </pre>
                   </div>
@@ -1253,20 +1253,20 @@ export function CoursesView({
                 {/* Common Mistakes & Risks */}
                 <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="border border-black/[0.08] rounded-2xl p-6">
-                    <h2 className="text-sm font-semibold text-[#0D0D0F] mb-3">
+                    <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F] mb-3">
                       {lang === 'en' ? '07. Common Mistakes' : '07. Amakosa Akunze Gukorwa'}
                     </h2>
-                    <ul className="space-y-2 text-sm text-[#5D5D66]">
+                    <ul className="space-y-2 text-[15px] text-[#5D5D66]">
                       {lesson.commonMistakes[lang].map((m) => (
                         <li key={m}>— {m}</li>
                       ))}
                     </ul>
                   </div>
                   <div className="border border-black/[0.08] rounded-2xl p-6">
-                    <h2 className="text-sm font-semibold text-[#0D0D0F] mb-3">
+                    <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F] mb-3">
                       {lang === 'en' ? '08. Limitations & Privacy Risks' : '08. Imipaka n’Umutekano'}
                     </h2>
-                    <p className="text-sm text-[#5D5D66] leading-relaxed">
+                    <p className="text-[15px] text-[#5D5D66] leading-relaxed">
                       {lesson.limitationsAndRisks[lang]}
                     </p>
                   </div>
@@ -1274,7 +1274,7 @@ export function CoursesView({
 
                 {/* Knowledge Check */}
                 <section id="sec-check" className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6">
-                  <h2 className="text-sm font-semibold text-[#0D0D0F] mb-2">
+                  <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F] mb-2">
                     {lang === 'en' ? '09. Knowledge Check' : '09. Isuzuma ry’Isomo'}
                   </h2>
                   <p className="text-base font-medium text-[#0D0D0F] mb-4">
@@ -1291,7 +1291,7 @@ export function CoursesView({
                           onClick={() =>
                             setQuizAnswer((prev) => ({ ...prev, [lesson.dayNumber]: idx }))
                           }
-                          className={`w-full text-left px-4 py-3 rounded-xl border text-sm transition-colors ${
+                          className={`w-full text-left px-4 py-3 rounded-xl border text-[15px] transition-colors ${
                             isPicked
                               ? isCorrect
                                 ? 'bg-[#ECFDF5] border-[#0D7A5F] text-[#0D0D0F]'
@@ -1305,7 +1305,7 @@ export function CoursesView({
                     })}
                   </div>
                   {chosenOption !== null && (
-                    <p className="mt-4 text-xs text-[#5D5D66] leading-relaxed">
+                    <p className="mt-4 text-sm text-[#5D5D66] leading-relaxed">
                       <strong className="text-[#0D0D0F]">
                         {chosenOption === lesson.knowledgeCheck.correctIndex
                           ? lang === 'en'
@@ -1326,10 +1326,10 @@ export function CoursesView({
             {user && user.emailVerified && (
               <section className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6 space-y-3">
                 <div className="flex items-center justify-between gap-3">
-                  <h2 className="text-sm font-semibold text-[#0D0D0F]">
+                  <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
                     {lang === 'en' ? 'Personal Study Notes' : 'Inyandiko Zawe bwite'}
                   </h2>
-                  {noteSavedMsg && <span className="text-xs text-[#0D7A5F]">{noteSavedMsg}</span>}
+                  {noteSavedMsg && <span className="text-sm text-[#0D7A5F]">{noteSavedMsg}</span>}
                 </div>
                 <textarea
                   rows={3}
@@ -1340,14 +1340,14 @@ export function CoursesView({
                       ? 'Jot down key takeaways, prompt variations, or Rwanda context ideas...'
                       : 'Andika ibyo wize cyangwa ibibazo ushaka gusubiramo...'
                   }
-                  className="w-full px-3.5 py-2.5 text-sm bg-white border border-black/15 rounded-lg"
+                  className="w-full px-3.5 py-2.5 text-[15px] bg-white border border-black/15 rounded-lg"
                 />
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <button
                     type="button"
                     disabled={savingNote}
                     onClick={() => handleSaveStudyNote(noteBookmarked)}
-                    className="px-4 py-2 text-xs font-medium text-white bg-[#0D0D0F] rounded-lg"
+                    className="px-4 py-2 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg"
                   >
                     {savingNote
                       ? lang === 'en'
@@ -1361,7 +1361,7 @@ export function CoursesView({
                     <button
                       type="button"
                       onClick={() => onNavigate('dashboard')}
-                      className="inline-flex items-center gap-1.5 text-xs text-[#5D5D66] hover:text-[#0D0D0F]"
+                      className="inline-flex items-center gap-1.5 text-sm text-[#5D5D66] hover:text-[#0D0D0F]"
                     >
                       <Flag className="w-3.5 h-3.5" />
                       <span>{lang === 'en' ? 'Report Lesson Issue' : 'Menyesha Ikibazo mu Isomo'}</span>
@@ -1375,12 +1375,12 @@ export function CoursesView({
             {isCompleted && (
               <section className="bg-[#ECFDF5] border border-[#0D7A5F]/25 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                  <p className="text-sm font-semibold text-[#0D7A5F]">
+                  <p className="text-[15px] font-semibold text-[#0D7A5F]">
                     {lang === 'en'
                       ? `Day ${displayDay} Completed`
                       : `Umunsi wa ${displayDay} Wararangiye`}
                   </p>
-                  <p className="text-xs text-[#0D0D0F]/80 mt-0.5">
+                  <p className="text-sm text-[#0D0D0F]/80 mt-0.5">
                     {displayDay < totalCourseDays
                       ? lang === 'en'
                         ? `Continue to Day ${displayDay + 1} or check weekly assessments & projects in your Learner Portal.`
@@ -1394,7 +1394,7 @@ export function CoursesView({
                   <button
                     type="button"
                     onClick={() => onNavigate('dashboard')}
-                    className="px-4 py-2 text-xs font-medium text-white bg-[#0D7A5F] rounded-lg shrink-0"
+                    className="px-4 py-2 text-sm font-medium text-white bg-[#0D7A5F] rounded-lg shrink-0"
                   >
                     {lang === 'en' ? 'Open Assessments' : 'Fungura Amasuzuma'}
                   </button>
@@ -1406,10 +1406,10 @@ export function CoursesView({
             <section className="border-t border-black/[0.08] pt-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               {!useStructuredReader ? (
                 <div>
-                  <p className="text-xs font-semibold text-[#0D0D0F] mb-1">
+                  <p className="text-sm font-semibold text-[#0D0D0F] mb-1">
                     {lang === 'en' ? 'Reflection Question' : 'Ikibazo cyo Gutekerezaho'}
                   </p>
-                  <p className="text-sm text-[#5D5D66] max-w-xl">
+                  <p className="text-[15px] text-[#5D5D66] max-w-xl">
                     {lesson.reflectionQuestion[lang]}
                   </p>
                 </div>
@@ -1422,7 +1422,7 @@ export function CoursesView({
                   <button
                     type="button"
                     onClick={() => onSelectDay(displayDay - 1)}
-                    className="inline-flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium text-[#0D0D0F] border border-black/15 rounded-lg hover:border-black/30 whitespace-nowrap"
+                    className="inline-flex items-center gap-1.5 px-4 py-2.5 text-[15px] font-medium text-[#0D0D0F] border border-black/15 rounded-lg hover:border-black/30 whitespace-nowrap"
                   >
                     <ArrowLeft className="w-4 h-4" />
                     <span>{lang === 'en' ? `Day ${displayDay - 1}` : `Umunsi ${displayDay - 1}`}</span>
@@ -1434,7 +1434,7 @@ export function CoursesView({
                     type="button"
                     disabled={isCompleted || markingComplete}
                     onClick={() => handleMarkDayComplete(displayDay)}
-                    className={`px-4 py-2.5 text-sm font-medium rounded-lg transition-colors whitespace-nowrap ${
+                    className={`px-4 py-2.5 text-[15px] font-medium rounded-lg transition-colors whitespace-nowrap ${
                       isCompleted
                         ? 'bg-[#ECFDF5] text-[#0D7A5F] border border-[#0D7A5F]/30'
                         : 'bg-[#0D7A5F] text-white hover:bg-[#0B664F]'
@@ -1458,7 +1458,7 @@ export function CoursesView({
                   <button
                     type="button"
                     onClick={() => onSelectDay(displayDay + 1)}
-                    className="inline-flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329] transition-colors whitespace-nowrap"
+                    className="inline-flex items-center gap-1.5 px-4 py-2.5 text-[15px] font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329] transition-colors whitespace-nowrap"
                   >
                     <span>
                       {lang === 'en' ? `Day ${displayDay + 1}` : `Umunsi wa ${displayDay + 1}`}
@@ -1492,7 +1492,7 @@ export function CoursesView({
         <button
           type="button"
           onClick={() => onSelectCourse(null)}
-          className="inline-flex items-center gap-2 text-sm font-medium text-[#5D5D66] hover:text-[#0D0D0F] transition-colors mb-8"
+          className="inline-flex items-center gap-2 text-[15px] font-medium text-[#5D5D66] hover:text-[#0D0D0F] transition-colors mb-8"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>{lang === 'en' ? 'All courses' : 'Amasomo yose'}</span>
@@ -1500,7 +1500,7 @@ export function CoursesView({
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 pb-12 border-b border-black/[0.08]">
           <div className="lg:col-span-7">
-            <p className="text-xs font-mono text-[#0D7A5F] mb-2">
+            <p className="text-sm font-mono text-[#0D7A5F] mb-2">
               {activeCourse.code} · {activeCourse.levelRange} · {activeCourse.durationDays}{' '}
               {lang === 'en' ? 'Days' : 'Iminsi'}
             </p>
@@ -1512,7 +1512,7 @@ export function CoursesView({
             </p>
 
             {activeCourse.prerequisitesText && (
-              <div className="mb-6 bg-[#F9F9FB] border border-black/[0.08] rounded-xl p-4 text-xs text-[#5D5D66]">
+              <div className="mb-6 bg-[#F9F9FB] border border-black/[0.08] rounded-xl p-4 text-sm text-[#5D5D66]">
                 <strong className="text-[#0D0D0F]">
                   {lang === 'en' ? 'Prerequisites: ' : 'Ibisabwa mbere: '}
                 </strong>
@@ -1522,14 +1522,14 @@ export function CoursesView({
 
             {activeCohorts.length > 0 && (
               <div className="mb-6 space-y-2">
-                <h2 className="text-xs font-semibold text-[#0D0D0F]">
+                <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
                   {lang === 'en' ? 'Upcoming & Active Cohorts' : 'Ibyiciro biriho'}
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   {activeCohorts.map((ch) => (
                     <div
                       key={ch.id}
-                      className="bg-[#F9F9FB] border border-black/[0.08] rounded-xl px-4 py-3 text-xs"
+                      className="bg-[#F9F9FB] border border-black/[0.08] rounded-xl px-4 py-3 text-sm"
                     >
                       <p className="font-semibold text-[#0D0D0F]">{ch.name}</p>
                       <p className="text-[#5D5D66] font-mono mt-0.5">
@@ -1545,7 +1545,7 @@ export function CoursesView({
             )}
 
             <div className="flex items-center justify-between gap-3 mb-3">
-              <h2 className="text-sm font-semibold text-[#0D0D0F]">
+              <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
                 {lang === 'en'
                   ? `Learning Outcomes (${activeCourse.outcomes[lang].length})`
                   : `Icyo uzageraho (${activeCourse.outcomes[lang].length})`}
@@ -1554,7 +1554,7 @@ export function CoursesView({
                 <button
                   type="button"
                   onClick={() => setShowAllOutcomes((v) => !v)}
-                  className="text-xs font-medium text-[#0D7A5F] hover:underline"
+                  className="text-sm font-medium text-[#0D7A5F] hover:underline"
                 >
                   {showAllOutcomes
                     ? lang === 'en'
@@ -1571,7 +1571,7 @@ export function CoursesView({
                 ? activeCourse.outcomes[lang]
                 : activeCourse.outcomes[lang].slice(0, 5)
               ).map((outcome) => (
-                <li key={outcome} className="text-sm text-[#5D5D66] flex items-start gap-2.5">
+                <li key={outcome} className="text-[15px] text-[#5D5D66] flex items-start gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-[#0D7A5F] shrink-0 mt-0.5" />
                   <span>{outcome}</span>
                 </li>
@@ -1580,10 +1580,10 @@ export function CoursesView({
 
             {activeCourse.audience[lang].length > 0 && (
               <div className="mb-6 bg-[#F9F9FB] border border-black/[0.08] rounded-xl p-4">
-                <p className="text-xs font-semibold text-[#0D0D0F] mb-2">
+                <p className="text-sm font-semibold text-[#0D0D0F] mb-2">
                   {lang === 'en' ? 'Target Learners' : 'Abo isomo rigenewe'}
                 </p>
-                <p className="text-xs text-[#5D5D66] leading-relaxed">
+                <p className="text-sm text-[#5D5D66] leading-relaxed">
                   {activeCourse.audience[lang].join(' · ')}
                 </p>
               </div>
@@ -1594,7 +1594,7 @@ export function CoursesView({
                 <Smartphone className="w-4 h-4" />
                 <Laptop className="w-4 h-4" />
               </div>
-              <p className="text-xs text-[#5D5D66] leading-relaxed">
+              <p className="text-sm text-[#5D5D66] leading-relaxed">
                 <strong className="text-[#0D0D0F]">
                   {lang === 'en' ? 'Device requirements: ' : 'Ibikoresho bikenewe: '}
                 </strong>
@@ -1617,7 +1617,7 @@ export function CoursesView({
               <div className="p-6 space-y-5">
                 <div className="flex items-baseline justify-between">
                   <div>
-                    <p className="text-xs text-[#5D5D66]">
+                    <p className="text-sm text-[#5D5D66]">
                       {activeCourse.status === 'active'
                         ? lang === 'en'
                           ? 'One-time pilot enrollment'
@@ -1634,7 +1634,7 @@ export function CoursesView({
                         : `${activeCourse.priceRwf.toLocaleString()} RWF`}
                     </p>
                   </div>
-                  <span className="text-xs font-mono text-[#0D7A5F]">
+                  <span className="text-sm font-mono text-[#0D7A5F]">
                     {activeCourse.status === 'active'
                       ? lang === 'en'
                         ? 'EN + RW Bilingual'
@@ -1648,7 +1648,7 @@ export function CoursesView({
                 {activeCourse.status === 'active' ? (
                   hasFullAccess || isFreeCourse ? (
                     <div className="space-y-3">
-                      <div className="bg-[#ECFDF5] border border-[#0D7A5F]/25 rounded-xl p-3.5 text-xs text-[#0D0D0F]">
+                      <div className="bg-[#ECFDF5] border border-[#0D7A5F]/25 rounded-xl p-3.5 text-sm text-[#0D0D0F]">
                         {activeEnrollment
                           ? lang === 'en'
                             ? `Enrolled · ${completedCount} of ${activeCourse.durationDays} days completed`
@@ -1662,7 +1662,7 @@ export function CoursesView({
                               : 'Ufite ububasha bw’ubuyobozi'}
                       </div>
                       {freeEnrollError && (
-                        <p className="text-xs text-[#DC2626] bg-[#FEF2F2] border border-[#DC2626]/20 rounded-lg px-3 py-2">
+                        <p className="text-sm text-[#DC2626] bg-[#FEF2F2] border border-[#DC2626]/20 rounded-lg px-3 py-2">
                           {freeEnrollError}
                         </p>
                       )}
@@ -1671,7 +1671,7 @@ export function CoursesView({
                           type="button"
                           disabled={freeEnrolling}
                           onClick={handleFreeEnroll}
-                          className="w-full px-4 py-2.5 text-sm font-medium text-white bg-[#0D7A5F] rounded-lg hover:bg-[#0B664F]"
+                          className="w-full px-4 py-2.5 text-[15px] font-medium text-white bg-[#0D7A5F] rounded-lg hover:bg-[#0B664F]"
                         >
                           {freeEnrolling
                             ? 'Enrolling...'
@@ -1687,7 +1687,7 @@ export function CoursesView({
                             lastVisitedByCourse[activeCourse.id] || activeEnrollment?.currentDay || 1
                           )
                         }
-                        className="w-full px-4 py-3 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329] transition-colors"
+                        className="w-full px-4 py-3 text-[15px] font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329] transition-colors"
                       >
                         {lang === 'en'
                           ? `Continue Day ${lastVisitedByCourse[activeCourse.id] || activeEnrollment?.currentDay || 1}`
@@ -1696,7 +1696,7 @@ export function CoursesView({
                     </div>
                   ) : pendingEnrollment ? (
                     <div className="space-y-3">
-                      <div className="bg-[#FFFBEB] border border-[#D97706]/30 rounded-xl p-3.5 text-xs text-[#0D0D0F] space-y-1">
+                      <div className="bg-[#FFFBEB] border border-[#D97706]/30 rounded-xl p-3.5 text-sm text-[#0D0D0F] space-y-1">
                         <p className="font-semibold">
                           {lang === 'en'
                             ? 'Payment Request Pending Verification'
@@ -1714,7 +1714,7 @@ export function CoursesView({
                       <button
                         type="button"
                         onClick={() => onSelectDay(1)}
-                        className="w-full px-4 py-2.5 text-sm font-medium text-[#0D0D0F] border border-black/15 rounded-lg hover:border-black/30 transition-colors"
+                        className="w-full px-4 py-2.5 text-[15px] font-medium text-[#0D0D0F] border border-black/15 rounded-lg hover:border-black/30 transition-colors"
                       >
                         {lang === 'en' ? 'Read Free Sample Lesson (Day 1)' : 'Soma Isomo rya 1 ku Buntu'}
                       </button>
@@ -1730,7 +1730,7 @@ export function CoursesView({
                             setCheckoutOpen(true);
                           }
                         }}
-                        className="w-full px-4 py-3 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329] transition-colors"
+                        className="w-full px-4 py-3 text-[15px] font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329] transition-colors"
                       >
                         {user
                           ? lang === 'en'
@@ -1743,7 +1743,7 @@ export function CoursesView({
                       <button
                         type="button"
                         onClick={() => onSelectDay(1)}
-                        className="w-full px-4 py-2.5 text-sm font-medium text-[#0D0D0F] border border-black/15 rounded-lg hover:border-black/30 transition-colors"
+                        className="w-full px-4 py-2.5 text-[15px] font-medium text-[#0D0D0F] border border-black/15 rounded-lg hover:border-black/30 transition-colors"
                       >
                         {lang === 'en' ? 'Read Free Sample Lesson (Day 1)' : 'Soma Isomo rya 1 ku Buntu'}
                       </button>
@@ -1756,17 +1756,17 @@ export function CoursesView({
                       setWaitlistCourse(activeCourse);
                       setWaitlistDone(false);
                     }}
-                    className="w-full px-4 py-3 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329] transition-colors"
+                    className="w-full px-4 py-3 text-[15px] font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329] transition-colors"
                   >
                     {lang === 'en' ? 'Join Upcoming Cohort Waitlist' : 'Iyandikishe ku rutonde rw’abategereje'}
                   </button>
                 ) : (
-                  <p className="text-xs text-[#5D5D66] border border-black/10 rounded-lg p-3 text-center">
+                  <p className="text-sm text-[#5D5D66] border border-black/10 rounded-lg p-3 text-center">
                     {lang === 'en' ? 'Cohort waitlist is currently closed.' : 'Urutonde rurafunze.'}
                   </p>
                 )}
 
-                <p className="text-xs text-[#5D5D66] leading-relaxed">
+                <p className="text-sm text-[#5D5D66] leading-relaxed">
                   {lang === 'en'
                     ? 'Free-tool policy: all introductory exercises run on free tiers of ChatGPT, Gemini, NotebookLM, Google Workspace, and Make.'
                     : 'Imyitozo yose ikoresha porogaramu z’ubuntu nta bundi buryo bwishyurwa busabwa.'}
@@ -1802,7 +1802,7 @@ export function CoursesView({
                   <button
                     type="button"
                     onClick={() => onSelectDay(resumeDay)}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-white bg-[#0D7A5F] rounded-lg hover:bg-[#0B664F]"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium text-white bg-[#0D7A5F] rounded-lg hover:bg-[#0B664F]"
                   >
                     <Play className="w-3.5 h-3.5" />
                     <span>
@@ -1811,7 +1811,7 @@ export function CoursesView({
                         : `Fungura Umunsi wa ${resumeDay}`}
                     </span>
                   </button>
-                  <div className="flex flex-wrap items-center gap-1.5 text-xs">
+                  <div className="flex flex-wrap items-center gap-1.5 text-sm">
                     <span className="text-[#5D5D66] ml-1">
                       {lang === 'en' ? 'Free Samples:' : 'Ubuntu:'}
                     </span>
@@ -1820,7 +1820,7 @@ export function CoursesView({
                         key={sDay}
                         type="button"
                         onClick={() => onSelectDay(sDay)}
-                        className="px-2.5 py-1.5 font-mono text-xs bg-white border border-black/15 rounded-lg hover:border-[#0D7A5F]"
+                        className="px-2.5 py-1.5 font-mono text-sm bg-white border border-black/15 rounded-lg hover:border-[#0D7A5F]"
                       >
                         D{sDay}
                       </button>
@@ -1832,7 +1832,7 @@ export function CoursesView({
                   <button
                     type="button"
                     onClick={() => setDetailTab('syllabus')}
-                    className={`px-3 py-1.5 text-xs font-medium rounded-lg border ${
+                    className={`px-3 py-1.5 text-sm font-medium rounded-lg border ${
                       detailTab === 'syllabus'
                         ? 'bg-[#0D0D0F] text-white border-[#0D0D0F]'
                         : 'bg-white text-[#5D5D66] border-black/10'
@@ -1843,7 +1843,7 @@ export function CoursesView({
                   <button
                     type="button"
                     onClick={() => setDetailTab('blueprint')}
-                    className={`px-3 py-1.5 text-xs font-medium rounded-lg border ${
+                    className={`px-3 py-1.5 text-sm font-medium rounded-lg border ${
                       detailTab === 'blueprint'
                         ? 'bg-[#0D0D0F] text-white border-[#0D0D0F]'
                         : 'bg-white text-[#5D5D66] border-black/10'
@@ -1855,7 +1855,7 @@ export function CoursesView({
                     <button
                       type="button"
                       onClick={() => onNavigate('projects')}
-                      className="px-3 py-1.5 text-xs font-medium bg-white border border-black/15 rounded-lg hover:border-black/30"
+                      className="px-3 py-1.5 text-sm font-medium bg-white border border-black/15 rounded-lg hover:border-black/30"
                     >
                       {lang === 'en' ? '6 Projects & Toolkits' : 'Imishinga 6'}
                     </button>
@@ -1868,15 +1868,15 @@ export function CoursesView({
                   {/* Blueprint Master Specification PDF Link & Course Scope */}
                   <div className="bg-white border border-black/[0.08] rounded-2xl p-6 flex flex-wrap items-center justify-between gap-4">
                     <div>
-                      <p className="text-xs font-mono text-[#0D7A5F] mb-1">
+                      <p className="text-sm font-mono text-[#0D7A5F] mb-1">
                         ACADEMIC &amp; PRODUCT MASTER BLUEPRINT · VERSION 1.0
                       </p>
-                      <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+                      <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
                         {lang === 'en'
                           ? 'Grading Structure, 7-Level Alignment & Course Standards'
                           : 'Imiterere y’Amanota n’Ibyiciro 7'}
                       </h2>
-                      <p className="text-xs text-[#5D5D66] mt-1 max-w-2xl">
+                      <p className="text-sm text-[#5D5D66] mt-1 max-w-2xl">
                         {lang === 'en'
                           ? 'Every lesson includes 16 structured sections (simple & technical explanations, Rwanda example, guided exercise, downloadable resource, verification check & reflection). Passing requires >=70% overall plus Final Project demonstration.'
                           : 'Buri somo ririmo ibice 16 birimo imyitozo ngiro, urugero rwo mu Rwanda, impapuro n’isuzuma. Gutahukana impamyabumenyi bisaba nibura 70%.'}
@@ -1886,7 +1886,7 @@ export function CoursesView({
                       href="/assets/aistudio/first_28_day_AI_COURSE_f519e752.pdf"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2 text-xs font-medium bg-[#0D0D0F] text-white rounded-lg hover:bg-[#232329]"
+                      className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-[#0D0D0F] text-white rounded-lg hover:bg-[#232329]"
                     >
                       <FileText className="w-3.5 h-3.5" />
                       <span>
@@ -1897,7 +1897,7 @@ export function CoursesView({
 
                   {/* Section 6 Assessment Weights */}
                   <div>
-                    <h3 className="text-base font-semibold text-[#0D0D0F] mb-3">
+                    <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F] mb-3">
                       {lang === 'en'
                         ? 'Section 6 Assessment Weighting (100%)'
                         : 'Uko Amanota Agabanywa (100%)'}
@@ -1909,14 +1909,14 @@ export function CoursesView({
                           className="bg-white border border-black/[0.08] rounded-xl p-4 space-y-1.5"
                         >
                           <div className="flex items-center justify-between gap-2">
-                            <span className="text-xs font-semibold text-[#0D0D0F]">
+                            <span className="text-sm font-semibold text-[#0D0D0F]">
                               {w.label[lang]}
                             </span>
-                            <span className="text-sm font-mono font-semibold text-[#0D7A5F] tabular-nums">
+                            <span className="text-[15px] font-mono font-semibold text-[#0D7A5F] tabular-nums">
                               {w.weightPct}%
                             </span>
                           </div>
-                          <p className="text-xs text-[#5D5D66] leading-relaxed">
+                          <p className="text-sm text-[#5D5D66] leading-relaxed">
                             {w.requirement[lang]}
                           </p>
                         </div>
@@ -1926,7 +1926,7 @@ export function CoursesView({
 
                   {/* 7-Criterion Final Project Rubric */}
                   <div>
-                    <h3 className="text-base font-semibold text-[#0D0D0F] mb-3">
+                    <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F] mb-3">
                       {lang === 'en'
                         ? 'Final Project Rubric (7 Criteria · 30% Capstone)'
                         : 'Ibipimo 7 by’Umushinga wa Nyuma (30%)'}
@@ -1938,10 +1938,10 @@ export function CoursesView({
                           className="bg-[#F9F9FB] border border-black/[0.08] rounded-xl p-4 flex items-start justify-between gap-4"
                         >
                           <div>
-                            <p className="text-xs font-semibold text-[#0D0D0F]">{c.criterion[lang]}</p>
-                            <p className="text-xs text-[#5D5D66] mt-0.5">{c.description[lang]}</p>
+                            <p className="text-sm font-semibold text-[#0D0D0F]">{c.criterion[lang]}</p>
+                            <p className="text-sm text-[#5D5D66] mt-0.5">{c.description[lang]}</p>
                           </div>
-                          <span className="text-xs font-mono font-semibold text-[#0D7A5F] tabular-nums shrink-0">
+                          <span className="text-sm font-mono font-semibold text-[#0D7A5F] tabular-nums shrink-0">
                             {c.weightPct}%
                           </span>
                         </div>
@@ -1951,7 +1951,7 @@ export function CoursesView({
 
                   {/* 7-Level Skills Matrix */}
                   <div>
-                    <h3 className="text-base font-semibold text-[#0D0D0F] mb-3">
+                    <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F] mb-3">
                       {lang === 'en' ? 'Seven-Level AI Skills Progression' : 'Ibyiciro 7 by’Ubumenyi'}
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -1960,11 +1960,11 @@ export function CoursesView({
                           key={lvl.level}
                           className="bg-white border border-black/[0.08] rounded-xl p-4 space-y-1.5"
                         >
-                          <p className="text-xs font-mono text-[#0D7A5F] tabular-nums">
+                          <p className="text-sm font-mono text-[#0D7A5F] tabular-nums">
                             Level 0{lvl.level} {lvl.codeRange ? `· ${lvl.codeRange}` : ''}
                           </p>
-                          <p className="text-sm font-semibold text-[#0D0D0F]">{lvl.title[lang]}</p>
-                          <p className="text-xs text-[#5D5D66]">{lvl.outcome[lang]}</p>
+                          <p className="text-[15px] font-semibold text-[#0D0D0F]">{lvl.title[lang]}</p>
+                          <p className="text-sm text-[#5D5D66]">{lvl.outcome[lang]}</p>
                         </div>
                       ))}
                     </div>
@@ -1974,10 +1974,10 @@ export function CoursesView({
                 <div className="space-y-4">
                   <div className="flex flex-wrap items-center justify-between gap-4">
                     <div>
-                      <h2 className="text-2xl font-display font-semibold text-[#0D0D0F]">
+                      <h2 className="text-[24px] sm:text-[28px] tracking-[-0.02em] leading-[1.2] font-display font-bold text-[#0D0D0F]">
                         {lang === 'en' ? 'Structured Course Curriculum' : 'Gahunda y’Amasomo'}
                       </h2>
-                      <p className="text-sm text-[#5D5D66] mt-1">
+                      <p className="text-[15px] text-[#5D5D66] mt-1">
                         {courseModules.length} {lang === 'en' ? 'modules' : 'ibyiciro'} ·{' '}
                         {courseStructuredLessons.length} {lang === 'en' ? 'lessons' : 'amasomo'}
                       </p>
@@ -1990,13 +1990,13 @@ export function CoursesView({
                           value={syllabusSearch}
                           onChange={(e) => setSyllabusSearch(e.target.value)}
                           placeholder={lang === 'en' ? 'Search syllabus...' : 'Shakisha isomo...'}
-                          className="pl-8 pr-3 py-1.5 text-xs bg-white border border-black/15 rounded-lg"
+                          className="pl-8 pr-3 py-1.5 text-sm bg-white border border-black/15 rounded-lg"
                         />
                       </div>
                       <button
                         type="button"
                         onClick={() => setExpandAllSyllabus((v) => !v)}
-                        className="px-3 py-1.5 text-xs font-medium bg-white border border-black/15 rounded-lg hover:border-black/30"
+                        className="px-3 py-1.5 text-sm font-medium bg-white border border-black/15 rounded-lg hover:border-black/30"
                       >
                         {expandAllSyllabus
                           ? lang === 'en'
@@ -2014,7 +2014,7 @@ export function CoursesView({
                     <button
                       type="button"
                       onClick={() => setSyllabusWeekFilter('all')}
-                      className={`px-3 py-1.5 text-xs font-medium rounded-lg border ${
+                      className={`px-3 py-1.5 text-sm font-medium rounded-lg border ${
                         syllabusWeekFilter === 'all'
                           ? 'bg-[#0D0D0F] text-white border-[#0D0D0F]'
                           : 'bg-white text-[#5D5D66] border-black/10'
@@ -2030,7 +2030,7 @@ export function CoursesView({
                           setSyllabusWeekFilter(idx + 1);
                           setOpenModuleId(m.id);
                         }}
-                        className={`px-3 py-1.5 text-xs font-medium rounded-lg border ${
+                        className={`px-3 py-1.5 text-sm font-medium rounded-lg border ${
                           syllabusWeekFilter === idx + 1
                             ? 'bg-[#0D0D0F] text-white border-[#0D0D0F]'
                             : 'bg-white text-[#5D5D66] border-black/10'
@@ -2075,7 +2075,7 @@ export function CoursesView({
                               className="w-full px-6 py-4 flex items-center justify-between gap-4 text-left hover:bg-[#F9F9FB] transition-colors"
                             >
                               <div>
-                                <p className="text-xs font-mono text-[#0D7A5F] tabular-nums">
+                                <p className="text-sm font-mono text-[#0D7A5F] tabular-nums">
                                   {lang === 'en' ? `Module 0${mIdx + 1}` : `Igice cya 0${mIdx + 1}`}
                                   {modReleaseLock.locked && (
                                     <span className="ml-2 text-[#B45309]">
@@ -2086,7 +2086,7 @@ export function CoursesView({
                                     </span>
                                   )}
                                 </p>
-                                <h3 className="text-base font-semibold text-[#0D0D0F]">
+                                <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F]">
                                   {lang === 'en' ? mod.titleEn : mod.titleRw}
                                 </h3>
                               </div>
@@ -2116,14 +2116,14 @@ export function CoursesView({
                                       className="w-full px-6 py-4 flex items-center justify-between gap-4 text-left hover:bg-[#F9F9FB] transition-colors"
                                     >
                                       <div className="flex items-center gap-4 min-w-0">
-                                        <span className="text-xs font-mono tabular-nums text-[#5D5D66] w-14 shrink-0">
+                                        <span className="text-sm font-mono tabular-nums text-[#5D5D66] w-14 shrink-0">
                                           {lang === 'en' ? `Day ${les.dayNumber}` : `Umunsi ${les.dayNumber}`}
                                         </span>
                                         <div className="min-w-0">
-                                          <p className="text-sm font-medium text-[#0D0D0F] truncate">
+                                          <p className="text-[15px] font-medium text-[#0D0D0F] truncate">
                                             {lang === 'en' ? les.titleEn : les.titleRw}
                                           </p>
-                                          <p className="text-xs text-[#5D5D66] truncate tabular-nums">
+                                          <p className="text-sm text-[#5D5D66] truncate tabular-nums">
                                             {les.estimatedMinutes || 15} min
                                             {les.deliverableEn
                                               ? ` · ${lang === 'en' ? les.deliverableEn : les.deliverableRw || les.deliverableEn}`
@@ -2133,12 +2133,12 @@ export function CoursesView({
                                       </div>
                                       <div className="flex items-center gap-3 shrink-0">
                                         {done && (
-                                          <span className="text-xs font-medium text-[#0D7A5F]">
+                                          <span className="text-sm font-medium text-[#0D7A5F]">
                                             {lang === 'en' ? 'Done' : 'Byarangiye'}
                                           </span>
                                         )}
                                         {lesLock.locked && (
-                                          <span className="inline-flex items-center gap-1 text-xs font-medium text-[#B45309]">
+                                          <span className="inline-flex items-center gap-1 text-sm font-medium text-[#B45309]">
                                             <Clock className="w-3.5 h-3.5" />
                                             <span>
                                               {formatReleaseDateLabel(
@@ -2150,7 +2150,7 @@ export function CoursesView({
                                           </span>
                                         )}
                                         {!lesLock.locked && les.isSample && !hasFullAccess && (
-                                          <span className="text-xs font-medium text-[#0D7A5F]">
+                                          <span className="text-sm font-medium text-[#0D7A5F]">
                                             {lang === 'en' ? 'Free sample' : 'Ubuntu'}
                                           </span>
                                         )}
@@ -2174,10 +2174,10 @@ export function CoursesView({
                 <div className="space-y-4">
                   <div className="flex flex-wrap items-center justify-between gap-4">
                     <div>
-                      <h2 className="text-2xl font-display font-semibold text-[#0D0D0F]">
+                      <h2 className="text-[24px] sm:text-[28px] tracking-[-0.02em] leading-[1.2] font-display font-bold text-[#0D0D0F]">
                         {lang === 'en' ? 'Complete 28-Day Curriculum' : 'Gahunda yuzuye y’Iminsi 28'}
                       </h2>
-                      <p className="text-sm text-[#5D5D66] mt-1">
+                      <p className="text-[15px] text-[#5D5D66] mt-1">
                         {lang === 'en'
                           ? 'Days 1, 2, 8, 15, and 22 are unlocked as free sample lessons for all visitors.'
                           : 'Iminsi ya 1, 2, 8, 15 na 22 irafunguye ku buntu kuri buri wese.'}
@@ -2191,13 +2191,13 @@ export function CoursesView({
                           value={syllabusSearch}
                           onChange={(e) => setSyllabusSearch(e.target.value)}
                           placeholder={lang === 'en' ? 'Search days or tools...' : 'Shakisha isomo...'}
-                          className="pl-8 pr-3 py-1.5 text-xs bg-white border border-black/15 rounded-lg"
+                          className="pl-8 pr-3 py-1.5 text-sm bg-white border border-black/15 rounded-lg"
                         />
                       </div>
                       <button
                         type="button"
                         onClick={() => setExpandAllSyllabus((v) => !v)}
-                        className="px-3 py-1.5 text-xs font-medium bg-white border border-black/15 rounded-lg hover:border-black/30"
+                        className="px-3 py-1.5 text-sm font-medium bg-white border border-black/15 rounded-lg hover:border-black/30"
                       >
                         {expandAllSyllabus
                           ? lang === 'en'
@@ -2215,7 +2215,7 @@ export function CoursesView({
                     <button
                       type="button"
                       onClick={() => setSyllabusWeekFilter('all')}
-                      className={`px-3 py-1.5 text-xs font-medium rounded-lg border ${
+                      className={`px-3 py-1.5 text-sm font-medium rounded-lg border ${
                         syllabusWeekFilter === 'all'
                           ? 'bg-[#0D0D0F] text-white border-[#0D0D0F]'
                           : 'bg-white text-[#5D5D66] border-black/10'
@@ -2231,7 +2231,7 @@ export function CoursesView({
                           setSyllabusWeekFilter(wk);
                           setOpenWeek(wk);
                         }}
-                        className={`px-3 py-1.5 text-xs font-medium rounded-lg border ${
+                        className={`px-3 py-1.5 text-sm font-medium rounded-lg border ${
                           syllabusWeekFilter === wk
                             ? 'bg-[#0D0D0F] text-white border-[#0D0D0F]'
                             : 'bg-white text-[#5D5D66] border-black/10'
@@ -2278,10 +2278,10 @@ export function CoursesView({
                               className="w-full px-6 py-4 flex items-center justify-between gap-4 text-left hover:bg-[#F9F9FB] transition-colors"
                             >
                               <div>
-                                <p className="text-xs font-mono text-[#0D7A5F] tabular-nums">
+                                <p className="text-sm font-mono text-[#0D7A5F] tabular-nums">
                                   {lang === 'en' ? `Week 0${weekNum}` : `Icyumweru cya 0${weekNum}`}
                                 </p>
-                                <h3 className="text-base font-semibold text-[#0D0D0F]">{weekTitle}</h3>
+                                <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F]">{weekTitle}</h3>
                               </div>
                               {isOpen ? (
                                 <ChevronUp className="w-5 h-5 text-[#5D5D66]" />
@@ -2313,14 +2313,14 @@ export function CoursesView({
                                       className="w-full px-6 py-4 flex items-center justify-between gap-4 text-left hover:bg-[#F9F9FB] transition-colors"
                                     >
                                       <div className="flex items-center gap-4 min-w-0">
-                                        <span className="text-xs font-mono tabular-nums text-[#5D5D66] w-14 shrink-0">
+                                        <span className="text-sm font-mono tabular-nums text-[#5D5D66] w-14 shrink-0">
                                           {lang === 'en' ? `Day ${lesson.dayNumber}` : `Umunsi ${lesson.dayNumber}`}
                                         </span>
                                         <div className="min-w-0">
-                                          <p className="text-sm font-medium text-[#0D0D0F] truncate">
+                                          <p className="text-[15px] font-medium text-[#0D0D0F] truncate">
                                             {lesson.title[lang]}
                                           </p>
-                                          <p className="text-xs text-[#5D5D66] truncate">
+                                          <p className="text-sm text-[#5D5D66] truncate">
                                             {lesson.deliverable
                                               ? `${lesson.deliverable[lang]} · ${lesson.tools.join(' · ')}`
                                               : lesson.tools.join(' · ')}
@@ -2330,12 +2330,12 @@ export function CoursesView({
 
                                       <div className="flex items-center gap-3 shrink-0">
                                         {done && (
-                                          <span className="text-xs font-medium text-[#0D7A5F]">
+                                          <span className="text-sm font-medium text-[#0D7A5F]">
                                             {lang === 'en' ? 'Done' : 'Byarangiye'}
                                           </span>
                                         )}
                                         {lesLock.locked && (
-                                          <span className="inline-flex items-center gap-1 text-xs font-medium text-[#B45309]">
+                                          <span className="inline-flex items-center gap-1 text-sm font-medium text-[#B45309]">
                                             <Clock className="w-3.5 h-3.5" />
                                             <span>
                                               {formatReleaseDateLabel(
@@ -2347,7 +2347,7 @@ export function CoursesView({
                                           </span>
                                         )}
                                         {!lesLock.locked && lesson.isSample && !hasFullAccess && (
-                                          <span className="text-xs font-medium text-[#0D7A5F]">
+                                          <span className="text-sm font-medium text-[#0D7A5F]">
                                             {lang === 'en' ? 'Free sample' : 'Ubuntu'}
                                           </span>
                                         )}
@@ -2368,7 +2368,7 @@ export function CoursesView({
                   </div>
                 </div>
               ) : (
-                <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6 text-sm text-[#5D5D66]">
+                <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6 text-[15px] text-[#5D5D66]">
                   {lang === 'en'
                     ? 'Curriculum modules for this upcoming track are currently being finalized by our academic team.'
                     : 'Gahunda y’iri somo rishya iri gutegurwa n’ikipe y’uburezi.'}
@@ -2388,7 +2388,7 @@ export function CoursesView({
           >
             <div className="bg-white border border-black/10 rounded-t-2xl sm:rounded-2xl max-w-lg w-full max-h-[92dvh] overflow-y-auto p-5 sm:p-8">
               <div className="flex items-center justify-between gap-4 mb-5">
-                <h2 id="checkout-title" className="text-xl sm:text-2xl font-display font-bold text-[#0D0D0F]">
+                <h2 id="checkout-title" className="text-xl sm:text-[24px] sm:text-[28px] tracking-[-0.02em] leading-[1.2] font-display font-bold text-[#0D0D0F]">
                   {lang === 'en' ? 'Mobile Money Enrollment' : 'Kwishyura na Mobile Money'}
                 </h2>
                 <button
@@ -2398,7 +2398,7 @@ export function CoursesView({
                     setPayError(null);
                     setPaySuccessInfo(null);
                   }}
-                  className="px-3 py-1.5 text-sm font-medium text-[#5D5D66] hover:text-[#0D0D0F] rounded-lg hover:bg-[#F4F5F7]"
+                  className="px-3 py-1.5 text-[15px] font-medium text-[#5D5D66] hover:text-[#0D0D0F] rounded-lg hover:bg-[#F4F5F7]"
                 >
                   {lang === 'en' ? 'Close' : 'Funga'}
                 </button>
@@ -2422,14 +2422,14 @@ export function CoursesView({
                           ? 'Payment Request Submitted — Pending Verification'
                           : 'Ubusabe bwo Kwishyura Bwoherejwe — Butegereje Kwemezwa'}
                     </p>
-                    <p className="text-sm text-[#5D5D66] font-mono mb-1.5">
+                    <p className="text-[15px] text-[#5D5D66] font-mono mb-1.5">
                       Reference: {paySuccessInfo.transactionRef}
                     </p>
                     {paySuccessInfo.gatewayMessage && (
-                      <p className="text-sm text-[#0D7A5F] mb-1.5">{paySuccessInfo.gatewayMessage}</p>
+                      <p className="text-[15px] text-[#0D7A5F] mb-1.5">{paySuccessInfo.gatewayMessage}</p>
                     )}
                     {paySuccessInfo.status === 'pending' && (
-                      <p className="text-sm text-[#5D5D66] leading-relaxed">
+                      <p className="text-[15px] text-[#5D5D66] leading-relaxed">
                         {lang === 'en'
                           ? 'Your request is recorded for payment verification. Full course access unlocks immediately once confirmed. You can read free sample lessons right now.'
                           : 'Ubusabe bwawe bwabitswe kugira ngo bwemezwe. Ushobora gutangira usoma amasomo y’ubuntu ako kanya.'}
@@ -2458,7 +2458,7 @@ export function CoursesView({
                       </span>
                     </div>
                     {appliedCoupon && (
-                      <p className="text-xs font-mono text-[#0D7A5F]">
+                      <p className="text-sm font-mono text-[#0D7A5F]">
                         Coupon {appliedCoupon.code}: -{appliedCoupon.discountRwf.toLocaleString()} RWF (Original{' '}
                         {activeCourse.priceRwf.toLocaleString()} RWF)
                       </p>
@@ -2467,7 +2467,7 @@ export function CoursesView({
 
                   {activeCohorts.filter((c) => c.status === 'enrolling' || c.status === 'active').length > 0 && (
                     <div>
-                      <label className="block text-sm font-medium text-[#0D0D0F] mb-1.5">
+                      <label className="block text-[15px] font-medium text-[#0D0D0F] mb-1.5">
                         {lang === 'en' ? 'Cohort Group' : 'Icyiciro'}
                       </label>
                       <select
@@ -2498,7 +2498,7 @@ export function CoursesView({
 
                   {couponsEnabled && (
                     <div>
-                      <label className="block text-sm font-medium text-[#0D0D0F] mb-1.5">
+                      <label className="block text-[15px] font-medium text-[#0D0D0F] mb-1.5">
                         {lang === 'en' ? 'Promo / Scholarship Coupon (optional)' : 'Kode igabanya (si itegeko)'}
                       </label>
                       <div className="flex flex-col sm:flex-row gap-2">
@@ -2513,7 +2513,7 @@ export function CoursesView({
                           type="button"
                           disabled={couponBusy}
                           onClick={handleApplyCoupon}
-                          className="min-h-[44px] inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-sm font-semibold border border-black/15 rounded-lg hover:border-black/30"
+                          className="min-h-[44px] inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-[15px] font-semibold border border-black/15 rounded-lg hover:border-black/30"
                         >
                           <Tag className="w-4 h-4" />
                           <span>{couponBusy ? '...' : lang === 'en' ? 'Apply' : 'Shyiraho'}</span>
@@ -2521,7 +2521,7 @@ export function CoursesView({
                       </div>
                       {couponFeedback && (
                         <p
-                          className={`text-xs mt-1.5 ${
+                          className={`text-sm mt-1.5 ${
                             appliedCoupon ? 'text-[#0D7A5F]' : 'text-[#DC2626]'
                           }`}
                         >
@@ -2532,7 +2532,7 @@ export function CoursesView({
                   )}
 
                   <div>
-                    <label className="block text-sm font-medium text-[#0D0D0F] mb-2">
+                    <label className="block text-[15px] font-medium text-[#0D0D0F] mb-2">
                       {lang === 'en' ? 'Payment provider' : 'Uburyo bwo kwishyura'}
                     </label>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -2562,7 +2562,7 @@ export function CoursesView({
                   </div>
 
                   <div>
-                    <label htmlFor="momo-phone" className="block text-sm font-medium text-[#0D0D0F] mb-1.5">
+                    <label htmlFor="momo-phone" className="block text-[15px] font-medium text-[#0D0D0F] mb-1.5">
                       {lang === 'en' ? 'Rwanda Mobile Number' : 'Nimero ya Telefoni mu Rwanda'}
                     </label>
                     <input
@@ -2574,7 +2574,7 @@ export function CoursesView({
                       placeholder={provider === 'mtn_momo' ? '0788 123 456' : '0738 123 456'}
                       className="w-full min-h-[44px] px-3.5 py-2.5 text-base border border-black/15 rounded-lg focus:outline-none focus:border-[#0D7A5F]"
                     />
-                    <p className="text-xs text-[#5D5D66] mt-1.5 leading-relaxed">
+                    <p className="text-sm text-[#5D5D66] mt-1.5 leading-relaxed">
                       {lang === 'en'
                         ? 'We verify transactions server-side with idempotency protection and never ask for or store your Mobile Money PIN.'
                         : 'Ntutange umubare wawe w’ibanga (PIN). Genzura iyandikishwa mu buryo bwizewe.'}
@@ -2582,7 +2582,7 @@ export function CoursesView({
                   </div>
 
                   {payError && (
-                    <p className="text-sm text-[#DC2626] bg-[#FEF2F2] border border-[#DC2626]/20 rounded-lg px-4 py-2.5">
+                    <p className="text-[15px] text-[#DC2626] bg-[#FEF2F2] border border-[#DC2626]/20 rounded-lg px-4 py-2.5">
                       {payError}
                     </p>
                   )}
@@ -2673,7 +2673,7 @@ export function CoursesView({
         {resumeBanner && (
           <div className="mb-8 bg-[#ECFDF5] border border-[#0D7A5F]/25 rounded-xl p-5 flex flex-wrap items-center justify-between gap-4">
             <div>
-              <p className="text-xs font-mono text-[#0D7A5F]">
+              <p className="text-sm font-mono text-[#0D7A5F]">
                 {lang === 'en' ? 'CONTINUE LEARNING' : 'KOMEZA KWIGA'}
               </p>
               <p className="text-lg font-semibold text-[#0D0D0F]">
@@ -2965,7 +2965,7 @@ export function CoursesView({
               className="bg-white border border-black/[0.08] rounded-2xl p-6 flex flex-col justify-between gap-4"
             >
               <div>
-                <p className="text-xs font-mono text-[#0D7A5F] mb-1.5">
+                <p className="text-sm font-mono text-[#0D7A5F] mb-1.5">
                   {ind.sectorCode} · {lang === 'en' ? 'Industry Path' : 'Urwego'}
                 </p>
                 <h3 className="text-lg font-display font-bold text-[#0D0D0F] mb-2">
@@ -2976,7 +2976,7 @@ export function CoursesView({
                 </p>
               </div>
               <div className="pt-3 border-t border-black/[0.06] flex flex-wrap items-center justify-between gap-2">
-                <span className="text-xs font-mono text-[#5D5D66]">
+                <span className="text-sm font-mono text-[#5D5D66]">
                   Days: {ind.recommendedDays.join(', ')}
                 </span>
                 <button
@@ -2985,7 +2985,7 @@ export function CoursesView({
                     onSelectCourse('challenge-28');
                     onSelectDay(ind.recommendedDays[0] || 1);
                   }}
-                  className="text-sm font-semibold text-[#0D7A5F] hover:underline"
+                  className="text-[15px] font-semibold text-[#0D7A5F] hover:underline"
                 >
                   {lang === 'en' ? 'Start Track ->' : 'Tangira ->'}
                 </button>
@@ -3004,13 +3004,13 @@ export function CoursesView({
         >
           <div className="bg-white border border-black/10 rounded-t-2xl sm:rounded-2xl max-w-4xl w-full p-5 sm:p-8 max-h-[92dvh] overflow-y-auto">
             <div className="flex items-center justify-between gap-4 mb-5">
-              <h2 className="text-xl sm:text-2xl font-display font-bold text-[#0D0D0F]">
+              <h2 className="text-[22px] sm:text-[26px] font-display font-bold tracking-[-0.02em] text-[#0D0D0F]">
                 {lang === 'en' ? 'Side-by-Side Course Comparison' : 'Kugereranya Amasomo'}
               </h2>
               <button
                 type="button"
                 onClick={() => setCompareOpen(false)}
-                className="px-3 py-1.5 text-sm font-medium text-[#5D5D66] hover:text-[#0D0D0F] rounded-lg hover:bg-[#F4F5F7]"
+                className="px-3 py-1.5 text-[15px] font-medium text-[#5D5D66] hover:text-[#0D0D0F] rounded-lg hover:bg-[#F4F5F7]"
               >
                 {lang === 'en' ? 'Close' : 'Funga'}
               </button>
@@ -3019,12 +3019,12 @@ export function CoursesView({
               {comparedCourses.map((c) => (
                 <div key={c.id} className="bg-[#F9F9FB] border border-black/[0.08] rounded-xl p-5 space-y-3">
                   <div>
-                    <p className="text-xs font-mono text-[#0D7A5F]">{c.code}</p>
-                    <h3 className="text-lg font-display font-bold text-[#0D0D0F] mt-0.5">
+                    <p className="text-sm font-mono text-[#0D7A5F]">{c.code}</p>
+                    <h3 className="text-[18px] sm:text-[20px] font-display font-bold text-[#0D0D0F] mt-0.5">
                       {c.title[lang]}
                     </h3>
                   </div>
-                  <div className="text-sm space-y-1.5 text-[#5D5D66]">
+                  <div className="text-[15px] space-y-1.5 text-[#5D5D66]">
                     <p>
                       <strong>Tuition:</strong>{' '}
                       {c.isFree || c.priceRwf === 0 ? 'Free' : `${c.priceRwf.toLocaleString()} RWF`}
@@ -3039,7 +3039,7 @@ export function CoursesView({
                       <strong>Certificate:</strong> {c.certificateEligible === false ? 'No' : 'Yes (QR)'}
                     </p>
                   </div>
-                  <ul className="text-xs text-[#5D5D66] space-y-1.5 border-t border-black/[0.06] pt-2.5">
+                  <ul className="text-sm text-[#5D5D66] space-y-1.5 border-t border-black/[0.06] pt-2.5">
                     {c.outcomes[lang].slice(0, 3).map((out) => (
                       <li key={out}>• {out}</li>
                     ))}
@@ -3050,7 +3050,7 @@ export function CoursesView({
                       setCompareOpen(false);
                       onSelectCourse(c.id);
                     }}
-                    className="w-full min-h-[44px] px-4 py-2.5 text-sm font-semibold text-white bg-[#0D7A5F] hover:bg-[#095945] rounded-lg"
+                    className="w-full min-h-[44px] px-4 py-2.5 text-[15px] font-semibold text-white bg-[#0D7A5F] hover:bg-[#095945] rounded-lg"
                   >
                     {lang === 'en' ? 'Open Course' : 'Fungura'}
                   </button>

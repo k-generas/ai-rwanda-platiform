@@ -222,7 +222,7 @@ export function AuthModal({
             <p className="text-sm font-semibold text-[#0D7A5F] mb-1">
               AI Education Rwanda
             </p>
-            <h2 id="auth-modal-title" className="text-2xl font-display font-bold text-[#0D0D0F]">
+            <h2 id="auth-modal-title" className="text-[26px] sm:text-[28px] font-display font-bold tracking-[-0.02em] text-[#0D0D0F]">
               {mode === 'verify'
                 ? lang === 'en'
                   ? 'Confirm Your Email Address'

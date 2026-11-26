@@ -501,7 +501,7 @@ export function StructuredLessonEditor({
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-3">
             <div>
-              <label className="block text-[11px] font-mono text-[#5D5D66] mb-1">COURSE</label>
+              <label className="block text-[15px] font-mono text-[#5D5D66] mb-1">COURSE</label>
               <select
                 value={selectedCourseId}
                 onChange={(e) => {
@@ -509,7 +509,7 @@ export function StructuredLessonEditor({
                   setSelectedLessonId('');
                   setDraft(null);
                 }}
-                className="px-3 py-2 text-xs border border-black/15 rounded-lg bg-white min-w-[200px]"
+                className="px-3 py-2 text-sm border border-black/15 rounded-lg bg-white min-w-[200px]"
               >
                 {catalog.map((c) => (
                   <option key={c.id} value={c.id}>
@@ -520,7 +520,7 @@ export function StructuredLessonEditor({
             </div>
 
             <div>
-              <label className="block text-[11px] font-mono text-[#5D5D66] mb-1">
+              <label className="block text-[15px] font-mono text-[#5D5D66] mb-1">
                 LESSON ({courseLessons.length} in Firestore)
               </label>
               <select
@@ -532,7 +532,7 @@ export function StructuredLessonEditor({
                     loadDraftFromLesson(found);
                   }
                 }}
-                className="px-3 py-2 text-xs border border-black/15 rounded-lg bg-white min-w-[240px]"
+                className="px-3 py-2 text-sm border border-black/15 rounded-lg bg-white min-w-[240px]"
               >
                 {courseLessons.length === 0 ? (
                   <option value="">No Firestore lessons yet (click + New Lesson)</option>
@@ -551,7 +551,7 @@ export function StructuredLessonEditor({
             <button
               type="button"
               onClick={handleCreateLesson}
-              className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-[#0D0D0F] border border-black/15 rounded-lg hover:border-black/35 bg-white"
+              className="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-[#0D0D0F] border border-black/15 rounded-lg hover:border-black/35 bg-white"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>New Lesson</span>
@@ -562,7 +562,7 @@ export function StructuredLessonEditor({
                 <button
                   type="button"
                   onClick={() => setPreviewMode((v) => !v)}
-                  className={`inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg border ${
+                  className={`inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg border ${
                     previewMode
                       ? 'bg-[#0D7A5F] text-white border-[#0D7A5F]'
                       : 'bg-white text-[#0D0D0F] border-black/15 hover:border-black/35'
@@ -579,7 +579,7 @@ export function StructuredLessonEditor({
                     setHistoryOpen(next);
                     if (next) loadVersions(draft.id);
                   }}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-[#0D0D0F] border border-black/15 rounded-lg hover:border-black/35 bg-white"
+                  className="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-[#0D0D0F] border border-black/15 rounded-lg hover:border-black/35 bg-white"
                 >
                   <History className="w-3.5 h-3.5" />
                   <span>Versions</span>
@@ -589,7 +589,7 @@ export function StructuredLessonEditor({
                   type="button"
                   onClick={() => persistLesson(draft, blocksEn, blocksRw, true)}
                   disabled={saveState === 'saving'}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329]"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329]"
                 >
                   <Save className="w-3.5 h-3.5" />
                   <span>{saveState === 'saving' ? 'Saving...' : 'Save Lesson'}</span>
@@ -600,7 +600,7 @@ export function StructuredLessonEditor({
         </div>
 
         {/* Status Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-black/[0.06] text-xs">
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-black/[0.06] text-sm">
           <div className="flex items-center gap-3 text-[#5D5D66]">
             {draft && <span className="font-mono">ID: {draft.id}</span>}
             {saveState === 'dirty' && <span className="text-[#D97706]">Unsaved changes (autosaving...)</span>}
@@ -629,13 +629,13 @@ export function StructuredLessonEditor({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         <aside className="lg:col-span-4 xl:col-span-3 bg-white border border-black/[0.08] rounded-2xl p-4 space-y-3 lg:sticky lg:top-20">
           <div className="flex items-center justify-between gap-2">
-            <h3 className="text-xs font-mono font-semibold uppercase tracking-wider text-[#0D0D0F]">
+            <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display font-mono uppercase tracking-wider text-[#0D0D0F]">
               Outline ({courseLessons.length})
             </h3>
             <button
               type="button"
               onClick={handleCreateLesson}
-              className="inline-flex items-center gap-1 px-2 py-1 text-[11px] font-medium text-white bg-[#0D7A5F] rounded-md"
+              className="inline-flex items-center gap-1 px-2 py-1 text-[15px] font-medium text-white bg-[#0D7A5F] rounded-md"
             >
               <Plus className="w-3 h-3" />
               <span>New</span>
@@ -648,12 +648,12 @@ export function StructuredLessonEditor({
               value={railSearch}
               onChange={(e) => setRailSearch(e.target.value)}
               placeholder="Jump to day or title..."
-              className="w-full pl-8 pr-2.5 py-1.5 text-xs bg-[#F9F9FB] border border-black/10 rounded-lg focus:outline-none focus:border-[#0D7A5F]"
+              className="w-full pl-8 pr-2.5 py-1.5 text-sm bg-[#F9F9FB] border border-black/10 rounded-lg focus:outline-none focus:border-[#0D7A5F]"
             />
           </div>
           <div className="space-y-1 max-h-[60vh] overflow-y-auto pr-1">
             {filteredRailLessons.length === 0 ? (
-              <p className="text-xs text-[#5D5D66] py-4 text-center">No matching lessons.</p>
+              <p className="text-sm text-[#5D5D66] py-4 text-center">No matching lessons.</p>
             ) : (
               filteredRailLessons.map((les) => {
                 const isSelected = (draft?.id || selectedLessonId) === les.id;
@@ -667,13 +667,13 @@ export function StructuredLessonEditor({
                       setSelectedLessonId(les.id);
                       loadDraftFromLesson(les);
                     }}
-                    className={`w-full text-left px-3 py-2 rounded-xl border transition-colors text-xs ${
+                    className={`w-full text-left px-3 py-2 rounded-xl border transition-colors text-sm ${
                       isSelected
                         ? 'bg-[#0D0D0F] text-white border-[#0D0D0F]'
                         : 'bg-white text-[#0D0D0F] border-black/[0.06] hover:border-black/25'
                     }`}
                   >
-                    <div className="flex items-center justify-between gap-2 font-mono text-[10px]">
+                    <div className="flex items-center justify-between gap-2 font-mono text-[15px]">
                       <span className={isSelected ? 'text-[#34D399]' : 'text-[#0D7A5F]'}>
                         DAY {les.dayNumber}
                       </span>
@@ -692,13 +692,13 @@ export function StructuredLessonEditor({
         <div className="lg:col-span-8 xl:col-span-9 min-w-0">
           {!draft ? (
             <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-10 text-center space-y-3">
-              <p className="text-sm font-medium text-[#0D0D0F]">
+              <p className="text-[15px] font-medium text-[#0D0D0F]">
                 This course does not have any structured lessons yet.
               </p>
               <button
                 type="button"
                 onClick={handleCreateLesson}
-                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-medium text-white bg-[#0D0D0F] rounded-lg"
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Create First 16-Part Structured Lesson</span>
@@ -709,17 +709,17 @@ export function StructuredLessonEditor({
         <div className="bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h3 className="text-base font-semibold text-[#0D0D0F]">
+              <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F]">
                 Version History & Snapshot Restore
               </h3>
-              <p className="text-xs text-[#5D5D66]">
+              <p className="text-sm text-[#5D5D66]">
                 Save immutable checkpoints before major edits or curriculum updates.
               </p>
             </div>
             <button
               type="button"
               onClick={() => setHistoryOpen(false)}
-              className="px-3 py-1.5 text-xs border border-black/15 rounded-lg"
+              className="px-3 py-1.5 text-sm border border-black/15 rounded-lg"
             >
               Close History
             </button>
@@ -731,25 +731,25 @@ export function StructuredLessonEditor({
               value={versionNote}
               onChange={(e) => setVersionNote(e.target.value)}
               placeholder="Snapshot note (e.g. Updated Rwanda MoMo example)..."
-              className="flex-1 min-w-[220px] px-3 py-2 text-xs border border-black/15 rounded-lg"
+              className="flex-1 min-w-[220px] px-3 py-2 text-sm border border-black/15 rounded-lg"
             />
             <button
               type="button"
               onClick={handleSaveSnapshot}
-              className="px-4 py-2 text-xs font-medium text-white bg-[#0D7A5F] rounded-lg"
+              className="px-4 py-2 text-sm font-medium text-white bg-[#0D7A5F] rounded-lg"
             >
               Save Version Snapshot
             </button>
           </div>
 
           {loadingVersions ? (
-            <p className="text-xs text-[#5D5D66]">Loading snapshots...</p>
+            <p className="text-sm text-[#5D5D66]">Loading snapshots...</p>
           ) : versions.length === 0 ? (
-            <p className="text-xs text-[#5D5D66]">No snapshots saved for this lesson yet.</p>
+            <p className="text-sm text-[#5D5D66]">No snapshots saved for this lesson yet.</p>
           ) : (
             <div className="divide-y divide-black/[0.06]">
               {versions.map((ver) => (
-                <div key={ver.id} className="py-3 flex items-center justify-between gap-4 text-xs">
+                <div key={ver.id} className="py-3 flex items-center justify-between gap-4 text-sm">
                   <div>
                     <p className="font-medium text-[#0D0D0F]">{ver.note || 'Saved Snapshot'}</p>
                     <p className="font-mono text-[#5D5D66]">
@@ -777,7 +777,7 @@ export function StructuredLessonEditor({
               <button
                 type="button"
                 onClick={() => setActiveLang('en')}
-                className={`px-3 py-1 text-xs rounded-md font-medium ${
+                className={`px-3 py-1 text-sm rounded-md font-medium ${
                   activeLang === 'en' ? 'bg-white text-[#0D0D0F]' : 'text-[#5D5D66]'
                 }`}
               >
@@ -786,20 +786,20 @@ export function StructuredLessonEditor({
               <button
                 type="button"
                 onClick={() => setActiveLang('rw')}
-                className={`px-3 py-1 text-xs rounded-md font-medium ${
+                className={`px-3 py-1 text-sm rounded-md font-medium ${
                   activeLang === 'rw' ? 'bg-white text-[#0D0D0F]' : 'text-[#5D5D66]'
                 }`}
               >
                 Preview Kinyarwanda
               </button>
             </div>
-            <span className="text-xs font-mono text-[#0D7A5F]">
+            <span className="text-sm font-mono text-[#0D7A5F]">
               LIVE LEARNER PREVIEW · Day {draft.dayNumber} · {draft.estimatedMinutes || 15} min
             </span>
           </div>
 
           <header className="space-y-3">
-            <h2 className="text-2xl sm:text-3xl font-display font-semibold text-[#0D0D0F]">
+            <h2 className="text-2xl sm:text-3xl font-display font-bold text-[#0D0D0F]">
               {activeLang === 'en' ? draft.titleEn : draft.titleRw}
             </h2>
             <p className="text-base text-[#5D5D66] leading-relaxed">
@@ -816,7 +816,7 @@ export function StructuredLessonEditor({
         /* STRUCTURED 14-BLOCK EDITOR */
         <div className="space-y-6">
           {/* Lesson Identity & Settings */}
-          <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-5 grid grid-cols-2 sm:grid-cols-6 gap-3 text-xs">
+          <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-5 grid grid-cols-2 sm:grid-cols-6 gap-3 text-sm">
             <div>
               <label className="block text-[#5D5D66] mb-1">Module</label>
               <select
@@ -911,7 +911,7 @@ export function StructuredLessonEditor({
                 <button
                   type="button"
                   onClick={() => setActiveLang('en')}
-                  className={`px-3.5 py-1.5 text-xs font-medium rounded-lg ${
+                  className={`px-3.5 py-1.5 text-sm font-medium rounded-lg ${
                     activeLang === 'en' ? 'bg-white text-[#0D0D0F] shadow-xs' : 'text-[#5D5D66]'
                   }`}
                 >
@@ -920,7 +920,7 @@ export function StructuredLessonEditor({
                 <button
                   type="button"
                   onClick={() => setActiveLang('rw')}
-                  className={`px-3.5 py-1.5 text-xs font-medium rounded-lg ${
+                  className={`px-3.5 py-1.5 text-sm font-medium rounded-lg ${
                     activeLang === 'rw' ? 'bg-white text-[#0D0D0F] shadow-xs' : 'text-[#5D5D66]'
                   }`}
                 >
@@ -932,7 +932,7 @@ export function StructuredLessonEditor({
                 <button
                   type="button"
                   onClick={handleCopyEnToRwDraft}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border border-black/15 rounded-lg hover:border-[#0D7A5F]"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium border border-black/15 rounded-lg hover:border-[#0D7A5F]"
                 >
                   <Languages className="w-3.5 h-3.5 text-[#0D7A5F]" />
                   <span>Copy EN Structure → RW Draft</span>
@@ -942,7 +942,7 @@ export function StructuredLessonEditor({
                   <button
                     type="button"
                     onClick={() => handleLoadStaticBlueprintDay(draft.dayNumber)}
-                    className="px-3 py-1.5 text-xs font-medium border border-black/15 rounded-lg hover:border-black/35"
+                    className="px-3 py-1.5 text-sm font-medium border border-black/15 rounded-lg hover:border-black/35"
                   >
                     Load Day {draft.dayNumber} Static Content
                   </button>
@@ -952,7 +952,7 @@ export function StructuredLessonEditor({
                   <button
                     type="button"
                     onClick={handleDeleteLesson}
-                    className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs text-[#DC2626] border border-[#DC2626]/25 rounded-lg hover:bg-[#FEF2F2]"
+                    className="inline-flex items-center gap-1 px-2.5 py-1.5 text-sm text-[#DC2626] border border-[#DC2626]/25 rounded-lg hover:bg-[#FEF2F2]"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                     <span>Delete</span>
@@ -964,7 +964,7 @@ export function StructuredLessonEditor({
             {/* Title, Summary & Objectives for active language */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-medium mb-1">
+                <label className="block text-sm font-medium mb-1">
                   Lesson Title ({activeLang.toUpperCase()})
                 </label>
                 <input
@@ -977,24 +977,24 @@ export function StructuredLessonEditor({
                         : { ...draft, titleRw: e.target.value }
                     )
                   }
-                  className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg"
+                  className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium mb-1">
+                <label className="block text-sm font-medium mb-1">
                   Scheduled Release Date (Optional)
                 </label>
                 <input
                   type="date"
                   value={draft.releaseAt || ''}
                   onChange={(e) => setDraft({ ...draft, releaseAt: e.target.value })}
-                  className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg"
+                  className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg"
                 />
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-xs font-medium mb-1">
+                <label className="block text-sm font-medium mb-1">
                   Lesson Introduction / Summary ({activeLang.toUpperCase()})
                 </label>
                 <textarea
@@ -1007,13 +1007,13 @@ export function StructuredLessonEditor({
                         : { ...draft, summaryRw: e.target.value }
                     )
                   }
-                  className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg"
+                  className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg"
                 />
               </div>
 
               <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="md:col-span-2">
-                  <label className="block text-xs font-medium mb-1">
+                  <label className="block text-sm font-medium mb-1">
                     Expected Lesson Deliverable ({activeLang.toUpperCase()})
                   </label>
                   <input
@@ -1033,11 +1033,11 @@ export function StructuredLessonEditor({
                         ? 'e.g. Prompt Quality Checklist & Tested Rewrite'
                         : 'Urugero: Urutonde rwo gusuzuma amabwiriza'
                     }
-                    className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg"
+                    className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium mb-1">
+                  <label className="block text-sm font-medium mb-1">
                     Competency Level Tag
                   </label>
                   <input
@@ -1045,13 +1045,13 @@ export function StructuredLessonEditor({
                     value={draft.levelTag || ''}
                     onChange={(e) => setDraft({ ...draft, levelTag: e.target.value })}
                     placeholder="e.g. Level 1 · 3.1"
-                    className="w-full px-3.5 py-2 text-sm border border-black/15 rounded-lg font-mono"
+                    className="w-full px-3.5 py-2 text-[15px] border border-black/15 rounded-lg font-mono"
                   />
                 </div>
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-xs font-medium mb-1">
+                <label className="block text-sm font-medium mb-1">
                   Learning Objectives ({activeLang.toUpperCase()}, one per line)
                 </label>
                 <textarea
@@ -1067,7 +1067,7 @@ export function StructuredLessonEditor({
                         : { ...draft, objectivesRw: lines }
                     );
                   }}
-                  className="w-full px-3.5 py-2 text-xs font-mono border border-black/15 rounded-lg"
+                  className="w-full px-3.5 py-2 text-sm font-mono border border-black/15 rounded-lg"
                 />
               </div>
             </div>
@@ -1078,7 +1078,7 @@ export function StructuredLessonEditor({
                 <select
                   value={newBlockType}
                   onChange={(e) => setNewBlockType(e.target.value as LessonBlockType)}
-                  className="px-3 py-2 text-xs border border-black/15 rounded-lg bg-white"
+                  className="px-3 py-2 text-sm border border-black/15 rounded-lg bg-white"
                 >
                   {BLOCK_TYPE_META.map((meta) => (
                     <option key={meta.type} value={meta.type}>
@@ -1091,7 +1091,7 @@ export function StructuredLessonEditor({
                   onClick={() =>
                     setActiveBlocks((prev) => [...prev, createDefaultBlock(newBlockType)])
                   }
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-white bg-[#0D0D0F] rounded-lg"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Add Block</span>
@@ -1108,7 +1108,7 @@ export function StructuredLessonEditor({
                       setStatusMessage(`Inserted 16-Section Lesson Standard blocks into ${activeLang.toUpperCase()}.`);
                     }
                   }}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-[#0D7A5F] bg-white border border-[#0D7A5F]/35 rounded-lg hover:bg-[#F2FBF8]"
+                  className="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-[#0D7A5F] bg-white border border-[#0D7A5F]/35 rounded-lg hover:bg-[#F2FBF8]"
                 >
                   <BookOpen className="w-3.5 h-3.5" />
                   <span>Apply Blueprint 16-Section Standard</span>
@@ -1123,7 +1123,7 @@ export function StructuredLessonEditor({
                       e.target.value = '';
                     }
                   }}
-                  className="px-3 py-2 text-xs border border-black/15 rounded-lg bg-white"
+                  className="px-3 py-2 text-sm border border-black/15 rounded-lg bg-white"
                 >
                   <option value="" disabled>
                     + Insert Reusable Lesson Template...
@@ -1140,7 +1140,7 @@ export function StructuredLessonEditor({
             {/* Blocks Stack */}
             <div className="space-y-4">
               {activeBlocks.length === 0 ? (
-                <div className="p-8 text-center border border-dashed border-black/15 rounded-xl text-xs text-[#5D5D66]">
+                <div className="p-8 text-center border border-dashed border-black/15 rounded-xl text-sm text-[#5D5D66]">
                   No blocks in {activeLang.toUpperCase()} yet. Use &ldquo;Add Block&rdquo; or insert a starter template above.
                 </div>
               ) : (
@@ -1152,7 +1152,7 @@ export function StructuredLessonEditor({
                       className="border border-black/[0.1] rounded-xl p-4 bg-white space-y-3"
                     >
                       <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-black/[0.06]">
-                        <div className="flex items-center gap-2 text-xs">
+                        <div className="flex items-center gap-2 text-sm">
                           <span className="font-mono text-[#0D7A5F] tabular-nums">
                             #{idx + 1}
                           </span>
@@ -1208,7 +1208,7 @@ export function StructuredLessonEditor({
                       </div>
 
                       {/* Common Title Field */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                         <div>
                           <label className="block text-[#5D5D66] mb-1">Block Heading / Title</label>
                           <input
@@ -1262,7 +1262,7 @@ export function StructuredLessonEditor({
                           value={block.body || ''}
                           onChange={(e) => updateBlock(idx, { body: e.target.value })}
                           placeholder="Write instructional content..."
-                          className="w-full px-3 py-2 text-xs border border-black/15 rounded-lg"
+                          className="w-full px-3 py-2 text-sm border border-black/15 rounded-lg"
                         />
                       )}
 
@@ -1272,7 +1272,7 @@ export function StructuredLessonEditor({
                           value={block.code || ''}
                           onChange={(e) => updateBlock(idx, { code: e.target.value })}
                           placeholder="Prompt formula or code snippet..."
-                          className="w-full px-3 py-2 text-xs font-mono border border-black/15 rounded-lg bg-[#F9F9FB]"
+                          className="w-full px-3 py-2 text-sm font-mono border border-black/15 rounded-lg bg-[#F9F9FB]"
                         />
                       )}
 
@@ -1281,7 +1281,7 @@ export function StructuredLessonEditor({
                         block.type === 'audio' ||
                         block.type === 'download' ||
                         block.type === 'external_resource') && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                           <div>
                             <label className="block text-[#5D5D66] mb-1">
                               Resource URL (or upload file)
@@ -1382,7 +1382,7 @@ export function StructuredLessonEditor({
                       )}
 
                       {block.type === 'interactive' && (
-                        <div className="space-y-2 text-xs">
+                        <div className="space-y-2 text-sm">
                           <input
                             type="text"
                             value={block.body || ''}
@@ -1401,7 +1401,7 @@ export function StructuredLessonEditor({
                       )}
 
                       {block.type === 'checklist' && (
-                        <div className="space-y-2 text-xs">
+                        <div className="space-y-2 text-sm">
                           <input
                             type="text"
                             value={block.body || ''}
@@ -1422,7 +1422,7 @@ export function StructuredLessonEditor({
                       )}
 
                       {block.type === 'table' && (
-                        <div className="space-y-2 text-xs">
+                        <div className="space-y-2 text-sm">
                           <label className="block text-[#5D5D66]">
                             Columns (comma-separated headers)
                           </label>
@@ -1456,7 +1456,7 @@ export function StructuredLessonEditor({
                       )}
 
                       {block.type === 'quiz' && (
-                        <div className="space-y-2.5 text-xs">
+                        <div className="space-y-2.5 text-sm">
                           <input
                             type="text"
                             value={block.question || ''}

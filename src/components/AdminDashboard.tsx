@@ -597,13 +597,13 @@ export function AdminDashboard({ lang, user, access, onRefreshPublic }: AdminDas
     return (
       <div className="space-y-5">
         <div className="relative">
-          <Search className="w-3.5 h-3.5 text-[#5D5D66] absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-[#5D5D66] absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="search"
             value={navSearch}
             onChange={(e) => setNavSearch(e.target.value)}
             placeholder="Find control section..."
-            className="w-full pl-8 pr-3 py-1.5 text-xs bg-white border border-black/10 rounded-lg focus:outline-none focus:border-[#0D7A5F]"
+            className="w-full pl-10 pr-3 py-2 text-[15px] bg-white border border-black/10 rounded-xl focus:outline-none focus:border-[#0D7A5F]"
           />
         </div>
 
@@ -618,7 +618,7 @@ export function AdminDashboard({ lang, user, access, onRefreshPublic }: AdminDas
 
             return (
               <div key={group} className="space-y-1">
-                <p className="px-2.5 text-[11px] font-mono text-[#5D5D66] tracking-wider">
+                <p className="px-3 text-xs font-semibold uppercase tracking-wider text-[#5D5D66]">
                   {group}
                 </p>
                 {items.map((item) => {
@@ -631,10 +631,10 @@ export function AdminDashboard({ lang, user, access, onRefreshPublic }: AdminDas
                         setActiveSection(item.id);
                         setMobileMenuOpen(false);
                       }}
-                      className={`w-full text-left px-2.5 py-2 rounded-lg text-xs font-medium transition-colors whitespace-nowrap truncate ${
+                      className={`w-full text-left px-3 py-2.5 rounded-xl text-[15px] transition-colors leading-snug ${
                         selected
-                          ? 'bg-[#0D0D0F] text-white'
-                          : 'text-[#5D5D66] hover:bg-white hover:text-[#0D0D0F]'
+                          ? 'bg-[#ECFDF5] text-[#0D7A5F] font-semibold'
+                          : 'text-[#4B4B55] font-medium hover:bg-white hover:text-[#0D0D0F]'
                       }`}
                     >
                       {item.label}
@@ -663,13 +663,13 @@ export function AdminDashboard({ lang, user, access, onRefreshPublic }: AdminDas
             {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
           </button>
           <div>
-            <p className="text-xs font-mono text-[#0D7A5F]">
+            <p className="text-sm font-mono text-[#0D7A5F]">
               {access.isSuperadmin
                 ? 'FOUNDER CONTROL CENTER · SUPERADMIN'
                 : `EDUCATION CONSOLE · ${ROLE_DISPLAY[access.role][lang].toUpperCase()}`}
               {activeNav ? ` / ${activeNav.group} / ${activeNav.label}` : ''}
             </p>
-            <h1 className="text-2xl sm:text-3xl font-display font-semibold tracking-tight text-[#0D0D0F]">
+            <h1 className="text-[32px] sm:text-[42px] font-display font-bold tracking-[-0.025em] leading-[1.1] text-[#0D0D0F]">
               {activeNav?.label ?? 'Control Center'}
             </h1>
           </div>
@@ -682,16 +682,16 @@ export function AdminDashboard({ lang, user, access, onRefreshPublic }: AdminDas
                 type="button"
                 onClick={() => setCreateMenuOpen((v) => !v)}
                 aria-expanded={createMenuOpen}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-white bg-[#0D7A5F] hover:bg-[#0B664F] rounded-lg whitespace-nowrap shrink-0"
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 text-[15px] font-semibold text-white bg-[#0D7A5F] hover:bg-[#095945] rounded-lg whitespace-nowrap shrink-0"
               >
-                <Plus className="w-3.5 h-3.5" />
+                <Plus className="w-4 h-4" />
                 <span>Create Everything</span>
-                <ChevronDown className="w-3.5 h-3.5 opacity-80" />
+                <ChevronDown className="w-4 h-4 opacity-80" />
               </button>
 
               {createMenuOpen && (
-                <div className="absolute right-0 mt-2 w-72 bg-white border border-black/15 rounded-xl shadow-lg p-1.5 z-40">
-                  <p className="px-2.5 py-1.5 text-[10px] font-mono uppercase tracking-wider text-[#5D5D66] border-b border-black/[0.06] mb-1">
+                <div className="absolute right-0 mt-2 w-80 bg-white border border-black/15 rounded-xl shadow-lg p-2 z-40">
+                  <p className="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-[#5D5D66] border-b border-black/[0.06] mb-1">
                     Founder Quick-Create Studio
                   </p>
                   <div className="max-h-80 overflow-y-auto divide-y divide-black/[0.04]">
@@ -704,10 +704,10 @@ export function AdminDashboard({ lang, user, access, onRefreshPublic }: AdminDas
                           setCreateMenuOpen(false);
                           setMobileMenuOpen(false);
                         }}
-                        className="w-full text-left px-2.5 py-2 rounded-lg hover:bg-[#F9F9FB] transition-colors"
+                        className="w-full text-left px-3 py-2.5 rounded-lg hover:bg-[#F9F9FB] transition-colors"
                       >
-                        <p className="text-xs font-medium text-[#0D0D0F]">{act.label}</p>
-                        <p className="text-[11px] text-[#5D5D66]">{act.hint}</p>
+                        <p className="text-[15px] font-semibold text-[#0D0D0F]">{act.label}</p>
+                        <p className="text-sm text-[#5D5D66]">{act.hint}</p>
                       </button>
                     ))}
                   </div>
@@ -720,9 +720,9 @@ export function AdminDashboard({ lang, user, access, onRefreshPublic }: AdminDas
             type="button"
             onClick={loadControlData}
             disabled={loading}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium border border-black/15 rounded-lg hover:border-black/35 bg-white whitespace-nowrap shrink-0"
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 text-[15px] font-medium border border-black/15 rounded-lg hover:border-black/35 bg-white whitespace-nowrap shrink-0"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
             <span>{loading ? 'Refreshing...' : 'Refresh Records'}</span>
           </button>
         </div>
@@ -742,7 +742,7 @@ export function AdminDashboard({ lang, user, access, onRefreshPublic }: AdminDas
 
         <section className="lg:col-span-9 min-w-0">
           {loading ? (
-            <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-10 text-sm text-[#5D5D66]">
+            <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-10 text-[15px] text-[#5D5D66]">
               Loading live Firestore workspace records...
             </div>
           ) : activeSection === 'overview' || activeSection === 'alerts' ? (

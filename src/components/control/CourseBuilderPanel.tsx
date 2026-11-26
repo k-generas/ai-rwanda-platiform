@@ -940,7 +940,7 @@ export function CourseBuilderPanel({
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-3">
             <div>
-              <label className="block text-[11px] font-mono text-[#5D5D66] mb-1">
+              <label className="block text-[15px] font-mono text-[#5D5D66] mb-1">
                 ACTIVE COURSE WORKSPACE
               </label>
               <select
@@ -950,7 +950,7 @@ export function CourseBuilderPanel({
                   setPreviewLessonId('');
                   setBusyMsg(null);
                 }}
-                className="px-3.5 py-2 text-xs font-medium border border-black/15 rounded-lg bg-white min-w-[260px]"
+                className="px-3.5 py-2 text-sm font-medium border border-black/15 rounded-lg bg-white min-w-[260px]"
               >
                 {catalog.map((c) => (
                   <option key={c.id} value={c.id}>
@@ -959,7 +959,7 @@ export function CourseBuilderPanel({
                 ))}
               </select>
             </div>
-            <div className="text-xs text-[#5D5D66] pt-4 font-mono tabular-nums">
+            <div className="text-sm text-[#5D5D66] pt-4 font-mono tabular-nums">
               {courseModules.length} modules · {courseLessons.length} structured lessons
             </div>
           </div>
@@ -968,7 +968,7 @@ export function CourseBuilderPanel({
             <button
               type="button"
               onClick={() => setNewCourseOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329]"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329]"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>New Course</span>
@@ -977,7 +977,7 @@ export function CourseBuilderPanel({
               type="button"
               disabled={busy}
               onClick={handleDuplicateCourse}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-[#0D0D0F] border border-black/15 rounded-lg hover:border-black/35 bg-white"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium text-[#0D0D0F] border border-black/15 rounded-lg hover:border-black/35 bg-white"
             >
               <Copy className="w-3.5 h-3.5" />
               <span>Duplicate Course</span>
@@ -1001,7 +1001,7 @@ export function CourseBuilderPanel({
               key={id}
               type="button"
               onClick={() => setTab(id)}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors whitespace-nowrap ${
+              className={`px-3 py-1.5 text-sm font-medium rounded-lg transition-colors whitespace-nowrap ${
                 tab === id ? 'bg-white text-[#0D0D0F] shadow-xs' : 'text-[#5D5D66] hover:text-[#0D0D0F]'
               }`}
             >
@@ -1010,14 +1010,14 @@ export function CourseBuilderPanel({
           ))}
         </div>
 
-        {busyMsg && <p className="text-xs text-[#0D7A5F] font-medium">{busyMsg}</p>}
+        {busyMsg && <p className="text-sm text-[#0D7A5F] font-medium">{busyMsg}</p>}
       </div>
 
       {/* TAB 1: OVERVIEW & SETTINGS */}
       {tab === 'overview' && (
         <form
           onSubmit={handleSaveCourseMetadata}
-          className="bg-white border border-black/[0.08] rounded-2xl p-6 space-y-6 text-xs"
+          className="bg-white border border-black/[0.08] rounded-2xl p-6 space-y-6 text-sm"
         >
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
@@ -1434,7 +1434,7 @@ export function CourseBuilderPanel({
             <button
               type="submit"
               disabled={busy}
-              className="inline-flex items-center gap-1.5 px-5 py-2.5 text-xs font-medium text-white bg-[#0D0D0F] rounded-lg"
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg"
             >
               <Save className="w-3.5 h-3.5" />
               <span>{busy ? 'Saving...' : 'Save Course Metadata & Settings'}</span>
@@ -1444,21 +1444,21 @@ export function CourseBuilderPanel({
               <div className="flex items-center gap-2">
                 {deleteConfirmId === courseDraft.id ? (
                   <>
-                    <span className="text-[11px] text-[#DC2626] font-medium">
+                    <span className="text-[15px] text-[#DC2626] font-medium">
                       Confirm deleting Firestore course {courseDraft.code}?
                     </span>
                     <button
                       type="button"
                       disabled={busy}
                       onClick={() => handleDeleteCourse(courseDraft.id)}
-                      className="px-3 py-1.5 text-xs font-medium text-white bg-[#DC2626] rounded-lg"
+                      className="px-3 py-1.5 text-sm font-medium text-white bg-[#DC2626] rounded-lg"
                     >
                       Yes, Delete
                     </button>
                     <button
                       type="button"
                       onClick={() => setDeleteConfirmId(null)}
-                      className="px-2.5 py-1.5 text-xs border border-black/15 rounded-lg"
+                      className="px-2.5 py-1.5 text-sm border border-black/15 rounded-lg"
                     >
                       Cancel
                     </button>
@@ -1467,7 +1467,7 @@ export function CourseBuilderPanel({
                   <button
                     type="button"
                     onClick={() => setDeleteConfirmId(courseDraft.id)}
-                    className="inline-flex items-center gap-1 px-3 py-2 text-xs font-medium text-[#DC2626] border border-[#DC2626]/25 rounded-lg hover:bg-[#FEF2F2]"
+                    className="inline-flex items-center gap-1 px-3 py-2 text-sm font-medium text-[#DC2626] border border-[#DC2626]/25 rounded-lg hover:bg-[#FEF2F2]"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                     <span>Delete Course</span>
@@ -1485,10 +1485,10 @@ export function CourseBuilderPanel({
           <div className="bg-white border border-black/[0.08] rounded-2xl p-5 space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
-                <h3 className="text-sm font-semibold text-[#0D0D0F]">
+                <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F]">
                   Course Modules &amp; 16-Part Lessons Hierarchy
                 </h3>
-                <p className="text-xs text-[#5D5D66]">
+                <p className="text-sm text-[#5D5D66]">
                   Generate weekly modules and bilingual lessons for any course, bulk-publish, duplicate, reorder, or schedule release dates.
                 </p>
               </div>
@@ -1497,7 +1497,7 @@ export function CourseBuilderPanel({
                   type="button"
                   disabled={busy}
                   onClick={handleImport28DayBlueprint}
-                  className="px-4 py-2 text-xs font-medium text-white bg-[#0D7A5F] rounded-lg hover:bg-[#0B664F]"
+                  className="px-4 py-2 text-sm font-medium text-white bg-[#0D7A5F] rounded-lg hover:bg-[#0B664F]"
                 >
                   {busy ? 'Importing...' : 'Import 28-Day Blueprint Structure'}
                 </button>
@@ -1505,7 +1505,7 @@ export function CourseBuilderPanel({
             </div>
 
             {/* Universal Curriculum Scaffold Generator for ANY course */}
-            <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-xl p-3.5 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-xl p-3.5 flex flex-wrap items-center justify-between gap-3 text-sm">
               <div className="flex flex-wrap items-center gap-3">
                 <span className="font-mono text-[#0D7A5F] font-semibold">AUTO-SCAFFOLD</span>
                 <label className="inline-flex items-center gap-1.5">
@@ -1535,7 +1535,7 @@ export function CourseBuilderPanel({
                 type="button"
                 disabled={busy}
                 onClick={handleGenerateGenericScaffold}
-                className="px-3.5 py-1.5 text-xs font-medium text-white bg-[#0D0D0F] hover:bg-[#232329] rounded-lg"
+                className="px-3.5 py-1.5 text-sm font-medium text-white bg-[#0D0D0F] hover:bg-[#232329] rounded-lg"
               >
                 {busy ? 'Scaffolding...' : `Generate ${scaffoldWeeks}w / ${scaffoldDays}d 16-Part Scaffold`}
               </button>
@@ -1544,7 +1544,7 @@ export function CourseBuilderPanel({
 
           {/* Search, Filter & Bulk Actions Bar */}
           {courseLessons.length > 0 && (
-            <div className="bg-white border border-black/[0.08] rounded-2xl p-4 space-y-3 text-xs">
+            <div className="bg-white border border-black/[0.08] rounded-2xl p-4 space-y-3 text-sm">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div className="flex flex-wrap items-center gap-2 flex-1 min-w-[240px]">
                   <div className="relative flex-1 min-w-[180px] max-w-xs">
@@ -1660,7 +1660,7 @@ export function CourseBuilderPanel({
           {/* Add Module Form */}
           <form
             onSubmit={handleAddModule}
-            className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-4 flex flex-wrap items-center gap-3 text-xs"
+            className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-4 flex flex-wrap items-center gap-3 text-sm"
           >
             <FolderPlus className="w-4 h-4 text-[#0D7A5F]" />
             <input
@@ -1698,7 +1698,7 @@ export function CourseBuilderPanel({
 
           {/* Modules & Lessons Tree */}
           {courseModules.length === 0 ? (
-            <div className="bg-white border border-black/[0.08] rounded-2xl p-8 text-center text-xs text-[#5D5D66]">
+            <div className="bg-white border border-black/[0.08] rounded-2xl p-8 text-center text-sm text-[#5D5D66]">
               No Firestore modules created for this course yet. Add a module above or run Auto-Scaffold.
             </div>
           ) : (
@@ -1716,15 +1716,15 @@ export function CourseBuilderPanel({
                     >
                       <div className="bg-[#F9F9FB] px-5 py-4 border-b border-black/[0.06] flex flex-wrap items-center justify-between gap-3">
                         <div>
-                          <p className="text-[11px] font-mono text-[#0D7A5F]">
+                          <p className="text-[15px] font-mono text-[#0D7A5F]">
                             MODULE {mIdx + 1} · {mod.isPublished ? 'PUBLISHED' : 'DRAFT'}
                             {mod.releaseAt ? ` · UNLOCKS ${formatReleaseDateLabel(mod.releaseAt, mod.releaseAtMs)}` : ''}
                           </p>
-                          <h4 className="text-sm font-semibold text-[#0D0D0F]">{mod.titleEn}</h4>
-                          <p className="text-xs text-[#5D5D66]">{mod.titleRw}</p>
+                          <h4 className="text-[15px] font-semibold text-[#0D0D0F]">{mod.titleEn}</h4>
+                          <p className="text-sm text-[#5D5D66]">{mod.titleRw}</p>
                         </div>
 
-                        <div className="flex flex-wrap items-center gap-1.5 text-xs">
+                        <div className="flex flex-wrap items-center gap-1.5 text-sm">
                           <input
                             type="date"
                             value={mod.releaseAt || ''}
@@ -1799,7 +1799,7 @@ export function CourseBuilderPanel({
                       </div>
 
                       {modLessons.length === 0 ? (
-                        <p className="p-4 text-xs text-[#5D5D66]">No matching lessons in this module.</p>
+                        <p className="p-4 text-sm text-[#5D5D66]">No matching lessons in this module.</p>
                       ) : (
                         <div className="divide-y divide-black/[0.06]">
                           {modLessons.map((les) => {
@@ -1809,7 +1809,7 @@ export function CourseBuilderPanel({
                             return (
                               <div
                                 key={les.id}
-                                className="px-5 py-3 flex flex-wrap items-center justify-between gap-3 text-xs"
+                                className="px-5 py-3 flex flex-wrap items-center justify-between gap-3 text-sm"
                               >
                                 <div className="flex items-start gap-2.5 min-w-0">
                                   <input
@@ -1855,7 +1855,7 @@ export function CourseBuilderPanel({
                                       await onRefreshData();
                                       onRefreshPublic();
                                     }}
-                                    className="px-2 py-1 border border-black/15 rounded-lg bg-white text-[11px] max-w-[140px]"
+                                    className="px-2 py-1 border border-black/15 rounded-lg bg-white text-[15px] max-w-[140px]"
                                     title="Move Lesson to Module"
                                   >
                                     <option value="">Unassigned</option>
@@ -1915,15 +1915,15 @@ export function CourseBuilderPanel({
           <div className="lg:col-span-7 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <h3 className="text-base font-semibold text-[#0D0D0F]">
+                <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F]">
                   Course Publishing Readiness Checklist
                 </h3>
-                <p className="text-xs text-[#5D5D66]">
+                <p className="text-sm text-[#5D5D66]">
                   All required quality & structural checks should pass before publishing to learners.
                 </p>
               </div>
               <span
-                className={`text-xs font-mono font-semibold ${
+                className={`text-sm font-mono font-semibold ${
                   checklist.readyToPublish ? 'text-[#0D7A5F]' : 'text-[#D97706]'
                 }`}
               >
@@ -1933,7 +1933,7 @@ export function CourseBuilderPanel({
 
             <div className="divide-y divide-black/[0.06]">
               {checklist.items.map((item) => (
-                <div key={item.id} className="py-3 flex items-start gap-3 text-xs">
+                <div key={item.id} className="py-3 flex items-start gap-3 text-sm">
                   {item.passed ? (
                     <CheckCircle2 className="w-4 h-4 text-[#0D7A5F] shrink-0 mt-0.5" />
                   ) : (
@@ -1942,7 +1942,7 @@ export function CourseBuilderPanel({
                   <div>
                     <p className="font-medium text-[#0D0D0F]">
                       {item.label}{' '}
-                      <span className="font-mono text-[10px] text-[#5D5D66]">
+                      <span className="font-mono text-[15px] text-[#5D5D66]">
                         ({item.required ? 'REQUIRED' : 'RECOMMENDED'})
                       </span>
                     </p>
@@ -1954,11 +1954,11 @@ export function CourseBuilderPanel({
           </div>
 
           <div className="lg:col-span-5 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
-            <h3 className="text-base font-semibold text-[#0D0D0F]">Publication Lifecycle</h3>
-            <p className="text-xs text-[#5D5D66]">
+            <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F]">Publication Lifecycle</h3>
+            <p className="text-sm text-[#5D5D66]">
               Current status: <strong className="font-mono uppercase">{courseDraft.status}</strong>
             </p>
-            <div className="grid grid-cols-1 gap-2 text-xs">
+            <div className="grid grid-cols-1 gap-2 text-sm">
               {(
                 [
                   ['draft', 'Draft (Internal Only)'],
@@ -1985,7 +1985,7 @@ export function CourseBuilderPanel({
               ))}
             </div>
             {!checklist.readyToPublish && (
-              <p className="text-[11px] text-[#D97706]">
+              <p className="text-[15px] text-[#D97706]">
                 Complete all REQUIRED checklist items before setting status to Active (Published).
               </p>
             )}
@@ -1996,8 +1996,8 @@ export function CourseBuilderPanel({
       {/* TAB 4: GUIDED LEARNING PATHS */}
       {tab === 'paths' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <div className="lg:col-span-5 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4 text-xs">
-            <h3 className="text-base font-semibold text-[#0D0D0F]">
+          <div className="lg:col-span-5 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4 text-sm">
+            <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F]">
               {editingPathId ? 'Edit Learning Path' : 'Create Guided Learning Path'}
             </h3>
             <form onSubmit={handleSaveLearningPath} className="space-y-3">
@@ -2098,29 +2098,29 @@ export function CourseBuilderPanel({
 
           <div className="lg:col-span-7 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <h3 className="text-base font-semibold text-[#0D0D0F]">Configured Learning Paths</h3>
+              <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F]">Configured Learning Paths</h3>
               <button
                 type="button"
                 disabled={busy}
                 onClick={handleImportIndustryPathPresets}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-[#0D7A5F] rounded-lg hover:bg-[#0B664F]"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-[#0D7A5F] rounded-lg hover:bg-[#0B664F]"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>{busy ? 'Syncing...' : 'Import 8 Industry Path Presets'}</span>
               </button>
             </div>
             {learningPaths.length === 0 ? (
-              <p className="text-xs text-[#5D5D66]">No learning paths created yet. Create one on the left or import the 8 Rwanda industry tracks.</p>
+              <p className="text-sm text-[#5D5D66]">No learning paths created yet. Create one on the left or import the 8 Rwanda industry tracks.</p>
             ) : (
               <div className="space-y-3">
                 {learningPaths.map((p) => (
                   <div
                     key={p.id}
-                    className="border border-black/[0.08] rounded-xl p-4 text-xs space-y-2"
+                    className="border border-black/[0.08] rounded-xl p-4 text-sm space-y-2"
                   >
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="font-semibold text-sm text-[#0D0D0F]">{p.titleEn}</p>
+                        <p className="font-semibold text-[15px] text-[#0D0D0F]">{p.titleEn}</p>
                         <p className="text-[#5D5D66]">{p.titleRw}</p>
                       </div>
                       <span className="font-mono text-[#0D7A5F]">
@@ -2160,7 +2160,7 @@ export function CourseBuilderPanel({
       {tab === 'preview' && (
         <div className="bg-white border border-black/[0.08] rounded-2xl p-6 sm:p-8 space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-black/[0.08]">
-            <div className="flex items-center gap-2 text-xs text-[#0D7A5F] font-mono">
+            <div className="flex items-center gap-2 text-sm text-[#0D7A5F] font-mono">
               <Eye className="w-4 h-4" />
               <span>FULL COURSE LEARNER PREVIEW</span>
             </div>
@@ -2168,7 +2168,7 @@ export function CourseBuilderPanel({
               <button
                 type="button"
                 onClick={() => setPreviewLang('en')}
-                className={`px-3 py-1 text-xs rounded-md ${
+                className={`px-3 py-1 text-sm rounded-md ${
                   previewLang === 'en' ? 'bg-white text-[#0D0D0F]' : 'text-[#5D5D66]'
                 }`}
               >
@@ -2177,7 +2177,7 @@ export function CourseBuilderPanel({
               <button
                 type="button"
                 onClick={() => setPreviewLang('rw')}
-                className={`px-3 py-1 text-xs rounded-md ${
+                className={`px-3 py-1 text-sm rounded-md ${
                   previewLang === 'rw' ? 'bg-white text-[#0D0D0F]' : 'text-[#5D5D66]'
                 }`}
               >
@@ -2188,12 +2188,12 @@ export function CourseBuilderPanel({
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             <div className="lg:col-span-4 space-y-3 border border-black/[0.08] rounded-xl p-4 bg-[#F9F9FB]">
-              <h4 className="text-xs font-semibold text-[#0D0D0F] flex items-center gap-1.5">
+              <h4 className="text-sm font-semibold text-[#0D0D0F] flex items-center gap-1.5">
                 <Layers className="w-3.5 h-3.5 text-[#0D7A5F]" />
                 <span>Curriculum Outline</span>
               </h4>
               {courseLessons.length === 0 ? (
-                <p className="text-xs text-[#5D5D66]">
+                <p className="text-sm text-[#5D5D66]">
                   No structured Firestore lessons yet. Use Tab 2 to add lessons or import the 28-Day Blueprint.
                 </p>
               ) : (
@@ -2203,7 +2203,7 @@ export function CourseBuilderPanel({
                       key={les.id}
                       type="button"
                       onClick={() => setPreviewLessonId(les.id)}
-                      className={`w-full text-left px-3 py-2 rounded-lg text-xs transition-colors ${
+                      className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
                         (previewLessonId || courseLessons[0].id) === les.id
                           ? 'bg-[#0D0D0F] text-white'
                           : 'bg-white text-[#0D0D0F] hover:bg-black/5'
@@ -2230,12 +2230,12 @@ export function CourseBuilderPanel({
                   return (
                     <div className="space-y-5">
                       <div>
-                        <h3 className="text-2xl font-display font-semibold text-[#0D0D0F]">
+                        <h3 className="text-2xl font-display font-bold text-[#0D0D0F]">
                           {previewLang === 'en'
                             ? activePreviewLesson.titleEn
                             : activePreviewLesson.titleRw}
                         </h3>
-                        <p className="text-sm text-[#5D5D66] mt-1">
+                        <p className="text-[15px] text-[#5D5D66] mt-1">
                           {previewLang === 'en'
                             ? activePreviewLesson.summaryEn
                             : activePreviewLesson.summaryRw}
@@ -2281,11 +2281,11 @@ export function CourseBuilderPanel({
           <div className="space-y-6">
             <div className="bg-white border border-black/[0.08] rounded-2xl p-6 flex flex-wrap items-center justify-between gap-4">
               <div>
-                <p className="text-xs font-mono text-[#0D7A5F]">ACADEMIC &amp; PRODUCT MASTER BLUEPRINT v1.0</p>
-                <h3 className="text-lg font-display font-semibold text-[#0D0D0F] mt-1">
+                <p className="text-sm font-mono text-[#0D7A5F]">ACADEMIC &amp; PRODUCT MASTER BLUEPRINT v1.0</p>
+                <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F] mt-1">
                   Production Inventory &amp; Assessment Specification ({verifiedCount}/{allItems.length} Ready)
                 </h3>
-                <p className="text-xs text-[#5D5D66] mt-1">
+                <p className="text-sm text-[#5D5D66] mt-1">
                   Product 01 ({courseDraft.code}) · 7 Learning Levels · 6 Practical Projects · 16-Part Lesson Standard · 62 Deliverables
                 </p>
               </div>
@@ -2293,7 +2293,7 @@ export function CourseBuilderPanel({
                 href="/assets/aistudio/first_28_day_AI_COURSE_f519e752.pdf"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329]"
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-[#0D0D0F] rounded-lg hover:bg-[#232329]"
               >
                 <FileText className="w-3.5 h-3.5" />
                 <span>Open Master Blueprint PDF</span>
@@ -2302,11 +2302,11 @@ export function CourseBuilderPanel({
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div className="bg-white border border-black/[0.08] rounded-2xl p-5 space-y-3">
-                <h4 className="text-sm font-semibold text-[#0D0D0F] flex items-center gap-1.5">
+                <h4 className="text-[15px] font-semibold text-[#0D0D0F] flex items-center gap-1.5">
                   <BookOpen className="w-4 h-4 text-[#0D7A5F]" />
                   <span>Section 6 Grading Weights (100%)</span>
                 </h4>
-                <div className="divide-y divide-black/[0.06] text-xs">
+                <div className="divide-y divide-black/[0.06] text-sm">
                   {BLUEPRINT_GRADING_BREAKDOWN.map((w) => (
                     <div key={w.id} className="py-2.5 flex items-center justify-between gap-4">
                       <div>
@@ -2322,10 +2322,10 @@ export function CourseBuilderPanel({
               </div>
 
               <div className="bg-white border border-black/[0.08] rounded-2xl p-5 space-y-3">
-                <h4 className="text-sm font-semibold text-[#0D0D0F]">
+                <h4 className="text-[15px] font-semibold text-[#0D0D0F]">
                   7-Criterion Final Project Rubric (100% of 30% Capstone)
                 </h4>
-                <div className="divide-y divide-black/[0.06] text-xs">
+                <div className="divide-y divide-black/[0.06] text-sm">
                   {FINAL_PROJECT_RUBRIC_7.map((c) => (
                     <div key={c.id} className="py-2 flex items-center justify-between gap-4">
                       <div>
@@ -2344,14 +2344,14 @@ export function CourseBuilderPanel({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {PRODUCTION_INVENTORY_SECTIONS.map((sec) => (
                 <div key={sec.id} className="bg-white border border-black/[0.08] rounded-2xl p-5 space-y-3">
-                  <h4 className="text-sm font-semibold text-[#0D0D0F]">{sec.title.en}</h4>
+                  <h4 className="text-[15px] font-semibold text-[#0D0D0F]">{sec.title.en}</h4>
                   <div className="space-y-1.5 max-h-64 overflow-y-auto pr-1">
                     {sec.items.map((item) => {
                       const isDone = inventoryChecks[item.id] ?? autoItemStatus(item.id);
                       return (
                         <label
                           key={item.id}
-                          className="flex items-center gap-2.5 text-xs py-1 px-2 rounded-lg hover:bg-[#F9F9FB] cursor-pointer"
+                          className="flex items-center gap-2.5 text-sm py-1 px-2 rounded-lg hover:bg-[#F9F9FB] cursor-pointer"
                         >
                           <input
                             type="checkbox"
@@ -2377,18 +2377,18 @@ export function CourseBuilderPanel({
         <div className="fixed inset-0 z-50 bg-black/45 flex items-end sm:items-center justify-center p-0 sm:p-4" role="dialog" aria-modal="true">
           <div className="bg-white border border-black/10 rounded-t-2xl sm:rounded-2xl max-w-lg w-full max-h-[92dvh] overflow-y-auto p-5 sm:p-7 space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-display font-semibold text-[#0D0D0F]">
+              <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F]">
                 Create New Course (Draft)
               </h3>
               <button
                 type="button"
                 onClick={() => setNewCourseOpen(false)}
-                className="text-xs text-[#5D5D66]"
+                className="text-sm text-[#5D5D66]"
               >
                 Close
               </button>
             </div>
-            <form onSubmit={handleCreateNewCourse} className="space-y-3 text-xs">
+            <form onSubmit={handleCreateNewCourse} className="space-y-3 text-sm">
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block font-medium mb-1">Course Code</label>

@@ -220,10 +220,10 @@ export function OperationsAndQuizzesPanel({
       <div className="space-y-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-5 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
-            <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+            <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
               {editingCohortId ? 'Edit Cohort' : 'Create Course Cohort'}
             </h2>
-            <form onSubmit={handleSaveCohort} className="space-y-3 text-xs">
+            <form onSubmit={handleSaveCohort} className="space-y-3 text-sm">
               <div>
                 <label className="block font-medium mb-1">Course</label>
                 <select
@@ -351,9 +351,9 @@ export function OperationsAndQuizzesPanel({
             {/* Assign learner to cohort */}
             <form
               onSubmit={handleAssignLearnerToCohort}
-              className="pt-5 border-t border-black/[0.08] space-y-3 text-xs"
+              className="pt-5 border-t border-black/[0.08] space-y-3 text-sm"
             >
-              <h3 className="font-semibold text-[#0D0D0F]">Assign / Move Enrolled Learner</h3>
+              <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F]">Assign / Move Enrolled Learner</h3>
               <select
                 required
                 value={assignEnrollmentId}
@@ -391,11 +391,11 @@ export function OperationsAndQuizzesPanel({
 
           <div className="lg:col-span-7 space-y-4">
             <div className="bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
-              <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+              <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
                 Active & Planned Cohorts ({cohorts.length})
               </h2>
               {cohorts.length === 0 ? (
-                <p className="text-xs text-[#5D5D66]">
+                <p className="text-sm text-[#5D5D66]">
                   No cohorts defined yet. Create your first cohort to group learners by intake schedule.
                 </p>
               ) : (
@@ -403,7 +403,7 @@ export function OperationsAndQuizzesPanel({
                   {cohorts.map((coh) => {
                     const count = enrollments.filter((e) => e.cohortId === coh.id).length;
                     return (
-                      <div key={coh.id} className="py-3.5 first:pt-0 last:pb-0 flex flex-wrap items-center justify-between gap-3 text-xs">
+                      <div key={coh.id} className="py-3.5 first:pt-0 last:pb-0 flex flex-wrap items-center justify-between gap-3 text-sm">
                         <div>
                           <p className="font-semibold text-[#0D0D0F]">
                             {coh.name} <span className="font-mono text-[#0D7A5F]">({coh.code})</span>
@@ -449,9 +449,9 @@ export function OperationsAndQuizzesPanel({
             </div>
 
             {rosterCohort && (
-              <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6 space-y-3 text-xs">
+              <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-6 space-y-3 text-sm">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-semibold text-[#0D0D0F]">
+                  <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F]">
                     Roster: {rosterCohort.name} ({rosterMembers.length})
                   </h3>
                   <button
@@ -593,20 +593,20 @@ export function OperationsAndQuizzesPanel({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         <div className="lg:col-span-7 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+            <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
               {editingQuizId ? 'Edit Dynamic Quiz' : 'Create Dynamic Quiz'}
             </h2>
             <button
               type="button"
               disabled={quizBusy}
               onClick={handleImportStarterQuizzes}
-              className="px-3 py-1.5 text-xs border border-black/15 rounded-lg hover:border-black/35"
+              className="px-3 py-1.5 text-sm border border-black/15 rounded-lg hover:border-black/35"
             >
               Import 4 Weekly Starters
             </button>
           </div>
 
-          <form onSubmit={handleSaveQuiz} className="space-y-4 text-xs">
+          <form onSubmit={handleSaveQuiz} className="space-y-4 text-sm">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label className="block font-medium mb-1">Course</label>
@@ -727,7 +727,7 @@ export function OperationsAndQuizzesPanel({
             {/* Question Builder */}
             <div className="space-y-3 pt-3 border-t border-black/[0.08]">
               <div className="flex items-center justify-between">
-                <h3 className="font-semibold text-[#0D0D0F]">
+                <h3 className="text-[18px] sm:text-[20px] font-bold tracking-[-0.015em] leading-[1.3] font-display text-[#0D0D0F]">
                   Questions ({quizQuestions.length})
                 </h3>
                 <button
@@ -965,11 +965,11 @@ export function OperationsAndQuizzesPanel({
         </div>
 
         <div className="lg:col-span-5 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
-          <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+          <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
             Published & Draft Quizzes ({quizzes.length})
           </h2>
           {quizzes.length === 0 ? (
-            <p className="text-xs text-[#5D5D66]">
+            <p className="text-sm text-[#5D5D66]">
               No dynamic quizzes in Firestore yet. Import the 4 weekly starters or create a new quiz.
             </p>
           ) : (
@@ -987,7 +987,7 @@ export function OperationsAndQuizzesPanel({
                       )
                     : null;
                 return (
-                  <div key={qz.id} className="py-3.5 first:pt-0 last:pb-0 text-xs space-y-1">
+                  <div key={qz.id} className="py-3.5 first:pt-0 last:pb-0 text-sm space-y-1">
                     <div className="flex items-center justify-between gap-2">
                       <span className="font-semibold text-[#0D0D0F]">{qz.titleEn}</span>
                       <span className="font-mono text-[#0D7A5F]">
@@ -1102,10 +1102,10 @@ export function OperationsAndQuizzesPanel({
     return (
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         <div className="lg:col-span-5 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
-          <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+          <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
             Create Promotional Coupon
           </h2>
-          <form onSubmit={handleSaveCoupon} className="space-y-3 text-xs">
+          <form onSubmit={handleSaveCoupon} className="space-y-3 text-sm">
             <div>
               <label className="block font-medium mb-1">Coupon Code (uppercase)</label>
               <input
@@ -1199,17 +1199,17 @@ export function OperationsAndQuizzesPanel({
         </div>
 
         <div className="lg:col-span-7 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
-          <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+          <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
             Active & Archived Coupons ({coupons.length})
           </h2>
           {coupons.length === 0 ? (
-            <p className="text-xs text-[#5D5D66]">No promotional coupons configured yet.</p>
+            <p className="text-sm text-[#5D5D66]">No promotional coupons configured yet.</p>
           ) : (
             <div className="divide-y divide-black/[0.06]">
               {coupons.map((cpn) => (
-                <div key={cpn.id} className="py-3.5 first:pt-0 last:pb-0 flex items-center justify-between gap-3 text-xs">
+                <div key={cpn.id} className="py-3.5 first:pt-0 last:pb-0 flex items-center justify-between gap-3 text-sm">
                   <div>
-                    <p className="font-mono font-semibold text-sm text-[#0D0D0F]">{cpn.code}</p>
+                    <p className="font-mono font-semibold text-[15px] text-[#0D0D0F]">{cpn.code}</p>
                     <p className="text-[#5D5D66]">
                       {cpn.discountType === 'percent'
                         ? `${cpn.discountValue}% off`
@@ -1329,19 +1329,19 @@ export function OperationsAndQuizzesPanel({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         <div className="lg:col-span-6 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
           <div className="flex items-center justify-between gap-2">
-            <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+            <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
               {editingResourceId ? 'Edit Resource' : 'Publish Downloadable Guide / Template'}
             </h2>
             <button
               type="button"
               disabled={resBusy}
               onClick={handleImportStarterResources}
-              className="px-3 py-1.5 text-xs border border-black/15 rounded-lg"
+              className="px-3 py-1.5 text-sm border border-black/15 rounded-lg"
             >
               Import Starters
             </button>
           </div>
-          <form onSubmit={handleSaveResource} className="space-y-3 text-xs">
+          <form onSubmit={handleSaveResource} className="space-y-3 text-sm">
             <div className="grid grid-cols-2 gap-3">
               <select
                 value={resCourseId}
@@ -1474,17 +1474,17 @@ export function OperationsAndQuizzesPanel({
         </div>
 
         <div className="lg:col-span-6 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
-          <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+          <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
             Library Items ({resources.length})
           </h2>
           {resources.length === 0 ? (
-            <p className="text-xs text-[#5D5D66]">
+            <p className="text-sm text-[#5D5D66]">
               No Firestore resources yet (public Projects Hub renders starter markdown templates until imported or created here).
             </p>
           ) : (
             <div className="divide-y divide-black/[0.06]">
               {resources.map((r) => (
-                <div key={r.id} className="py-3 first:pt-0 last:pb-0 flex items-center justify-between gap-3 text-xs">
+                <div key={r.id} className="py-3 first:pt-0 last:pb-0 flex items-center justify-between gap-3 text-sm">
                   <div>
                     <p className="font-semibold text-[#0D0D0F]">{r.titleEn}</p>
                     <p className="font-mono text-[#5D5D66]">
@@ -1527,38 +1527,38 @@ export function OperationsAndQuizzesPanel({
     <div className="space-y-6">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-5">
-          <p className="text-xs text-[#5D5D66]">Completion Rate</p>
+          <p className="text-sm text-[#5D5D66]">Completion Rate</p>
           <p className="text-2xl font-display font-semibold tabular-nums text-[#0D0D0F] mt-1">
             {analytics.completionRatePct}%
           </p>
-          <p className="text-[11px] font-mono text-[#5D5D66] mt-1">
+          <p className="text-[15px] font-mono text-[#5D5D66] mt-1">
             {analytics.completedLearners} of {analytics.activeEnrollments} active
           </p>
         </div>
         <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-5">
-          <p className="text-xs text-[#5D5D66]">Net Verified Revenue</p>
+          <p className="text-sm text-[#5D5D66]">Net Verified Revenue</p>
           <p className="text-2xl font-display font-semibold tabular-nums text-[#0D7A5F] mt-1">
             {analytics.netRevenueRwf.toLocaleString()} RWF
           </p>
-          <p className="text-[11px] font-mono text-[#5D5D66] mt-1">
+          <p className="text-[15px] font-mono text-[#5D5D66] mt-1">
             Discounts: {analytics.totalDiscountsRwf.toLocaleString()} RWF
           </p>
         </div>
         <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-5">
-          <p className="text-xs text-[#5D5D66]">Assessment Average</p>
+          <p className="text-sm text-[#5D5D66]">Assessment Average</p>
           <p className="text-2xl font-display font-semibold tabular-nums text-[#0D0D0F] mt-1">
             {analytics.quizAvgScore}%
           </p>
-          <p className="text-[11px] font-mono text-[#5D5D66] mt-1">
+          <p className="text-[15px] font-mono text-[#5D5D66] mt-1">
             Pass rate: {analytics.quizPassRatePct}% ({analytics.quizAttemptsCount} runs)
           </p>
         </div>
         <div className="bg-[#F9F9FB] border border-black/[0.08] rounded-2xl p-5">
-          <p className="text-xs text-[#5D5D66]">Support Resolution</p>
+          <p className="text-sm text-[#5D5D66]">Support Resolution</p>
           <p className="text-2xl font-display font-semibold tabular-nums text-[#0D0D0F] mt-1">
             {analytics.resolvedTicketsCount} / {analytics.openTicketsCount + analytics.resolvedTicketsCount}
           </p>
-          <p className="text-[11px] font-mono text-[#5D5D66] mt-1">
+          <p className="text-[15px] font-mono text-[#5D5D66] mt-1">
             Open / In Progress: {analytics.openTicketsCount}
           </p>
         </div>
@@ -1567,7 +1567,7 @@ export function OperationsAndQuizzesPanel({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         <div className="lg:col-span-6 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+            <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
               Learner Progress & Drop-Off Distribution
             </h2>
             <button
@@ -1579,7 +1579,7 @@ export function OperationsAndQuizzesPanel({
                   analytics.progressBuckets.map((b) => [b.label, b.count])
                 )
               }
-              className="px-3 py-1.5 text-xs border border-black/15 rounded-lg"
+              className="px-3 py-1.5 text-sm border border-black/15 rounded-lg"
             >
               Export CSV
             </button>
@@ -1591,7 +1591,7 @@ export function OperationsAndQuizzesPanel({
                   ? Math.round((bucket.count / analytics.activeEnrollments) * 100)
                   : 0;
               return (
-                <div key={bucket.label} className="space-y-1 text-xs">
+                <div key={bucket.label} className="space-y-1 text-sm">
                   <div className="flex justify-between">
                     <span className="text-[#0D0D0F] font-medium">{bucket.label}</span>
                     <span className="font-mono tabular-nums text-[#5D5D66]">
@@ -1609,7 +1609,7 @@ export function OperationsAndQuizzesPanel({
 
         <div className="lg:col-span-6 bg-white border border-black/[0.08] rounded-2xl p-6 space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-display font-semibold text-[#0D0D0F]">
+            <h2 className="text-[21px] sm:text-[25px] font-bold tracking-[-0.02em] leading-[1.22] font-display text-[#0D0D0F]">
               Course Performance Breakdown
             </h2>
             <button
@@ -1629,12 +1629,12 @@ export function OperationsAndQuizzesPanel({
                   ])
                 )
               }
-              className="px-3 py-1.5 text-xs border border-black/15 rounded-lg"
+              className="px-3 py-1.5 text-sm border border-black/15 rounded-lg"
             >
               Export CSV
             </button>
           </div>
-          <div className="divide-y divide-black/[0.06] text-xs">
+          <div className="divide-y divide-black/[0.06] text-sm">
             {catalog.map((c) => {
               const active = enrollments.filter(
                 (e) => e.courseId === c.id && e.status === 'active'
